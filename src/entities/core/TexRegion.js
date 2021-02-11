@@ -9,9 +9,11 @@ class TexRegion extends Node {
         this.meta = meta
         this.frame = frame
     }
-    static createAtlas(texture, meta) {
-        return { texture, meta }
-    }
+    static createAtlas = atlas => ({
+        createRegion: params => new TexRegion({ atlas, ...params })
+    })
 }
+
+
 
 export default TexRegion
