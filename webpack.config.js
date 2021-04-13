@@ -6,6 +6,11 @@ module.exports = {
         path: path.join(process.cwd(), "/dist")
     },
     mode: "development",
+    resolve: {
+        alias: {
+            "@lib": path.join(process.cwd(), "./lib")
+        }
+    },
     module: {
         rules: [
             {

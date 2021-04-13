@@ -1,39 +1,31 @@
-import Node from "./entities/Node"
-import Texture from "./entities/core/Texture"
-import * as texRegionUtils from "./entities/core/TexRegion"
-import Canvas2DRenderer from "./renderer/Canvas2D"
+import { Node, Rect, Canvas2DRenderer, math, utils } from "@lib"
 
-import bgAtlasMeta from "./assets/atlasmeta.json"
-import bgAtlasImg from "./assets/texatlas.png"
-
-const bgTexAtlas = texRegionUtils.createAtlas({ meta: bgAtlasMeta, texture: new Texture({ imgUrl: bgAtlasImg })})
-
-const wall = bgTexAtlas.spawnRegion({ frame: "wall" })
-const spike = bgTexAtlas.spawnRegion({ frame: "spike"})
-const aqueduct = bgTexAtlas.spawnRegion({ frame: "aqueduct" })
-const tower = bgTexAtlas.spawnRegion({ frame: "tower" })
-const gate = bgTexAtlas.spawnRegion({ frame: "gate" })
-
+const worldDimensions = Object.freeze({
+    width: window.innerWidth,
+    height: window.innerHeight
+})
 const gameWorld = new Node()
-gameWorld.add(aqueduct)
-aqueduct.pos.x = 100
-aqueduct.pos.y = 100
+const platform = new Rect({ width: 100, height: 20, fill: "lavender" })
+platform.vel = { x: 200, y: 0 }
+ 
+platform.pos.y = worldDimensions.height / 2 - 10
+gameWorld.add(platform)
 
-const renderer = new Canvas2DRenderer({ canvasId: "arena", scene: gameWorld})
+platform.update = function(dt) {
+    this.pos.x += this.vel.x * dt
+}
+
+const renderer = new Canvas2DRenderer({ canvasId: "arena", scene: gameWorld, background: "#333", ...worldDimensions})
 
 
-const startGameLoop = mainUpdateFn => {
-    function loop(ts) {
-        mainUpdateFn(ts)
-        renderer.renderRecursively()
-        requestAnimationFrame(loop)
-    }
-    return () => {
-        requestAnimationFrame(loop)
+const mainUpdateFn = () => {
+    if (platform.pos.x < 0 || platform.pos.x + platform.width > worldDimensions.width) {
+        platform.pos.x = math.clamp(0, worldDimensions.width - platform.width, platform.pos.x)
+        platform.vel.x *= -1
     }
 }
 
-startGameLoop(function() {
-    // house.pos.x += 128 / 100
-    aqueduct.rotation += 1
-})()
+utils.startGameLoop({
+    mainUpdateFn,
+    renderer
+})
