@@ -1,14 +1,16 @@
 const path = require("path")
+const cwd = process.cwd()
 module.exports = {
     entry: "/src/index.js",
     output: {
         filename: "app.bundle.js",
-        path: path.join(process.cwd(), "/dist")
+        path: path.join(cwd, "/dist")
     },
     mode: "development",
     resolve: {
         alias: {
-            "@lib": path.join(process.cwd(), "./lib")
+            "@lib": path.join(cwd, "./lib"),
+            "@config": path.join(cwd, "./src/config")
         }
     },
     module: {
