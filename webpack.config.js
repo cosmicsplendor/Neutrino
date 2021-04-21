@@ -10,7 +10,9 @@ module.exports = {
     resolve: {
         alias: {
             "@lib": path.join(cwd, "./lib"),
-            "@config": path.join(cwd, "./src/config")
+            "@config": path.join(cwd, "./src/config"),
+            "@entities": path.join(cwd, "./src/entities"),
+            "@components": path.join(cwd, "./src/components")
         }
     },
     module: {
