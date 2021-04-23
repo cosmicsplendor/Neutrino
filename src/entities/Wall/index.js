@@ -9,7 +9,7 @@ class Wall extends Node {
         const cellCount = gridWidth * stackHeight
         const height = stackHeight * blockWidth
         this.pos = {
-            x: blockLength + 50, // (viewport.width - wallWidth) / 2,
+            x: blockLength + 50,
             y: (viewport.height - height) / 2,
         }
         const grid = Array(cellCount).fill(0).map((_, index) => {
@@ -27,11 +27,13 @@ class Wall extends Node {
         // wall blocks
         for (let cellIdx = cellCount - 1; cellIdx > -1; cellIdx--) {
             const pos = {
-                x:  cellIdx % gridWidth * blockWidth,
+                x:  (gridWidth - 1 - cellIdx % gridWidth) * blockWidth,
                 y: Math.floor(cellIdx / gridWidth) * blockWidth
             }
             const block = new IsoCube({
                 pos,
+                width: blockWidth,
+                height: blockWidth,
                 invisible: !grid[cellIdx]
             })
             this.add(block)

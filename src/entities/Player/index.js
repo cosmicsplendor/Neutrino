@@ -1,6 +1,7 @@
 import { Rect } from "@lib"
 import config from "@config"
-import Collision from "@components/collision"
+import Collision from "@components/Collision"
+import PlayerKeyControls from "@components/PlayerKeyControls"
 
 const collisionCallback = (player, block) => {
 }
@@ -13,13 +14,16 @@ class Player extends Rect {
         this.pos.x = (config.viewport.width - this.width)  / 2
         this.pos.y = (config.viewport.height - this.height)  / 2 - 300
 
-
+        this.keyControls = new PlayerKeyControls(40)
         this.collision = new Collision({ entity: this, blocks, callback: collisionCallback })
     }
     update(dt) {
         const initPos = { ...this.pos }
         this.vel.y += config.acceleration * dt / 2
         this.pos.y += this.vel.y * dt
+        
+        this.keyControls.update(this, dt)
+        
         this.collision.update({ from: initPos, to: this.pos })
     }
 }
