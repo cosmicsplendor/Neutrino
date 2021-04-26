@@ -12,7 +12,8 @@ module.exports = {
             "@lib": path.join(cwd, "./lib"),
             "@config": path.join(cwd, "./src/config"),
             "@entities": path.join(cwd, "./src/entities"),
-            "@components": path.join(cwd, "./src/components")
+            "@components": path.join(cwd, "./src/components"),
+            "@root": path.join(cwd, "./src")
         }
     },
     module: {
@@ -32,6 +33,7 @@ module.exports = {
                 use: {
                     loader: "babel-loader",
                     options: {
+                        plugins: [ "@babel/plugin-proposal-class-properties" ],
                         presets: [
                             "@babel/preset-env"
                         ]

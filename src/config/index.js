@@ -6,7 +6,7 @@ const config = Object.freeze({
     blockWidth: 40,
     blockLength: 20,
     stackHeight: 8,
-    acceleration: 1000
+    acceleration: 250
 })
 
 export default config

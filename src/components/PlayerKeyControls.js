@@ -1,16 +1,19 @@
+import { Node } from "@lib"
 import KeyControls from "@lib/components/controls/KeyControls"
+import spawnBullet from "../factories/spawnBullet"
 
-const mappings = {
+const mappings = Object.freeze({
     left: [ 37, 65 ],
     up: [ 38, 87 ],
     right: [ 39, 68 ],
-    down: [ 40, 83 ]
-}
+    down: [ 40, 83 ],
+    axn: 32
+})
 
 class PlayerKeyControls extends KeyControls {
-    constructor(speed) {
+    constructor() {
         super(mappings)
-        this.speed = speed
+        this.speed = 100
     }
     update(entity, dt) {
         if (this.get("left")) {
@@ -19,6 +22,17 @@ class PlayerKeyControls extends KeyControls {
         if (this.get("right")) {
             entity.pos.x += this.speed * dt
         }
+        if (this.get("up")) {
+            entity.vel.y = -75
+        }
+        if (this.get("down")) {
+            entity.vel.y += 75
+        }
+        if (this.get("axn", "pressed")) {
+            const bullet = spawnBullet({ x: entity.pos.x + entity.width, y: entity.pos.y + entity.height / 2 })
+            Node.get("root").add(bullet)
+        }
+        this.reset()
     }
 }
 

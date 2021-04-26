@@ -1,4 +1,4 @@
-import { Node, IsoCube } from "@lib"
+import { Node, Rect } from "@lib"
 import config from "@config"
 
 const { blockWidth, blockLength, stackHeight, viewport } = config
@@ -30,11 +30,12 @@ class Wall extends Node {
                 x:  (gridWidth - 1 - cellIdx % gridWidth) * blockWidth,
                 y: Math.floor(cellIdx / gridWidth) * blockWidth
             }
-            const block = new IsoCube({
+            const block = new Rect({
                 pos,
                 width: blockWidth,
                 height: blockWidth,
-                invisible: !grid[cellIdx]
+                invisible: !grid[cellIdx],
+                fill: "dimgrey"
             })
             this.add(block)
         }

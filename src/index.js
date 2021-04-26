@@ -1,15 +1,15 @@
 import { Node, Canvas2DRenderer, utils } from "@lib"
 import config from "@config"
-import Wall from "./entities/Wall"
+import Wall from "@entities/Wall"
 import Player from "./entities/Player"
 
 const { viewport: canvasDimensions } = config
 
+const gameWorld = new Node({ id: "root" })
 
-const gameWorld = new Node()
-const wall = new Wall({ gridWidth: 10 })
+const wall = new Wall({ id: "wall" })
+const player = new Player({ width: 24, height: 24, fill: "goldenrod", id: "player" })
 
-const player = new Player({ width: 24, blocks: wall.children, height: 24, fill: "cadetblue" })
 gameWorld.add(wall)
 gameWorld.add(player)
 

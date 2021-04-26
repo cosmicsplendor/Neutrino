@@ -9,8 +9,6 @@ export default class Platform extends Rect {
         super({ width: 100, height: 20, fill: "lavender", vel: { x: 200, y: 0 }, ...params })
         this.pos.y = viewport.height / 2 - 10
         this.vel = { x: 250, y: 0 }
-
-        console.log({events})
     }
     add(node) {
         super.add(node)
