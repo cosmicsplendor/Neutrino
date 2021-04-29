@@ -1,4 +1,4 @@
-import { Rect, Node } from "@lib"
+import { Rect, Node, math } from "@lib"
 import config from "@config"
 import PlayerCollision from "@components/PlayerCollision"
 import PlayerKeyControls from "@components/PlayerKeyControls"
@@ -8,6 +8,7 @@ class Player extends Rect {
         super({ ...rectProps })
         this.fill = fill
         this.vel = { x: 0, y: 0 }
+        this.acc = { x: 0, y: config.gravity }
         this.pos.x = (config.viewport.width - this.width)  / 2
         this.pos.y = (config.viewport.height - this.height)  / 2 - 300
 
@@ -15,11 +16,10 @@ class Player extends Rect {
         this.collision = new PlayerCollision({ entity: this, blocks: Node.get("wall") })
     }
     update(dt) {
-        const initPos = { ...this.pos }
+        this.prevPos = { ...this.pos }
         this.keyControls.update(this, dt)
-        this.vel.y += config.acceleration * dt / 2
-        this.pos.y += this.vel.y * dt
-        this.collision.update({ from: initPos, to: { ...this.pos } })
+        math.move(this, dt)
+        this.collision.update(this)
     }
 }
 

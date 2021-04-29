@@ -8,6 +8,7 @@ class BulletCollision extends Collision {
         this.test(block => {
             block.remove()
             this.entity.remove()
+            return true
         })
     }
 }

@@ -1,7 +1,10 @@
 import { Node, Rect } from "@lib"
 import config from "@config"
+const { viewport } = config
 
-const { blockWidth, blockLength, stackHeight, viewport } = config
+const blockWidth = 40
+const blockLength = 20
+const stackHeight = 8
 
 class Wall extends Node {
     constructor({ gridWidth = 20, ...nodeProps} = {}) {
@@ -30,14 +33,16 @@ class Wall extends Node {
                 x:  (gridWidth - 1 - cellIdx % gridWidth) * blockWidth,
                 y: Math.floor(cellIdx / gridWidth) * blockWidth
             }
-            const block = new Rect({
-                pos,
-                width: blockWidth,
-                height: blockWidth,
-                invisible: !grid[cellIdx],
-                fill: "dimgrey"
-            })
-            this.add(block)
+            if (grid[cellIdx]) {
+                const block = new Rect({
+                    pos,
+                    width: blockWidth,
+                    height: blockWidth,
+                    fill: "dimgrey"
+                })
+                block.static = true
+                this.add(block)
+            }
         }
     }
 }

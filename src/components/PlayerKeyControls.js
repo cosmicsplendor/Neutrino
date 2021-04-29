@@ -29,8 +29,7 @@ class PlayerKeyControls extends KeyControls {
             entity.vel.y += 75
         }
         if (this.get("axn", "pressed")) {
-            const bullet = spawnBullet({ x: entity.pos.x + entity.width, y: entity.pos.y + entity.height / 2 })
-            Node.get("root").add(bullet)
+            spawnBullet({ x: entity.pos.x + entity.width, y: entity.pos.y + entity.height / 2 })
         }
         this.reset()
     }

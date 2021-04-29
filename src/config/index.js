@@ -1,12 +1,11 @@
 const config = Object.freeze({
-    viewport: {
+    viewport: Object.freeze({
         width: Math.max(500, window.innerWidth / 2),
         height: window.innerHeight
-    },
-    blockWidth: 40,
-    blockLength: 20,
-    stackHeight: 8,
-    acceleration: 250
+    }),
+    worldWidth: 1000,
+    worldHeight: window.innerHeight,
+    gravity: 250
 })
 
 export default config
