@@ -1,7 +1,10 @@
-import { Node, Canvas2DRenderer, utils } from "@lib"
+import { Node, Circle, Canvas2DRenderer, utils } from "@lib"
 import config from "@config"
 import Wall from "@entities/Wall"
 import Player from "./entities/Player"
+import bgMusic from "./assets/audio/bg.wav"
+
+console.log({ bgMusic })
 
 const { viewport: canvasDimensions } = config
 

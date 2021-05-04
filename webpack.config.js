@@ -12,14 +12,13 @@ module.exports = {
             "@lib": path.join(cwd, "./lib"),
             "@config": path.join(cwd, "./src/config"),
             "@entities": path.join(cwd, "./src/entities"),
-            "@components": path.join(cwd, "./src/components"),
             "@root": path.join(cwd, "./src")
         }
     },
     module: {
         rules: [
             {
-                test: /\.(png|jpe?g|mp3)$/,
+                test: /\.(png|jpe?g|mp3|wav)$/,
                 use: {
                     loader: "file-loader",
                     options: {

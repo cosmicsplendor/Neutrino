@@ -5,7 +5,7 @@ const config = Object.freeze({
     }),
     worldWidth: 1000,
     worldHeight: window.innerHeight,
-    gravity: 250
+    gravity: 1000
 })
 
 export default config
