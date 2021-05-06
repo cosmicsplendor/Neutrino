@@ -1,4 +1,5 @@
-import { Camera, Canvas2DRenderer, utils } from "@lib"
+import { Camera, Canvas2DRenderer } from "@lib"
+import { startGameLoop } from "@utils"
 import config from "@config"
 import Wall from "@entities/Wall"
 import Player from "./entities/Player"
@@ -23,7 +24,7 @@ const mainUpdateFn = (dt) => {
 
 }
 
-utils.startGameLoop({
+startGameLoop({
     mainUpdateFn,
     renderer
 })

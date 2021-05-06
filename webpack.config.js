@@ -10,6 +10,8 @@ module.exports = {
     resolve: {
         alias: {
             "@lib": path.join(cwd, "./lib"),
+            "@utils": path.join(cwd, "./lib/utils"),
+            "@components": path.join(cwd, "./lib/components"),
             "@config": path.join(cwd, "./src/config"),
             "@entities": path.join(cwd, "./src/entities"),
             "@root": path.join(cwd, "./src")
@@ -34,7 +36,12 @@ module.exports = {
                     options: {
                         plugins: [ "@babel/plugin-proposal-class-properties" ],
                         presets: [
-                            "@babel/preset-env"
+                            [
+                                "@babel/preset-env",
+                                {
+                                    modules: false
+                                }
+                            ]
                         ]
                     }
                 }

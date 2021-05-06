@@ -1,4 +1,5 @@
-import { Rect, Node } from "@lib"
+import { Node } from "@lib"
+import Rect from "@lib/entities/Rect"
 import Collision from "@lib/components/Collision"
 
 export default (pos = { x: 0, y: 0 }) => {

@@ -1,7 +1,8 @@
 {
-  "name": "medieval-wasteland",
+  "name": "neutrino",
   "version": "1.0.0",
-  "description": "my first facebook messenger instant game",
+  "sideEffects": false,
+  "description": "2d game engine",
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

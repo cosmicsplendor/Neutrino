@@ -1,4 +1,4 @@
-import { KeyControls } from "@lib/components"
+import KeyControls from "@lib/components/KeyControls"
 import spawnBullet from "@entities/factories/spawnBullet"
 
 const mappings = Object.freeze({

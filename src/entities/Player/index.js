@@ -1,9 +1,8 @@
-import { Rect, utils } from "@lib"
+import Rect from "@lib/entities/Rect"
 import config from "@config"
-import { components } from "@lib"
+import Collision from "@components/Collision"
+import Movement from "@components/Movement"
 import PlayerKeyControls from "./PlayerKeyControls"
-
-const { Collision, Movement } = components
 
 class Player extends Rect {
     constructor({ fill="coral", ...rectProps }) {
