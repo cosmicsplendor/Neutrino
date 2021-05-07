@@ -7,7 +7,7 @@ export default (pos = { x: 0, y: 0 }) => {
     bullet.vel = { x: 1000 , y: 0 }
 
     const collision = new Collision({
-        entity: bullet, blocks: "wall", callback: block => {
+        entity: bullet, blocks: "wall", cheap: true, onHit: block => {
             bullet.remove()
             block.remove()
         }
