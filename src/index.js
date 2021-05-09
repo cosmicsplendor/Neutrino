@@ -1,5 +1,6 @@
 import { Camera, Canvas2DRenderer } from "@lib"
 import { startGameLoop } from "@utils"
+import "@utils/globals"
 import config from "@config"
 import Wall from "@entities/Wall"
 import Player from "./entities/Player"

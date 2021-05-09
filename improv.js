@@ -80,3 +80,19 @@ function playReverb() {
     })
     xhr.send()
 }
+
+class Paused {
+    constructor(sound) {
+        super(sound)
+    }
+    
+}
+
+class Playing {
+    constructor(sound) {
+        super(sound)
+    }
+    
+}
+
+
