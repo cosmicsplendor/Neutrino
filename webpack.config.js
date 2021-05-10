@@ -9,12 +9,15 @@ module.exports = {
     mode: "development",
     resolve: {
         alias: {
+            // lib alias
             "@lib": path.join(cwd, "./lib"),
             "@utils": path.join(cwd, "./lib/utils"),
             "@components": path.join(cwd, "./lib/components"),
+            // source alias
+            "@root": path.join(cwd, "./src"),
+            "@assets": path.join(cwd, "./src/assets"),
             "@config": path.join(cwd, "./src/config"),
             "@entities": path.join(cwd, "./src/entities"),
-            "@root": path.join(cwd, "./src")
         }
     },
     module: {
