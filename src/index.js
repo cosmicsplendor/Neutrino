@@ -24,7 +24,10 @@ const mainUpdateFn = (dt) => {
 
 }
 
-startGameLoop({
+const loopControls = startGameLoop({
     mainUpdateFn,
     renderer
 })
+
+// loopControls.setSpeed(0.5)
+// setTimeout(() => loopControls.pause(), 6000)
