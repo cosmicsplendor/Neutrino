@@ -16,13 +16,11 @@ assetsCache.load([
 Texture.initialize(assetsCache)
 
 assetsCache.once("load", () => {
-    alert()
     const { viewport: canvasDimensions } = config
-    const music = new Sound(assetsCache.get(bgMusicUrl))
-    music.play()
     alert()
-    // music.volume = 50
-    // music.loop = true
+    const music = new Sound(assetsCache.get(bgMusicUrl))
+    alert()
+    music.play()
 
     const gameWorld = new Camera({ id: "root", viewport: canvasDimensions, world: { ...canvasDimensions, width: 1000 } })
 
