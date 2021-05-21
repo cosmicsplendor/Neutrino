@@ -1,4 +1,4 @@
-import { Camera, Canvas2DRenderer, Texture } from "@lib"
+import { Node, Camera, Canvas2DRenderer, Texture } from "@lib"
 import { startGameLoop } from "@utils"
 import config from "@config"
 import Wall from "@entities/Wall"
@@ -17,22 +17,19 @@ Texture.initialize(assetsCache)
 
 assetsCache.once("load", () => {
     const { viewport: canvasDimensions } = config
-    alert()
     const music = new Sound(assetsCache.get(bgMusicUrl))
-    alert()
     music.play()
 
     const gameWorld = new Camera({ id: "root", viewport: canvasDimensions, world: { ...canvasDimensions, width: 1000 } })
 
     const wall = new Wall({ id: "wall" })
-    const player = new Player({ width: 24, height: 24, fill: "goldenrod", id: "player" })
-
+    const player = new Player({ width: 24, height: 24, fill: "brown", id: "player" })
+    
     gameWorld.setSubject(player)
     gameWorld.add(wall)
     gameWorld.add(player)
 
-    const renderer = new Canvas2DRenderer({ canvasId: "arena", scene: gameWorld, background: "black", ...canvasDimensions })
-
+    const renderer = new Canvas2DRenderer({ canvasID: "arena", scene: gameWorld, background: "black", ...canvasDimensions })
     const mainUpdateFn = dt => { 
         // console.log(`Frame Rate: ${1 / dt}`)
     }

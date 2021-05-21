@@ -16,7 +16,7 @@ class Player extends Rect {
         // this.debug = true
 
         this.keyControls = new PlayerKeyControls()
-        this.wallCollision = new Collision({ entity: this, blocks: "wall" })
+        this.wallCollision = new Collision({ entity: this, blocks: "wall", static: true })
     }
     update(dt) {
         this.keyControls.update(this, dt)
