@@ -1,48 +1,47 @@
 import { Node } from "@lib"
 import Rect from "@lib/entities/Rect"
+import Movement from "@components/Movement"
+import Collision from "@components/Collision"
 import config from "@config"
 const { viewport } = config
 
-const blockWidth = 40
-const blockLength = 20
-const stackHeight = 8
 
+const asciiTilemap = 
+`
+                              #################                          #######################################################################################
+                              #################                          #######################################################################################
+                              ########################                   #######################################################################################
+#                             ########################                   #######################################################################################
+#                             ########################                   #######################################################################################
+#########      ################################                          #######################################################################################
+#########      #################################################################################################################################################
+################################################################################################################################################################
+`
 class Wall extends Node {
-    constructor({ gridWidth = 20, ...nodeProps} = {}) {
+    constructor({ gridWidth = 20, blockWidth = 30, blockHeight = 30, ...nodeProps} = {}) {
         super({ ...nodeProps })
-        const cellCount = gridWidth * stackHeight
-        const height = stackHeight * blockWidth
-        this.pos = {
-            x: blockLength + 50,
-            y: (viewport.height - height) / 2,
-        }
-        const grid = Array(cellCount).fill(0).map((_, index) => {
-            if (
-                index / gridWidth < 1 ||
-                (index / gridWidth < 2 && Math.random() < 0.2) ||
-                (index < cellCount * 2 / 3 && Math.random() < 0.3)
-                // (index < cellCount * 1 / 2 && Math.random() < 0.4)
-            ) {
-                return false
-            }
-            return true
-        })
-        
-        // wall blocks
-        for (let cellIdx = cellCount - 1; cellIdx > -1; cellIdx--) {
-            const pos = {
-                x:  (gridWidth - 1 - cellIdx % gridWidth) * blockWidth,
-                y: Math.floor(cellIdx / gridWidth) * blockWidth
-            }
-            if (grid[cellIdx]) {
-                const block = new Rect({
-                    pos,
-                    width: blockWidth,
-                    height: blockWidth,
-                    fill: "dimgrey"
-                })
-                block.static = true
-                this.add(block)
+        const tilemap = asciiTilemap.split("\n")
+        this.width = tilemap[0].length * blockWidth
+        this.height = tilemap.length * blockHeight
+        console.log(`number of cells: ${tilemap.length * tilemap[0].length} `)
+        this.pos.y = (viewport.height - this.height) / 2
+        for (let row = 0; row < tilemap.length; row++) {
+            const rowCells = tilemap[row].split("")
+            for (let col = 0; col < rowCells.length; col++) {
+                const cell = rowCells[col]
+                if (cell === "#") {
+                    const pos = {
+                        x: col * blockWidth,
+                        y: row * blockHeight
+                    }
+                    const block = new Rect({
+                        pos,
+                        width: blockWidth,
+                        height: blockHeight,
+                        fill: "dimgrey"
+                    })
+                    this.add(block)
+                }
             }
         }
     }

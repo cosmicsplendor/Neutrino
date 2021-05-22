@@ -6,6 +6,7 @@ import Player from "./entities/Player"
 import bgMusicUrl from "./assets/audio/music2.wav"
 import AssetsCache from "@lib/utils/AssetsCache"
 import Sound from "@lib/utils/Sound"
+import Crate from "@entities/Crate"
 
 console.log({ bgMusicUrl })
 
@@ -18,15 +19,18 @@ Texture.initialize(assetsCache)
 assetsCache.once("load", () => {
     const { viewport: canvasDimensions } = config
     const music = new Sound(assetsCache.get(bgMusicUrl))
-    music.play()
+    // music.play()
 
-    const gameWorld = new Camera({ id: "root", viewport: canvasDimensions, world: { ...canvasDimensions, width: 1000 } })
+    const gameWorld = new Camera({ id: "root", viewport: canvasDimensions, world: { ...canvasDimensions, width: 5000 } })
 
     const wall = new Wall({ id: "wall" })
-    const player = new Player({ width: 24, height: 24, fill: "brown", id: "player" })
+    const player = new Player({ width: 24, height: 24, fill: "brown", id: "player", speed: 100 })
+    const crate = new Crate({ id: "crate", width: 50, height: 50, pos: { x: 500, y: 0 } })
+
     
     gameWorld.setSubject(player)
     gameWorld.add(wall)
+    // gameWorld.add(crate)
     gameWorld.add(player)
 
     const renderer = new Canvas2DRenderer({ canvasID: "arena", scene: gameWorld, background: "black", ...canvasDimensions })

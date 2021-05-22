@@ -10,9 +10,9 @@ const mappings = Object.freeze({
 })
 
 class PlayerKeyControls extends KeyControls {
-    constructor() {
+    constructor(speed=100) {
         super(mappings)
-        this.speed = 100
+        this.speed = speed
     }
     update(entity, dt) {
         if (this.get("left")) {
@@ -22,10 +22,10 @@ class PlayerKeyControls extends KeyControls {
             entity.pos.x += this.speed * dt
         }
         if (this.get("up")) {
-            entity.vel.y = -200
+            entity.velY = -200
         }
         if (this.get("down")) {
-            entity.vel.y += 75
+            entity.velY += 75
         }
         if (this.get("axn", "pressed")) {
             spawnBullet({ x: entity.pos.x + entity.width, y: entity.pos.y + entity.height / 2 })

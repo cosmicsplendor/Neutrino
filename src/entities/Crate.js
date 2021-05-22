@@ -4,18 +4,24 @@ import Movement from "@components/Movement"
 import config from "@config"
 
 class Crate extends Rect {
-    constructor({ groupID, wallID, playerID, ...rectProps }) {
-        super({ ...rectProps })
-        this.mutualCollision = new Collision({ entity: this, blocks: groupID, static: true, mutual: true })
-        this.wallCollision = new Collision({ entity: this, blocks: wallID, static: true })
-        this.playerCollision = new Collision({ entity: this, block: playerID, static: true })
-        this.vel = { x: 0, y: 0 }
-        this.acc = { x: 0, y: config.gravity }
+    constructor(...rectProps) {
+        super(...rectProps)
+        this.fill = "lemonchiffon"
+        this.stroke = "orange"
+        this.debug = true
+        this.wallCollision = new Collision({ entity: this, blocks: "wall", resolve: true, onHit: (block, movement) => {
+            if (movement.y) {
+                this.frictionX = 10
+            }
+        } })
+        Movement.makeMovable(this, { accY: config.gravity })
     }
-    update(dt) {    
+    update(dt) {
         Movement.update(this, dt)
-        this.mutualCollision.update(this, dt)
-        this.wallCollision.update(this, dt)
+        this.wallCollision.update()
+        // Math.random() < 1/ 1000 && (
+        //     console.log({ x: this.pos.x - this.prevPosX, y: this.pos.y - this.prevPosY})
+        // )
     }
 }
 
