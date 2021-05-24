@@ -7,9 +7,9 @@ class Crate extends Rect {
     constructor(...rectProps) {
         super(...rectProps)
         this.fill = "lemonchiffon"
-        this.stroke = "orange"
-        this.debug = true
-        this.wallCollision = new Collision({ entity: this, blocks: "wall", resolve: true, onHit: (block, movement) => {
+        // this.stroke = "orange"
+        this.smooth = true
+        this.wallCollision = new Collision({ entity: this, blocks: "wall", rigid: true, movable: false, onHit: (block, movement) => {
             if (movement.y) {
                 this.frictionX = 10
             }

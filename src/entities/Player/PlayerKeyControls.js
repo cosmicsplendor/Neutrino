@@ -21,8 +21,9 @@ class PlayerKeyControls extends KeyControls {
         if (this.get("right")) {
             entity.pos.x += this.speed * dt
         }
-        if (this.get("up")) {
-            entity.velY = -200
+        if (this.get("up") && !entity.jumping) {
+            entity.jumping = true
+            entity.velY = -400
         }
         if (this.get("down")) {
             entity.velY += 75

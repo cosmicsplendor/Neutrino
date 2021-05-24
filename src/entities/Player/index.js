@@ -6,26 +6,37 @@ import PlayerKeyControls from "./PlayerKeyControls"
 import { sign } from "@utils/math"
 
 class Player extends Rect {
-    constructor({ fill="coral", speed=100, ...rectProps }) {
+    constructor({ fill="coral", speed=150, ...rectProps }) {
         super({ ...rectProps })
         this.fill = fill
-        this.pos.x = (config.viewport.width - this.width)  / 2
         this.pos.y = (config.viewport.height - this.height)  / 2 - 300
         // this.hitbox = { x: 2, y: 2, width: rectProps.width - 4, height: rectProps.height - 4 }
         // this.debug = true
 
         this.keyControls = new PlayerKeyControls(speed)
-        this.wallCollision = new Collision({ entity: this, blocks: "wall", resolve: true, onHit: (block, movement) => {
-            // if (movement.x) { 
-            //     block.velX = sign(movement.x) * speed
-            // }
-            // if (movement.y) {
-            //     // block.pos.y += movement.y / 2
-            // }
+        this.wallCollision = new Collision({ entity: this, blocks: "wall", rigid: true, movable: false, onHit: (block, movement) => {
+            this.jumping = false
+            if (movement.x) { 
+                // block.velX = sign(movement.x) * speed
+            }
+            if (movement.y) {
+                if (movement.y < 0) {
+                    this.jumping = false
+                }
+                // debugger
+                // console.log(movement)
+            }
         } })
-        this.crateCollision = new Collision({ entity: this, block: "crate", resolve: true, onHit: (block, movement) => {
+        this.crateCollision = new Collision({ entity: this, block: "crate", rigid: true, onHit: (block, movement) => {
             if (movement.x) {
                 block.velX = sign(movement.x) * speed
+            }
+            if (movement.y) {
+                if (movement.y < 0) {
+                    this.jumping = false
+                }
+                // debugger
+                // console.log(movement)
             }
         }})
 

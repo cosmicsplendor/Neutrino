@@ -21,21 +21,21 @@ assetsCache.once("load", () => {
     const music = new Sound(assetsCache.get(bgMusicUrl))
     // music.play()
 
-    const gameWorld = new Camera({ id: "root", viewport: canvasDimensions, world: { ...canvasDimensions, width: 5000 } })
+    const wall = new Wall({ crestID: "wall", blockWidth: 50, blockHeight: 50 })
+    const gameWorld = new Camera({ id: "root", viewport: canvasDimensions, world: { width: wall.width, height: wall.height } })
 
-    const wall = new Wall({ id: "wall" })
-    const player = new Player({ width: 24, height: 24, fill: "brown", id: "player", speed: 100 })
-    const crate = new Crate({ id: "crate", width: 50, height: 50, pos: { x: 500, y: 0 } })
+    const player = new Player({ width: 24, height: 24, fill: "brown", id: "player", speed: 100, pos: { x: 2050 } })
+    const crate = new Crate({ id: "crate", width: 50, height: 50, pos: { x: 2000, y: 0 } })
 
     
     gameWorld.setSubject(player)
     gameWorld.add(wall)
-    // gameWorld.add(crate)
+    gameWorld.add(crate)
     gameWorld.add(player)
 
-    const renderer = new Canvas2DRenderer({ canvasID: "arena", scene: gameWorld, background: "black", ...canvasDimensions })
+    const renderer = new Canvas2DRenderer({ canvasID: "arena", scene: gameWorld, background: "skyblue", ...canvasDimensions })
     const mainUpdateFn = dt => { 
-        // console.log(`Frame Rate: ${1 / dt}`)
+        // console.log(`Frame Rate: ${Math.round(1 / dt)}`)
     }
 
     const loopControls = startGameLoop({
