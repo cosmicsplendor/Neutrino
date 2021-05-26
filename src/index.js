@@ -16,7 +16,18 @@ assetsCache.load([
  ])
 Texture.initialize(assetsCache)
 
-assetsCache.once("load", () => {
+assetsCache.once("load", initialize)
+
+assetsCache.on("error", e => {
+    console.log(e)
+})
+
+assetsCache.on("progress", ({ progress, msg }) => {
+    console.log(`Loading progress: ${progress}%`)
+    console.log(`Loading message: ${msg}`)
+})
+
+function initalize() {
     const { viewport: canvasDimensions } = config
     const music = new Sound(assetsCache.get(bgMusicUrl))
     // music.play()
@@ -45,13 +56,4 @@ assetsCache.once("load", () => {
     // loopControls.setSpeed(0.5)
     // console.log(loopControls.meta.elapsed)
     // setTimeout(() => loopControls.pause(), 6000)
-})
-
-assetsCache.on("error", e => {
-    console.log(e)
-})
-
-assetsCache.on("progress", ({ progress, msg }) => {
-    console.log(`Loading progress: ${progress}%`)
-    console.log(`Loading message: ${msg}`)
-})
+}

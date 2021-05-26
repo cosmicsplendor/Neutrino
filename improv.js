@@ -85,14 +85,42 @@ class Paused {
     constructor(sound) {
         super(sound)
     }
-    
+    play() {
+        // playI
+        this.sound.state = this.sound.states.playing
+    }
+    pause() {
+        // do nothing
+    }
 }
 
 class Playing {
     constructor(sound) {
+        this.sound = sound
         super(sound)
     }
-    
+    play() {
+        // do nothing
+    }
+    pause() {
+        // pause
+        this.sound.state = this.sound.states.paused
+    }
 }
 
 
+class Sound {
+    constructor() {
+        this.states = {
+            playing: new PlayingState(this),
+            paused: new PausedState(this)
+        }
+        this.state = this.states.paused
+    }
+    play() {
+        this.state.play()
+    }
+    pause() {
+        this.state.pause()
+    }
+}
