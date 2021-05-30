@@ -1,8 +1,5 @@
 import { Node } from "@lib"
 import Rect from "@lib/entities/Rect"
-import config from "@config"
-const { viewport } = config
-
 
 
 const asciiTilemap = 

@@ -1,2 +1,3 @@
 export const LOADING = "LOADING"
-export const MENU = "MENU"
+export const MAIN_MENU = "MAIN_MENU"
+export const LEVEL = "LEVEL"

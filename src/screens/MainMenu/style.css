@@ -1,0 +1,8 @@
+.playBtn {
+    background: whitesmoke;
+    font-size: 1.2em;
+    color: black;
+    padding: 0.55em;
+    border-radius: 0.2em;
+    cursor: pointer;
+}

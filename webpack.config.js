@@ -18,6 +18,7 @@ module.exports = {
             "@assets": path.join(cwd, "./src/assets"),
             "@config": path.join(cwd, "./src/config"),
             "@entities": path.join(cwd, "./src/entities"),
+            "@screens": path.join(cwd, "./src/screens"),
         }
     },
     module: {
@@ -48,6 +49,19 @@ module.exports = {
                         ]
                     }
                 }
+            },
+            {
+                test: /\.css$/,
+                use: [
+                    "style-loader",
+                    {
+                        loader: "css-loader",
+                        options: {
+                            modules: true,
+                            import: true
+                        }
+                    }
+                ]
             }
         ]
     },
