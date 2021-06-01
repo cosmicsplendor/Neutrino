@@ -3,7 +3,7 @@ import Observable from "@utils/Observable"
 
 const computeViewport = () => {
     return ({ 
-        width: clamp(300, 500, window.innerWidth / 2),
+        width: clamp(300, 600, window.innerWidth),
         height: window.innerHeight
     })
 }

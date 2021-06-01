@@ -63,9 +63,10 @@ class Wall extends Node {
                         pos,
                         width: blockWidth,
                         height: blockHeight,
-                        fill: cell === "#" ? "dimgrey": cell === "=" ? "slategrey": ""
+                        fill: cell === "#" ? "dimgrey": cell === "=" ? "slategrey": "",
+                        stroke: "darkslategrey"
                     })
-                    block.debug = true
+                    block.debug = false
                     // if (col > 20) block.invisible = true
                     if (cell === "=") {
                         this.slategreyBlocks.add(block)

@@ -124,3 +124,23 @@ class Sound {
         this.state.pause()
     }
 }
+
+class Timer extends Node {
+    constructor(time, callback) {
+        this.cur = 0
+        this.time = time
+        this.callback = callback
+    }
+    update(dt) {
+        this.cur += dt
+        const normalizedVal = lerp(0, this.time, this.cur)
+        if (this.cur > this.cur) {
+            return this.remove()
+        }
+        this.callback(normalizedVal)
+    }
+}
+
+new Timer(100, n => {
+    button.pos.x = n < 0.5 ? n * 100: (1 - n) * 100 
+})

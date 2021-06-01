@@ -2,6 +2,8 @@ import { skewedRand } from "@utils/math"
 import { Node } from "@lib"
 import { Rect } from "@lib/entities"
 import { center } from "@utils/entity"
+import Timer from "@utils/Timer"
+import { easingFns } from "@utils/math"
 
 import config from "@config"
 import bgMusicUrl from "@assets/audio/music2.wav"
@@ -18,7 +20,26 @@ class TitleScreen extends Node {
         this.realign = viewport => { 
             progressBar.pos = progressOutline.pos = center(viewport, { width: 250, height: 40 })
         }
-        
+        const startAnim = () => {
+            this.add(new Timer({
+                duration: 1 / 2,
+                onTick: prog => {
+                    this.pos.x = easingFns.cubicOut(prog) * 24 - 12
+                },
+                onDone: () => {
+                    this.add(new Timer({
+                        duration: 1 / 2,
+                        onTick: prog => {
+                            this.pos.x = 12 - easingFns.cubicOut(prog) * 24
+                        },
+                        onDone: () => {
+                            startAnim()
+                        }
+                    }))
+                }
+            }))
+        }
+        startAnim()
         this.add(progressBar)
         this.add(progressOutline)
         this.realign(config.viewport)
