@@ -27,6 +27,7 @@ class Player extends Rect {
                 // console.log(movement)
             }
         } })
+       
         this.crateCollision = new Collision({ entity: this, block: "crate", rigid: true, onHit: (block, movement) => {
             if (movement.x) {
                 block.velX = sign(movement.x) * speed
@@ -41,6 +42,9 @@ class Player extends Rect {
         }})
 
         Movement.makeMovable(this, { accY: config.gravity })
+    }
+    set explosionSFX(val) {
+        this.keyControls.explosionSFX = val
     }
     update(dt) {
         this.keyControls.update(this, dt)

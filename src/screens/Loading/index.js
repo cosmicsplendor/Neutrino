@@ -6,8 +6,9 @@ import Timer from "@utils/Timer"
 import { easingFns } from "@utils/math"
 
 import config from "@config"
-import bgMusicUrl from "@assets/audio/music2.wav"
 import { MAIN_MENU } from "@screens/names"
+
+import soundSprite from "@assets/audio/sprite.mp3"
 
 class TitleScreen extends Node {
     background = "black"
@@ -55,7 +56,7 @@ class TitleScreen extends Node {
         const { assetsCache } = this.game
         
         assetsCache.load([
-            { url: bgMusicUrl, msg: "Loading sound" }
+            { url: soundSprite, msg: "Loading sound" }
         ])
 
         assetsCache.once("load", () => { })

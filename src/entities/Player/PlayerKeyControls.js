@@ -10,6 +10,7 @@ const mappings = Object.freeze({
 })
 
 class PlayerKeyControls extends KeyControls {
+    explosionSFX = null
     constructor(speed=100) {
         super(mappings)
         this.speed = speed
@@ -29,7 +30,7 @@ class PlayerKeyControls extends KeyControls {
             entity.velY += 75
         }
         if (this.get("axn", "pressed")) {
-            spawnBullet({ x: entity.pos.x + entity.width, y: entity.pos.y + entity.height / 2 })
+            spawnBullet({ x: entity.pos.x + entity.width, y: entity.pos.y + entity.height / 2 }, this.explosionSFX)
         }
         this.reset()
     }

@@ -1,9 +1,10 @@
 import { Node } from "@lib"
 import initUI from "./initUI"
 import { LEVEL } from "@screens/names"
-import bgMusicUrl from "@assets/audio/music2.wav"
-import Sound from "@utils/Sound"
+import SoundAtlas from "@utils/Sound/SoundAtlas"
 
+import soundAtlasFile from "@assets/audio/sprite.mp3"
+import soundAtlasMeta from "@assets/audio/sprite.json"
 
 class MainMenuScreen extends Node {
     background = "black"
@@ -15,9 +16,8 @@ class MainMenuScreen extends Node {
     onEnter() {
         const { uiRoot, game } = this
         this.teardownUI = initUI({ uiRoot, onPlay: () => {
-            const bgMusic = new Sound(this.game.assetsCache.get(bgMusicUrl))
-            bgMusic.play()
-            game.switchScreen(LEVEL)
+            const soundAtlas = new SoundAtlas({ resourceID: soundAtlasFile, meta: soundAtlasMeta, assetsCache: game.assetsCache })
+            game.switchScreen(LEVEL, soundAtlas)
         } })
     }
     onExit() {

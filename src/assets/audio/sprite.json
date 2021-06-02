@@ -1,0 +1,17 @@
+{
+  "resources": [
+    "C:\\Users\\Dell\\Music\\bfxr\\finalsprite.mp3"
+  ],
+  "spritemap": {
+    "explosion": {
+      "start": 0,
+      "end": 1.6713151927437642,
+      "loop": false
+    },
+    "music": {
+      "start": 3,
+      "end": 289.0234013605442,
+      "loop": false
+    }
+  }
+}
