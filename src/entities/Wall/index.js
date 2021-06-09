@@ -48,13 +48,12 @@ const asciiTilemap2 =
 `
 
 class Wall extends Node {
-    constructor({ img, crestID, gridWidth = 20, blockWidth = 30, blockHeight = 30, ...nodeProps} = {}) {
+    constructor({ img, crestId, gridWidth = 20, blockWidth = 30, blockHeight = 30, ...nodeProps} = {}) {
         super({ ...nodeProps })
         const tilemap = asciiTilemap0.split("\n")
-        console.log(tilemap[1].length)
         this.width = tilemap[1].length * blockWidth
         this.height = tilemap.length * blockHeight
-        this.slategreyBlocks = new Node({ id: crestID })
+        this.slategreyBlocks = new Node({ id: crestId })
         this.greyBlocks = new Node()
         this.add(this.slategreyBlocks)
             .add(this.greyBlocks)

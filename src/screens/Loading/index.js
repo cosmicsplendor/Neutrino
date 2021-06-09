@@ -12,6 +12,7 @@ import cartonDarkImg from "@assets/images/cartonDark.png"
 import blockImg from "@assets/images/block.png"
 import texatlasImg from "@assets/images/texatlas.png"
 import texatlasMeta from "@assets/images/atlasmeta.cson"
+import levelDataUrl from "@assets/levels/level.cson"
 
 class TitleScreen extends Node {
     background = "black"
@@ -38,7 +39,8 @@ class TitleScreen extends Node {
             { url: blockImg },
             { url: cartonDarkImg },
             { url: texatlasImg },
-            { url: texatlasMeta, msg: "loading texture atlas" }
+            { url: texatlasMeta, msg: "loading texture atlas" },
+            { url: levelDataUrl, msg: "loading level data" },
         ])
 
         assetsCache.on("error", console.log)
