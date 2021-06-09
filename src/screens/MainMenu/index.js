@@ -4,7 +4,7 @@ import { LEVEL } from "@screens/names"
 import SoundAtlas from "@utils/Sound/SoundAtlas"
 
 import soundAtlasFile from "@assets/audio/sprite.mp3"
-import soundAtlasMeta from "@assets/audio/sprite.json"
+import soundAtlasMeta from "@assets/audio/sprite.cson"
 
 class MainMenuScreen extends Node {
     background = "black"

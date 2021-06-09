@@ -24,11 +24,12 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.(png|jpe?g|mp3|wav)$/,
+                test: /\.(png|jpe?g|mp3|ogg|wav|cson)$/,
                 use: {
                     loader: "file-loader",
                     options: {
-                        outputPath: "images"
+                        outputPath: "assets",
+                        esModule: false
                     }
                 }
             },

@@ -1,7 +1,17 @@
 import { Node } from "@lib"
-import Rect from "@lib/entities/Rect"
+import Texture from "@lib/entities/Texture"
+import blockImgUrl from "@assets/images/block.png"
 
-
+const asciiTilemap0 = 
+`
+                                                    
+                                             
+                                             
+                                             
+        =      ==============                     
+        =      =#############
+        ========#############
+`
 const asciiTilemap = 
 `
                               =##############=                       
@@ -38,9 +48,9 @@ const asciiTilemap2 =
 `
 
 class Wall extends Node {
-    constructor({ crestID, gridWidth = 20, blockWidth = 30, blockHeight = 30, ...nodeProps} = {}) {
+    constructor({ img, crestID, gridWidth = 20, blockWidth = 30, blockHeight = 30, ...nodeProps} = {}) {
         super({ ...nodeProps })
-        const tilemap = asciiTilemap.split("\n")
+        const tilemap = asciiTilemap0.split("\n")
         console.log(tilemap[1].length)
         this.width = tilemap[1].length * blockWidth
         this.height = tilemap.length * blockHeight
@@ -59,13 +69,14 @@ class Wall extends Node {
                         x: col * blockWidth,
                         y: row * blockHeight
                     }
-                    const block = new Rect({
+                    const block = new Texture({
                         pos,
-                        width: blockWidth,
-                        height: blockHeight,
-                        fill: cell === "#" ? "dimgrey": cell === "=" ? "slategrey": "",
-                        stroke: "darkslategrey"
+                        url: blockImgUrl,
+                        // fill: cell === "#" ? "dimgrey": cell === "=" ? "slategrey": "",
+                        // stroke: "darkslategrey"
                     })
+                    block.width = blockWidth
+                    block.height = blockHeight
                     block.debug = false
                     // if (col > 20) block.invisible = true
                     if (cell === "=") {

@@ -1,5 +1,7 @@
 import KeyControls from "@lib/components/KeyControls"
 import spawnBullet from "@entities/factories/spawnBullet"
+import Crate from "@entities/Crate"
+import { Node } from "@lib"
 
 const mappings = Object.freeze({
     left: [ 37, 65 ],
