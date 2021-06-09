@@ -19,7 +19,7 @@ class Player extends Texture {
         this.smooth = true
 
         this.keyControls = new PlayerKeyControls(speed)
-        this.wallCollision = new Collision({ entity: this, blocks: "wall", rigid: true, movable: false, onHit: (block, movement) => {
+        this.wallCollision = new Collision({ entity: this, blocks: "col-rects", rigid: true, movable: false, onHit: (block, movement) => {
             this.jumping = false
             if (movement.x) { 
                 // block.velX = sign(movement.x) * speed
