@@ -9,7 +9,6 @@ import soundSprite from "@assets/audio/sprite.mp3"
 import soundSpriteMeta from "@assets/audio/sprite.cson"
 import cartonImg from "@assets/images/carton.png"
 import cartonDarkImg from "@assets/images/cartonDark.png"
-import blockImg from "@assets/images/block.png"
 import texatlasImg from "@assets/images/texatlas.png"
 import texatlasMeta from "@assets/images/atlasmeta.cson"
 import levelDataUrl from "@assets/levels/level.cson"
@@ -36,7 +35,6 @@ class TitleScreen extends Node {
             { url: soundSprite, msg: "loading audio sprite" },
             { url: soundSpriteMeta, msg: "loading audio sprite metadata"},
             { url: cartonImg, msg: "loading Images" },
-            { url: blockImg },
             { url: cartonDarkImg },
             { url: texatlasImg },
             { url: texatlasMeta, msg: "loading texture atlas" },

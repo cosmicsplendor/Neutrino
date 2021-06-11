@@ -38,7 +38,6 @@ class Player extends Texture {
                 block.velX = sign(movement.x) * speed
             }
             if (movement.y) {
-                console.log(movement.y)
                 if (movement.y < 0) {
                     this.jumping = false
                 }

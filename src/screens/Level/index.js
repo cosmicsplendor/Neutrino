@@ -7,7 +7,6 @@ import TiledLevel from "@utils/TiledLevel"
 import Texture from "@lib/entities/Texture"
 
 import config from "@config"
-import Wall from "@entities/Wall"
 import Player from "@entities/Player"
 import Crate from "@entities/Crate"
 
@@ -26,7 +25,6 @@ class LevelScreen extends Camera {
         const { assetsCache } = game
         this.game = game
         assetsCache.on("load", () => {
-            const wall = new Wall({ crestId: "wall", blockWidth: 80, blockHeight: 80 })
             const player = new Player({ width: 80, height: 80, fill: "brown", id: "player", speed: 100, pos: { x: 300 } })
             const crate = new Crate({ id: "crate", width: 50, height: 50, pos: { x: 200, y: 0 } })
             const level = new TiledLevel({ 
@@ -37,7 +35,7 @@ class LevelScreen extends Camera {
                 })
             })
             level.pos.y = 100
-            this.world =  { width: wall.width, height: wall.height }
+            this.world =  { width: 1500, height: window.innerHeight }
             this.player = player
             this.setSubject(player)
 
