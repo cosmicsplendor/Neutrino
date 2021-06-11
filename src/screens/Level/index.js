@@ -19,7 +19,7 @@ import texatlasMetaId from "@assets/images/atlasmeta.cson"
 
 
 class LevelScreen extends Camera {
-    background = "burlywood"
+    background = "white"
     initialized = false
     constructor({ game }) {
         super({ id: "root", viewport: config.viewport })
