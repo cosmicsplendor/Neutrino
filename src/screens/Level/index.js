@@ -4,7 +4,6 @@ import { easingFns } from "@utils/math"
 import SoundSprite from "@utils/Sound/SoundSprite"
 import { createAtlas } from "@lib/entities/TexRegion"
 import TiledLevel from "@utils/TiledLevel"
-import Texture from "@lib/entities/Texture"
 
 import config from "@config"
 import Player from "@entities/Player"
@@ -28,8 +27,8 @@ class LevelScreen extends Camera {
             const player = new Player({ width: 80, height: 80, fill: "brown", id: "player", speed: 100, pos: { x: 300 } })
             const crate = new Crate({ id: "crate", width: 50, height: 50, pos: { x: 200, y: 0 } })
             const texatlas = createAtlas({ 
-                meta: assetsCache.get(texatlasMetaId),
-                texture: new Texture({ url: texatlasId })
+                metaId: texatlasMetaId,
+                imgId: texatlasId
             })
             const level = new TiledLevel({ 
                 data: assetsCache.get(levelDataId),
