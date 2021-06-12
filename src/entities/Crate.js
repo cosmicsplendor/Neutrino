@@ -9,7 +9,7 @@ import cartonDarkImg from "@assets/images/cartonDark.png"
 
 class Crate extends Texture {
     constructor({ width = 50, height = 50, ...nodeProps } = {}) {
-        super({ url: cartonDarkImg, ...nodeProps })
+        super({ imgId: cartonDarkImg, ...nodeProps })
         // this.fill = "lemonchiffon"
         // this.stroke = "orange"
         this.width = width
