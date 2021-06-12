@@ -5,6 +5,7 @@ import Movement from "@components/Movement"
 import PlayerKeyControls from "./PlayerKeyControls"
 import { sign } from "@utils/math"
 import crateImgUrl from "@assets/images/carton.png"
+import { COL_RECTS } from "@lib/constants"
 
 class Player extends Texture {
     constructor({ fill="coral", speed = 150, width = 80, height = 80, ...nodeProps }) {
@@ -19,7 +20,7 @@ class Player extends Texture {
         this.smooth = true
 
         this.keyControls = new PlayerKeyControls(speed)
-        this.wallCollision = new Collision({ entity: this, blocks: "col-rects", rigid: true, movable: false, onHit: (block, movement) => {
+        this.wallCollision = new Collision({ entity: this, blocks: COL_RECTS, rigid: true, movable: false, onHit: (block, movement) => {
             this.jumping = false
             if (movement.x) { 
                 // block.velX = sign(movement.x) * speed
