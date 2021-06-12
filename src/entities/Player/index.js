@@ -45,13 +45,13 @@ class Player extends Texture {
                 // console.log(movement)
             }
         }})
-
+        this.anchor = { x: this.width / 2, y: this.height / 2}
         Movement.makeMovable(this, { accY: config.gravity })
     }
     set explosionSFX(val) {
         this.keyControls.explosionSFX = val
     }
-    update(dt) {
+    update(dt, t) {
         this.keyControls.update(this, dt)
         Movement.update(this, dt)
         this.crateCollision.update()

@@ -27,13 +27,15 @@ class LevelScreen extends Camera {
         assetsCache.on("load", () => {
             const player = new Player({ width: 80, height: 80, fill: "brown", id: "player", speed: 100, pos: { x: 300 } })
             const crate = new Crate({ id: "crate", width: 50, height: 50, pos: { x: 200, y: 0 } })
+            const texatlas = createAtlas({ 
+                meta: assetsCache.get(texatlasMetaId),
+                texture: new Texture({ url: texatlasId })
+            })
             const level = new TiledLevel({ 
                 data: assetsCache.get(levelDataId),
-                texatlas: createAtlas({ 
-                    meta: assetsCache.get(texatlasMetaId),
-                    texture: new Texture({ url: texatlasId })
-                })
+                texatlas
             })
+
             level.pos.y = 100
             this.world =  { width: 1500, height: window.innerHeight }
             this.player = player
