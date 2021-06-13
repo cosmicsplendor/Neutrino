@@ -23,6 +23,7 @@ class LevelScreen extends Camera {
         super({ id: "root", viewport: config.viewport })
         const { assetsCache } = game
         this.game = game
+        this.addTimer = Timer.attachedTo(this)
         assetsCache.on("load", () => {
             const player = new Player({ width: 80, height: 80, fill: "brown", id: "player", speed: 100, pos: { x: 300 } })
             const crate = new Crate({ id: "crate", width: 50, height: 50, pos: { x: 200, y: 0 } })
@@ -47,8 +48,7 @@ class LevelScreen extends Camera {
             config.viewport.on("change", viewport => {
                 this.viewport = viewport
             })
-        })
-
+        })  
     }
     onEnter() { 
         if (!this.initialized) {
@@ -62,13 +62,13 @@ class LevelScreen extends Camera {
             // this.music.play()
             this.initialized = true
 
-            this.add(new Timer({
+            this.addTimer({
                 duration: 10,
                 onTick: progress => {
                     this.music.pan = easingFns.cubicIn(progress) - 1
                     this.music.volume = easingFns.cubicOut(progress) * 100
                 }
-            }))
+            })
         }
     }
     onExit() { }
