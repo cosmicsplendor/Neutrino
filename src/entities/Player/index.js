@@ -37,7 +37,7 @@ class Player extends Texture {
                 }
             }
         }})
-        Movement.makeMovable(this, { accY: config.gravity, velX: 60 })
+        Movement.makeMovable(this, { accY: config.gravity })
     }
     set explosionSFX(val) {
         this.keyControls.explosionSFX = val
