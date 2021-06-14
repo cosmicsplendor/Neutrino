@@ -45,6 +45,11 @@ class LevelScreen extends Camera {
             this.add(crate)
             this.add(player)
 
+            this.addTimer({
+                duration: 1,
+                onDone: () => {  }
+            })
+
             config.viewport.on("change", viewport => {
                 this.viewport = viewport
             })
