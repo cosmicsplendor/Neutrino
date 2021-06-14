@@ -15,6 +15,7 @@ class Crate extends Texture {
         this.width = width
         this.height = height
         this.smooth = true
+        this.hitbox = { x: 2, y: 2, width: this.width - 2, height: this.height - 2 }
         // this.rotation = pickOne([ 0, 90, 180, 270 ])
         // this.anchor = { x: 25, y: 25 }
         this.wallCollision = new Collision({ entity: this, blocks: "col-rects", rigid: true, movable: false, onHit: (block, movement) => {
