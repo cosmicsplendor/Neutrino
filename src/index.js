@@ -10,7 +10,7 @@ import MainMenuScreen from "@screens/MainMenu"
 import LevelScreen from "@screens/Level"
 
 const { viewport } = config
-const renderer = new Canvas2DRenderer({ canvasID: "arena", scene: null, background: "skyblue", width: viewport.width, height: viewport.height }) // scene will be injected by game
+const renderer = new Canvas2DRenderer({ canvasID: "arena", scene: null, background: "skyblue", viewport }) // scene will be injected by game
 const assetsCache = new AssetsCache()
 const uiRoot = new UI("#ui-layer")
 const screenFactories = {
@@ -23,8 +23,6 @@ const game = new Game({
     assetsCache,
     screenFactories
 })
-
-viewport.on("change", ({ width, height }) => renderer.resize({ width, height }))
 
 game.switchScreen(screenNames.LOADING)
 game.start()

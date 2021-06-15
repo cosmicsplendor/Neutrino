@@ -49,10 +49,6 @@ class LevelScreen extends Camera {
                 duration: 1,
                 onDone: () => {  }
             })
-
-            config.viewport.on("change", viewport => {
-                this.viewport = viewport
-            })
         })  
     }
     onEnter() { 
