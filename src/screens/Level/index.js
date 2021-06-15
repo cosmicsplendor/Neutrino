@@ -1,4 +1,4 @@
-import { Camera } from "@lib"
+import { Camera, Node } from "@lib"
 import Timer from "@utils/Timer"
 import { easingFns } from "@utils/math"
 import SoundSprite from "@utils/Sound/SoundSprite"
@@ -72,7 +72,10 @@ class LevelScreen extends Camera {
             })
         }
     }
-    onExit() { }
+    onExit() {
+        Node.cleanupRecursively(this)
+        this.children.length = 0
+    }
 }
 
 export default LevelScreen

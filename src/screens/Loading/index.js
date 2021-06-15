@@ -45,6 +45,9 @@ class TitleScreen extends Node {
             assetsCache.on("progress", progress => {
             this.progressBar.width = progress * 250
         })
+        assetsCache.on("progress", payload => {
+            this.progressBar.width = 250 * payload.progress
+        })
         assetsCache.on("load", () => {
             this.game.switchScreen(MAIN_MENU)
         })
