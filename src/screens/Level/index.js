@@ -1,6 +1,5 @@
 import { Camera, Node } from "@lib"
 import Timer from "@utils/Timer"
-import { easingFns } from "@utils/math"
 import SoundSprite from "@utils/Sound/SoundSprite"
 import { createAtlas } from "@lib/entities/TexRegion"
 import TiledLevel from "@utils/TiledLevel"
@@ -37,19 +36,14 @@ class LevelScreen extends Camera {
             })
 
             level.pos.y = 100
-            this.world =  { width: 1500, height: window.innerHeight }
+            this.world =  { width: level.width, height: window.innerHeight }
             this.player = player
             this.setSubject(player)
 
             this.add(level)
             this.add(crate)
             this.add(player)
-
-            this.addTimer({
-                duration: 1,
-                onDone: () => {  }
-            })
-        })  
+        })
     }
     onEnter() { 
         if (!this.initialized) {
@@ -58,18 +52,11 @@ class LevelScreen extends Camera {
             const soundResource = game.assetsCache.get(soundSpriteId)
             const soundSprite = new SoundSprite({ resource: soundResource, resourceId: soundSpriteId, meta })
             this.soundSprite = soundSprite
-            this.music = soundSprite.create("music", { volume: 0, pan: -1 })
-            this.player.explosionSFX = soundSprite.createPool("explosion") 
+            this.music = soundSprite.create("music", { volume: 1, pan: -1 })
+            this.explosionSound = soundSprite.createPool("explosion") 
+            this.player.explosionSFX = this.explosionSound
             // this.music.play()
             this.initialized = true
-
-            this.addTimer({
-                duration: 10,
-                onTick: progress => {
-                    this.music.pan = easingFns.cubicIn(progress) - 1
-                    this.music.volume = easingFns.cubicOut(progress) * 100
-                }
-            })
         }
     }
     onExit() {

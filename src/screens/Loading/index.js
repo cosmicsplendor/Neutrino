@@ -1,6 +1,6 @@
 import { Node } from "@lib"
 import { Rect } from "@lib/entities"
-import { center } from "@utils/entity"
+import { calcCentered } from "@utils/entity"
 
 import config from "@config"
 import { MAIN_MENU } from "@screens/names"
@@ -22,7 +22,7 @@ class TitleScreen extends Node {
         const progressBar = new Rect({ width: 0, height: 40, fill: "whitesmoke" })
         this.progressBar = progressBar
         this.realign = viewport => { 
-            progressBar.pos = progressOutline.pos = center(viewport, { width: 250, height: 40 })
+            progressBar.pos = progressOutline.pos = calcCentered(viewport, { width: 250, height: 40 })
         }
         this.add(progressBar)
         this.add(progressOutline)

@@ -1,12 +1,12 @@
 import config from "@config"
-import { center } from "@utils/entity"
+import { calcCentered } from "@utils/entity"
 import styles from "./style.css"
 const BTN_ID = "play-btn"
 const render = () => 
 `
-    <div class="${styles.playBtn}" id="${BTN_ID}">
-        PLAY
-    </div>
+<div class="${styles.playBtn}" id="${BTN_ID}">
+    PLAY
+</div>
 `
 
 const initUI = ({ uiRoot, onPlay }) => {
@@ -15,7 +15,7 @@ const initUI = ({ uiRoot, onPlay }) => {
     const playBtn = uiRoot.get(`#${BTN_ID}`)
     const playBtnBounds = playBtn.bounds
     const realign = viewport => { 
-        playBtn.pos = center(viewport, playBtnBounds)
+        playBtn.pos = calcCentered(viewport, playBtnBounds)
     }
     playBtn.on("click", onPlay)
     config.viewport.on("change", realign)
