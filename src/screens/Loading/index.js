@@ -55,6 +55,7 @@ class TitleScreen extends Node {
     }
     onExit() {
         config.viewport.off("change", this.realign)
+        this.game.disposeScreen(this)
     }
 }
 
