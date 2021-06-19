@@ -33,5 +33,19 @@
         "rotation": 0,
         "width": 88,
         "height": 76
+    },
+    "fire_2": {
+        "x": 198,
+        "y": 2,
+        "rotation": 0,
+        "width": 20,
+        "height": 20
+    },
+    "fire_1": {
+        "x": 198,
+        "y": 26,
+        "rotation": 0,
+        "width": 15,
+        "height": 15
     }
 }

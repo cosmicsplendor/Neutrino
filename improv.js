@@ -144,3 +144,10 @@ class Timer extends Node {
 new Timer(100, n => {
     button.pos.x = n < 0.5 ? n * 100: (1 - n) * 100 
 })
+
+/**
+ * how to go about supporting multiple levels?
+ * it all have to happen lazily
+ * maybe gotta have a Node intance as the root container of everyting
+ * followed by everything
+ */
