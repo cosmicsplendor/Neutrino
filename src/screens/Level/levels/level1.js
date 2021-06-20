@@ -36,6 +36,7 @@ class Level1 extends Node {
             loop: true,
             metaId: texatlasMetaId,
             imgId: texatlasId,
+            randomDistribution: true,
             params: [
                 {
                     frame: "fire_1",
