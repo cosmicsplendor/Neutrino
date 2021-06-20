@@ -32,7 +32,8 @@ class Level1 extends Node {
         this.add(new ParticleEmitter({
             pos: { x: 400, y: 500 }, 
             size: 100,
-            blendMode: "destination-over",
+            blendMode: "color-dodge",
+            loop: true,
             metaId: texatlasMetaId,
             imgId: texatlasId,
             params: [
@@ -48,8 +49,8 @@ class Level1 extends Node {
                 },
                 {
                     frame: "fire_2",
-                    lifetime: [ 1, 4 ],
-                    velX: [ -15, 15 ],
+                    lifetime: [ 1, 2 ],
+                    velX: [ -5, 5 ],
                     velY: [ -30, 0 ],
                     accY: [ -10, 10],
                     weight: 2,
