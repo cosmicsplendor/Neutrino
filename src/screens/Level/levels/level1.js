@@ -32,6 +32,7 @@ class Level1 extends Node {
         this.add(new ParticleEmitter({
             pos: { x: 400, y: 500 }, 
             size: 100,
+            blendMode: "destination-over",
             metaId: texatlasMetaId,
             imgId: texatlasId,
             params: [

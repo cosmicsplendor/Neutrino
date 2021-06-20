@@ -9,7 +9,7 @@ import soundSpriteId from "@assets/audio/sprite.mp3"
 import soundMetaId from "@assets/audio/sprite.cson"
 
 class LevelScreen extends Camera {
-    background = "black"
+    background = "midnightblue"
     initialized = false
     constructor({ game }) {
         super({ id: "root", viewport: config.viewport })
