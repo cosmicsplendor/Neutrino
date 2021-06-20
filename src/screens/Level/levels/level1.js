@@ -31,15 +31,15 @@ class Level1 extends Node {
         this.add(player)
         this.add(new ParticleEmitter({
             pos: { x: 400, y: 500 }, 
-            size: 40,
+            size: 100,
             metaId: texatlasMetaId,
             imgId: texatlasId,
             params: [
                 {
                     frame: "fire_1",
-                    lifetime: 1,
-                    velX: [ -20, 20 ],
-                    velY: [ -100, -40 ],
+                    lifetime: [ 1, 2 ],
+                    velX: [ -10, 10 ],
+                    velY: [ -60, -40 ],
                     accY: [ -10, 30],
                     weight: 1,
                     alpha: 1,
@@ -47,10 +47,10 @@ class Level1 extends Node {
                 },
                 {
                     frame: "fire_2",
-                    lifetime: 2,
+                    lifetime: [ 1, 4 ],
                     velX: [ -15, 15 ],
-                    velY: [ -80, -20 ],
-                    accY: [ -10, 30],
+                    velY: [ -30, 0 ],
+                    accY: [ -10, 10],
                     weight: 2,
                     alpha: 1,
                     alphaEasingFn: x => 1 - x
