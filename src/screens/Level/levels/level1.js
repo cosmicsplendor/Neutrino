@@ -30,35 +30,59 @@ class Level1 extends Node {
         this.add(crate)
         this.add(player)
         this.add(new ParticleEmitter({
-            pos: { x: 400, y: 500 }, 
-            size: 100,
-            blendMode: "color-dodge",
-            loop: true,
-            metaId: texatlasMetaId,
-            imgId: texatlasId,
-            randomDistribution: true,
-            params: [
-                {
-                    frame: "fire_1",
-                    lifetime: [ 1, 2 ],
-                    velX: [ -10, 10 ],
-                    velY: [ -60, -40 ],
-                    accY: [ -10, 30],
-                    weight: 1,
-                    alpha: 1,
-                    alphaEasingFn: x => 1 - x
-                },
-                {
-                    frame: "fire_2",
-                    lifetime: [ 1, 2 ],
-                    velX: [ -5, 5 ],
-                    velY: [ -30, 0 ],
-                    accY: [ -10, 10],
-                    weight: 2,
-                    alpha: 1,
-                    alphaEasingFn: x => 1 - x
-                }
-            ]
+                pos: { x: 830, y: 190 }, imgId: texatlasId, metaId: texatlasMetaId, ...JSON.parse(`{
+                    "blendMode": "color-dodge",
+                    "loop": true,
+                    "size": 100,
+                    "params": [
+                        {
+                            "alphaDecayFn": "",
+                            "weight": 1,
+                            "frame": "fire_1",
+                            "offsetX": [
+                                0,
+                                40
+                            ],
+                            "offsetY": [
+                                0,
+                                0
+                            ],
+                            "lifetime": [
+                                1,
+                                2.6
+                            ],
+                            "velX": [
+                                -16,
+                                6
+                            ],
+                            "velY": [
+                                -94,
+                                -56
+                            ],
+                            "accX": [
+                                0,
+                                0
+                            ],
+                            "accY": [
+                                40,
+                                40
+                            ],
+                            "alpha": [
+                                0.9,
+                                1
+                            ],
+                            "rotation": [
+                                3,
+                                3
+                            ],
+                            "angularVel": [
+                                16,
+                                16
+                            ]
+                        }
+                    ],
+                    "randomDistribution": true
+                }`)
         }))
     }
 
