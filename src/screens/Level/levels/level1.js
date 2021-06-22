@@ -36,7 +36,7 @@ class Level1 extends Node {
                     "size": 100,
                     "params": [
                         {
-                            "alphaDecayFn": "",
+                            "alphaDecayFn": "quadOut",
                             "weight": 1,
                             "frame": "fire_1",
                             "offsetX": [
