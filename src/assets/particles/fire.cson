@@ -1,5 +1,5 @@
 {
- "blendMode": "source-over",
+ "blendMode": "color-dodge",
  "loop": true,
  "debug": false,
  "params": [

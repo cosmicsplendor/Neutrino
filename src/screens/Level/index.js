@@ -9,7 +9,7 @@ import soundSpriteId from "@assets/audio/sprite.mp3"
 import soundMetaId from "@assets/audio/sprite.cson"
 
 class LevelScreen extends Camera {
-    background = "midnightblue"
+    background = "cadetblue"
     initialized = false
     constructor({ game }) {
         super({ id: "root", viewport: config.viewport })
@@ -25,7 +25,7 @@ class LevelScreen extends Camera {
             this.music = soundSprite.create("music", { volume: 1, pan: -1 })
             this.explosionSound = soundSprite.createPool("explosion") 
             // this.music.play()
-            this.player = new Player({ width: 80, height: 80, fill: "brown", id: "player", speed: 500, pos: { x: 300 } })
+            this.player = new Player({ width: 64, height: 64, fill: "brown", id: "player", speed: 20, pos: { x: 300 } })
             this.player.explosionSFX = this.explosionSound
             this.setSubject(this.player)
         })

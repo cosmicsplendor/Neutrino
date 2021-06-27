@@ -8,36 +8,43 @@ import crateImgUrl from "@assets/images/carton.png"
 import { COL_RECTS } from "@lib/constants"
 
 class Player extends Texture {
-    constructor({ fill="coral", speed = 150, width = 80, height = 80, ...nodeProps }) {
+    constructor({ fill="coral", speed = 20, width = 64, height = 64, ...nodeProps }) {
         super({ imgId: crateImgUrl, ...nodeProps })
         this.width = width
         this.height = height
+        this.radius = Math.sqrt(width * width + height * height)
+        this.rotation = 0
+        this.anchor = {
+            x: width / 2,
+            y: height / 2
+        }
         this.pos.y = 0
         this.smooth = true
 
         this.keyControls = new PlayerKeyControls(speed)
-        this.wallCollision = new Collision({ entity: this, blocks: COL_RECTS, rigid: true, movable: false, onHit: (block, movement) => {
+        this.wallCollision = new Collision({ entity: this, blocks: COL_RECTS, rigid: true, movable: false, onHit: (block, movX, movY) => {
             this.jumping = false
-            if (movement.x) { 
+            if (movX) { 
             }
-            if (movement.y) {
-                if (movement.y < 0) {
+            if (movY) {
+                if (movY < 0) {
                     this.jumping = false
                 }
             }
         } })
        
-        this.crateCollision = new Collision({ entity: this, block: "crate", rigid: true, onHit: (block, movement) => {
-            if (movement.x) {
-                block.velX = sign(movement.x) * speed
+        this.crateCollision = new Collision({ entity: this, block: "crate", rigid: true, onHit: (block, movX, movY) => {
+            if (movX) {
+                // block.velX += sign(movX)
             }
-            if (movement.y) {
-                if (movement.y < 0) {
+            if (movY) {
+                if (movY < 0) {
                     this.jumping = false
                 }
             }
         }})
-        Movement.makeMovable(this, { accY: config.gravity })
+        
+        Movement.makeMovable(this, { accY: config.gravity, roll: true, fricX: 6 })
     }
     set explosionSFX(val) {
         this.keyControls.explosionSFX = val

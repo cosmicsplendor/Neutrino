@@ -13,7 +13,6 @@ class Level1 extends Node {
     constructor({ player, assetsCache, camera }) {
         super()
         const crate = new Crate({ id: "crate", width: 50, height: 50, pos: { x: 200, y: 0 } })
-
         const texatlas = createAtlas({ 
             metaId: texatlasMetaId,
             imgId: texatlasId
@@ -30,7 +29,8 @@ class Level1 extends Node {
             }
         })
 
-        arena.pos.y = 100
+        arena.pos.y = 200
+        arena.pos.x = 100
         camera.world =  { width: 6000, height: window.innerHeight }
         this.player = player
 

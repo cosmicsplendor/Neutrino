@@ -18,10 +18,10 @@ class Crate extends Texture {
         // this.hitbox = { x: 2, y: 2, width: this.width - 2, height: this.height - 2 }
         // this.rotation = pickOne([ 0, 90, 180, 270 ])
         // this.anchor = { x: 25, y: 25 }
-        this.wallCollision = new Collision({ entity: this, blocks: "col-rects", rigid: true, movable: false, onHit: (block, movement) => {
-            if (movement.y) {
-                this.frictionX = 10
-            }
+        this.wallCollision = new Collision({ entity: this, blocks: "col-rects", rigid: true, movable: false, onHit: (block, _, movY) => {
+            // if (movY) {
+            //     block.fricX = 10
+            // }
         } })
         Movement.makeMovable(this, { accY: config.gravity })
     }
