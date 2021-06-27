@@ -12,22 +12,20 @@ class Player extends Texture {
         super({ imgId: crateImgUrl, ...nodeProps })
         this.width = width
         this.height = height
-        this.radius = Math.sqrt(width * width + height * height)
+        this.radius = width / 2
+        this.hitCirc = { x: 0, y: 0, radius: this.radius }
         this.rotation = 0
         this.anchor = {
             x: width / 2,
             y: height / 2
         }
-        this.pos.y = 0
+        this.pos.y = 100
         this.smooth = true
 
         this.keyControls = new PlayerKeyControls(speed)
         this.wallCollision = new Collision({ entity: this, blocks: COL_RECTS, rigid: true, movable: false, onHit: (block, movX, movY) => {
-            this.jumping = false
-            if (movX) { 
-            }
             if (movY) {
-                if (movY < 0) {
+                if (movY > 0) {
                     this.jumping = false
                 }
             }
@@ -38,13 +36,13 @@ class Player extends Texture {
                 // block.velX += sign(movX)
             }
             if (movY) {
-                if (movY < 0) {
+                if (movY > 0) {
                     this.jumping = false
                 }
             }
         }})
         
-        Movement.makeMovable(this, { accY: config.gravity, roll: true, fricX: 6 })
+        Movement.makeMovable(this, { accY: config.gravity, roll: true, fricX: 8 })
     }
     set explosionSFX(val) {
         this.keyControls.explosionSFX = val

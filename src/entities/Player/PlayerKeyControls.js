@@ -26,9 +26,9 @@ class PlayerKeyControls extends KeyControls {
             entity.jumping = true
             entity.velY = -400
         }
-        if (this.get("down")) {
-            entity.velY += 75
-        }
+        // if (this.get("down")) {
+        //     entity.velY += 75
+        // }
         if (this.get("axn", "pressed")) {
             spawnBullet({ x: entity.pos.x + entity.width, y: entity.pos.y + entity.height / 2 }, this.explosionSFX)
         }
