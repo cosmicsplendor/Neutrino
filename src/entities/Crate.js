@@ -4,7 +4,6 @@ import Movement from "@components/Movement"
 import config from "@config"
 import { pickOne } from "@utils/math"
 
-import crateImgUrl from "@assets/images/carton.png"
 import cartonDarkImg from "@assets/images/cartonDark.png"
 
 class Crate extends Texture {
@@ -20,7 +19,7 @@ class Crate extends Texture {
         // this.anchor = { x: 25, y: 25 }
         this.wallCollision = new Collision({ entity: this, blocks: "col-rects", rigid: true, movable: false, onHit: (block, _, movY) => {
         } })
-        Movement.makeMovable(this, { accY: config.gravity, fricX: 20 })
+        Movement.makeMovable(this, { accY: config.gravity, fricX: 10 })
     }
     update(dt) {
         Movement.update(this, dt)

@@ -26,7 +26,7 @@ class Jumping {
 
 class OffEdge {
     name = "offEdge"
-    constructor(controls, timeout = 0.25) {
+    constructor(controls, timeout = 0.125) {
         this.controls = controls
         this.timeout = timeout
         this.elapsed = 0
