@@ -25,7 +25,7 @@ class LevelScreen extends Camera {
             this.music = soundSprite.create("music", { volume: 1, pan: -1 })
             this.explosionSound = soundSprite.createPool("explosion") 
             // this.music.play()
-            this.player = new Player({ width: 64, height: 64, fill: "brown", id: "player", speed: 10, pos: { x: 400 } })
+            this.player = new Player({ width: 64, height: 64, fill: "brown", id: "player", speed: 3, pos: { x: 400 } })
             this.player.explosionSFX = this.explosionSound
             this.setSubject(this.player)
         })

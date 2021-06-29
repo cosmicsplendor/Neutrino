@@ -19,11 +19,8 @@ class Crate extends Texture {
         // this.rotation = pickOne([ 0, 90, 180, 270 ])
         // this.anchor = { x: 25, y: 25 }
         this.wallCollision = new Collision({ entity: this, blocks: "col-rects", rigid: true, movable: false, onHit: (block, _, movY) => {
-            // if (movY) {
-            //     block.fricX = 10
-            // }
         } })
-        Movement.makeMovable(this, { accY: config.gravity })
+        Movement.makeMovable(this, { accY: config.gravity, fricX: 20 })
     }
     update(dt) {
         Movement.update(this, dt)

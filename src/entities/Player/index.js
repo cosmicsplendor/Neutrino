@@ -3,7 +3,6 @@ import config from "@config"
 import Collision from "@components/Collision"
 import Movement from "@components/Movement"
 import PlayerKeyControls from "./PlayerKeyControls"
-import { sign } from "@utils/math"
 import crateImgUrl from "@assets/images/carton.png"
 import { COL_RECTS } from "@lib/constants"
 
@@ -26,7 +25,7 @@ class Player extends Texture {
         this.wallCollision = new Collision({ entity: this, blocks: COL_RECTS, rigid: true, movable: false, onHit: (block, movX, movY) => {
             if (movY) {
                 if (movY > 0) {
-                    this.jumping = false
+                    this.keyControls.switchState("rolling")
                 }
             }
         } })
@@ -37,15 +36,16 @@ class Player extends Texture {
             }
             if (movY) {
                 if (movY > 0) {
-                    this.jumping = false
+                    this.keyControls.switchState("rolling")
                 }
             }
         }})
         
-        Movement.makeMovable(this, { accY: config.gravity, roll: true, fricX: 8 })
+        Movement.makeMovable(this, { accY: config.gravity, roll: true, fricX: 1 })
     }
-    set explosionSFX(val) {
-        this.keyControls.explosionSFX = val
+    set offEdge(val) {
+        this.keyControls.offEdge = val
+        this.keyControls.switchState("offEdge")
     }
     update(dt, t) {
         this.keyControls.update(this, dt)

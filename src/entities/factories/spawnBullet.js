@@ -3,7 +3,7 @@ import Rect from "@lib/entities/Rect"
 import Pool from "@utils/Pool"
 import { pickOne } from "@utils/math"
 
-const colors = [ "red", "yellow", "green", "blue" ]
+const colors = [ "#ff0099", "#ffcc00", "#aa00aa", "#9900ff" ]
 
 const BulletFactory = () => {
     const bullet = new Rect({ width: 5, height: 5, fill: pickOne(colors) })
