@@ -26,10 +26,19 @@ class Jumping {
 
 class OffEdge {
     name = "offEdge"
-    constructor(controls, timeout = 1) {
+    constructor(controls, timeout = 0.25) {
         this.controls = controls
+        this.timeout = timeout
+        this.elapsed = 0
     }
-    update(entity) {
+    onEnter() {
+        this.elapsed = 0
+    }
+    update(entity, dt) {
+        this.elapsed += dt
+        if (this.elapsed > this.timeout) { 
+            return this.controls.switchState("jumping")
+        }
         if (this.controls.get("left") && this.controls.offEdge === 1 && entity.velX > 0) { // off the right edge
             entity.velX = -50
             entity.velY = -200
@@ -88,6 +97,7 @@ class PlayerKeyControls extends KeyControls {
         if (this.stateSwitched) { return } // disallow state switching more than once every frame
         this.state = this.states[name]
         this.stateSwitched = true
+        this.state.onEnter && this.state.onEnter()
         // if (!this.state) { 
         //     throw new Error(`Undefined state: ${name}`)
         // }
