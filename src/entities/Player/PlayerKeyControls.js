@@ -30,13 +30,13 @@ class OffEdge {
         this.controls = controls
     }
     update(entity) {
-        if (this.controls.get("left") && this.keyControls.offEdge === 1 && entity.velX > 0) { // off the right edge
+        if (this.controls.get("left") && this.controls.offEdge === 1 && entity.velX > 0) { // off the right edge
             entity.velX = -50
             entity.velY = -200
             this.controls.switchState("jumping")
             return
         }
-        if (this.controls.get("right") && this.keyControls.offEdge === -1 && entity.velX < 0) { // off the left edge 
+        if (this.controls.get("right") && this.controls.offEdge === -1 && entity.velX < 0) { // off the left edge 
             entity.velX = 50
             entity.velY = -200
             this.controls.switchState("jumping")
@@ -69,6 +69,7 @@ class Rolling {
 
 class PlayerKeyControls extends KeyControls {
     offEdge = null
+    stateSwitched = false
     constructor(speed=100) {
         super(mappings)
         this.speed = speed
@@ -79,11 +80,17 @@ class PlayerKeyControls extends KeyControls {
         }
         this.switchState("jumping")
     }
+    reset() {
+        super.reset()
+        this.stateSwitched = false
+    }
     switchState(name) {
+        if (this.stateSwitched) { return } // disallow state switching more than once every frame
         this.state = this.states[name]
-        if (!this.state) { 
-            throw new Error(`Undefined state: ${name}`)
-        }
+        this.stateSwitched = true
+        // if (!this.state) { 
+        //     throw new Error(`Undefined state: ${name}`)
+        // }
     }
     update(entity, dt) {
         this.state.update(entity, dt)
