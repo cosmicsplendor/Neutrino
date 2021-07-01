@@ -51,6 +51,10 @@ class OffEdge {
             this.controls.switchState("jumping")
             return
         }
+        if (this.controls.get("up")) {
+            this.controls.switchState("jumping")
+            entity.velY = -300
+        }
     }
 }
 
@@ -68,7 +72,7 @@ class Rolling {
         }
         if (this.controls.get("up")) {
             this.controls.switchState("jumping")
-            entity.velY = -400
+            entity.velY = -350
         }
         if (this.controls.get("axn", "pressed")) {
             spawnBullet({ x: entity.pos.x + entity.width, y: entity.pos.y + entity.height / 2 }, this.explosionSFX)
@@ -98,9 +102,6 @@ class PlayerKeyControls extends KeyControls {
         this.state = this.states[name]
         this.stateSwitched = true
         this.state.onEnter && this.state.onEnter()
-        // if (!this.state) { 
-        //     throw new Error(`Undefined state: ${name}`)
-        // }
     }
     update(entity, dt) {
         this.state.update(entity, dt)
