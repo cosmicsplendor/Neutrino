@@ -1,11 +1,9 @@
 import Texture from "@lib/entities/Texture"
-import { PLANK } from "@lib/constants"
 import { calcNormal, normalize } from "@utils/math"
 
 class Plank extends Texture {
     constructor({ imgId, width, height, ...rest }) {
         super({ imgId: imgId, ...rest })
-        this.shape = PLANK
         this.width = width
         this.height = height
         const normal = calcNormal(width, height)

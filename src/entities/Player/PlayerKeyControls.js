@@ -35,20 +35,20 @@ class Inclined {
     }
     constructor(controls) {
         this.controls = controls
+        this.speed = controls.speed / 4
     }
     onEnter(tanX, tanY) {
-        console.log(tanX, tanY)
         this.setTan(tanX, tanY)
     }
     update(entity) {
         if (this.controls.get("left")) {
-            entity.pos.x -= this.projectedVx * this.controls.speed
-            entity.pos.y -= this.projectedVy * this.controls.speed
+            entity.pos.x -= this.projectedVx * this.speed
+            entity.pos.y -= this.projectedVy * this.speed
         }
-        // if (this.controls.get("right")) {
-        //     entity.pos.x += this.projectedVx * this.controls.speed
-        //     entity.pos.y += this.projectedVy * this.controls.speed
-        // }
+        if (this.controls.get("right")) {
+            entity.pos.x += this.projectedVx * this.speed
+            entity.pos.y += this.projectedVy * this.speed
+        }
     }
 }
 

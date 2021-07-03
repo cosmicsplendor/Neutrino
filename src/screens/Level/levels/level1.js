@@ -4,18 +4,15 @@ import TiledLevel from "@utils/TiledLevel"
 import ParticleEmitter from "@utils/ParticleEmitter"
 
 import Crate from "@entities/Crate"
-import Plank from "@entities/plank"
 import levelDataId from "@assets/levels/level.cson"
 import texatlasId from "@assets/images/texatlas.png"
 import texatlasMetaId from "@assets/images/atlasmeta.cson"
 import fireDataId from "@assets/particles/fire.cson"
-import plankImgId from "@assets/images/plank.png"
 
 class Level1 extends Node {
     constructor({ player, assetsCache, camera }) {
         super()
         const crate = new Crate({ id: "crate", width: 50, height: 50, pos: { x: 0, y: 0 } })
-        const plank = new Plank({ imgId: plankImgId, id: "plank", width: 100, height: 100, pos: { x: 650, y: 300 } })
         const texatlas = createAtlas({ 
             metaId: texatlasMetaId,
             imgId: texatlasId
@@ -39,7 +36,6 @@ class Level1 extends Node {
 
         this.add(arena)
         this.add(crate)
-        this.add(plank)
         this.add(player)
     }
 

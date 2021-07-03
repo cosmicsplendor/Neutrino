@@ -32,9 +32,7 @@ class Player extends Texture {
                 }
             }
         } })
-
-        this.plankCollision = new Collision({ entity: this, block: "plank", rigid: true })
-       
+        
         this.crateCollision = new Collision({ entity: this, block: "crate", rigid: true, onHit: (block, movX, movY) => {
             if (movX) {
                 // block.velX += sign(movX)
@@ -51,15 +49,11 @@ class Player extends Texture {
     set offEdge(val) {
         this.keyControls.switchState("offEdge", val)
     }
-    set inclination(plane) {
-        this.keyControls.switchState("inclined", plane.tanX, plane.tanY)
-    }
     update(dt, t) {
         this.keyControls.update(this, dt)
         Movement.update(this, dt)
         this.crateCollision.update()
         this.wallCollision.update()
-        this.plankCollision.update()
     }
 }
 
