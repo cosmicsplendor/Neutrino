@@ -24,6 +24,34 @@ class Jumping {
     }
 }
 
+class Inclined {
+    name = "inclined"
+    projectedVx = 0
+    projectedVy = 0
+    setTan(x, y) { // inclined surface tangent
+        const projectedVel = x * this.controls.speed // projected velocity along inclined plane
+        this.projectedVx = projectedVel * x
+        this.projectedVy = projectedVel * y
+    }
+    constructor(controls) {
+        this.controls = controls
+    }
+    onEnter(tanX, tanY) {
+        console.log(tanX, tanY)
+        this.setTan(tanX, tanY)
+    }
+    update(entity) {
+        if (this.controls.get("left")) {
+            entity.pos.x -= this.projectedVx * this.controls.speed
+            entity.pos.y -= this.projectedVy * this.controls.speed
+        }
+        // if (this.controls.get("right")) {
+        //     entity.pos.x += this.projectedVx * this.controls.speed
+        //     entity.pos.y += this.projectedVy * this.controls.speed
+        // }
+    }
+}
+
 class OffEdge {
     name = "offEdge"
     constructor(controls, timeout = 0.125) {
@@ -31,7 +59,8 @@ class OffEdge {
         this.timeout = timeout
         this.elapsed = 0
     }
-    onEnter() {
+    onEnter(offEdge) {
+        this.offEdge = offEdge
         this.elapsed = 0
     }
     update(entity, dt) {
@@ -39,13 +68,13 @@ class OffEdge {
         if (this.elapsed > this.timeout) { 
             return this.controls.switchState("jumping")
         }
-        if (this.controls.get("left") && this.controls.offEdge === 1 && entity.velX > 0) { // off the right edge
+        if (this.controls.get("left") && this.offEdge === 1 && entity.velX > 0) { // off the right edge
             entity.velX = -50
             entity.velY = -200
             this.controls.switchState("jumping")
             return
         }
-        if (this.controls.get("right") && this.controls.offEdge === -1 && entity.velX < 0) { // off the left edge 
+        if (this.controls.get("right") && this.offEdge === -1 && entity.velX < 0) { // off the left edge 
             entity.velX = 50
             entity.velY = -200
             this.controls.switchState("jumping")
@@ -53,7 +82,7 @@ class OffEdge {
         }
         if (this.controls.get("up")) {
             this.controls.switchState("jumping")
-            entity.velY = -300
+            entity.velY = this.controls.jumpVel
         }
     }
 }
@@ -72,7 +101,7 @@ class Rolling {
         }
         if (this.controls.get("up")) {
             this.controls.switchState("jumping")
-            entity.velY = -350
+            entity.velY = this.controls.jumpVel
         }
         if (this.controls.get("axn", "pressed")) {
             spawnBullet({ x: entity.pos.x + entity.width, y: entity.pos.y + entity.height / 2 }, this.explosionSFX)
@@ -81,15 +110,18 @@ class Rolling {
 }
 
 class PlayerKeyControls extends KeyControls {
-    offEdge = null
-    stateSwitched = false
+    projectedVx = 0
+    projectedVy = 0
+    stateSwitched = false // a helper flag for preventing multiple state updates every frame making sure the first one gets precendence 
+    jumpVel = -350
     constructor(speed=100) {
         super(mappings)
         this.speed = speed
         this.states = {
             offEdge: new OffEdge(this),
             jumping: new Jumping(this),
-            rolling: new Rolling(this)
+            rolling: new Rolling(this),
+            inclined: new Inclined(this)
         }
         this.switchState("jumping")
     }
@@ -97,11 +129,11 @@ class PlayerKeyControls extends KeyControls {
         super.reset()
         this.stateSwitched = false
     }
-    switchState(name) {
+    switchState(name, ...params) {
         if (this.stateSwitched) { return } // disallow state switching more than once every frame
         this.state = this.states[name]
         this.stateSwitched = true
-        this.state.onEnter && this.state.onEnter()
+        this.state.onEnter && this.state.onEnter(...params)
     }
     update(entity, dt) {
         this.state.update(entity, dt)

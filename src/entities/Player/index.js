@@ -1,14 +1,17 @@
 import Texture from "@lib/entities/Texture"
+import { Node } from "@lib"
 import config from "@config"
 import Collision from "@components/Collision"
 import Movement from "@components/Movement"
 import PlayerKeyControls from "./PlayerKeyControls"
 import crateImgUrl from "@assets/images/carton.png"
+import botHeadImgId from "@assets/images/bot_head.png"
 import { COL_RECTS } from "@lib/constants"
 
+
 class Player extends Texture {
-    constructor({ fill="coral", speed = 20, width = 64, height = 64, ...nodeProps }) {
-        super({ imgId: crateImgUrl, ...nodeProps })
+    constructor({ speed = 20, width = 64, height = 64, ...rest }) {
+        super({ imgId: crateImgUrl, ...rest })
         this.width = width
         this.height = height
         this.radius = width / 2
@@ -19,6 +22,7 @@ class Player extends Texture {
             y: height / 2
         }
         this.pos.y = 100
+  
 
         this.keyControls = new PlayerKeyControls(speed)
         this.wallCollision = new Collision({ entity: this, blocks: COL_RECTS, rigid: true, movable: false, onHit: (block, movX, movY) => {
@@ -28,6 +32,8 @@ class Player extends Texture {
                 }
             }
         } })
+
+        this.plankCollision = new Collision({ entity: this, block: "plank", rigid: true })
        
         this.crateCollision = new Collision({ entity: this, block: "crate", rigid: true, onHit: (block, movX, movY) => {
             if (movX) {
@@ -43,15 +49,36 @@ class Player extends Texture {
         Movement.makeMovable(this, { accY: config.gravity, roll: true, fricX: 1 })
     }
     set offEdge(val) {
-        this.keyControls.offEdge = val
-        this.keyControls.switchState("offEdge")
+        this.keyControls.switchState("offEdge", val)
+    }
+    set inclination(plane) {
+        this.keyControls.switchState("inclined", plane.tanX, plane.tanY)
     }
     update(dt, t) {
         this.keyControls.update(this, dt)
         Movement.update(this, dt)
         this.crateCollision.update()
         this.wallCollision.update()
+        this.plankCollision.update()
     }
 }
 
-export default Player
+class UberPlayer extends Node {
+    constructor({ id, speed = 20, width = 64, height = 64, ...rest }) {
+        super()
+        this.body = new Player({ id, speed, width, height, ...rest })
+        this.head = new Texture({ imgId: botHeadImgId  }) // adding Head
+
+        this.add(this.body)
+        this.add(this.head)
+        this.head.update = () => {
+            this.head.pos.x = this.body.pos.x + 9
+            this.head.pos.y = this.body.pos.y - 22
+        }
+        this.head.pos.x = 9 // 45
+        this.head.pos.y = -16 // 27
+        this.head.update()
+    }
+}
+
+export default UberPlayer
