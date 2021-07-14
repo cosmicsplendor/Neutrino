@@ -22,9 +22,9 @@ class Jumping {
             entity.velX += this.controls.speed
         }
         if (this.controls.get("up")) {
-            if (entity.velY >= 0 || entity.velY < -250) { this.limitReached = true }
+            if (entity.velY >= 0 || entity.velY < -300) { this.limitReached = true }
             if (this.limitReached) { return }
-            entity.velY = this.controls.jumpVel + entity.velY
+            entity.velY = this.controls.jumpVel * 13 * ((90000 - entity.velY * entity.velY) / 90000) + entity.velY
         } else { this.limitReached = true }
     }
     onEnter() {
@@ -76,12 +76,12 @@ class OffEdge {
         // if (this.elapsed > this.timeout) { 
         //     return this.controls.switchState("jumping")
         // }
-        if (this.controls.get("left") && this.offEdge === 1 && entity.velX > 0) { // off the right edge
-            entity.velX -= 50 * this.controls.speed
+        if (this.controls.get("left") && this.offEdge === 1 ) { // off the right edge
+            entity.velX -= this.controls.speed
             return
         }
         if (this.controls.get("right") && this.offEdge === -1 && entity.velX < 0) { // off the left edge 
-            entity.velX += 50 * this.controls.speed
+            entity.velX += this.controls.speed
             return
         }
         // if (this.controls.get("up")) {
@@ -117,7 +117,7 @@ class PlayerKeyControls extends KeyControls {
     projectedVx = 0
     projectedVy = 0
     stateSwitched = false // a helper flag for preventing multiple state updates every frame making sure the first one gets precendence 
-    jumpVel = -10
+    jumpVel = -25
     constructor(speed=100) {
         super(mappings)
         this.speed = speed
