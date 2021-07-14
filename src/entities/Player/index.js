@@ -10,7 +10,7 @@ import { COL_RECTS } from "@lib/constants"
 
 
 class Player extends Texture {
-    constructor({ speed = 20, width = 64, height = 64, ...rest }) {
+    constructor({ speed = 45, width = 64, height = 64, ...rest }) {
         super({ imgId: crateImgUrl, ...rest })
         this.width = width
         this.height = height
@@ -44,14 +44,18 @@ class Player extends Texture {
             }
         }})
         
-        Movement.makeMovable(this, { accY: config.gravity, roll: true, fricX: 1 })
+        Movement.makeMovable(this, { accY: config.gravity, roll: true, fricX: 1 / 2 })
     }
     set offEdge(val) {
         this.keyControls.switchState("offEdge", val)
+        this._offEdge = Boolean(val)
+    }
+    get offEdge() {
+        return this._offEdge
     }
     update(dt, t) {
         this.keyControls.update(this, dt)
-        Movement.update(this, dt)
+        Movement.update(this, dt, t)
         this.crateCollision.update()
         this.wallCollision.update()
     }
@@ -64,7 +68,7 @@ class UberPlayer extends Node {
         this.head = new Texture({ imgId: botHeadImgId  }) // adding Head
 
         this.add(this.body)
-        this.add(this.head)
+        // this.add(this.head)
         this.head.update = () => {
             this.head.pos.x = this.body.pos.x + 9
             this.head.pos.y = this.body.pos.y - 22

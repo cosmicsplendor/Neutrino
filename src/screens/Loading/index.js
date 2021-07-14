@@ -13,7 +13,6 @@ import texatlasImg from "@assets/images/texatlas.png"
 import texatlasMeta from "@assets/images/atlasmeta.cson"
 import levelDataUrl from "@assets/levels/level.cson"
 import fireDataId from "@assets/particles/fire.cson"
-import plankImgId from "@assets/images/plank.png"
 import botHeadImgId from "@assets/images/bot_head.png"
 
 class TitleScreen extends Node {
@@ -38,7 +37,6 @@ class TitleScreen extends Node {
             { url: soundSprite, msg: "loading audio sprite" },
             { url: soundSpriteMeta, msg: "loading audio sprite metadata"},
             { url: cartonImg, msg: "loading Images" },
-            { url: plankImgId },
             { url: botHeadImgId },
             { url: cartonDarkImg },
             { url: texatlasImg },
