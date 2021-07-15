@@ -2,7 +2,7 @@ import Viewport  from "@utils/ViewPort"
 import { clamp } from "@utils/math"
 
 const computeViewport = () => ({ 
-    width: clamp(300, 600, window.innerWidth),
+    width: clamp(300, 1200, window.innerWidth),
     height: Math.min(800, window.innerHeight)
 })
 

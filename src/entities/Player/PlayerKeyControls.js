@@ -17,18 +17,18 @@ class Jumping {
     }
     update(entity) {
         if (this.controls.get("left")) {
-            entity.velX -= this.controls.speed
+            entity.velX -= this.controls.speed / 2
         }
         if (this.controls.get("right")) {
-            entity.velX += this.controls.speed
+            entity.velX += this.controls.speed / 2
         }
         if (this.controls.get("up")) {
             if (entity.velY >= 0 || entity.velY < -300) { this.limitReached = true }
             if (this.limitReached) { return }
-            entity.velY = this.controls.jumpVel * 20 * ((90000 - entity.velY * entity.velY) / 90000) + entity.velY
+            entity.velY = this.controls.jumpVel + entity.velY
         } else { this.limitReached = true }
     }
-    onEnter() {
+    onEnter(entity) {
         this.limitReached = false
     }
 }
@@ -101,7 +101,7 @@ class Rolling {
         }
         if (this.controls.get("up")) {
             entity.velY += this.controls.jumpVel
-            this.controls.switchState("jumping")
+            this.controls.switchState("jumping", entity)
         }
         if (this.controls.get("axn", "pressed")) {
             spawnBullet({ x: entity.pos.x + entity.width, y: entity.pos.y + entity.height / 2 }, this.explosionSFX)
@@ -113,7 +113,7 @@ class PlayerKeyControls extends KeyControls {
     projectedVx = 0
     projectedVy = 0
     stateSwitched = false // a helper flag for preventing multiple state updates every frame making sure the first one gets precendence 
-    jumpVel = -20
+    jumpVel = -30
     constructor(speed=100) {
         super(mappings)
         this.speed = speed
