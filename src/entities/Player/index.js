@@ -1,11 +1,9 @@
 import Texture from "@lib/entities/Texture"
-import { Node } from "@lib"
 import config from "@config"
 import Collision from "@components/Collision"
 import Movement from "@components/Movement"
 import PlayerKeyControls from "./PlayerKeyControls"
 import crateImgUrl from "@assets/images/carton.png"
-import botHeadImgId from "@assets/images/bot_head.png"
 import { COL_RECTS } from "@lib/constants"
 
 
@@ -48,35 +46,17 @@ class Player extends Texture {
     }
     set offEdge(val) {
         this.keyControls.switchState("offEdge", val)
-        this._offEdge = Boolean(val)
+        this._offEdge = val
     }
     get offEdge() {
         return this._offEdge
     }
-    update(dt, t) {
+    update(dt) {
         this.keyControls.update(this, dt)
-        Movement.update(this, dt, t)
+        Boolean(this.offEdge) ? Movement.updateOffEdge(this, dt): Movement.update(this, dt)
         this.crateCollision.update()
         this.wallCollision.update()
     }
 }
 
-class UberPlayer extends Node {
-    constructor({ id, speed = 20, width = 64, height = 64, ...rest }) {
-        super()
-        this.body = new Player({ id, speed, width, height, ...rest })
-        this.head = new Texture({ imgId: botHeadImgId  }) // adding Head
-
-        this.add(this.body)
-        // this.add(this.head)
-        this.head.update = () => {
-            this.head.pos.x = this.body.pos.x + 9
-            this.head.pos.y = this.body.pos.y - 22
-        }
-        this.head.pos.x = 9 // 45
-        this.head.pos.y = -16 // 27
-        this.head.update()
-    }
-}
-
-export default UberPlayer
+export default Player

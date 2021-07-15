@@ -46,7 +46,7 @@ class LevelScreen extends Node {
         }
     }
     onEnter() { 
-        const startingLevel = new Level1({ player: this.player, assetsCache: this.game.assetsCache, viewport: config.viewport, bg: this.bg, fbg: this.fbg, subject: this.player.body })
+        const startingLevel = new Level1({ player: this.player, assetsCache: this.game.assetsCache, viewport: config.viewport, bg: this.bg, fbg: this.fbg, subject: this.player })
         this.setLevel(startingLevel)
     }
     onExit() {

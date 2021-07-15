@@ -29,18 +29,15 @@ class Level1 extends Camera {
                     ))
                 },
                 player: (x, y) => {
-                    player.body.pos.x = x
-                    player.body.pos.y = y
-                    try {
-                        player.remove()
-                    } catch (e) { console.log(e) }
+                    player.pos.x = x
+                    player.pos.y = y
+                    player.onRemove = () => delete player.parent
                     return player
                 }
             }
         })
 
         this.player = player
-        this.setSubject(player.body)
                                                                                                                                                                                                                                                                                                                                                                  
         this.add(arena)
         arena.add(crate)
