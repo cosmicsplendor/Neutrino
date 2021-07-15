@@ -1,5 +1,6 @@
 import KeyControls from "@lib/components/KeyControls"
 import spawnBullet from "@entities/factories/spawnBullet"
+import { clamp } from "@utils/math"
 
 const mappings = Object.freeze({
     left: [ 37, 65 ],
@@ -82,10 +83,7 @@ class OffEdge {
         if (this.controls.get("right")) { // off the left edge 
             entity.velX += this.controls.speed
         }
-        // if (this.controls.get("up")) {
-        //     this.controls.switchState("jumping")
-        //     entity.velY = this.controls.jumpVel
-        // }
+        entity.velX = clamp(-100, 100, entity.velX) 
     }
 }
 
