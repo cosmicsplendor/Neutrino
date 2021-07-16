@@ -3,7 +3,7 @@ import { clamp } from "@utils/math"
 
 const computeViewport = () => ({ 
     width: clamp(300, 1200, window.innerWidth),
-    height: Math.min(800, window.innerHeight)
+    height: Math.min(700, window.innerHeight)
 })
 
 export default Object.freeze({

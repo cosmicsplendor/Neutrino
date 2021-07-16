@@ -2,7 +2,7 @@ import KeyControls from "@lib/components/KeyControls"
 import spawnBullet from "@entities/factories/spawnBullet"
 import { clamp } from "@utils/math"
 
-const mappings = Object.freeze({
+const defaultMappings = Object.freeze({
     left: [ 37, 65 ],
     up: [ 38, 87 ],
     right: [ 39, 68 ],
@@ -10,80 +10,33 @@ const mappings = Object.freeze({
     axn: 32
 })
 
-class Jumping {
-    name = "jumping"
-    constructor(controls) {
-        this.controls = controls
-    }
-    update(entity) {
-        if (this.controls.get("left")) {
-            entity.velX -= this.controls.speed / 2
+class PlayerKeyControls extends KeyControls {
+    stateSwitched = false // a helper flag for preventing multiple state updates every frame making sure the first one gets precendence 
+    jumpVel = -260
+    constructor(speed=100, mappings=defaultMappings) {
+        super(mappings)
+        this.speed = speed
+        this.states = {
+            offEdge: new OffEdge(this),
+            jumping: new Jumping(this),
+            rolling: new Rolling(this),
         }
-        if (this.controls.get("right")) {
-            entity.velX += this.controls.speed / 2
-        }
-        if (this.controls.get("up")) {
-            if (entity.velY >= 0 || entity.velY < -300) { this.limitReached = true }
-            if (this.limitReached) { return }
-            entity.velY = this.controls.jumpVel + entity.velY
-        } else { this.limitReached = true }
+        this.state = this.states.jumping
     }
-    onEnter(entity) {
-        this.limitReached = false
+    cleanup() {
+        this.reset() // reset pressed attribute on all keys
+        this.stateSwitched = false // reset stateSwitched for the next frame
     }
-}
-
-class Inclined {
-    name = "inclined"
-    projectedVx = 0
-    projectedVy = 0
-    setTan(x, y) { // inclined surface tangent
-        const projectedVel = x * this.controls.speed // projected velocity along inclined plane
-        this.projectedVx = projectedVel * x
-        this.projectedVy = projectedVel * y
-    }
-    constructor(controls) {
-        this.controls = controls
-        this.speed = controls.speed / 4
-    }
-    onEnter(tanX, tanY) {
-        this.setTan(tanX, tanY)
-    }
-    update(entity) {
-        if (this.controls.get("left")) {
-            entity.pos.x -= this.projectedVx * this.speed
-            entity.pos.y -= this.projectedVy * this.speed
-        }
-        if (this.controls.get("right")) {
-            entity.pos.x += this.projectedVx * this.speed
-            entity.pos.y += this.projectedVy * this.speed
-        }
-    }
-}
-
-class OffEdge {
-    name = "offEdge"
-    constructor(controls, timeout = 0.125) {
-        this.controls = controls
-        this.timeout = timeout
-        this.elapsed = 0
-    }
-    onEnter(offEdge) {
-        this.offEdge = offEdge
-        this.elapsed = 0
+    switchState(name, ...params) {
+        if (this.stateSwitched || name === this.state.name) { return } // disallow state switching more than once every frame
+        this.state.onExit && this.state.onExit() // execute previous state's onExit hook, in case there's one
+        this.state = this.states[name]
+        this.state.onEnter && this.state.onEnter(...params)
+        this.stateSwitched = true
     }
     update(entity, dt) {
-        this.elapsed += dt
-        // if (this.elapsed > this.timeout) { 
-        //     return this.controls.switchState("jumping")
-        // }
-        if (this.controls.get("left")) { // off the right edge
-            entity.velX -= this.controls.speed
-        }
-        if (this.controls.get("right")) { // off the left edge 
-            entity.velX += this.controls.speed
-        }
-        entity.velX = clamp(-100, 100, entity.velX) 
+        this.state.update(entity, dt)
+        this.cleanup()
     }
 }
 
@@ -92,15 +45,16 @@ class Rolling {
     constructor(controls) {
         this.controls = controls
     }
-    update(entity) {
+    onEnter() {
+    }
+    update(entity, dt) {
         if (this.controls.get("left")) {
-            entity.velX -= this.controls.speed
+            entity.velX -= this.controls.speed * dt
         }
         if (this.controls.get("right")) {
-            entity.velX += this.controls.speed
+            entity.velX += this.controls.speed * dt
         }
         if (this.controls.get("up")) {
-            entity.velY += this.controls.jumpVel
             this.controls.switchState("jumping", entity)
         }
         if (this.controls.get("axn", "pressed")) {
@@ -109,36 +63,44 @@ class Rolling {
     }
 }
 
-class PlayerKeyControls extends KeyControls {
-    projectedVx = 0
-    projectedVy = 0
-    stateSwitched = false // a helper flag for preventing multiple state updates every frame making sure the first one gets precendence 
-    jumpVel = -30
-    constructor(speed=100) {
-        super(mappings)
-        this.speed = speed
-        this.states = {
-            offEdge: new OffEdge(this),
-            jumping: new Jumping(this),
-            rolling: new Rolling(this),
-            inclined: new Inclined(this)
-        }
-        this.state = this.states.jumping
+
+class Jumping {
+    name = "jumping"
+    constructor(controls) {
+        this.controls = controls
     }
-    reset() {
-        super.reset()
-        this.stateSwitched = false
-    }
-    switchState(name, ...params) {
-        
-        if (this.stateSwitched || name === this.state.name) { return } // disallow state switching more than once every frame
-        this.state = this.states[name]
-        this.stateSwitched = true
-        this.state.onEnter && this.state.onEnter(...params)
+    onEnter(entity) {
+        entity.velY += this.controls.jumpVel
+        this.limitReached = false
     }
     update(entity, dt) {
-        this.state.update(entity, dt)
-        this.reset()
+        if (this.controls.get("left")) {
+            entity.velX -= this.controls.speed * dt / 2 
+        }
+        if (this.controls.get("right")) {
+            entity.velX += this.controls.speed * dt / 2
+        }
+        if (this.controls.get("up")) {
+            if (this.limitReached) { return }
+            entity.velY = this.controls.jumpVel * dt + entity.velY
+        } else { this.limitReached = true } // if the player has stopped pressing "up" key, that's as much velocity as he'll attain in this jump
+    }
+}
+
+class OffEdge {
+    name = "offEdge"
+    constructor(controls, timeout = 0.125) {
+        this.controls = controls
+        this.timeout = timeout
+    }
+    update(entity, dt) {
+        if (this.controls.get("left")) { // off the right edge
+            entity.velX -= this.controls.speed * dt
+        }
+        if (this.controls.get("right")) { // off the left edge 
+            entity.velX += this.controls.speed * dt
+        }
+        entity.velX = clamp(-100, 100, entity.velX) 
     }
 }
 

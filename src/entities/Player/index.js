@@ -21,7 +21,6 @@ class Player extends Texture {
         }
         this.pos.y = 100
   
-
         this.keyControls = new PlayerKeyControls(speed)
         this.wallCollision = new Collision({ entity: this, blocks: COL_RECTS, rigid: true, movable: false, onHit: (block, movX, movY) => {
             if (movY) {

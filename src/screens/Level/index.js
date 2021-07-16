@@ -25,7 +25,7 @@ class LevelScreen extends Node {
             this.music = soundSprite.create("music", { volume: 1, pan: -1 })
             this.explosionSound = soundSprite.createPool("explosion") 
             // this.music.play()
-            this.player = new Player({ width: 64, height: 64, fill: "brown", id: "player", speed: 3, pos: { x: 300, y: 0 }})
+            this.player = new Player({ width: 64, height: 64, fill: "brown", id: "player", speed: 180, pos: { x: 300, y: 0 }})
             this.bg = new Camera({ z: 2, viewport: config.viewport, subject: this.player }) // parallax bg
             this.fbg = new Camera({ z: 5, viewport: config.viewport, subject: this.player })// parallax far-background
             this.add(this.fbg)
