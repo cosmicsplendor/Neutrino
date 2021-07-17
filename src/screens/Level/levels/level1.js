@@ -11,7 +11,6 @@ import fireDataId from "@assets/particles/fire.cson"
 
 class Level1 extends Camera {
     constructor({ player, assetsCache, bg, fbg, ...cameraProps }) {
-        super({ ...cameraProps, world: { width: 6000, height: window.innerHeight * 3 } })
         const crate = new Crate({ id: "crate", width: 50, height: 50, pos: { x: 0, y: 0 } })
         const texatlas = createAtlas({ 
             metaId: texatlasMetaId,
@@ -36,6 +35,7 @@ class Level1 extends Camera {
                 }
             }
         })
+        super({ ...cameraProps, world: { width: arena.width, height: arena.height } })
 
         this.player = player
                                                                                                                                                                                                                                                                                                                                                                  
