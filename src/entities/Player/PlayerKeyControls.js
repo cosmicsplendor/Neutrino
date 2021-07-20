@@ -57,9 +57,9 @@ class Rolling {
         if (this.controls.get("up")) {
             this.controls.switchState("jumping", entity)
         }
-        if (this.controls.get("axn", "pressed")) {
-            spawnBullet({ x: entity.pos.x + entity.width, y: entity.pos.y + entity.height / 2 }, this.explosionSFX)
-        }
+        // if (this.controls.get("axn", "pressed")) {
+        //     spawnBullet({ x: entity.pos.x + entity.width, y: entity.pos.y + entity.height / 2 }, this.explosionSFX)
+        // }
     }
 }
 

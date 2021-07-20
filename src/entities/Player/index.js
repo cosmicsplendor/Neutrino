@@ -8,7 +8,7 @@ import { COL_RECTS } from "@lib/constants"
 
 
 class Player extends Texture {
-    constructor({ speed = 45, width = 64, height = 64, ...rest }) {
+    constructor({ speed = 48, width = 64, height = 64, ...rest }) {
         super({ imgId: crateImgUrl, ...rest })
         this.width = width
         this.height = height
