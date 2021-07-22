@@ -1,3 +1,6 @@
+const { Camera } = require("@lib/entities")
+const { default: Player } = require("@root")
+
 function playSound() {
     const actx = new AudioContext()
     const xhr = new XMLHttpRequest()
@@ -151,3 +154,14 @@ new Timer(100, n => {
  * maybe gotta have a Node intance as the root container of everyting
  * followed by everything
  */
+
+
+const mapbaseline = Math.max(entity.y + entity.height)
+const mapbaseline = tiles.reduce((acc, tile) => {
+    return Math.max(acc, tile.y + tile.height)
+}, -Math.Infinity)
+const FYmax = mapbaseline - Player.height / 2
+let baseline =   (fymax + Player.height) / 2
+Camera.children.forEach(map => {
+    entity.y = baseline - (mapbaseline -entity.y)
+})

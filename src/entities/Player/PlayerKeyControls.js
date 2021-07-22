@@ -12,7 +12,7 @@ const defaultMappings = Object.freeze({
 
 class PlayerKeyControls extends KeyControls {
     stateSwitched = false // a helper flag for preventing multiple state updates every frame making sure the first one gets precendence 
-    jumpVel = -260
+    jumpVel = -400
     constructor(speed=100, mappings=defaultMappings) {
         super(mappings)
         this.speed = speed
@@ -75,15 +75,15 @@ class Jumping {
     }
     update(entity, dt) {
         if (this.controls.get("left")) {
-            entity.velX -= this.controls.speed * dt / 2 
+            entity.velX -= (entity.velX > 0 ? 2 : 1) * this.controls.speed * dt 
         }
         if (this.controls.get("right")) {
-            entity.velX += this.controls.speed * dt / 2
+            entity.velX += (entity.velX < 0 ? 2 : 1) * this.controls.speed * dt 
         }
         if (this.controls.get("up")) {
             if (this.limitReached) { return }
-            entity.velY = this.controls.jumpVel * dt + entity.velY
-        } else { this.limitReached = true } // if the player has stopped pressing "up" key, that's as much velocity as he'll attain in this jump
+            entity.velY += this.controls.jumpVel * dt * ((1 + Math.abs(entity.velY)) / Math.abs(entity.velY))
+        } else { this.limitReached = true } // if the player has stopped pressing "up" key, player won't gain anymore velocity in this jump
     }
 }
 

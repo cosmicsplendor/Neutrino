@@ -1,4 +1,5 @@
-import { Camera, Node } from "@lib"
+import { Node } from "@lib"
+import ParallaxCamera from "@lib/entities/ParallaxCamera"
 import Timer from "@utils/Timer"
 import SoundSprite from "@utils/Sound/SoundSprite"
 
@@ -8,8 +9,8 @@ import Player from "@entities/Player"
 import soundSpriteId from "@assets/audio/sprite.mp3"
 import soundMetaId from "@assets/audio/sprite.cson"
 
-class LevelScreen extends Node {
-    background = "black"
+class LevelScreen extends Node { // can only have cameras as children
+    background = "#00002bff"
     initialized = false
     constructor({ game }) {
         super()
@@ -26,8 +27,8 @@ class LevelScreen extends Node {
             this.explosionSound = soundSprite.createPool("explosion") 
             // this.music.play()
             this.player = new Player({ width: 64, height: 64, fill: "brown", id: "player", speed: 180, pos: { x: 300, y: 0 }})
-            this.bg = new Camera({ z: 2, viewport: config.viewport, subject: this.player }) // parallax bg
-            this.fbg = new Camera({ z: 5, viewport: config.viewport, subject: this.player })// parallax far-background
+            this.bg = new ParallaxCamera({ z: 2, viewport: config.viewport, subject: this.player }) // parallax bg
+            this.fbg = new ParallaxCamera({ z: 5, viewport: config.viewport, subject: this.player })// parallax far-background
             this.add(this.fbg)
             this.add(this.bg)
         })
