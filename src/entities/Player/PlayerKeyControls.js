@@ -12,7 +12,9 @@ const defaultMappings = Object.freeze({
 
 class PlayerKeyControls extends KeyControls {
     stateSwitched = false // a helper flag for preventing multiple state updates every frame making sure the first one gets precendence 
-    jumpVel = -400
+    jmpVel = -260
+    maxJvelInc = 5
+    mxJmpVel = 370
     constructor(speed=100, mappings=defaultMappings) {
         super(mappings)
         this.speed = speed
@@ -49,10 +51,10 @@ class Rolling {
     }
     update(entity, dt) {
         if (this.controls.get("left")) {
-            entity.velX -= this.controls.speed * dt
+            entity.velX -= (entity.velX > 0 ? 3 : 1) * this.controls.speed * dt 
         }
         if (this.controls.get("right")) {
-            entity.velX += this.controls.speed * dt
+            entity.velX += (entity.velX < 0 ? 3 : 1) * this.controls.speed * dt 
         }
         if (this.controls.get("up")) {
             this.controls.switchState("jumping", entity)
@@ -70,19 +72,20 @@ class Jumping {
         this.controls = controls
     }
     onEnter(entity) {
-        entity.velY += this.controls.jumpVel
+        entity.velY += this.controls.jmpVel
         this.limitReached = false
     }
     update(entity, dt) {
         if (this.controls.get("left")) {
-            entity.velX -= (entity.velX > 0 ? 2 : 1) * this.controls.speed * dt 
+            entity.velX -= (entity.velX > 0 ? 3 : 1) * this.controls.speed * dt 
         }
         if (this.controls.get("right")) {
-            entity.velX += (entity.velX < 0 ? 2 : 1) * this.controls.speed * dt 
+            entity.velX += (entity.velX < 0 ? 3 : 1) * this.controls.speed * dt 
         }
         if (this.controls.get("up")) {
+            if (entity.velY < -this.controls.mxJmpVel) { this.limitReached = true }
             if (this.limitReached) { return }
-            entity.velY += this.controls.jumpVel * dt * ((1 + Math.abs(entity.velY)) / Math.abs(entity.velY))
+            entity.velY += this.controls.jmpVel * ( Math.min(5.5, (entity.velY * entity.velY) / 100)) * dt 
         } else { this.limitReached = true } // if the player has stopped pressing "up" key, player won't gain anymore velocity in this jump
     }
 }
