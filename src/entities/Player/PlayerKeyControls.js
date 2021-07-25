@@ -14,7 +14,7 @@ class PlayerKeyControls extends KeyControls {
     stateSwitched = false // a helper flag for preventing multiple state updates every frame making sure the first one gets precendence 
     jmpVel = -260
     maxJvelInc = 5
-    mxJmpVel = 370
+    mxJmpVel = 375
     constructor(speed=100, mappings=defaultMappings) {
         super(mappings)
         this.speed = speed
