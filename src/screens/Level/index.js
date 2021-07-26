@@ -10,7 +10,7 @@ import soundSpriteId from "@assets/audio/sprite.mp3"
 import soundMetaId from "@assets/audio/sprite.cson"
 
 class LevelScreen extends Node { // can only have cameras as children
-    background = "#00002bff"
+    background = "#2e2e3d"
     initialized = false
     constructor({ game }) {
         super()
