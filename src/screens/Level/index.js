@@ -28,13 +28,12 @@ class LevelScreen extends Node { // can only have cameras as children
             // this.music.play()
             this.player = new Player({ width: 64, height: 64, fill: "brown", id: "player", speed: 180, pos: { x: 300, y: 0 }})
             this.bg = new ParallaxCamera({ z: 2, viewport: config.viewport, subject: this.player }) // parallax bg
-            this.fbg = new ParallaxCamera({ z: 5, viewport: config.viewport, subject: this.player })// parallax far-background
+            this.fbg = new ParallaxCamera({ z: 4, viewport: config.viewport, subject: this.player })// parallax far-background
             this.add(this.fbg)
             this.add(this.bg)
         })
     }
     setLevel(level) {
-        this.unsetLevel()
         this.add(level)
         level.parent = null // sever the child to parent link
     }
@@ -47,6 +46,7 @@ class LevelScreen extends Node { // can only have cameras as children
         }
     }
     onEnter() { 
+        this.unsetLevel()
         const startingLevel = new Level1({ player: this.player, assetsCache: this.game.assetsCache, viewport: config.viewport, bg: this.bg, fbg: this.fbg, subject: this.player })
         this.setLevel(startingLevel)
     }

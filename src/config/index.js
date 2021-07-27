@@ -10,5 +10,5 @@ export default Object.freeze({
     viewport: new Viewport(computeViewport),
     worldWidth: 1000,
     worldHeight: window.innerHeight,
-    gravity: 1700
+    gravity: 500
 })
