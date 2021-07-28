@@ -11,7 +11,7 @@ import fireDataId from "@assets/particles/fire.cson"
 
 class Level1 extends Camera {
     constructor({ player, assetsCache, bg, fbg, ...cameraProps }) {
-        const crate = new Crate({ id: "crate", width: 50, height: 50, pos: { x: 0, y: 0 } })
+        const crate = new Crate({ id: "crate", width: 50, height: 50, pos: { x: 100, y: 1000 } })
         const texatlas = createAtlas({ 
             metaId: texatlasMetaId,
             imgId: texatlasId
