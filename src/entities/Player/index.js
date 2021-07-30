@@ -22,24 +22,9 @@ class Player extends Texture {
         this.pos.y = 100
   
         this.keyControls = new PlayerKeyControls(speed)
-        this.wallCollision = new Collision({ entity: this, blocks: COL_RECTS, rigid: true, movable: false, onHit: (block, movX, movY) => {
-            if (movY) {
-                if (movY > 0) {
-                    this.keyControls.switchState("rolling")
-                }
-            }
-        } })
+        this.wallCollision = new Collision({ entity: this, blocks: COL_RECTS, rigid: true, movable: false, onHit: this.onWallCollision })
         
-        this.crateCollision = new Collision({ entity: this, block: "crate", rigid: true, onHit: (block, movX, movY) => {
-            if (movX) {
-                // block.velX += sign(movX)
-            }
-            if (movY) {
-                if (movY > 0) {
-                    this.keyControls.switchState("rolling")
-                }
-            }
-        }})
+        this.crateCollision = new Collision({ entity: this, block: "crate", rigid: true, onHit: this.onCrateCollision })
         
         Movement.makeMovable(this, { accY: config.gravity, roll: true, fricX })
     }
@@ -49,6 +34,23 @@ class Player extends Texture {
     }
     get offEdge() {
         return this._offEdge
+    }
+    onWallCollision(block, movX, movY) {
+        if (movY) {
+            if (movY > 0) {
+                this.keyControls.switchState("rolling")
+            }
+        }
+    } 
+    onCrateCollision(block, movX, movY) {
+        if (movX) {
+            // block.velX += sign(movX)
+        }
+        if (movY) {
+            if (movY > 0) {
+                this.keyControls.switchState("rolling")
+            }
+        }
     }
     update(dt) {
         this.keyControls.update(this, dt)
