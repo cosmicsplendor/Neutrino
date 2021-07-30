@@ -1,6 +1,6 @@
 import { Camera } from "@lib"
 import { createAtlas } from "@lib/entities/TexRegion"
-import TiledLevel, { resettable } from "@utils/TiledLevel"
+import TiledLevel from "@utils/TiledLevel"
 import ParticleEmitter from "@utils/ParticleEmitter"
 
 import Crate from "@entities/Crate"
@@ -22,19 +22,13 @@ class Level1 extends Camera {
                     assetsCache.get(fireDataId), { pos: { x, y }, imgId: texatlasId, metaId: texatlasMetaId }
                 ))
                 return fire
-            },
-            player: (x, y) => {
-                player.pos.x = x
-                player.pos.y = y
-                player.onRemove = () => delete player.parent
-                return player
             }
         }
         const arena = new TiledLevel({ 
             id: "arena",
             data: assetsCache.get(levelDataId),
             texatlas,
-            bg, fbg,
+            bg, fbg, player,
             factories
         })
         super({ ...cameraProps, world: { width: arena.width, height: arena.height } })

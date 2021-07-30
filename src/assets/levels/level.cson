@@ -6,19 +6,22 @@
          "x": 3,
          "y": 1408,
          "width": 4033,
-         "height": 200
+         "height": 200,
+         "mat": "concrete"
       },
       {
          "x": 768,
          "y": 1288,
          "width": 240,
-         "height": 120
+         "height": 120,
+         "mat": "metal"
       },
       {
          "x": 1008,
          "y": 1168,
          "width": 240,
-         "height": 240
+         "height": 240,
+         "mat": "concrete"
       }
    ],
    "spawnPoints": [
