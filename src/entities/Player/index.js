@@ -8,7 +8,7 @@ import { COL_RECTS } from "@lib/constants"
 
 
 class Player extends Texture {
-    constructor({ speed = 48, width = 64, height = 64, ...rest }) {
+    constructor({ speed = 48, width = 64, height = 64, fricX=4, ...rest }) {
         super({ imgId: crateImgUrl, ...rest })
         this.width = width
         this.height = height
@@ -41,7 +41,7 @@ class Player extends Texture {
             }
         }})
         
-        Movement.makeMovable(this, { accY: config.gravity, roll: true, fricX: 1 / 2 })
+        Movement.makeMovable(this, { accY: config.gravity, roll: true, fricX })
     }
     set offEdge(val) {
         this.keyControls.switchState("offEdge", val)
