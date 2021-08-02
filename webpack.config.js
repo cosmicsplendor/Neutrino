@@ -19,6 +19,7 @@ module.exports = {
             "@config": path.join(cwd, "./src/config"),
             "@entities": path.join(cwd, "./src/entities"),
             "@screens": path.join(cwd, "./src/screens"),
+            "@factories": path.join(cwd, "./src/entities/factories"),
         }
     },
     module: {

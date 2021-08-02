@@ -22,9 +22,8 @@ class Player extends Texture {
         this.pos.y = 100
   
         this.keyControls = new PlayerKeyControls(speed)
-        this.wallCollision = new Collision({ entity: this, blocks: COL_RECTS, rigid: true, movable: false, onHit: this.onWallCollision })
-        
-        this.crateCollision = new Collision({ entity: this, block: "crate", rigid: true, onHit: this.onCrateCollision })
+        this.wallCollision = new Collision({ entity: this, blocks: COL_RECTS, rigid: true, movable: false, onHit: this.onWallCollision.bind(this) })
+        this.spikeCollision = new Collision({ entity: this, blocks: "spikes", rigid: false, movable: false, onHit: this.onSpikeCollision.bind(this) })
         
         Movement.makeMovable(this, { accY: config.gravity, roll: true, fricX })
     }
@@ -42,21 +41,17 @@ class Player extends Texture {
             }
         }
     } 
-    onCrateCollision(block, movX, movY) {
-        if (movX) {
-            // block.velX += sign(movX)
-        }
-        if (movY) {
-            if (movY > 0) {
-                this.keyControls.switchState("rolling")
-            }
-        }
+    onSpikeCollision(block) {
+        this._level.resetRecursively()
+    }
+    injectLevel(level) {
+        this._level = level 
     }
     update(dt) {
         this.keyControls.update(this, dt)
         Boolean(this.offEdge) ? Movement.updateOffEdge(this, dt): Movement.update(this, dt)
-        this.crateCollision.update()
         this.wallCollision.update()
+        this.spikeCollision.update()
     }
 }
 
