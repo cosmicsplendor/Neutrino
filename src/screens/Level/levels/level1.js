@@ -3,6 +3,8 @@ import { createAtlas } from "@lib/entities/TexRegion"
 import TiledLevel from "@utils/TiledLevel"
 import ParticleEmitter from "@utils/ParticleEmitter"
 
+import createGate from "@factories/gate"
+
 import levelDataId from "@assets/levels/level.cson"
 import texatlasId from "@assets/images/texatlas.png"
 import texatlasMetaId from "@assets/images/atlasmeta.cson"
@@ -21,6 +23,7 @@ class Level1 extends Camera {
                 ))
                 return fire
             },
+            gate: createGate
         }
         const arena = new TiledLevel({ 
             id: "arena",
