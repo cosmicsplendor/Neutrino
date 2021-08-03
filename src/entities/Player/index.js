@@ -23,7 +23,8 @@ class Player extends Texture {
   
         this.keyControls = new PlayerKeyControls(speed)
         this.wallCollision = new Collision({ entity: this, blocks: COL_RECTS, rigid: true, movable: false, onHit: this.onWallCollision.bind(this) })
-        this.spikeCollision = new Collision({ entity: this, blocks: "spikes", rigid: false, movable: false, onHit: this.onSpikeCollision.bind(this) })
+        this.spikeCollision = new Collision({ entity: this, blocks: "spikes", rigid: false, movable: false, onHit: this.explode.bind(this) })
+        this.gateCollision = new Collision({ entity: this, blocks: "gates", rigid: false, movable: false, onHit: this.explode.bind(this) })
         
         Movement.makeMovable(this, { accY: config.gravity, roll: true, fricX })
     }
@@ -41,7 +42,7 @@ class Player extends Texture {
             }
         }
     } 
-    onSpikeCollision(block) {
+    explode() {
         this._level.resetRecursively()
     }
     injectLevel(level) {
@@ -52,6 +53,7 @@ class Player extends Texture {
         Boolean(this.offEdge) ? Movement.updateOffEdge(this, dt): Movement.update(this, dt)
         this.wallCollision.update()
         this.spikeCollision.update()
+        this.gateCollision.update()
     }
 }
 

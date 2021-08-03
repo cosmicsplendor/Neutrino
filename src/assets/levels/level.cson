@@ -76,7 +76,8 @@
          "name": "gate",
          "x": 3040,
          "y": 920,
-         "endY": 782
+         "endY": 782,
+         "groupId": "gates"
       }
    ],
    "markerPoints": [],
