@@ -983,13 +983,7 @@
          "name": "wt_4"
       },
       {
-         "x": 72,
-         "y": 1384,
-         "groupId": "spikes",
-         "name": "saw2"
-      },
-      {
-         "x": 144,
+         "x": 48,
          "y": 1384,
          "groupId": "spikes",
          "name": "saw2"

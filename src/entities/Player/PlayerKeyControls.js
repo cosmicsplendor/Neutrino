@@ -75,7 +75,11 @@ class Jumping {
         entity.velY += this.controls.jmpVel
         this.limitReached = false
     }
+    onHalt() { // jump prematurely obstructed (mostly by collision with bottom edge of a rect)
+        this.limitReached = true
+    }
     update(entity, dt) {
+        console.log(this.limitReached)
         if (this.controls.get("left")) {
             entity.velX -= (entity.velX > 0 ? 3 : 1) * this.controls.speed * dt 
         }

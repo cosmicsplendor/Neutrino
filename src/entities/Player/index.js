@@ -38,7 +38,11 @@ class Player extends Texture {
     onWallCollision(block, movX, movY) {
         if (movY) {
             if (movY > 0) {
-                this.keyControls.switchState("rolling")
+                return this.keyControls.switchState("rolling")
+            }
+            // collision with the bottom edge
+            if (this.keyControls.state && this.keyControls.state.name && this.keyControls.state.name === "jumping") {
+                this.keyControls.state.onHalt()
             }
         }
     } 
