@@ -1,0 +1,93 @@
+{
+ "blendMode": "source-over",
+ "loop": false,
+ "debug": false,
+ "params": [
+  {
+   "alphaDecayFn": "cubicOut",
+   "weight": 2,
+   "frame": "sh5",
+   "width": 6,
+   "height": 6,
+   "offsetX": [
+    0,
+    0
+   ],
+   "offsetY": [
+    0,
+    0
+   ],
+   "lifetime": [
+    1,
+    1
+   ],
+   "velX": [
+    -10,
+    10
+   ],
+   "velY": [
+    -30,
+    -15
+   ],
+   "accX": [
+    0,
+    0
+   ],
+   "accY": [
+    0,
+    0
+   ],
+   "alpha": [
+    0.9,
+    1
+   ]
+  },
+  {
+   "alphaDecayFn": "linear",
+   "weight": 4,
+   "frame": "sh6",
+   "width": 6,
+   "height": 6,
+   "offsetX": [
+    0,
+    0
+   ],
+   "offsetY": [
+    0,
+    0
+   ],
+   "lifetime": [
+    1,
+    1
+   ],
+   "velX": [
+    -14,
+    14
+   ],
+   "velY": [
+    -50,
+    -30
+   ],
+   "accX": [
+    0,
+    0
+   ],
+   "accY": [
+    0,
+    0
+   ],
+   "alpha": [
+    0.9,
+    1
+   ]
+  }
+ ],
+ "hitbox": {
+  "x": -27,
+  "y": -51,
+  "width": 54,
+  "height": 34.5
+ },
+ "randomDistribution": true,
+ "size": 24
+}

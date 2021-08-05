@@ -2,6 +2,7 @@ import { Camera } from "@lib"
 import { createAtlas } from "@lib/entities/TexRegion"
 import TiledLevel from "@utils/TiledLevel"
 import ParticleEmitter from "@utils/ParticleEmitter"
+import { curLevelId } from "@lib/constants"
 
 import createGate from "@factories/gate"
 
@@ -32,7 +33,7 @@ class Level1 extends Camera {
             bg, fbg, player,
             factories
         })
-        super({ ...cameraProps, world: { width: arena.width, height: arena.height } })
+        super({ ...cameraProps, id: curLevelId, world: { width: arena.width, height: arena.height } })
 
         this.player = player
         player.injectLevel(arena)

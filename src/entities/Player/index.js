@@ -1,14 +1,14 @@
+import { Node } from "@lib"
 import Texture from "@lib/entities/Texture"
 import config from "@config"
 import Collision from "@components/Collision"
 import Movement from "@components/Movement"
 import PlayerKeyControls from "./PlayerKeyControls"
 import crateImgUrl from "@assets/images/carton.png"
-import { COL_RECTS } from "@lib/constants"
-
+import { colRectsId, curLevelId } from "@lib/constants"
 
 class Player extends Texture {
-    constructor({ speed = 48, width = 64, height = 64, fricX=4, ...rest }) {
+    constructor({ speed = 48, width = 64, height = 64, fricX=4, shard, cinder, ...rest }) {
         super({ imgId: crateImgUrl, ...rest })
         this.width = width
         this.height = height
@@ -20,17 +20,20 @@ class Player extends Texture {
             y: height / 2
         }
         this.pos.y = 100
+        this.shard = shard
+        this.cinder = cinder
+        
   
         this.keyControls = new PlayerKeyControls(speed)
-        this.wallCollision = new Collision({ entity: this, blocks: COL_RECTS, rigid: true, movable: false, onHit: this.onWallCollision.bind(this) })
+        this.wallCollision = new Collision({ entity: this, blocks: colRectsId, rigid: true, movable: false, onHit: this.onWallCollision.bind(this) })
         this.spikeCollision = new Collision({ entity: this, blocks: "spikes", rigid: false, movable: false, onHit: this.explode.bind(this) })
         this.gateCollision = new Collision({ entity: this, blocks: "gates", rigid: false, movable: false, onHit: this.explode.bind(this) })
         
         Movement.makeMovable(this, { accY: config.gravity, roll: true, fricX })
     }
-    set offEdge(val) {
-        this.keyControls.switchState("offEdge", val)
-        this._offEdge = val
+    set offEdge(which) {
+        this.keyControls.switchState("offEdge", which)
+        this._offEdge = which
     }
     get offEdge() {
         return this._offEdge
@@ -42,15 +45,21 @@ class Player extends Texture {
             }
             // collision with the bottom edge
             if (this.keyControls.state && this.keyControls.state.name && this.keyControls.state.name === "jumping") {
+                // this.velY = -100
                 this.keyControls.state.onHalt()
             }
         }
     } 
     explode() {
-        this._level.resetRecursively()
-    }
-    injectLevel(level) {
-        this._level = level 
+        this.cinder.pos.x = this.shard.pos.x = this.pos.x + this.width / 2
+        this.cinder.pos.y = this.shard.pos.y = this.pos.y + this.height / 2
+        this.remove()
+        this.shard.onDone = () => { 
+            // this.alpha = 1;
+            // Node.get(curLevelId).resetRecursively()
+         }
+        Node.get(curLevelId).add(this.shard)
+        Node.get(curLevelId).add(this.cinder)
     }
     update(dt) {
         this.keyControls.update(this, dt)

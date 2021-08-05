@@ -1,0 +1,171 @@
+{
+ "blendMode": "source-over",
+ "loop": false,
+ "debug": false,
+ "params": [
+  {
+   "alphaDecayFn": "linear",
+   "weight": 1,
+   "frame": "sh4",
+   "width": 32,
+   "height": 52,
+   "offsetX": [
+    0,
+    0
+   ],
+   "offsetY": [
+    0,
+    0
+   ],
+   "lifetime": [
+    1,
+    1
+   ],
+   "velX": [
+    96,
+    100
+   ],
+   "velY": [
+    -125,
+    -125
+   ],
+   "accX": [
+    0,
+    0
+   ],
+   "accY": [
+    276,
+    500
+   ],
+   "alpha": [
+    0.9,
+    1
+   ]
+  },
+  {
+   "alphaDecayFn": "cubicOut",
+   "weight": 1,
+   "frame": "sh2",
+   "width": 34,
+   "height": 11,
+   "offsetX": [
+    -20,
+    -20
+   ],
+   "offsetY": [
+    50,
+    60
+   ],
+   "lifetime": [
+    1,
+    1
+   ],
+   "velX": [
+    0,
+    0
+   ],
+   "velY": [
+    90,
+    95
+   ],
+   "accX": [
+    0,
+    0
+   ],
+   "accY": [
+    500,
+    500
+   ],
+   "alpha": [
+    0.9,
+    1
+   ]
+  },
+  {
+   "alphaDecayFn": "cubicOut",
+   "weight": 1,
+   "frame": "sh1",
+   "width": 34,
+   "height": 11,
+   "offsetX": [
+    -20,
+    -20
+   ],
+   "offsetY": [
+    -10,
+    -10
+   ],
+   "lifetime": [
+    1,
+    1
+   ],
+   "velX": [
+    0,
+    0
+   ],
+   "velY": [
+    -250,
+    -240
+   ],
+   "accX": [
+    0,
+    0
+   ],
+   "accY": [
+    282,
+    500
+   ],
+   "alpha": [
+    0.9,
+    1
+   ]
+  },
+  {
+   "alphaDecayFn": "linear",
+   "weight": 1,
+   "frame": "sh3",
+   "width": 34,
+   "height": 53,
+   "offsetX": [
+    -40,
+    -40
+   ],
+   "offsetY": [
+    0,
+    0
+   ],
+   "lifetime": [
+    1,
+    1
+   ],
+   "velX": [
+    -100,
+    -96
+   ],
+   "velY": [
+    -125,
+    -125
+   ],
+   "accX": [
+    0,
+    0
+   ],
+   "accY": [
+    500,
+    500
+   ],
+   "alpha": [
+    0.9,
+    1
+   ]
+  }
+ ],
+ "hitbox": {
+  "x": -193,
+  "y": -80.30615942028986,
+  "width": 345,
+  "height": 419.3061594202899
+ },
+ "randomDistribution": false,
+ "size": 4
+}
