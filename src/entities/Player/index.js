@@ -5,7 +5,7 @@ import Collision from "@components/Collision"
 import Movement from "@components/Movement"
 import PlayerKeyControls from "./PlayerKeyControls"
 import crateImgUrl from "@assets/images/carton.png"
-import { colRectsId, curLevelId } from "@lib/constants"
+import { colRectsId, curLevelId, objLayerId } from "@lib/constants"
 
 class Player extends Texture {
     constructor({ speed = 48, width = 64, height = 64, fricX=4, shard, cinder, ...rest }) {
@@ -22,6 +22,15 @@ class Player extends Texture {
         this.pos.y = 100
         this.shard = shard
         this.cinder = cinder
+
+        this.shard.onDead = () => { // what should happen upon player explosion
+            /**
+             * implicit assumptions: 
+             * 1. both cinder and shard should have same "lifetime"
+             * 2. ParticleEmitters with finite "lifetime" (loop set to false) remove themselves from the parent once they're dead 
+             */
+            Node.get(curLevelId).resetRecursively() // this also sets player's forceHide field to false
+        }
         
   
         this.keyControls = new PlayerKeyControls(speed)
@@ -53,13 +62,10 @@ class Player extends Texture {
     explode() {
         this.cinder.pos.x = this.shard.pos.x = this.pos.x + this.width / 2
         this.cinder.pos.y = this.shard.pos.y = this.pos.y + this.height / 2
-        this.remove()
-        this.shard.onDone = () => { 
-            // this.alpha = 1;
-            // Node.get(curLevelId).resetRecursively()
-         }
-        Node.get(curLevelId).add(this.shard)
-        Node.get(curLevelId).add(this.cinder)
+        
+        this.alpha = 0  // forces off the visibility (ensuring no update or rendering)
+        Node.get(objLayerId).add(this.cinder) // particle emitters have to be manually inserted into the scene graph, since it doesn't implicitly know where it should be located
+        Node.get(objLayerId).add(this.shard)
     }
     update(dt) {
         this.keyControls.update(this, dt)

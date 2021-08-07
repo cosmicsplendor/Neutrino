@@ -27,16 +27,14 @@ class Level1 extends Camera {
             gate: createGate
         }
         const arena = new TiledLevel({ 
-            id: "arena",
             data: assetsCache.get(levelDataId),
             texatlas,
             bg, fbg, player,
             factories
         })
-        super({ ...cameraProps, id: curLevelId, world: { width: arena.width, height: arena.height } })
+        super({ ...cameraProps, world: { width: arena.width, height: arena.height } })
 
         this.player = player
-        player.injectLevel(arena)
                                                                                                                                                                                                                                                                                                                                                                  
         this.add(arena)
     }

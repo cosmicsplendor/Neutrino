@@ -1,9 +1,9 @@
 import Viewport  from "@utils/ViewPort"
 import { clamp } from "@utils/math"
 
-const computeViewport = () => ({ 
-    width: clamp(300, 1200, window.innerWidth),
-    height: Math.min(700, window.innerHeight)
+const computeViewport = () => ({ // spoorting resolution upto 1280 * 1280
+    width: clamp(300, 1280, window.innerWidth),
+    height: Math.min(1280, window.innerHeight)
 })
 
 export default Object.freeze({
