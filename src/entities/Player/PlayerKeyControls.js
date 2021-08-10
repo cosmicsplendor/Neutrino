@@ -56,7 +56,7 @@ class Rolling {
         if (this.controls.get("right")) {
             entity.velX += (entity.velX < 0 ? 3 : 1) * this.controls.speed * dt 
         }
-        if (this.controls.get("up")) {
+        if (this.controls.get("axn")) {
             this.controls.switchState("jumping", entity)
         }
         // if (this.controls.get("axn", "pressed")) {
@@ -85,11 +85,11 @@ class Jumping {
         if (this.controls.get("right")) {
             entity.velX += (entity.velX < 0 ? 3 : 1) * this.controls.speed * dt 
         }
-        if (this.controls.get("up")) {
+        if (this.controls.get("axn")) {
             if (entity.velY < -this.controls.mxJmpVel) { this.limitReached = true }
             if (this.limitReached) { return }
             entity.velY += this.controls.jmpVel * ( Math.min(5.5, (entity.velY * entity.velY) / 100)) * dt 
-        } else { this.limitReached = true } // if the player has stopped pressing "up" key, player won't gain anymore velocity in this jump
+        } else { this.limitReached = true } // if the player has stopped pressing "axn" key, player won't gain anymore velocity in this jump
     }
 }
 
