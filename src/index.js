@@ -16,7 +16,7 @@ const uiRoot = new UI("#ui-layer")
 const screenFactories = {
     [screenNames.LOADING]: game => new LoadingScreen({ game }),
     [screenNames.MAIN_MENU]: game => new MainMenuScreen({ game, uiRoot }),
-    [screenNames.LEVEL]: game => new LevelScreen({ game })
+    [screenNames.LEVEL]: game => new LevelScreen({ game, uiRoot })
 }
 const game = new Game({
     renderer,
