@@ -1,4 +1,4 @@
-import KeyControls from "@lib/components/KeyControls"
+import KeyControls from "@lib/components/controls/KeyControls"
 import spawnBullet from "@entities/factories/spawnBullet"
 import { clamp } from "@utils/math"
 
