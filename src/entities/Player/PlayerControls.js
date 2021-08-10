@@ -10,7 +10,7 @@ const defaultMappings = Object.freeze({
     axn: 32
 })
 
-const extendPalyerControls = _Super => class PlayerControls extends _Super {
+const extendPalyerControls = _Super => class extends _Super {
     stateSwitched = false // a helper flag for preventing multiple state updates every frame making sure the first one gets the precendence 
     jmpVel = -260
     maxJvelInc = 5
@@ -42,8 +42,6 @@ const extendPalyerControls = _Super => class PlayerControls extends _Super {
     }
 }
 
-export const PlayerKeyControls = extendPalyerControls(KeyControls)
-export const PlayerTouchControls = extendPalyerControls(TouchControls)
 
 class Rolling {
     name = "rolling"
@@ -65,7 +63,6 @@ class Rolling {
         // }
     }
 }
-
 
 class Jumping {
     name = "jumping"
@@ -110,3 +107,6 @@ class OffEdge {
         entity.velX = clamp(-100, 100, entity.velX) 
     }
 }
+
+export const PlayerKeyControls = extendPalyerControls(KeyControls)
+export const PlayerTouchControls = extendPalyerControls(TouchControls)
