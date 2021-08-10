@@ -1,5 +1,5 @@
 import KeyControls from "@lib/components/controls/KeyControls"
-import spawnBullet from "@entities/factories/spawnBullet"
+import TouchControls from "@lib/components/controls/TouchControls"
 import { clamp } from "@utils/math"
 
 const defaultMappings = Object.freeze({
@@ -10,8 +10,8 @@ const defaultMappings = Object.freeze({
     axn: 32
 })
 
-class PlayerKeyControls extends KeyControls {
-    stateSwitched = false // a helper flag for preventing multiple state updates every frame making sure the first one gets precendence 
+const extendPalyerControls = _Super => class PlayerControls extends _Super {
+    stateSwitched = false // a helper flag for preventing multiple state updates every frame making sure the first one gets the precendence 
     jmpVel = -260
     maxJvelInc = 5
     mxJmpVel = 375
@@ -42,6 +42,9 @@ class PlayerKeyControls extends KeyControls {
     }
 }
 
+export const PlayerKeyControls = extendPalyerControls(KeyControls)
+export const PlayerTouchControls = extendPalyerControls(TouchControls)
+
 class Rolling {
     name = "rolling"
     constructor(controls) {
@@ -59,8 +62,6 @@ class Rolling {
         if (this.controls.get("axn")) {
             this.controls.switchState("jumping", entity)
         }
-        // if (this.controls.get("axn", "pressed")) {
-        //     spawnBullet({ x: entity.pos.x + entity.width, y: entity.pos.y + entity.height / 2 }, this.explosionSFX)
         // }
     }
 }
@@ -109,5 +110,3 @@ class OffEdge {
         entity.velX = clamp(-100, 100, entity.velX) 
     }
 }
-
-export default PlayerKeyControls
