@@ -1,0 +1,9 @@
+.controlBtn {
+    background-color: white;
+    color: black;
+    font-size: 2em;
+    padding: 1em;
+    border-radius: 0.5em;
+    opacity: 0.8;
+    position: absolute;
+}
