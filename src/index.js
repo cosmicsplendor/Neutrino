@@ -12,7 +12,7 @@ import LevelScreen from "@screens/Level"
 const { viewport } = config
 const renderer = new Canvas2DRenderer({ canvasID: "arena", scene: null, background: "skyblue", viewport }) // scene will be injected by game
 const assetsCache = new AssetsCache()
-const uiRoot = new UI("#ui-layer")
+const uiRoot = UI.query("#ui-layer")
 const screenFactories = {
     [screenNames.LOADING]: game => new LoadingScreen({ game }),
     [screenNames.MAIN_MENU]: game => new MainMenuScreen({ game, uiRoot }),
