@@ -2,8 +2,8 @@ import { Camera } from "@lib"
 import { createAtlas } from "@lib/entities/TexRegion"
 import TiledLevel from "@utils/TiledLevel"
 import ParticleEmitter from "@utils/ParticleEmitter"
-import { curLevelId } from "@lib/constants"
 
+import initUI from "./initUI"
 import createGate from "@factories/gate"
 
 import levelDataId from "@assets/levels/level.cson"
@@ -12,7 +12,7 @@ import texatlasMetaId from "@assets/images/atlasmeta.cson"
 import fireDataId from "@assets/particles/fire.cson"
 
 class Level1 extends Camera {
-    constructor({ player, assetsCache, bg, fbg, ...cameraProps }) {
+    constructor({ player, uiRoot, assetsCache, bg, fbg, ...cameraProps }) {
         const texatlas = createAtlas({ 
             metaId: texatlasMetaId,
             imgId: texatlasId
@@ -37,8 +37,10 @@ class Level1 extends Camera {
         this.player = player
                                                                                                                                                                                                                                                                                                                                                                  
         this.add(arena)
+        
+        const teardownUI = initUI(uiRoot, player)
+        this.onRemove = () => teardownUI()
     }
-
 }
 
 export default Level1

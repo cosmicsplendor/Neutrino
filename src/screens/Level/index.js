@@ -22,6 +22,7 @@ class LevelScreen extends Node { // can only have cameras as children
         super()
         const { assetsCache } = game
         this.game = game
+        this.uiRoot = uiRoot
         this.addTimer = Timer.attachedTo(this)
         assetsCache.on("load", () => {
             const meta = assetsCache.get(soundMetaId)
@@ -55,7 +56,7 @@ class LevelScreen extends Node { // can only have cameras as children
     }
     onEnter() { 
         this.unsetLevel()
-        const startingLevel = new Level1({ player: this.player, assetsCache: this.game.assetsCache, viewport: config.viewport, bg: this.bg, fbg: this.fbg, subject: this.player })
+        const startingLevel = new Level1({ player: this.player, uiRoot: this.uiRoot, assetsCache: this.game.assetsCache, viewport: config.viewport, bg: this.bg, fbg: this.fbg, subject: this.player })
         this.setLevel(startingLevel)
     }
     onExit() {

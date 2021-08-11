@@ -21,6 +21,7 @@ const getTouchMappings = () => {
             el.classList.add(styles.controlBtn)
             el.content = x.markup
             acc[x.name] = el
+            return acc
         }, {})
     )
 }
