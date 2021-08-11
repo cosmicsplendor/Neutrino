@@ -3,6 +3,7 @@ import Texture from "@lib/entities/Texture"
 import config from "@config"
 import Collision from "@components/Collision"
 import Movement from "@components/Movement"
+import UI from "@utils/UI"
 import { PlayerKeyControls, PlayerTouchControls } from "./PlayerControls"
 import crateImgUrl from "@assets/images/carton.png"
 import { colRectsId, curLevelId, objLayerId } from "@lib/constants"
@@ -16,9 +17,9 @@ const getTouchMappings = () => {
     ]
     return Object.freeze(
         data.reduce((acc, x) => {
-            const el = document.createElement("div")
+            const el = UI.create("div")
             el.classList.add(styles.controlBtn)
-            el.innerHTML = x.markup
+            el.content = x.markup
             acc[x.name] = el
         }, {})
     )
