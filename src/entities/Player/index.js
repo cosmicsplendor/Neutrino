@@ -62,7 +62,9 @@ class Player extends Texture {
             Node.get(curLevelId).resetRecursively() // this also sets player's alpha field to 1
         }
   
-        this.controls = controls || new PlayerControlsClass(speed, getControlsMapping())
+        this.controls = controls || new PlayerControlsClass(speed, getControlsMapping(), () => {
+            sounds.jump.play()
+        })
         this.wallCollision = new Collision({ entity: this, blocks: colRectsId, rigid: true, movable: false, onHit: this.onWallCollision.bind(this) })
         this.spikeCollision = new Collision({ entity: this, blocks: "spikes", rigid: false, movable: false, onHit: this.explode.bind(this) })
         this.gateCollision = new Collision({ entity: this, blocks: "gates", rigid: false, movable: false, onHit: this.explode.bind(this) })

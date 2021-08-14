@@ -2,25 +2,17 @@ import KeyControls from "@lib/components/controls/KeyControls"
 import TouchControls from "@lib/components/controls/TouchControls"
 import { clamp } from "@utils/math"
 
-const defaultMappings = Object.freeze({
-    left: [ 37, 65 ],
-    up: [ 38, 87 ],
-    right: [ 39, 68 ],
-    down: [ 40, 83 ],
-    axn: 32
-})
-
 const extendPalyerControls = _Super => class extends _Super {
     stateSwitched = false // a helper flag for preventing multiple state updates every frame making sure the first one gets the precendence 
     jmpVel = -260
     maxJvelInc = 5
     mxJmpVel = 375
-    constructor(speed=100, mappings=defaultMappings) {
+    constructor(speed=100, mappings, onJump=() => {}) {
         super(mappings)
         this.speed = speed
         this.states = {
             offEdge: new OffEdge(this),
-            jumping: new Jumping(this),
+            jumping: new Jumping(this, onJump),
             rolling: new Rolling(this),
         }
         this.state = this.states.jumping
@@ -66,10 +58,12 @@ class Rolling {
 
 class Jumping {
     name = "jumping"
-    constructor(controls) {
+    constructor(controls, onJump) {
         this.controls = controls
+        this.onJump = onJump
     }
     onEnter(entity) {
+        this.onJump()
         entity.velY += this.controls.jmpVel
         this.limitReached = false
     }
