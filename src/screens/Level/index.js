@@ -30,16 +30,15 @@ class LevelScreen extends Node { // can only have cameras as children
             const soundSprite = new SoundSprite({ resource: soundResource, resourceId: soundSpriteId, meta })
             const shard = new ParticleEmitter(Object.assign(assetsCache.get(shardDataUrl), { metaId: atlasmetaId, imgId: texatlasId}))
             const cinder = new ParticleEmitter(Object.assign(assetsCache.get(cinderDataUrl), { metaId: atlasmetaId, imgId: texatlasId}))
+            const playerSounds = Player.sounds.reduce((spritemap, frame) => {
+                spritemap[frame] = soundSprite.create(frame)
+                return spritemap
+            }, {})
             
             this.soundSprite = soundSprite
-            this.music = soundSprite.create("music", { volume: 1, pan: -1 })
-            this.explosionSound = soundSprite.createPool("explosion")
-            // this.music.play()
-            this.player = new Player({ width: 64, height: 64, fill: "brown", speed: 350, fricX: 3, pos: { x: 300, y: 0 }, shard, cinder })
+            this.player = new Player({ width: 64, height: 64, fill: "brown", speed: 350, fricX: 3, pos: { x: 300, y: 0 }, shard, cinder, sounds: playerSounds })
             this.bg = new ParallaxCamera({ z: 2.5, zAtop: 1, viewport: config.viewport, subject: this.player, entYOffset: 0 }) // parallax bg
             this.fbg = new ParallaxCamera({ z: 5, zAtop: 1, viewport: config.viewport, subject: this.player, entYOffset: -80 })// parallax far-background
-            this.add(this.fbg)
-            this.add(this.bg)
         })
     }
     setLevel(level) {

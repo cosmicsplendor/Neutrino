@@ -36,7 +36,8 @@ const PlayerControlsClass = config.isMobile ? PlayerTouchControls: PlayerKeyCont
 const getControlsMapping = config.isMobile ? getTouchMappings: getKeyMappings
 
 class Player extends Texture {
-    constructor({ speed = 48, width = 64, height = 64, fricX=4, shard, cinder, controls, ...rest }) {
+    static sounds = [ "player_dead", "concrete", "concrete_heavy", "wood", "wood_heavy", "metal", "metal_heavy", "jump" ]
+    constructor({ speed = 48, width = 64, height = 64, fricX=4, shard, cinder, controls, soundSprite, sounds, ...rest }) {
         super({ imgId: crateImgUrl, ...rest })
         this.width = width
         this.height = height
@@ -50,6 +51,7 @@ class Player extends Texture {
         this.pos.y = 100
         this.shard = shard
         this.cinder = cinder
+        this.sounds = sounds
 
         this.shard.onDead = () => { // what should happen upon player explosion
             /**
@@ -80,9 +82,15 @@ class Player extends Texture {
         }
         return this.controls.mappings
     }
-    onWallCollision(block, movX, movY) {
-        if (movY) {
-            if (movY > 0) {
+    onWallCollision(block, velX, velY) {
+        if (velY) {
+            const intensity = Math.abs(velY) / 10
+            if (intensity > 40) {
+                this.sounds[`${block.mat}_heavy`].play()
+            } else if (intensity > 5) {
+                this.sounds[block.mat].play()
+            }
+            if (velY > 0) {
                 return this.controls.switchState("rolling")
             }
             // collision with the bottom edge
@@ -90,6 +98,8 @@ class Player extends Texture {
                 // this.velY = -100
                 this.controls.state.onHalt()
             }
+        } else if (Math.abs(velX) > 50) {
+            this.sounds[`${block.mat}_heavy`].play()
         }
     } 
     explode() {

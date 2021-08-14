@@ -1,17 +1,55 @@
 {
-  "resources": [
-    "C:\\Users\\Dell\\Music\\bfxr\\finalsprite.mp3"
+  "urls": [
+    "audiosprite.opus",
+    "audiosprite.mp3",
+    "audiosprite.m4a",
+    "audiosprite.webm"
   ],
-  "spritemap": {
-    "explosion": {
-      "start": 0,
-      "end": 1.6713151927437642,
-      "loop": false
-    },
-    "music": {
-      "start": 3,
-      "end": 289.0234013605442,
-      "loop": false
-    }
+  "sprite": {
+    "concrete": [
+      0,
+      0.11174603174603175,
+      false
+    ],
+    "concrete_concrete": [
+      0.36174603174603176,
+      5.3999773242630384,
+      false
+    ],
+    "concrete_heavy": [
+      6.01172335600907,
+      0.3178231292517007,
+      false
+    ],
+    "jump": [
+      6.579546485260771,
+      1.42984126984127,
+      false
+    ],
+    "metal": [
+      8.25938775510204,
+      0.16108843537414966,
+      false
+    ],
+    "metal_heavy": [
+      8.67047619047619,
+      0.18430839002267574,
+      false
+    ],
+    "player_dead": [
+      9.104784580498865,
+      0.9505668934240363,
+      false
+    ],
+    "wood": [
+      10.3053514739229,
+      0.34104308390022675,
+      false
+    ],
+    "wood_heavy": [
+      10.896394557823127,
+      0.2742857142857143,
+      false
+    ]
   }
 }
