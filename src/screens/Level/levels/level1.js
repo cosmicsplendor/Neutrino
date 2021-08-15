@@ -12,7 +12,7 @@ import texatlasMetaId from "@assets/images/atlasmeta.cson"
 import fireDataId from "@assets/particles/fire.cson"
 
 class Level1 extends Camera {
-    constructor({ player, uiRoot, assetsCache, bg, fbg, ...cameraProps }) {
+    constructor({ player, uiRoot, assetsCache, bg, fbg, music, ...cameraProps }) {
         const texatlas = createAtlas({ 
             metaId: texatlasMetaId,
             imgId: texatlasId
@@ -40,6 +40,7 @@ class Level1 extends Camera {
         
         const teardownUI = initUI(uiRoot, player)
         this.onRemove = () => teardownUI()
+        music.play()
     }
 }
 

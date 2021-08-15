@@ -34,6 +34,7 @@ class LevelScreen extends Node { // can only have cameras as children
                 spritemap[frame] = soundSprite.create(frame)
                 return spritemap
             }, {})
+            this.bgMusic = soundSprite.create("music1")
             
             this.soundSprite = soundSprite
             this.player = new Player({ width: 64, height: 64, fill: "brown", speed: 350, fricX: 3, pos: { x: 300, y: 0 }, shard, cinder, sounds: playerSounds })
@@ -57,7 +58,7 @@ class LevelScreen extends Node { // can only have cameras as children
     }
     onEnter() { 
         this.unsetLevel()
-        const startingLevel = new Level1({ player: this.player, uiRoot: this.uiRoot, assetsCache: this.game.assetsCache, viewport: config.viewport, bg: this.bg, fbg: this.fbg, subject: this.player })
+        const startingLevel = new Level1({ player: this.player, uiRoot: this.uiRoot, assetsCache: this.game.assetsCache, viewport: config.viewport, bg: this.bg, fbg: this.fbg, subject: this.player, music: this.bgMusic })
         this.setLevel(startingLevel)
     }
     onExit() {

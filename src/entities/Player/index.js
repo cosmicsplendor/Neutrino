@@ -36,7 +36,7 @@ const PlayerControlsClass = config.isMobile ? PlayerTouchControls: PlayerKeyCont
 const getControlsMapping = config.isMobile ? getTouchMappings: getKeyMappings
 
 class Player extends Texture {
-    static sounds = [ "player_dead", "concrete", "concrete_heavy", "wood", "wood_heavy", "metal", "metal_heavy", "jump" ]
+    static sounds = [ "player_dead", "concrete", "wood", "metal", "jump" ]
     constructor({ speed = 48, width = 64, height = 64, fricX=4, shard, cinder, controls, soundSprite, sounds, ...rest }) {
         super({ imgId: crateImgUrl, ...rest })
         this.width = width
@@ -87,11 +87,7 @@ class Player extends Texture {
     onWallCollision(block, velX, velY) {
         if (velY) {
             const intensity = Math.abs(velY) / 10
-            if (intensity > 40) {
-                this.sounds[`${block.mat}_heavy`].play()
-            } else if (intensity > 5) {
-                this.sounds[block.mat].play()
-            }
+            velY > 25 && this.sounds[block.mat].play()
             if (velY > 0) {
                 return this.controls.switchState("rolling")
             }
@@ -100,8 +96,9 @@ class Player extends Texture {
                 // this.velY = -100
                 this.controls.state.onHalt()
             }
-        } else if (Math.abs(velX) > 50) {
-            this.sounds[`${block.mat}_heavy`].play()
+        }
+        if (velX > 25) {
+            this.sounds[block.mat].play()
         }
     } 
     explode() {
@@ -111,6 +108,7 @@ class Player extends Texture {
         this.alpha = 0  // forces off the visibility (ensuring no update or rendering)
         Node.get(objLayerId).add(this.cinder) // particle emitters have to be manually inserted into the scene graph, since it doesn't implicitly know where it should be located
         Node.get(objLayerId).add(this.shard)
+        this.sounds.player_dead.play()
     }
     update(dt) {
         this.controls.update(this, dt)

@@ -1,55 +1,45 @@
 {
-  "urls": [
-    "sprite.opus",
-    "sprite.mp3",
+  "resources": [
+    "sprite.ogg",
     "sprite.m4a",
-    "sprite.webm"
+    "sprite.mp3",
+    "sprite.ac3"
   ],
-  "sprite": {
-    "concrete": [
-      0,
-      0.11174603174603175,
-      false
-    ],
-    "concrete_concrete": [
-      0.36174603174603176,
-      5.3999773242630384,
-      false
-    ],
-    "concrete_heavy": [
-      6.01172335600907,
-      0.3178231292517007,
-      false
-    ],
-    "jump": [
-      6.579546485260771,
-      0.3129251700680272,
-      false
-    ],
-    "metal": [
-      7.142471655328798,
-      0.16108843537414966,
-      false
-    ],
-    "metal_heavy": [
-      7.553560090702947,
-      0.18430839002267574,
-      false
-    ],
-    "player_dead": [
-      7.9878684807256235,
-      0.9505668934240363,
-      false
-    ],
-    "wood": [
-      9.188435374149659,
-      0.34104308390022675,
-      false
-    ],
-    "wood_heavy": [
-      9.779478458049885,
-      0.2742857142857143,
-      false
-    ]
+  "spritemap": {
+    "concrete_concrete": {
+      "start": 0,
+      "end": 5.3999773242630384,
+      "loop": false
+    },
+    "concrete": {
+      "start": 7,
+      "end": 7.108843537414966,
+      "loop": false
+    },
+    "jump": {
+      "start": 9,
+      "end": 9.312925170068027,
+      "loop": false
+    },
+    "metal": {
+      "start": 11,
+      "end": 11.184308390022675,
+      "loop": false
+    },
+    "music1": {
+      "start": 13,
+      "end": 199.3328798185941,
+      "loop": false
+    },
+    "player_dead": {
+      "start": 201,
+      "end": 201.95056689342402,
+      "loop": false
+    },
+    "wood": {
+      "start": 203,
+      "end": 203.27428571428572,
+      "loop": false
+    }
   }
 }
