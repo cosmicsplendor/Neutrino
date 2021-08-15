@@ -40,7 +40,7 @@ class Level1 extends Camera {
         
         const teardownUI = initUI(uiRoot, player)
         this.onRemove = () => teardownUI()
-        music.play()
+        // music.play()
     }
 }
 
