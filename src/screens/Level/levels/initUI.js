@@ -3,7 +3,6 @@ import { calcAligned } from "@utils/entity"
 import config from "@config"
 export default (uiRoot, player) => {
     const ctrlBtns = config.isMobile && player.getCtrlBtns()
-    console.log(ctrlBtns)
     if (ctrlBtns) {
         uiRoot.add(ctrlBtns.left)
               .add(ctrlBtns.right)
