@@ -87,7 +87,10 @@ class Player extends Texture {
         return this.controls.mappings
     }
     onWallCollision(block, velX, velY, moved) {
-        Math.abs(velY || velX) > 25 && moved && !this.offEdge && this.sounds[block.mat].play()
+        const colSpeed = Math.abs(velY || velX) || 0
+        if (colSpeed > 50 && moved && !this.offEdge) {
+           this.sounds[block.mat].play(Math.min(1, colSpeed / 600)) // play if impact speed exeeds some threshold value, the eintity actually moved and isn't offedge
+        }
         if (velY) {
             if (velY > 0) {
                 return this.controls.switchState("rolling")
