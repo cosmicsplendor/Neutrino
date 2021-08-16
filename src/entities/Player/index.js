@@ -37,7 +37,7 @@ const getControlsMapping = config.isMobile ? getTouchMappings: getKeyMappings
 
 class Player extends Texture {
     static sounds = [ "player_dead", "concrete", "wood", "metal", "jump" ]
-    constructor({ speed = 48, width = 64, height = 64, fricX=4, shard, cinder, controls, soundSprite, sounds, ...rest }) {
+    constructor({ speed = 48, width = 64, height = 64, fricX=4, shard, cinder, controls, sounds, ...rest }) {
         super({ imgId: crateImgUrl, ...rest })
         this.width = width
         this.height = height
@@ -70,6 +70,8 @@ class Player extends Texture {
         this.gateCollision = new Collision({ entity: this, blocks: "gates", rigid: false, movable: false, onHit: this.explode.bind(this) })
         
         Movement.makeMovable(this, { accY: config.gravity, roll: true, fricX })
+        window.temp1 = sounds.jump
+        console.log(sounds)
     }
     set offEdge(which) {
         this.controls.switchState("offEdge", which)
@@ -84,21 +86,16 @@ class Player extends Texture {
         }
         return this.controls.mappings
     }
-    onWallCollision(block, velX, velY) {
+    onWallCollision(block, velX, velY, moved) {
+        Math.abs(velY || velX) > 25 && moved && this.sounds[block.mat].play()
         if (velY) {
-            const intensity = Math.abs(velY) / 10
-            velY > 25 && this.sounds[block.mat].play()
             if (velY > 0) {
                 return this.controls.switchState("rolling")
             }
             // collision with the bottom edge
-            if (this.controls.state && this.controls.state.name && this.controls.state.name === "jumping") {
-                // this.velY = -100
+            if (this.controls.state && this.controls.state.name === "jumping") {
                 this.controls.state.onHalt()
             }
-        }
-        if (velX > 25) {
-            this.sounds[block.mat].play()
         }
     } 
     explode() {
