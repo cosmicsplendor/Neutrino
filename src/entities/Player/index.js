@@ -88,8 +88,8 @@ class Player extends Texture {
     }
     onWallCollision(block, velX, velY, moved) {
         const colSpeed = Math.abs(velY || velX) || 0
-        if (colSpeed > 50 && moved && !this.offEdge) {
-           this.sounds[block.mat].play(Math.min(1, colSpeed / 600)) // play if impact speed exeeds some threshold value, the eintity actually moved and isn't offedge
+        if (colSpeed > 100 && moved) { // hardcoding palyer collision audio threshold speed to 100
+           this.sounds[block.mat].play(Math.min(1, (colSpeed - 100) / 600)) // hardcoding palyer collision audio cutoff speed to 600
         }
         if (velY) {
             if (velY > 0) {
