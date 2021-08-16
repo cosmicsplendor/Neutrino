@@ -87,7 +87,7 @@ class Player extends Texture {
         return this.controls.mappings
     }
     onWallCollision(block, velX, velY, moved) {
-        Math.abs(velY || velX) > 25 && moved && this.sounds[block.mat].play()
+        Math.abs(velY || velX) > 25 && moved && !this.offEdge && this.sounds[block.mat].play()
         if (velY) {
             if (velY > 0) {
                 return this.controls.switchState("rolling")
