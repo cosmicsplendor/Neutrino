@@ -62,12 +62,12 @@ class Jumping {
         this.controls = controls
         this.onJump = onJump
     }
-    onEnter(entity) {
+    onEnter(entity, jumpVel) {
         this.onJump()
-        entity.velY += this.controls.jmpVel
         this.limitReached = false
+        entity.velY += jumpVel || this.controls.jmpVel
     }
-    onHalt() { // jump prematurely obstructed (mostly by collision with bottom edge of a rect)
+    onHalt() { // obstruct jump prematurely (mostly by collision with bottom edge of a rect)
         this.limitReached = true
     }
     update(entity, dt) {

@@ -80,6 +80,9 @@ class Player extends Texture {
     get offEdge() {
         return this._offEdge
     }
+    onFall() {
+        this.controls.switchState("jumping")
+    }
     getCtrlBtns() {
         if (!config.isMobile) {
             throw new Error(`control buttons are not defined for non-touch/desktop devices`)
