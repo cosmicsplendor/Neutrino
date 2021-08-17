@@ -36,7 +36,7 @@ const PlayerControlsClass = config.isMobile ? PlayerTouchControls: PlayerKeyCont
 const getControlsMapping = config.isMobile ? getTouchMappings: getKeyMappings
 
 class Player extends Texture {
-    static sounds = [ "player_dead", "concrete", "wood", "metal", "jump" ]
+    static sounds = [ "player_din", "concrete", "wood", "metal", "jump", "rolling", "player_exp" ]
     constructor({ speed = 48, width = 64, height = 64, fricX=4, shard, cinder, controls, sounds, ...rest }) {
         super({ imgId: crateImgUrl, ...rest })
         this.width = width
@@ -72,6 +72,7 @@ class Player extends Texture {
         Movement.makeMovable(this, { accY: config.gravity, roll: true, fricX })
         window.temp1 = sounds.jump
         console.log(sounds)
+        sounds.rolling.speed = 1.2
     }
     set offEdge(which) {
         this.controls.switchState("offEdge", which)
@@ -108,7 +109,14 @@ class Player extends Texture {
         this.alpha = 0  // forces off the visibility (ensuring no update or rendering)
         Node.get(objLayerId).add(this.cinder) // particle emitters have to be manually inserted into the scene graph, since it doesn't implicitly know where it should be located
         Node.get(objLayerId).add(this.shard)
-        this.sounds.player_dead.play()
+        const sqVel = this.velX * this.velX + this.velY * this.velY
+        this.sounds.player_exp.play(sqVel / 1000000)
+        this.sounds.player_din.play(sqVel / 10000)
+        console.log({
+            exp: sqVel / 1000000,
+            din: sqVel / 10000
+        })
+        this.velX = this.velY = 0
     }
     update(dt) {
         this.controls.update(this, dt)
@@ -116,6 +124,12 @@ class Player extends Texture {
         this.wallCollision.update()
         this.spikeCollision.update()
         this.gateCollision.update()
+        if (this.controls.state.name !== "jumping" && this.pos.x !== this.prevPosX) {
+            this.sounds.rolling.volume = Math.abs(this.pos.x - this.prevPosX) / 8
+            this.sounds.rolling.play()
+        } else {
+            this.sounds.rolling.pause()
+        }
     }
 }
 
