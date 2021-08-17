@@ -8,11 +8,10 @@ export default (uiRoot, player) => {
               .add(ctrlBtns.right)
               .add(ctrlBtns.axn)
     }
-    const onViewportChange = ({ width, height, scale }) => {
+    const onViewportChange = ({ scale, ...viewport }) => {
         if (!ctrlBtns) { return }
-        const viewport = { width: width, height: height }
         ctrlBtns.left.pos = calcAligned(viewport, ctrlBtns.left.bounds, "left", "bottom", margin / scale, -margin / scale)
-        ctrlBtns.right.pos = calcAligned(viewport, ctrlBtns.right.bounds, "left", "bottom", 30 / scale + ctrlBtns.left.bounds.width, -margin / scale)
+        ctrlBtns.right.pos = calcAligned(viewport, ctrlBtns.right.bounds, "left", "bottom", 40 / scale + (ctrlBtns.left.bounds.width * scale), -margin / scale)
         ctrlBtns.axn.pos = calcAligned(viewport, ctrlBtns.right.bounds, "right", "bottom", -margin / scale, -margin / scale)
     }
     onViewportChange(config.viewport)

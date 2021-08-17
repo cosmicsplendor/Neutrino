@@ -3,7 +3,7 @@ import Viewport  from "@utils/ViewPort"
 // the following three are config variables 
 const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 const resolution = isMobile ? { max: 800, min: 600 }: { max: 1920, min: 1080 }
-const scale = true
+const scale = false
 const computeViewport = () => {
     const width = window.innerWidth, height = window.innerHeight
     const portraitMode = height > width
