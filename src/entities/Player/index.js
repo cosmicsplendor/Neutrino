@@ -71,7 +71,6 @@ class Player extends Texture {
         
         Movement.makeMovable(this, { accY: config.gravity, roll: true, fricX })
         window.temp1 = sounds.jump
-        console.log(sounds)
         sounds.rolling.speed = 1.2
     }
     set offEdge(which) {
@@ -112,11 +111,15 @@ class Player extends Texture {
         const sqVel = this.velX * this.velX + this.velY * this.velY
         this.sounds.player_exp.play(sqVel / 1000000)
         this.sounds.player_din.play(sqVel / 10000)
-        console.log({
-            exp: sqVel / 1000000,
-            din: sqVel / 10000
-        })
         this.velX = this.velY = 0
+    }
+    updateAudio() {
+        if (this.controls.state.name !== "jumping" && this.pos.x !== this.prevPosX) {
+            this.sounds.rolling.volume = Math.abs(this.pos.x - this.prevPosX) / 8
+            this.sounds.rolling.play()
+        } else {
+            this.sounds.rolling.pause()
+        }
     }
     update(dt) {
         this.controls.update(this, dt)
@@ -124,12 +127,7 @@ class Player extends Texture {
         this.wallCollision.update()
         this.spikeCollision.update()
         this.gateCollision.update()
-        if (this.controls.state.name !== "jumping" && this.pos.x !== this.prevPosX) {
-            this.sounds.rolling.volume = Math.abs(this.pos.x - this.prevPosX) / 8
-            this.sounds.rolling.play()
-        } else {
-            this.sounds.rolling.pause()
-        }
+        this.updateAudio()
     }
 }
 
