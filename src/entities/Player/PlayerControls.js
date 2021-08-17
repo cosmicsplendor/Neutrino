@@ -2,7 +2,7 @@ import KeyControls from "@lib/components/controls/KeyControls"
 import TouchControls from "@lib/components/controls/TouchControls"
 import { clamp } from "@utils/math"
 
-const extendPalyerControls = _Super => class extends _Super {
+const extendPalyerControls = S => class extends S {
     stateSwitched = false // a helper flag for preventing multiple state updates every frame making sure the first one gets the precendence 
     jmpVel = -260
     maxJvelInc = 5
@@ -62,10 +62,11 @@ class Jumping {
         this.controls = controls
         this.onJump = onJump
     }
-    onEnter(entity, jumpVel) {
-        this.onJump()
+    onEnter(entity, limReached=false) {
+        if (limReached) { return } // if jump state begins from peak height (like when falling off the edge of a wall), exit early
         this.limitReached = false
-        entity.velY += jumpVel || this.controls.jmpVel
+        this.onJump()
+        entity.velY += this.controls.jmpVel
     }
     onHalt() { // obstruct jump prematurely (mostly by collision with bottom edge of a rect)
         this.limitReached = true
@@ -87,9 +88,8 @@ class Jumping {
 
 class OffEdge {
     name = "offEdge"
-    constructor(controls, timeout = 0.125) {
+    constructor(controls) {
         this.controls = controls
-        this.timeout = timeout
     }
     update(entity, dt) {
         if (this.controls.get("left")) { // off the right edge

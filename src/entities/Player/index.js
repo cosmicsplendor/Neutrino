@@ -81,7 +81,7 @@ class Player extends Texture {
         return this._offEdge
     }
     onFall() {
-        this.controls.switchState("jumping")
+        this.controls.switchState("jumping", this, true)
     }
     getCtrlBtns() {
         if (!config.isMobile) {
