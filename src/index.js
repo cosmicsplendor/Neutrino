@@ -23,6 +23,10 @@ const game = new Game({
     assetsCache,
     screenFactories
 })
-
+const onViewportChange = viewport => {
+    document.getElementById("game-container").style.transform = `scale(${viewport.scale})` // scaling up the entire game container
+}
+viewport.on("change", onViewportChange)
+onViewportChange(viewport)
 game.switchScreen(screenNames.LOADING)
 game.start()

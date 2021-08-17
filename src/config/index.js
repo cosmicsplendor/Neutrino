@@ -1,7 +1,9 @@
 import Viewport  from "@utils/ViewPort"
 
+// the following three are config variables 
 const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 const resolution = isMobile ? { max: 800, min: 600 }: { max: 1920, min: 1080 }
+const scale = true
 const computeViewport = () => {
     const width = window.innerWidth, height = window.innerHeight
     const portraitMode = height > width
@@ -14,7 +16,7 @@ const computeViewport = () => {
     return ({
         width: vpWidth,
         height: vpHeight,
-        scale: Math.min(scaleX, scaleY)
+        scale: scale ? Math.min(scaleX, scaleY): 1
     })
 }
 
@@ -23,5 +25,7 @@ export default Object.freeze({
     worldWidth: 1000,
     worldHeight: window.innerHeight,
     gravity: 1700,
-    isMobile
+    isMobile,
+    scale,
+    resolution
 })
