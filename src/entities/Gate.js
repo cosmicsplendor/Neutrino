@@ -1,11 +1,11 @@
 import TexRegion from "@lib/entities/TexRegion"
-import { clamp, sign, easingFns } from "@utils/math"
+import { clamp, len, sign, easingFns } from "@utils/math"
 
 import imgId from "@assets/images/texatlas.png"
 import metaId from "@assets/images/atlasmeta.cson"
 
 class Gate extends TexRegion {
-    constructor({ endY, soundSprite, movSound, speed=150, pos, ...rest }) {
+    constructor({ endY, soundSprite, movSound, speed=150, pos, player, ...rest }) {
         super({ imgId, metaId, frame: "gate", pos, ...rest })
         this.endY = endY
         this.startY = pos.y
@@ -15,6 +15,8 @@ class Gate extends TexRegion {
         this.period = this.dist / speed
         this.t = 0
         this.movSound = movSound
+        this.playerPos = player.pos
+        this.diag = len(this.width / 2, this.height / 2)
     }
     updatePos(dt) {
         this.t += dt
@@ -28,7 +30,8 @@ class Gate extends TexRegion {
         }
     }
     updateAudio(mov) { // momvement
-        console.log(mov)
+        const volume = clamp(0, 1, (mov / 4) * this.diag / len(this.pos.x - this.playerPos.x, this.pos.y - this.playerPos.y) )
+        this.movSound.play(volume)
     }
     reset() {
         this.pos.Y = this.startY

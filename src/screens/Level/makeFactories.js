@@ -11,11 +11,13 @@ export default soundSprite => {
     // const gColSound = soundSprite.createPool("")
     const gMovSound = soundSprite.createPool("gate")
     return ({
-        gate: (x, y, props) => {
+        gate: (x, y, props, player) => {
+            console.log(player)
             return new Gate({
                 pos: { x, y },
                 colSound: null,
                 movSound: gMovSound,
+                player,
                 ...props
             })
         }
