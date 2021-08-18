@@ -1,8 +1,14 @@
 import Viewport  from "@utils/ViewPort"
 
+const resolutions = {
+    mini: { max: 800, min: 600 },
+    mobile: { max: 1280, min: 720 },
+    desktop: { max: 1920, min: 1080 }
+}
+
 // the following three are config variables 
 const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
-const resolution = isMobile ? { max: 800, min: 600 }: { max: 1920, min: 1080 }
+const resolution = isMobile ? resolutions.mobile: resolutions.desktop
 const scale = false
 const computeViewport = () => {
     const width = window.innerWidth, height = window.innerHeight

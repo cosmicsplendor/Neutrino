@@ -18,6 +18,7 @@ class LevelScreen extends Node { // can only have cameras as children
     background = "#2e2e3d"
     // background = "#313143"
     initialized = false
+    soundPools = [ "gate" ]
     constructor({ game, uiRoot }) {
         super()
         const { assetsCache } = game
@@ -37,6 +38,10 @@ class LevelScreen extends Node { // can only have cameras as children
             this.bgMusic = soundSprite.create("music1")
             
             this.soundSprite = soundSprite
+            this.soundPools = LevelScreen.soundPools.reduce((poolmap, frame) => {
+                poolmap[frame] = soundSprite.createPool(frame)
+                return poolmap
+            }, {})
             this.player = new Player({ width: 64, height: 64, fill: "brown", speed: 350, fricX: 3, pos: { x: 300, y: 0 }, shard, cinder, sounds: playerSounds })
             this.bg = new ParallaxCamera({ z: 2.5, zAtop: 1, viewport: config.viewport, subject: this.player, entYOffset: 0 }) // parallax bg
             this.fbg = new ParallaxCamera({ z: 5, zAtop: 1, viewport: config.viewport, subject: this.player, entYOffset: -80 })// parallax far-background

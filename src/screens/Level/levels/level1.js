@@ -18,12 +18,6 @@ class Level1 extends Camera {
             imgId: texatlasId
         })
         const factories = {
-            fire: (x, y) => {
-                const fire = new ParticleEmitter(Object.assign(
-                    assetsCache.get(fireDataId), { pos: { x, y }, imgId: texatlasId, metaId: texatlasMetaId }
-                ))
-                return fire
-            },
             gate: createGate
         }
         const arena = new TiledLevel({ 
