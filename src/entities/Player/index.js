@@ -111,7 +111,6 @@ class Player extends Texture {
         this.alpha = 0  // forces off the visibility (ensuring no update or rendering)
         Node.get(objLayerId).add(this.cinder) // particle emitters have to be manually inserted into the scene graph, since it doesn't implicitly know where it should be located
         Node.get(objLayerId).add(this.shard)
-        const sqVel = this.velX * this.velX + this.velY * this.velY
         this.sounds.player_exp.play(0.6)
         this.sounds.player_din.play(0.2)
         this.velX = this.velY = 0
