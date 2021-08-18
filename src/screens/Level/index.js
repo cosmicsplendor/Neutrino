@@ -63,6 +63,10 @@ class LevelScreen extends Node { // can only have cameras as children
         this.unsetLevel()
         const startingLevel = new Level1({ player: this.player, uiRoot: this.uiRoot, assetsCache: this.game.assetsCache, viewport: config.viewport, bg: this.bg, fbg: this.fbg, subject: this.player, factories: this.factories })
         this.setLevel(startingLevel)
+        setTimeout(() => {
+            const resume = this.game.pause()
+            setTimeout(() => resume(), 2000)
+        }, 4000)
     }
     onExit() {
         this.unsetLevel()
