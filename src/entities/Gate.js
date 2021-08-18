@@ -5,7 +5,7 @@ import imgId from "@assets/images/texatlas.png"
 import metaId from "@assets/images/atlasmeta.cson"
 
 class Gate extends TexRegion {
-    constructor({ endY, speed=150, pos, ...rest }) {
+    constructor({ endY, soundSprite, movSound, speed=150, pos, ...rest }) {
         super({ imgId, metaId, frame: "gate", pos, ...rest })
         this.endY = endY
         this.startY = pos.y
@@ -14,6 +14,7 @@ class Gate extends TexRegion {
         this.dist = Math.abs(this.endY - this.startY)
         this.period = this.dist / speed
         this.t = 0
+        this.movSound = movSound
     }
     updatePos(dt) {
         this.t += dt
@@ -26,12 +27,17 @@ class Gate extends TexRegion {
             this.pos.y = newPosY
         }
     }
+    updateAudio(mov) { // momvement
+        console.log(mov)
+    }
     reset() {
         this.pos.Y = this.startY
         this.velY = this.velY0
     }
     update(dt) {
+        const prevPosY = this.pos.y
         this.updatePos(dt)  
+        this.updateAudio(Math.abs(this.pos.y - prevPosY))
     }
 }
 

@@ -1,25 +1,19 @@
 import { Camera } from "@lib"
 import { createAtlas } from "@lib/entities/TexRegion"
 import TiledLevel from "@utils/TiledLevel"
-import ParticleEmitter from "@utils/ParticleEmitter"
 
 import initUI from "./initUI"
-import createGate from "@factories/gate"
 
 import levelDataId from "@assets/levels/level.cson"
 import texatlasId from "@assets/images/texatlas.png"
 import texatlasMetaId from "@assets/images/atlasmeta.cson"
-import fireDataId from "@assets/particles/fire.cson"
 
 class Level1 extends Camera {
-    constructor({ player, uiRoot, assetsCache, bg, fbg, music, ...cameraProps }) {
+    constructor({ player, uiRoot, assetsCache, bg, fbg, factories, ...cameraProps }) {
         const texatlas = createAtlas({ 
             metaId: texatlasMetaId,
             imgId: texatlasId
         })
-        const factories = {
-            gate: createGate
-        }
         const arena = new TiledLevel({ 
             data: assetsCache.get(levelDataId),
             texatlas,

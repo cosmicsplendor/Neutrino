@@ -6,6 +6,7 @@ import ParticleEmitter from "@lib/utils/ParticleEmitter"
 
 import config from "@config"
 import Level1 from "./levels/Level1"
+import makeFactories from "./makeFactories"
 import Player from "@entities/Player"
 import soundSpriteId from "@assets/audio/sprite.mp3"
 import soundMetaId from "@assets/audio/sprite.cson"
@@ -38,10 +39,7 @@ class LevelScreen extends Node { // can only have cameras as children
             this.bgMusic = soundSprite.create("music1")
             
             this.soundSprite = soundSprite
-            this.soundPools = LevelScreen.soundPools.reduce((poolmap, frame) => {
-                poolmap[frame] = soundSprite.createPool(frame)
-                return poolmap
-            }, {})
+            this.factories = makeFactories(soundSprite)
             this.player = new Player({ width: 64, height: 64, fill: "brown", speed: 350, fricX: 3, pos: { x: 300, y: 0 }, shard, cinder, sounds: playerSounds })
             this.bg = new ParallaxCamera({ z: 2.5, zAtop: 1, viewport: config.viewport, subject: this.player, entYOffset: 0 }) // parallax bg
             this.fbg = new ParallaxCamera({ z: 5, zAtop: 1, viewport: config.viewport, subject: this.player, entYOffset: -80 })// parallax far-background
@@ -63,7 +61,7 @@ class LevelScreen extends Node { // can only have cameras as children
     }
     onEnter() { 
         this.unsetLevel()
-        const startingLevel = new Level1({ player: this.player, uiRoot: this.uiRoot, assetsCache: this.game.assetsCache, viewport: config.viewport, bg: this.bg, fbg: this.fbg, subject: this.player, music: this.bgMusic })
+        const startingLevel = new Level1({ player: this.player, uiRoot: this.uiRoot, assetsCache: this.game.assetsCache, viewport: config.viewport, bg: this.bg, fbg: this.fbg, subject: this.player, factories: this.factories })
         this.setLevel(startingLevel)
     }
     onExit() {
