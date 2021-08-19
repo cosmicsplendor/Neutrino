@@ -8,8 +8,11 @@ import config from "@config"
 import Level1 from "./levels/Level1"
 import makeFactories from "./makeFactories"
 import Player from "@entities/Player"
+import Orb from "@entities/Orb"
 import soundSpriteId from "@assets/audio/sprite.mp3"
 import soundMetaId from "@assets/audio/sprite.cson"
+import fireDataId from "@assets/particles/fire.cson"
+import orbDataId from "@assets/particles/orb.cson"
 import shardDataUrl from "@assets/particles/shard.cson"
 import cinderDataUrl from "@assets/particles/cinder.cson"
 import texatlasId from "@assets/images/texatlas.png"
@@ -41,6 +44,7 @@ class LevelScreen extends Node { // can only have cameras as children
             this.soundSprite = soundSprite
             this.factories = makeFactories(soundSprite)
             this.player = new Player({ width: 64, height: 64, fill: "brown", speed: 350, fricX: 3, pos: { x: 300, y: 0 }, shard, cinder, sounds: playerSounds })
+            this.orb = new Orb(Object.assign(assetsCache.get(orbDataId), { metaId: atlasmetaId, imgId: texatlasId, player: this.player }))
             this.bg = new ParallaxCamera({ z: 2.5, zAtop: 1, viewport: config.viewport, subject: this.player, entYOffset: 0 }) // parallax bg
             this.fbg = new ParallaxCamera({ z: 5, zAtop: 1, viewport: config.viewport, subject: this.player, entYOffset: -80 })// parallax far-background
             this.add(this.fbg)

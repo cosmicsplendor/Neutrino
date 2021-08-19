@@ -8,7 +8,6 @@ import { MAIN_MENU } from "@screens/names"
 import soundSprite from "@assets/audio/sprite.mp3"
 import soundSpriteMeta from "@assets/audio/sprite.cson"
 import cartonImg from "@assets/images/carton.png"
-import orbImgId from "@assets/images/orb.png"
 import cartonDarkImg from "@assets/images/cartonDark.png"
 import texatlasImg from "@assets/images/texatlas.png"
 import texatlasMeta from "@assets/images/atlasmeta.cson"
@@ -42,7 +41,6 @@ class TitleScreen extends Node {
             { url: cartonImg, msg: "loading Images" },
             { url: cartonDarkImg },
             { url: texatlasImg },
-            { url: orbImgId },
             { url: texatlasMeta, msg: "loading texture atlas" },
             { url: levelDataUrl, msg: "loading level data" },
             { url: fireDataId, msg: "loading particles" },

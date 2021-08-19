@@ -1,6 +1,6 @@
 {
  "blendMode": "color-dodge",
- "loop": true,
+ "loop": false,
  "debug": false,
  "params": [
   {
