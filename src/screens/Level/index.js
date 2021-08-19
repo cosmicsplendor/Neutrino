@@ -16,7 +16,7 @@ import texatlasId from "@assets/images/texatlas.png"
 import atlasmetaId from "@assets/images/atlasmeta.cson"
 
 class LevelScreen extends Node { // can only have cameras as children
-    background = "#2e2e3d"
+    background = "#000"
     // background = "#313143"
     initialized = false
     soundPools = [ "gate" ]
@@ -63,10 +63,6 @@ class LevelScreen extends Node { // can only have cameras as children
         this.unsetLevel()
         const startingLevel = new Level1({ player: this.player, uiRoot: this.uiRoot, assetsCache: this.game.assetsCache, viewport: config.viewport, bg: this.bg, fbg: this.fbg, subject: this.player, factories: this.factories })
         this.setLevel(startingLevel)
-        setTimeout(() => {
-            const resume = this.game.pause()
-            setTimeout(() => resume(), 2000)
-        }, 4000)
     }
     onExit() {
         this.unsetLevel()
