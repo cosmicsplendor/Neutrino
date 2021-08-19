@@ -76,8 +76,8 @@
    "spawnPoints": [
       {
          "name": "player",
-         "x": 555,
-         "y": 1282
+         "x": 545,
+         "y": 1208
       },
       {
          "name": "gate",

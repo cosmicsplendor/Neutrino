@@ -16,7 +16,7 @@ import texatlasId from "@assets/images/texatlas.png"
 import atlasmetaId from "@assets/images/atlasmeta.cson"
 
 class LevelScreen extends Node { // can only have cameras as children
-    background = "#000"
+    background = config.isMobile ? "#000000" : "#2e2e3d"
     // background = "#313143"
     initialized = false
     soundPools = [ "gate" ]

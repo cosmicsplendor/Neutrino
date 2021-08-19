@@ -1,12 +1,12 @@
 {
- "blendMode": "color-dodge",
+ "blendMode": "saturation",
  "loop": true,
  "debug": false,
  "params": [
   {
-   "alphaDecayFn": "linear",
+   "alphaDecayFn": "quadIn",
    "weight": 1,
-   "frame": "orb1",
+   "frame": "orb",
    "width": 24,
    "height": 24,
    "offsetX": [
@@ -18,16 +18,16 @@
     0
    ],
    "lifetime": [
-    0.6,
-    1.2
+    0.7,
+    1.4
    ],
    "velX": [
-    -8,
-    8
+    -4,
+    4
    ],
    "velY": [
-    -40,
-    -20
+    -10,
+    10
    ],
    "accX": [
     0,
@@ -44,11 +44,11 @@
   }
  ],
  "hitbox": {
-  "x": -21.6,
-  "y": -60,
-  "width": 43.2,
-  "height": 48
+  "x": -17.6,
+  "y": -26,
+  "width": 35.2,
+  "height": 52
  },
  "randomDistribution": true,
- "size": 16
+ "size": 6
 }

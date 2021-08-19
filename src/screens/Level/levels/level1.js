@@ -8,6 +8,7 @@ import levelDataId from "@assets/levels/level.cson"
 import texatlasId from "@assets/images/texatlas.png"
 import texatlasMetaId from "@assets/images/atlasmeta.cson"
 
+
 class Level1 extends Camera {
     constructor({ player, uiRoot, assetsCache, bg, fbg, factories, ...cameraProps }) {
         const texatlas = createAtlas({ 

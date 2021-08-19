@@ -1,5 +1,6 @@
 import TexRegion from "@lib/entities/TexRegion"
 import { clamp, len, sign, easingFns } from "@utils/math"
+import getTestFn from "@lib/components/Collision/helpers/getTestFn"
 
 import imgId from "@assets/images/texatlas.png"
 import metaId from "@assets/images/atlasmeta.cson"
@@ -16,7 +17,9 @@ class Gate extends TexRegion {
         this.t = 0
         this.movSound = movSound
         this.playerPos = player.pos
+        this.player = player
         this.diag = len(this.width / 2, this.height / 2)
+        this.testCol = getTestFn(this, player)
     }
     updatePos(dt) {
         this.t += dt
@@ -41,6 +44,9 @@ class Gate extends TexRegion {
         const prevPosY = this.pos.y
         this.updatePos(dt)  
         this.updateAudio(Math.abs(this.pos.y - prevPosY))
+        if (this.testCol(this, this.player)) {
+            this.player.visible && this.player.explode()
+        }
     }
 }
 

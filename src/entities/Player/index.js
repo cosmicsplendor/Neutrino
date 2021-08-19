@@ -67,11 +67,14 @@ class Player extends Texture {
         })
         this.wallCollision = new Collision({ entity: this, blocks: colRectsId, rigid: true, movable: false, onHit: this.onWallCollision.bind(this) })
         this.spikeCollision = new Collision({ entity: this, blocks: "spikes", rigid: false, movable: false, onHit: this.explode.bind(this) })
-        this.gateCollision = new Collision({ entity: this, blocks: "gates", rigid: false, movable: false, onHit: this.explode.bind(this) })
+        // this.gateCollision = new Collision({ entity: this, blocks: "gates", rigid: false, movable: false, onHit: this.explode.bind(this) })
         
         Movement.makeMovable(this, { accY: config.gravity, roll: true, fricX })
         window.temp1 = sounds.jump
         sounds.rolling.speed = 1.2
+    }
+    get visible() {
+        return this.alpha !== 0 && this._visible
     }
     set offEdge(which) {
         this.controls.switchState("offEdge", which)
@@ -82,6 +85,9 @@ class Player extends Texture {
     }
     onFall() {
         this.controls.switchState("jumping", this, true)
+    }
+    testCol(entity) {
+
     }
     getCtrlBtns() {
         if (!config.isMobile) {
@@ -128,7 +134,6 @@ class Player extends Texture {
         Boolean(this.offEdge) ? Movement.updateOffEdge(this, dt): Movement.update(this, dt)
         this.wallCollision.update()
         this.spikeCollision.update()
-        this.gateCollision.update()
         this.updateAudio()
     }
 }
