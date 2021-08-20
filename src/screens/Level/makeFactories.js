@@ -6,6 +6,7 @@ import texatlasId from "@assets/images/texatlas.png"
 import atlasmetaId from "@assets/images/atlasmeta.cson"
 import fireDataId from "@assets/particles/fire.cson"
 import orbDataId from "@assets/particles/orb.cson"
+import ParticleEmitter from "@lib/utils/ParticleEmitter"
 
 const getDefault = EClass => (x, y, props) => {
     return new EClass({
@@ -34,6 +35,10 @@ export default ({ soundSprite, assetsCache }) => { // using sound sprite to crea
             obj.pos.y = y
         }
     })
+    const fire = new ParticleEmitter(Object.assign(
+        assetsCache.get(fireDataId),
+        { metaId: atlasmetaId, imgId: texatlasId }
+    ))
     return ({
         gate: (x, y, props, player) => {
             return new Gate({
@@ -45,5 +50,11 @@ export default ({ soundSprite, assetsCache }) => { // using sound sprite to crea
             })
         },
         orb: orbPool.create.bind(orbPool),
+        fire: (x, y) => {
+            fire.parent && fire.remove()
+            fire.pos.x = x
+            fire.pos.y = y
+            return fire
+        }
     })
 }
