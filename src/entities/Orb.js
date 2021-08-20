@@ -1,10 +1,13 @@
 import ParticleEmitter from "@lib/utils/ParticleEmitter"
 import { sqLen } from "@lib/utils/math"
+import getTestFn from "@lib/components/Collision/helpers/getTestFn"
 
 class Orb extends ParticleEmitter {
     constructor({ player, ...rest }) {
         super({ ...rest })
         this.player = player
+        this.testCol = getTestFn(this, player)
+        this.hitbox = { x: 5, y: 5, width: 14, height: 14}
     }
     update(dt) {
         const dPosX = this.player.pos.x + this.player.width / 2 - this.pos.x
@@ -14,6 +17,8 @@ class Orb extends ParticleEmitter {
         }
         this.pos.x += dPosX / 40
         this.pos.y += dPosY / 40
+        if (this.testCol(this, this.player)) {
+        }
     }
 }
 
