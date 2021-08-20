@@ -4,15 +4,12 @@ import { sqLen } from "@lib/utils/math"
 class Orb extends ParticleEmitter {
     constructor({ player, ...rest }) {
         super({ ...rest })
-        this.pos.y = 1200
-        this.pos.x = 500
         this.player = player
-        console.log(this.update)
     }
     update(dt) {
         const dPosX = this.player.pos.x + this.player.width / 2 - this.pos.x
         const dPosY = this.player.pos.y + this.player.width / 2 - this.pos.y
-        if (sqLen(dPosX, dPosY) > 40000) { // distance > 200
+        if (sqLen(dPosX, dPosY) > 90000) { // distance > 200
             return
         }
         this.pos.x += dPosX / 40
