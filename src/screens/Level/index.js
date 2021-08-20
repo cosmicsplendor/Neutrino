@@ -36,7 +36,6 @@ class LevelScreen extends Node { // can only have cameras as children
                 spritemap[frame] = soundSprite.create(frame)
                 return spritemap
             }, {})
-            this.bgMusic = soundSprite.create("music1")
             
             this.soundSprite = soundSprite
             this.factories = makeFactories({ soundSprite, assetsCache })

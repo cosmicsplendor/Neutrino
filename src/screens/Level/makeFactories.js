@@ -20,7 +20,7 @@ export default ({ soundSprite, assetsCache }) => { // using sound sprite to crea
     const orbFactory = (x, y, props, player) => {
         return new Orb(Object.assign(
             assetsCache.get(orbDataId),
-            { metaId: atlasmetaId, imgId: texatlasId, player, pos: { x, y } },
+            { metaId: atlasmetaId, imgId: texatlasId, player, pos: { x, y }, sound: soundSprite.create("orb"), movSound: soundSprite.create("orb_mov") },
             props
         ))
     }
