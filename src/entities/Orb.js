@@ -11,11 +11,11 @@ class Orb extends ParticleEmitter {
         this.testCol = getTestFn(this, player)
         this.hitbox = { x: 5, y: 5, width: 14, height: 14}
     }
-    update(dt) {
+    update() {
         const dPosX = this.player.pos.x + this.player.width / 2 - this.pos.x
         const dPosY = this.player.pos.y + this.player.width / 2 - this.pos.y
         const sqDist = sqLen(dPosX, dPosY)
-        if (sqDist > 90000) { // distance > 200
+        if (sqDist > 14400) { // distance > 120
             this.movSound.pause()
             return 
         }
@@ -23,7 +23,7 @@ class Orb extends ParticleEmitter {
         this.pos.y += dPosY / 30
         this.movSound.play()
         if (this.testCol(this, this.player) && this.player.visible) {
-            this.sound.play(1 - (sqDist / 9000))
+            this.sound.play(1 - (sqDist / 14400))
             this.movSound.pause()
             this.remove()
         }
