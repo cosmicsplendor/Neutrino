@@ -23,7 +23,7 @@ class Gate extends TexRegion {
     }
     updatePos(dt) {
         this.t += dt
-        const dp = this.dist * easingFns.cubicOut(this.t / this.period)
+        const dp = this.dist * easingFns.cubicIn(this.t / this.period)
         this.pos.y = (this.dir === this.initDir ? this.startY: this.endY) + dp * this.dir
         const newPosY = this.startToEndDir === 1 ? clamp(this.startY, this.endY, this.pos.y): clamp(this.endY, this.startY, this.pos.y)
         if (newPosY !== this.pos.y) { // if the gate has gone beyond extremes

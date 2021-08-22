@@ -4,7 +4,7 @@
  "debug": false,
  "params": [
   {
-   "alphaDecayFn": "linear",
+   "alphaDecayFn": "",
    "weight": 1,
    "frame": "orb1",
    "width": 24,
@@ -38,7 +38,7 @@
     0
    ],
    "alpha": [
-    0.9,
+    1,
     1
    ]
   }

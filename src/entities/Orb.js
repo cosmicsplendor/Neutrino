@@ -19,8 +19,8 @@ class Orb extends ParticleEmitter {
             this.movSound.pause()
             return 
         }
-        this.pos.x += dPosX / 35
-        this.pos.y += dPosY / 35
+        this.pos.x += dPosX / 30
+        this.pos.y += dPosY / 30
         this.movSound.play()
         if (this.testCol(this, this.player) && this.player.visible) {
             this.sound.play(1 - (sqDist / 9000))
