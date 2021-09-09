@@ -1,6 +1,6 @@
 import Game from "@utils/Game"
 import UI from "@utils/UI"
-import { Canvas2DRenderer } from "@lib"
+import { Canvas2DRenderer, Webgl2Renderer } from "@lib"
 import AssetsCache from "@utils/AssetsCache"
 import TexRegion from "@lib/entities/TexRegion"
 
@@ -23,7 +23,7 @@ import shardDataId from "@assets/particles/shard.cson"
 import cinderDataId from "@assets/particles/cinder.cson"
 
 const { viewport } = config
-const renderer = new Canvas2DRenderer({ canvasID: "arena", scene: null, background: "skyblue", viewport }) // scene will be injected by game
+const renderer = new Webgl2Renderer({ cnvQry: "#arena", scene: null, background: "skyblue", viewport }) // scene will be injected by game
 const assetsCache = new AssetsCache()
 const uiRoot = UI.query("#ui-layer")
 const assets = [
@@ -39,7 +39,6 @@ const assets = [
     { url: cinderDataId },
     { url: shardDataId },
 ]
-TexRegion.injectAtlasmeta({})
 const screenFactories = {
     [screenNames.LOADING]: game => new LoadingScreen({ game, assets }),
     [screenNames.MAIN_MENU]: game => new MainMenuScreen({ game, uiRoot }),
