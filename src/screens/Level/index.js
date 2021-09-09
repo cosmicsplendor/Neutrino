@@ -26,7 +26,7 @@ class LevelScreen extends Node { // can only have cameras as children
         this.game = game
         this.uiRoot = uiRoot
         this.addTimer = Timer.attachedTo(this)
-        assetsCache.on("load", () => {
+        assetsCache.once("load", () => {
             const meta = assetsCache.get(soundMetaId)
             const soundResource = assetsCache.get(soundSpriteId)
             const soundSprite = new SoundSprite({ resource: soundResource, resourceId: soundSpriteId, meta })

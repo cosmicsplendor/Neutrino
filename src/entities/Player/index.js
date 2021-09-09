@@ -35,10 +35,10 @@ const getKeyMappings = () => Object.freeze({
 const PlayerControlsClass = config.isMobile ? PlayerTouchControls: PlayerKeyControls
 const getControlsMapping = config.isMobile ? getTouchMappings: getKeyMappings
 
-class Player extends Texture {
+class Player extends TexRegion {
     static sounds = [ "player_din", "concrete", "wood", "metal", "jump", "rolling", "player_exp" ]
     constructor({ speed = 48, width = 64, height = 64, fricX=4, shard, cinder, controls, sounds, ...rest }) {
-        super({ imgId: crateImgUrl, ...rest })
+        super({ frame: "ball", ...rest })
         this.width = width
         this.height = height
         this.radius = width / 2

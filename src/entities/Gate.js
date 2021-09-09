@@ -2,12 +2,9 @@ import TexRegion from "@lib/entities/TexRegion"
 import { clamp, len, sign, easingFns } from "@utils/math"
 import getTestFn from "@lib/components/Collision/helpers/getTestFn"
 
-import imgId from "@assets/images/texatlas.png"
-import metaId from "@assets/images/atlasmeta.cson"
-
 class Gate extends TexRegion {
     constructor({ endY, soundSprite, speed=150, pos, player, ...rest }) {
-        super({ imgId, metaId, frame: "gate", pos, ...rest })
+        super({ frame: "gate", pos, ...rest })
         this.endY = endY
         this.startY = pos.y
         this.initDir = sign(this.endY - this.startY)
