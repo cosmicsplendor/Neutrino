@@ -5,19 +5,11 @@ import TiledLevel from "@utils/TiledLevel"
 import initUI from "./initUI"
 
 import levelDataId from "@assets/levels/level.cson"
-import texatlasId from "@assets/images/texatlas.png"
-import texatlasMetaId from "@assets/images/atlasmeta.cson"
-
 
 class Level1 extends Camera {
     constructor({ player, uiRoot, assetsCache, bg, fbg, factories, ...cameraProps }) {
-        const texatlas = createAtlas({ 
-            metaId: texatlasMetaId,
-            imgId: texatlasId
-        })
         const arena = new TiledLevel({ 
             data: assetsCache.get(levelDataId),
-            texatlas,
             bg, fbg, player,
             factories
         })

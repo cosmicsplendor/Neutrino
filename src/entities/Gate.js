@@ -1,5 +1,5 @@
 import TexRegion from "@lib/entities/TexRegion"
-import { clamp, len, sign, easingFns } from "@utils/math"
+import { clamp, sign, easingFns } from "@utils/math"
 import getTestFn from "@lib/components/Collision/helpers/getTestFn"
 
 class Gate extends TexRegion {

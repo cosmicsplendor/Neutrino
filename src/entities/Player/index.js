@@ -1,11 +1,10 @@
 import { Node } from "@lib"
-import Texture from "@lib/entities/Texture"
+import TexRegion from "@lib/entities/TexRegion"
 import config from "@config"
 import Collision from "@components/Collision"
 import Movement from "@components/Movement"
 import UI from "@utils/UI"
 import { PlayerKeyControls, PlayerTouchControls } from "./PlayerControls"
-import crateImgUrl from "@assets/images/carton.png"
 import { colRectsId, curLevelId, objLayerId } from "@lib/constants"
 import styles from "./style.css"
 
