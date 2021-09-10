@@ -1,5 +1,4 @@
 import { Camera } from "@lib"
-import { createAtlas } from "@lib/entities/TexRegion"
 import TiledLevel from "@utils/TiledLevel"
 
 import initUI from "./initUI"
@@ -18,7 +17,7 @@ class Level1 extends Camera {
         this.player = player
                                                                                                                                                                                                                                                                                                                                                                  
         this.add(arena)
-        
+        this.tint = [ 0.1, -0, -0.1, 0 ]
         const teardownUI = initUI(uiRoot, player)
         this.onRemove = () => teardownUI()
         // music.play()

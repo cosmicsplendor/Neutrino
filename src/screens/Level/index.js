@@ -1,5 +1,5 @@
 import { Node } from "@lib"
-import ParallaxCamera, { getBaseline } from "@lib/entities/ParallaxCamera"
+import ParallaxCamera from "@lib/entities/ParallaxCamera"
 import Timer from "@utils/Timer"
 import SoundSprite from "@utils/Sound/SoundSprite"
 import ParticleEmitter from "@lib/utils/ParticleEmitter"
@@ -46,6 +46,7 @@ class LevelScreen extends Node { // can only have cameras as children
                 const bgData = assetsCache.get(bgDataId)
                 const dataToTile = tile => new TexRegion({ frame: tile.name, pos: { x: tile.x, y: tile.y }})
                 this.bg = new ParallaxCamera({ z: 2.5, zAtop: 1, viewport: config.viewport, subject: this.player, entYOffset: 0, tiles: bgData.map(dataToTile) }) // parallax bg
+                this.bg.pxCol = [ 0.5, 0.1, 0.1 ]
                 // this.fbg = new ParallaxCamera({ z: 5, zAtop: 1, viewport: config.viewport, subject: this.player, entYOffset: 0, tiles: bgData.fbg.map(dataToTile) })// parallax far-background
                 // this.add(this.fbg)
                 this.add(this.bg)
