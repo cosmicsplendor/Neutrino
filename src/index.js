@@ -16,7 +16,8 @@ import cartonImg from "@assets/images/carton.png"
 import cartonDarkImg from "@assets/images/cartonDark.png"
 import texatlasId from "@assets/images/texatlas.png"
 import atlasmetaId from "@assets/images/atlasmeta.cson"
-import levelDataUrl from "@assets/levels/level.cson"
+import levelDataId from "@assets/levels/level.cson"
+import bgDataId from "@assets/levels/background.cson"
 import fireDataId from "@assets/particles/fire.cson"
 import orbDataId from "@assets/particles/orb.cson"
 import shardDataId from "@assets/particles/shard.cson"
@@ -33,7 +34,8 @@ const assets = [
     { url: cartonDarkImg },
     { url: texatlasId },
     { url: atlasmetaId, msg: "loading texture atlas" },
-    { url: levelDataUrl, msg: "loading level data" },
+    { url: levelDataId, msg: "loading level data" },
+    { url: bgDataId },
     { url: fireDataId, msg: "loading particles" },
     { url: orbDataId },
     { url: cinderDataId },
