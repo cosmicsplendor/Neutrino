@@ -44,40 +44,27 @@ class LevelScreen extends Node { // can only have cameras as children
             this.player = new Player({ width: 64, height: 64, fill: "brown", speed: 350, fricX: 3, pos: { x: 300, y: 0 }, shard, cinder, sounds: playerSounds })
             if (!config.isMobile) {
                 const bgData = assetsCache.get(bgDataId)
-                const bg = new ParallaxCamera({ z: 2.5, zAtop: 1, viewport: config.viewport, subject: this.player, entYOffset: 0 }) // parallax bg
-                const fbg = new ParallaxCamera({ z: 5, zAtop: 1, viewport: config.viewport, subject: this.player, entYOffset: -80 })// parallax far-background
-                this.add(this.fbg)
+                const dataToTile = tile => new TexRegion({ frame: tile.name, pos: { x: tile.x, y: tile.y }})
+                this.bg = new ParallaxCamera({ z: 2.5, zAtop: 1, viewport: config.viewport, subject: this.player, entYOffset: 0, tiles: bgData.map(dataToTile) }) // parallax bg
+                // this.fbg = new ParallaxCamera({ z: 5, zAtop: 1, viewport: config.viewport, subject: this.player, entYOffset: 0, tiles: bgData.fbg.map(dataToTile) })// parallax far-background
+                // this.add(this.fbg)
                 this.add(this.bg)
-                // adding tiles to parallax background cameras
-                this.addParallaxTiles({ tiles: bgData.fbgTiles, layer: fbg })
-                this.addParallaxTiles({ tiles: bgData.bgTiles, layer: bg })
             }
-        })
-    }
-    addParallaxTiles = ({ tiles, layer }) => {
-        if (!tiles || tiles.length === 0) { return }
-        const tEnts = tiles.map(tile => new TexRegion({ frame: tile.name, pos: { x: tile.x, y: tile.y }}))  // tiles mapped into entities,
-        layer.layoutTiles({ 
-            tiles: tEnts,
-            baseline: getBaseline(tEnts),
-            worldWidth: data.width, 
-            worldHeight: data.height, 
         })
     }
     setLevel(level) {
         this.add(level)
+        this.bg && this.bg.layoutTiles(level.world)
+        // this.fbg.layoutTiles(level.world)
         level.parent = null // sever the child to parent link
     }
     unsetLevel() {
-        this.bg.children = []
-        this.fbg.children = []
-        if (this.children && this.children[2]) {
-            Node.cleanupRecursively(this.children[2])
-            Node.removeChild(this, this.children[2])
+        if (this.children) {
+            const idx = this.children.length - 1
+            idx > -1 && Node.removeChild(this, this.children[idx])
         }
     }
     onEnter() { 
-        this.unsetLevel()
         const startingLevel = new Level1({ player: this.player, uiRoot: this.uiRoot, assetsCache: this.game.assetsCache, viewport: config.viewport, subject: this.player, factories: this.factories })
         this.setLevel(startingLevel)
     }
