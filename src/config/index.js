@@ -3,7 +3,8 @@ import Viewport  from "@utils/ViewPort"
 const resolutions = {
     mini: { max: 800, min: 600 },
     mobile: { max: 1280, min: 720 },
-    desktop: { max: 1920, min: 1080 }
+    desktop: { max: 1920, min: 1080 },
+    // desktop: { max: 1280, min: 720 },
 }
 
 // the following three are config variables 
