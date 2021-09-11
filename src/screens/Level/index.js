@@ -18,7 +18,7 @@ import atlasmetaId from "@assets/images/atlasmeta.cson"
 import bgDataId from "@assets/levels/background.cson"
 
 class LevelScreen extends Node { // can only have cameras as children
-    background = config.isMobile ? "#000000" : "#2e2e3d"
+    background = "rgb(181 24 24)"
     // background = "#313143"
     initialized = false
     soundPools = [ "gate" ]
@@ -46,7 +46,7 @@ class LevelScreen extends Node { // can only have cameras as children
                 const bgData = assetsCache.get(bgDataId)
                 const dataToTile = tile => new TexRegion({ frame: tile.name, pos: { x: tile.x, y: tile.y }})
                 this.bg = new ParallaxCamera({ z: 2.5, zAtop: 1, viewport: config.viewport, subject: this.player, entYOffset: 0, tiles: bgData.map(dataToTile) }) // parallax bg
-                this.bg.pxCol = [ 0.5, 0.1, 0.1 ]
+                this.bg.overlay = [ 0.5, 0.1, 0.1 ]
                 // this.fbg = new ParallaxCamera({ z: 5, zAtop: 1, viewport: config.viewport, subject: this.player, entYOffset: 0, tiles: bgData.fbg.map(dataToTile) })// parallax far-background
                 // this.add(this.fbg)
                 this.add(this.bg)
