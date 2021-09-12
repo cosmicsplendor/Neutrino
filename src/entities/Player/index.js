@@ -51,6 +51,7 @@ class Player extends TexRegion {
         this.shard = shard
         this.cinder = cinder
         this.sounds = sounds
+        this.fricX0 = fricX
 
         this.shard.onDead = () => { // what should happen upon player explosion
             /**
@@ -64,8 +65,9 @@ class Player extends TexRegion {
         this.controls = controls || new PlayerControlsClass(speed, getControlsMapping(), () => {
             sounds.jump.play()
         })
-        this.wallCollision = new Collision({ entity: this, blocks: colRectsId, rigid: true, movable: false, onHit: this.onWallCollision.bind(this) })
+        this.wallCollision = new Collision({ entity: this, blocks: colRectsId, rigid: true, movable: false, onHit: this.onWallCol.bind(this) })
         this.spikeCollision = new Collision({ entity: this, blocks: "spikes", rigid: false, movable: false, onHit: this.explode.bind(this) })
+        this.magnetCollision = new Collision({ entity: this, blocks: "magnets", rigid: true, movable: false, onHit: this.onMagnetCol.bind(this) })
         // this.gateCollision = new Collision({ entity: this, blocks: "gates", rigid: false, movable: false, onHit: this.explode.bind(this) })
         
         Movement.makeMovable(this, { accY: config.gravity, roll: true, fricX })
@@ -94,17 +96,35 @@ class Player extends TexRegion {
         }
         return this.controls.mappings
     }
-    onWallCollision(block, velX, velY, moved) {
-        const colSpeed = Math.abs(velY || velX) || 0
-        if (colSpeed > 100 && moved) { // hardcoding palyer collision audio threshold speed to 100
-           this.sounds[block.mat].play(Math.min(1, (colSpeed - 100) / 600)) // hardcoding palyer collision audio cutoff speed to 600
+    onWallCol(block, velX, velY, moved) {
+        if (moved) { // hardcoding palyer collision audio threshold speed to 100
+            const colSpeed = Math.abs(velY || velX) || 0
+            if (colSpeed > 100) {
+                this.sounds[block.mat || "concrete"].play(Math.min(1, colSpeed / 800)) // hardcoding palyer collision audio cutoff speed to 600
+            }
         }
         if (velY) {
             if (velY > 0) {
+                this.fricX = this.fricX0
                 return this.controls.switchState("rolling")
             }
             // collision with the bottom edge
             if (this.controls.state && this.controls.state.name === "jumping") {
+                this.controls.state.onHalt()
+            }
+        }
+    }
+    onMagnetCol(block, velX, velY, moved) {
+        if (moved) { // hardcoding palyer collision audio threshold speed to 100
+            const colSpeed = Math.abs(velY || velX) || 0
+            if (colSpeed > 100) {
+                this.sounds.metal.play(Math.min(1, colSpeed / 3000)) // hardcoding collision audio cutoff speed to 1200
+            }
+        }
+        if (velY && velY < 0) {
+            this.velY = -100
+            if (this.controls.state.name === "jumping") {
+                this.fricX = this.fricX0 * 2
                 this.controls.state.onHalt()
             }
         }
@@ -132,6 +152,7 @@ class Player extends TexRegion {
         this.controls.update(this, dt)
         Boolean(this.offEdge) ? Movement.updateOffEdge(this, dt): Movement.update(this, dt)
         this.wallCollision.update()
+        this.magnetCollision.update()
         this.spikeCollision.update()
         this.updateAudio()
     }

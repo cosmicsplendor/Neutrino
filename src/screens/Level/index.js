@@ -55,7 +55,7 @@ class LevelScreen extends Node { // can only have cameras as children
     }
     setLevel(level) {
         this.add(level)
-        this.game.renderer.gTint = [ 0.1, -0, -0.1, 0 ]
+        // this.game.renderer.gTint = [ 0.05, 0, -0.05, 0 ]
         this.bg && this.bg.layoutTiles(level.world)
         // this.fbg.layoutTiles(level.world)
         level.parent = null // sever the child to parent link

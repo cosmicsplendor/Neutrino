@@ -1,5 +1,6 @@
 import Orb from "@entities/Orb"
-import Gate from "@entities/gate"
+import Gate from "@entities/Gate"
+import Magnet from "@entities/Magnet"
 import Pool from "@utils/Pool"
 
 import texatlasId from "@assets/images/texatlas.png"
@@ -56,6 +57,9 @@ export default ({ soundSprite, assetsCache }) => { // using sound sprite to crea
             fire.pos.x = x
             fire.pos.y = y
             return fire
+        },
+        pillar: (x, y) => {
+            return new Magnet({ pos: { x, y }, frame: "pillar" })
         }
     })
 }
