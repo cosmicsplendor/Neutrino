@@ -17,7 +17,7 @@ class Level1 extends Camera {
         this.player = player
                                                                                                                                                                                                                                                                                                                                                                  
         this.add(arena)
-        this.tint = [ 0.1, -0, -0.1, 0 ]
+        this.gTint = [ 0.1, -0, -0.1, 0 ]
         const teardownUI = initUI(uiRoot, player)
         this.onRemove = () => teardownUI()
         // music.play()
