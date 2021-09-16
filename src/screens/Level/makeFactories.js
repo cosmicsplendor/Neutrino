@@ -54,8 +54,8 @@ export default ({ soundSprite, assetsCache }) => { // using sound sprite to crea
         orb: orbPool.create.bind(orbPool),
         fire: (x, y) => {
             fire.parent && fire.remove()
-            fire.pos.x = x
-            fire.pos.y = y
+            fire.pos.x = x - 13
+            fire.pos.y = y - 20
             return fire
         },
         magnet: (x, y) => {
