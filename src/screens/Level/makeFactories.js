@@ -58,8 +58,8 @@ export default ({ soundSprite, assetsCache }) => { // using sound sprite to crea
             fire.pos.y = y
             return fire
         },
-        pillar: (x, y) => {
-            return new Magnet({ pos: { x, y }, frame: "pillar" })
+        magnet: (x, y) => {
+            return new Magnet({ pos: { x, y }, frame: "magnet" })
         }
     })
 }
