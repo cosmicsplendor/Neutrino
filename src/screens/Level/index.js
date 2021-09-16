@@ -18,8 +18,8 @@ import atlasmetaId from "@assets/images/atlasmeta.cson"
 import bgDataId from "@assets/levels/background.cson"
 
 class LevelScreen extends Node { // can only have cameras as children
-    background = "rgb(181 24 24)"
-    // background = "#313143"
+    // background = "rgb(181 24 24)"
+    background = "#313143"
     initialized = false
     soundPools = [ "gate" ]
     constructor({ game, uiRoot }) {
