@@ -24,7 +24,7 @@ import shardDataId from "@assets/particles/shard.cson"
 import cinderDataId from "@assets/particles/cinder.cson"
 
 const { viewport } = config
-const renderer = new Canvas2DRenderer({ cnvQry: "#arena", scene: null, background: "skyblue", viewport }) // scene will be injected by game
+const renderer = new Webgl2Renderer({ cnvQry: "#arena", scene: null, background: "skyblue", viewport }) // scene will be injected by game
 const assetsCache = new AssetsCache()
 const uiRoot = UI.query("#ui-layer")
 const assets = [

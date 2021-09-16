@@ -1,6 +1,7 @@
 import Orb from "@entities/Orb"
 import Gate from "@entities/Gate"
 import Magnet from "@entities/Magnet"
+import Ball from "@entities/Ball"
 import Pool from "@utils/Pool"
 
 import texatlasId from "@assets/images/texatlas.png"
@@ -60,6 +61,9 @@ export default ({ soundSprite, assetsCache }) => { // using sound sprite to crea
         },
         magnet: (x, y) => {
             return new Magnet({ pos: { x, y }, frame: "magnet" })
+        },
+        ball: (x, y, props, player) => {
+            return new Ball(x, y, props.seq, player)
         }
     })
 }
