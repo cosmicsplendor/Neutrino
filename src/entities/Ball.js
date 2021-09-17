@@ -13,7 +13,7 @@ const defaultSeq = `
     },
     {
         "rollTo": 2664,
-        "speed": 200
+        "speed": 118
     }
 ]
 `
@@ -24,10 +24,11 @@ class Ball extends TexRegion {
         super({ frame: "ball", pos: { x, y } })
         this.pos0 = { x, y }
         this.player = player
-        this.tint = [ 0, 0, 1, 0 ]
+        this.tint = [ 0.05, 0, -0.05, 0 ]
         this.anchor = { x: this.width / 2, y: this.height / 2 }
         this.radius = this.width / 2
-        Object.assign(this, makeFlashMixin(0.1))
+        this.alpha = 0.7
+        // Object.assign(this, makeFlashMixin(0.5))
         Movement.makeMovable(this, { roll: true })
         this.seqs = JSON.parse(seq)
         this.seqIdx = -1
@@ -68,7 +69,7 @@ class Ball extends TexRegion {
         }
     }
     update(dt) {
-        this.updateFlash(dt)
+        // this.updateFlash(dt)
         Movement.update(this, dt)
         this.checkSeq()
     }

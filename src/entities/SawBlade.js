@@ -17,10 +17,12 @@ class SawBlade extends TexRegion {
             y: this.height / 2
         }
         this.radius = this.width / 2
-        this.velX = Math.abs(toX - x) * sign(toX - x) * speed
-        this.velY = Math.abs(toY - y) * sign(toY - y) * speed
+        this.hitCirc = { x: 0, y: 0, radius: this.radius }
+        this.velX = (toX - x) === 0 ? 0: sign(toX - x) * speed
+        this.velY = (toY - y) === 0 ? 0: sign(toY - y) * speed
         this.rotation = 0
         this.testCol = getTestFn(this, player)
+        console.log(this.testCol)
     }
     update(dt) {
         const newPosX = this.pos.x + this.velX * dt
@@ -31,7 +33,7 @@ class SawBlade extends TexRegion {
         this.pos.y = clamp(this.fromY, this.toY, newPosY)
 
         ;(this.pos.x !== newPosX) && (this.velX *= -1) // in case the blade moved beyond it's x bounds, reverse it's x-velocity
-        (this.pos.y !== newPosY) && (this.velY *= -1)
+        ;(this.pos.y !== newPosY) && (this.velY *= -1)
 
         this.rotation += dRot || ANG_VEL * dt
         if (this.testCol(this, this.player)) {

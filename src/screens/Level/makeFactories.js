@@ -68,6 +68,12 @@ export default ({ soundSprite, assetsCache }) => { // using sound sprite to crea
         },
         sb1: (x, y, props, player) => {
             return new SawBlade(x, y,  "sb1", props.toX, props.toY, props.speed, player)
-        }
+        },
+        sb2: (x, y, props, player) => {
+            return new SawBlade(x, y,  "sb2", props.toX, props.toY, props.speed, player)
+        },
+        sb3: (x, y, props, player) => {
+            return new SawBlade(x, y,  "sb3", props.toX, props.toY, props.speed, player)
+        },
     })
 }
