@@ -22,7 +22,6 @@ class SawBlade extends TexRegion {
         this.velY = (toY - y) === 0 ? 0: sign(toY - y) * speed
         this.rotation = 0
         this.testCol = getTestFn(this, player)
-        console.log(this.testCol)
     }
     update(dt) {
         const newPosX = this.pos.x + this.velX * dt

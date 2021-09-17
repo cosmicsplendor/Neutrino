@@ -43,6 +43,7 @@ export default ({ soundSprite, assetsCache }) => { // using sound sprite to crea
         assetsCache.get(fireDataId),
         { metaId: atlasmetaId, imgId: texatlasId }
     ))
+    fire.reset = () => {}
     return ({
         gate: (x, y, props, player) => {
             return new Gate({
