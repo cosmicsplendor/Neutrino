@@ -1,22 +1,34 @@
 const { TexRegion } = require("@lib/entities");
 import Movement from "@lib/components/Movement";
+import Timer from "@utils/Timer"
 import config from "@config"
 import { sign } from "@utils/math"
+import getTestFn from "@lib/components/Collision/helpers/getTestFn";
 
-const defaultSeq = `
-[
-    { 
-        "jumpTo": 1008,
-        "speed": 500,
-        "acc": 1000,
-        "velX": 200
-    },
-    {
-        "rollTo": 2664,
-        "speed": 118
-    }
-]
-`
+// seq instance
+// `
+// [
+//     { 
+//         "jumpTo": 1008,
+//         "speed": 500,
+//         "acc": 1000,
+//         "velX": 200
+//     },
+//     {
+//         "rollTo": 2664,
+//         "speed": 118
+//     },
+//     {
+//         "jumpTo": 1104,
+//         "speed": 0,
+//         "velX": 118
+//     },
+//     {
+//         "rollTo": 2800,
+//         "speed": 118
+//     }
+// ]
+// `
 
 // tutorial ball
 class Ball extends TexRegion {
@@ -27,21 +39,34 @@ class Ball extends TexRegion {
         this.tint = [ 0.05, 0, -0.05, 0 ]
         this.anchor = { x: this.width / 2, y: this.height / 2 }
         this.radius = this.width / 2
-        this.alpha = 0.7
-        // Object.assign(this, makeFlashMixin(0.5))
+        this.alpha = 0.6
+        Object.assign(this, makeFlashMixin(1))
         Movement.makeMovable(this, { roll: true })
         this.seqs = JSON.parse(seq)
         this.seqIdx = -1
         this.seq = null
+        this.initiated = false
+        this.dead = false
+        this.testCol = getTestFn(this, player)
         this.nextSeq()
     }
     reset() {}
     nextSeq() {
         this.seqIdx++
         if (this.seqIdx > this.seqs.length - 1) {
-            this.seqIdx = 0
-            this.pos.x = this.pos0.x
-            this.pos.y = this.pos0.y
+            // this.seqIdx = 0
+            // this.pos.x = this.pos0.x
+            // this.pos.y = this.pos0.y
+            this.dead = true
+            const alpha = this.alpha
+            this.add(new Timer({ 
+                duration: 0.6, 
+                onTick: dt => { 
+                    this.alpha = alpha * (1 - dt)
+                }, 
+                onDone: () => this.remove()
+            }))
+            return
         }
         this.seq = this.seqs[this.seqIdx]
         if (this.seq.jumpTo) {
@@ -70,9 +95,16 @@ class Ball extends TexRegion {
         }
     }
     update(dt) {
-        // this.updateFlash(dt)
-        Movement.update(this, dt)
-        this.checkSeq()
+        if (this.dead) {
+            return
+        }
+        this.updateFlash(dt)
+        if (this.initiated) { // sequence initiated (triggered by player touch)
+            Movement.update(this, dt)
+            this.checkSeq()
+            return
+        }
+        this.initiated = this.testCol(this, this.player)
     }
 }
 
