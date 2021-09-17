@@ -35,6 +35,7 @@ class Ball extends TexRegion {
         this.seq = null
         this.nextSeq()
     }
+    reset() {}
     nextSeq() {
         this.seqIdx++
         if (this.seqIdx > this.seqs.length - 1) {
