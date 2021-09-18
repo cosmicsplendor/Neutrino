@@ -9,9 +9,9 @@ class Magnet extends TexRegion {
     }
     update(dt) {
         this.tintVal += dt * 0.2 * this.vel
-        if (this.tintVal > 0.15) {
+        if (this.tintVal > 0.16) {
             this.vel = -1
-            this.tintVal = 0.15
+            this.tintVal = 0.16
         } else if (this.tintVal < 0) {
             this.vel = 1
             this.tintVal = 0

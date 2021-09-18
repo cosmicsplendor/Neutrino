@@ -43,7 +43,8 @@ export default ({ soundSprite, assetsCache }) => { // using sound sprite to crea
         assetsCache.get(fireDataId),
         { metaId: atlasmetaId, imgId: texatlasId }
     ))
-    fire.reset = () => {}
+    ParticleEmitter.feed(fire, 120, 0.02) // feed 2.4 (120 iterations * 0.02 second time step ) seconds worth of update to stabilize the fire
+    fire.reset = () => {} 
     return ({
         gate: (x, y, props, player) => {
             return new Gate({
@@ -57,8 +58,8 @@ export default ({ soundSprite, assetsCache }) => { // using sound sprite to crea
         orb: orbPool.create.bind(orbPool),
         fire: (x, y) => {
             fire.parent && fire.remove()
-            fire.pos.x = x - 13
-            fire.pos.y = y - 20
+            fire.pos.x = x
+            fire.pos.y = y
             return fire
         },
         magnet: (x, y) => {
