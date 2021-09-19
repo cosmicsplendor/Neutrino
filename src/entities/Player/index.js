@@ -74,6 +74,9 @@ class Player extends TexRegion {
         window.temp1 = sounds.jump
         sounds.rolling.speed = 1.2
     }
+    onEndReached() {
+        // fadeOut(this, 0.5, () => this.game.nextLevel())
+    }
     get visible() {
         return this.alpha !== 0 && this._visible
     }

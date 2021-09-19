@@ -3,13 +3,13 @@ import Gate from "@entities/Gate"
 import Magnet from "@entities/Magnet"
 import Ball from "@entities/Ball"
 import SawBlade from "@entities/SawBlade"
+import Fire from "@entities/Fire"
 import Pool from "@utils/Pool"
 
 import texatlasId from "@assets/images/texatlas.png"
 import atlasmetaId from "@assets/images/atlasmeta.cson"
 import fireDataId from "@assets/particles/fire.cson"
 import orbDataId from "@assets/particles/orb.cson"
-import ParticleEmitter from "@lib/utils/ParticleEmitter"
 
 const getDefault = EClass => (x, y, props) => {
     return new EClass({
@@ -39,12 +39,7 @@ export default ({ soundSprite, assetsCache }) => { // using sound sprite to crea
             obj.pos.y = y
         }
     })
-    const fire = new ParticleEmitter(Object.assign(
-        assetsCache.get(fireDataId),
-        { metaId: atlasmetaId, imgId: texatlasId }
-    ))
-    ParticleEmitter.feed(fire, 120, 0.02) // feed 2.4 (120 iterations * 0.02 second time step ) seconds worth of update to stabilize the fire
-    fire.reset = () => {} 
+    const fire = new Fire(assetsCache.get(fireDataId))
     return ({
         gate: (x, y, props, player) => {
             return new Gate({
@@ -56,8 +51,9 @@ export default ({ soundSprite, assetsCache }) => { // using sound sprite to crea
             })
         },
         orb: orbPool.create.bind(orbPool),
-        fire: (x, y) => {
+        fire: (x, y, _, player) => {
             fire.parent && fire.remove()
+            fire.player = player
             fire.pos.x = x
             fire.pos.y = y
             return fire
