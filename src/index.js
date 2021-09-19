@@ -22,6 +22,7 @@ import fireDataId from "@assets/particles/fire.cson"
 import orbDataId from "@assets/particles/orb.cson"
 import shardDataId from "@assets/particles/shard.cson"
 import cinderDataId from "@assets/particles/cinder.cson"
+import crateDmgDataId from "@assets/particles/crate-dmg.cson"
 
 const { viewport } = config
 const renderer = new Canvas2DRenderer({ cnvQry: "#arena", scene: null, background: "skyblue", viewport }) // scene will be injected by game
@@ -40,6 +41,7 @@ const assets = [
     { url: orbDataId },
     { url: cinderDataId },
     { url: shardDataId },
+    { url: crateDmgDataId },
 ]
 const screenFactories = {
     [screenNames.LOADING]: game => new LoadingScreen({ game, assets }),

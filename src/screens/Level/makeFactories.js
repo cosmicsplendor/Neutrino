@@ -1,3 +1,4 @@
+import ParticleEmitter from "@lib/utils/ParticleEmitter"
 import Orb from "@entities/Orb"
 import Gate from "@entities/Gate"
 import Magnet from "@entities/Magnet"
@@ -11,6 +12,7 @@ import texatlasId from "@assets/images/texatlas.png"
 import atlasmetaId from "@assets/images/atlasmeta.cson"
 import fireDataId from "@assets/particles/fire.cson"
 import orbDataId from "@assets/particles/orb.cson"
+import crateDmgDataId from "@assets/particles/crate-dmg.cson"
 
 const getDefault = EClass => (x, y, props) => {
     return new EClass({
@@ -41,6 +43,7 @@ export default ({ soundSprite, assetsCache }) => { // using sound sprite to crea
         }
     })
     const fire = new Fire(assetsCache.get(fireDataId))
+    const crateParticle = new ParticleEmitter(assetsCache.get(crateDmgDataId))
     return ({
         gate: (x, y, props, player) => {
             return new Gate({
@@ -75,7 +78,7 @@ export default ({ soundSprite, assetsCache }) => { // using sound sprite to crea
             return new SawBlade(x, y,  "sb3", props.toX, props.toY, props.speed, player)
         },
         lcr1: (x, y, props, player) => {
-            return new Crate(x, y)
+            return new Crate(x, y, crateParticle)
         }
     })
 }

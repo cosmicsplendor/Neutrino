@@ -136,11 +136,8 @@ class Player extends TexRegion {
     } 
     onCrateCol(block, velX, velY, moved) {
         if (moved) {
-            const colSpeed = Math.abs(velY || velX) || 0
-            if (colSpeed > 100) {
-                this.sounds.wood.play(1)
-                block.takeDamage()
-            }
+            const dmg = Math.abs(velY || velX) || 0
+            block.takeDamage(dmg)
         }
         if (velY) {
             if (velY > 0) {
