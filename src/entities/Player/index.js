@@ -68,6 +68,7 @@ class Player extends TexRegion {
         this.wallCollision = new Collision({ entity: this, blocks: colRectsId, rigid: true, movable: false, onHit: this.onWallCol.bind(this) })
         this.spikeCollision = new Collision({ entity: this, blocks: "spikes", rigid: false, movable: false, onHit: this.explode.bind(this) })
         this.magnetCollision = new Collision({ entity: this, blocks: "magnets", rigid: true, movable: false, onHit: this.onMagnetCol.bind(this) })
+        this.crateCollision = new Collision({ entity: this, blocks: "crates", rigid: true, movable: false, onHit: this.onCrateCol.bind(this) })
         // this.gateCollision = new Collision({ entity: this, blocks: "gates", rigid: false, movable: false, onHit: this.explode.bind(this) })
         
         Movement.makeMovable(this, { accY: config.gravity, roll: true, fricX })
@@ -75,6 +76,7 @@ class Player extends TexRegion {
         sounds.rolling.speed = 1.2
     }
     onEndReached() {
+        // play sound
         // fadeOut(this, 0.5, () => this.game.nextLevel())
     }
     get visible() {
@@ -132,6 +134,25 @@ class Player extends TexRegion {
             }
         }
     } 
+    onCrateCol(block, velX, velY, moved) {
+        if (moved) {
+            const colSpeed = Math.abs(velY || velX) || 0
+            if (colSpeed > 100) {
+                this.sounds.wood.play(1)
+                block.takeDamage()
+            }
+        }
+        if (velY) {
+            if (velY > 0) {
+                this.fricX = this.fricX0
+                return this.controls.switchState("rolling")
+            }
+            // collision with the bottom edge
+            if (this.controls.state && this.controls.state.name === "jumping") {
+                this.controls.state.onHalt()
+            }
+        }
+    } 
     explode() {
         this.cinder.pos.x = this.shard.pos.x = this.pos.x + this.width / 2
         this.cinder.pos.y = this.shard.pos.y = this.pos.y + this.height / 2
@@ -157,6 +178,7 @@ class Player extends TexRegion {
         this.wallCollision.update()
         this.magnetCollision.update()
         this.spikeCollision.update()
+        this.crateCollision.update()
         this.updateAudio()
     }
 }

@@ -4,6 +4,7 @@ import Magnet from "@entities/Magnet"
 import Ball from "@entities/Ball"
 import SawBlade from "@entities/SawBlade"
 import Fire from "@entities/Fire"
+import Crate from "@entities/Crate"
 import Pool from "@utils/Pool"
 
 import texatlasId from "@assets/images/texatlas.png"
@@ -73,5 +74,8 @@ export default ({ soundSprite, assetsCache }) => { // using sound sprite to crea
         sb3: (x, y, props, player) => {
             return new SawBlade(x, y,  "sb3", props.toX, props.toY, props.speed, player)
         },
+        lcr1: (x, y, props, player) => {
+            return new Crate(x, y)
+        }
     })
 }
