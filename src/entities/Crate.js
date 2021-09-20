@@ -6,25 +6,29 @@ const dmgToFrame = [
     "lcr3"
 ]
 class Crate extends TexRegion { // breakable crate class
-    constructor(x, y, particle) {
+    constructor(x, y, dmgParticles) {
         super({ frame: "lcr1", pos: { x, y }})
         this.damage = 0
-        this.particle = particle
+        this.dmgParticles = dmgParticles
     }
-    takeDamage(dmg) {
+    takeDamage(dmg, vy) {
+        console.log(vy)
         if (dmg < 300) { return }
         this.damage++
         if (this.damage > dmgToFrame.length) {
-            this.break()
+            this.break(vy)
             return
         }
         this.frame = dmgToFrame[this.damage - 1]
     }
-    break() {
+    break(vy) {
         this.remove()
-        this.particle.pos.x = this.pos.x
-        this.particle.pos.y = this.pos.y
-        Node.get(objLayerId).add(this.particle)
+        console.log(vy)
+        const dir = vy > 0 ? "down": "up" 
+        const particle = this.dmgParticles[dir]
+        particle.pos.x = this.pos.x
+        particle.pos.y = this.pos.y
+        Node.get(objLayerId).add(particle)
     }
 }
 
