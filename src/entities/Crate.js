@@ -6,12 +6,13 @@ const dmgToFrame = [
     "lcr3"
 ]
 class Crate extends TexRegion { // breakable crate class
-    constructor(x, y, dmgParticles, orbPool, player) {
+    constructor(x, y, dmgParticles, orbPool, sounds, player) {
         super({ frame: "lcr1", pos: { x, y }})
         this.damage = 0
         this.dmgParticles = dmgParticles
         this.orbPool = orbPool
         this.player = player
+        this.sounds = sounds
     }
     takeDamage(dmg, vy) {
         if (dmg < 300) { return }
@@ -28,10 +29,10 @@ class Crate extends TexRegion { // breakable crate class
         const particle = this.dmgParticles[dir]
         particle.pos.x = this.pos.x
         particle.pos.y = this.pos.y
+        this.sounds.snap.play()
         // if (Math.random() < 0.5) { // 50-50 chance of spawning
-            const orb = this.orbPool.create(this.pos.x - 6 + this.width / 2, this.pos.y -6 + this.height / 2, null,  this.player )
-            orb.update = () => {}
-            Node.get(objLayerId).add(orb)
+        //     const orb = this.orbPool.create(this.pos.x - 6 + this.width / 2, this.pos.y -6 + this.height / 2, null,  this.player )
+        //     Node.get(objLayerId).add(orb)
         // }
         Node.get(objLayerId).add(particle)
     }

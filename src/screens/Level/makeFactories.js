@@ -23,6 +23,10 @@ const getDefault = EClass => (x, y, props) => {
 export default ({ soundSprite, assetsCache }) => { // using sound sprite to create and pass objects and (cached) pools so that objects can just consume sound in ready-to-use form rather than by creating them on their own. This helps me make sound creation parameters changes at one place, making code more scalable.
     const gMovSound = soundSprite.createPool("gate")
     const orbMovSound = soundSprite.create("orb_mov")
+    const wSounds = {
+        snap: soundSprite.create("w_snap"),
+
+    }
     const orbFactory = (x, y, props, player) => {
         return new Orb(Object.assign(
             assetsCache.get(orbDataId),
@@ -80,7 +84,7 @@ export default ({ soundSprite, assetsCache }) => { // using sound sprite to crea
             return new SawBlade(x, y,  "sb3", props.toX, props.toY, props.speed, player)
         },
         lcr1: (x, y, props, player) => {
-            return new Crate(x, y, crateParticles, orbPool, player)
+            return new Crate(x, y, crateParticles, orbPool, wSounds, player)
         }
     })
 }
