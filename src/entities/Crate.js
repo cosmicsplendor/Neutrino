@@ -1,5 +1,6 @@
 import { TexRegion, Node } from "@lib"
 import { objLayerId } from "@lib/constants"
+import { clamp } from "@utils/math"
 import Timer from "@utils/Timer"
 
 const dmgToFrame = [
@@ -14,7 +15,7 @@ class Crate extends TexRegion { // breakable crate class
         this.player = player
         this.sounds = sounds
         this.luck = luck
-        this.damage = Math.min(dmg, dmgToFrame.length)
+        this.damage = clamp(0, dmgToFrame.length, dmg)
         if (this.damage > 0) {
             this.frame = dmgToFrame[this.damage - 1]
         }
