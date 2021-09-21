@@ -7,17 +7,20 @@ const dmgToFrame = [
     "lcr3"
 ]
 class Crate extends TexRegion { // breakable crate class
-    constructor(x, y, dmgParticles, orbPool, sounds, luck=50, player) {
+    constructor(x, y, dmgParticles, orbPool, sounds, luck=50, dmg=0, player) {
         super({ frame: "lcr1", pos: { x, y }})
-        this.damage = 0
         this.dmgParticles = dmgParticles
         this.orbPool = orbPool
         this.player = player
         this.sounds = sounds
         this.luck = luck
+        this.damage = Math.min(dmg, dmgToFrame.length)
+        if (this.damage > 0) {
+            this.frame = dmgToFrame[this.damage - 1]
+        }
     }
-    takeDamage(dmg, vy) {
-        if (dmg < 300) { return }
+    takeDamage(vy) {
+        if (Math.abs(vy) < 300) { return }
         this.damage++
         if (this.damage > dmgToFrame.length) {
             this.break(vy)
