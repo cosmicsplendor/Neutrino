@@ -1,6 +1,5 @@
 const { TexRegion } = require("@lib/entities");
 import Movement from "@lib/components/Movement";
-import Timer from "@utils/Timer"
 import config from "@config"
 import { sign } from "@utils/math"
 import getTestFn from "@lib/components/Collision/helpers/getTestFn";

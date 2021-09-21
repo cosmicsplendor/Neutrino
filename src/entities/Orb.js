@@ -10,8 +10,10 @@ class Orb extends ParticleEmitter {
         this.movSound = movSound
         this.hitbox = { x: 5, y: 5, width: 14, height: 14}
         this.testCol = getTestFn(this, player)
+        this.active = true
     }
     update() {
+        if (!this.active) { return }
         const dPosX = this.player.pos.x + this.player.width / 2 - this.pos.x
         const dPosY = this.player.pos.y + this.player.width / 2 - this.pos.y
         const sqDist = sqLen(dPosX, dPosY)

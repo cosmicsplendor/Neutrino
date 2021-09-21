@@ -1,5 +1,6 @@
 import { TexRegion, Node } from "@lib"
 import { objLayerId } from "@lib/constants"
+import Timer from "@utils/Timer"
 
 const dmgToFrame = [
     "lcr2",
@@ -30,10 +31,14 @@ class Crate extends TexRegion { // breakable crate class
         particle.pos.x = this.pos.x
         particle.pos.y = this.pos.y
         this.sounds.snap.play()
-        // if (Math.random() < 0.5) { // 50-50 chance of spawning
-        //     const orb = this.orbPool.create(this.pos.x - 6 + this.width / 2, this.pos.y -6 + this.height / 2, null,  this.player )
-        //     Node.get(objLayerId).add(orb)
-        // }
+        if (Math.random() < 0.5) { // 50-50 chance of spawning
+            const orb = this.orbPool.create(this.pos.x - 6 + this.width / 2, this.pos.y -6 + this.height / 2, null,  this.player )
+            orb.active = false
+            orb.add(new Timer(1, null, () => {
+                orb.active = true
+            }))
+            Node.get(objLayerId).add(orb)
+        }
         Node.get(objLayerId).add(particle)
     }
 }
