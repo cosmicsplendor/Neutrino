@@ -4,6 +4,7 @@ import Timer from "@utils/Timer"
 import config from "@config"
 import { sign } from "@utils/math"
 import getTestFn from "@lib/components/Collision/helpers/getTestFn";
+import { fadeOut } from "@utils/functions"
 
 // seq 
 // `
@@ -58,15 +59,7 @@ class Ball extends TexRegion {
             // this.pos.x = this.pos0.x
             // this.pos.y = this.pos0.y
             this.dead = true
-            const alpha = this.alpha
-            this.add(new Timer({ 
-                duration: 0.6, 
-                onTick: dt => { 
-                    this.alpha = alpha * (1 - dt)
-                }, 
-                onDone: () => this.remove()
-            }))
-            return
+            return fadeOut(this, this.alpha, 0.6, () => this.remove())
         }
         this.seq = this.seqs[this.seqIdx]
         if (this.seq.jumpTo) {

@@ -8,8 +8,6 @@ import Fire from "@entities/Fire"
 import Crate from "@entities/Crate"
 import Pool from "@utils/Pool"
 
-import texatlasId from "@assets/images/texatlas.png"
-import atlasmetaId from "@assets/images/atlasmeta.cson"
 import fireDataId from "@assets/particles/fire.cson"
 import orbDataId from "@assets/particles/orb.cson"
 import crateUpDataId from "@assets/particles/crate-up.cson"
@@ -28,19 +26,20 @@ export default ({ soundSprite, assetsCache }) => { // using sound sprite to crea
     const orbFactory = (x, y, props, player) => {
         return new Orb(Object.assign(
             assetsCache.get(orbDataId),
-            { metaId: atlasmetaId, imgId: texatlasId, player, pos: { x, y }, sound: soundSprite.create("orb"), movSound: orbMovSound },
+            { player, pos: { x, y }, sound: soundSprite.create("orb"), movSound: orbMovSound },
             props
         ))
     }
     const orbPool = new Pool({
         factory: orbFactory,
-        size: 3,
+        size: 4,
         free(obj) {
             obj.remove() // remove the object from it's parent
         },
-        reset(obj, x, y) {
+        reset(obj, x, y, { active=true }) {
             obj.pos.x = x
             obj.pos.y = y
+            obj.active = active
         }
     })
     const fire = new Fire(assetsCache.get(fireDataId))
@@ -82,7 +81,7 @@ export default ({ soundSprite, assetsCache }) => { // using sound sprite to crea
             return new SawBlade(x, y,  "sb3", props.toX, props.toY, props.speed, player)
         },
         lcr1: (x, y, props, player) => {
-            return new Crate(x, y, crateParticles)
+            return new Crate(x, y, crateParticles, orbPool, player)
         }
     })
 }
