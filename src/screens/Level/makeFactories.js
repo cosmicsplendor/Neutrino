@@ -36,10 +36,9 @@ export default ({ soundSprite, assetsCache }) => { // using sound sprite to crea
         free(obj) {
             obj.remove() // remove the object from it's parent
         },
-        reset(obj, x, y, { active=true }) {
+        reset(obj, x, y) {
             obj.pos.x = x
             obj.pos.y = y
-            obj.active = active
         }
     })
     const fire = new Fire(assetsCache.get(fireDataId))
