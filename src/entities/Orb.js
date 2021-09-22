@@ -31,6 +31,9 @@ class Orb extends ParticleEmitter {
         }
     }
     reset() { }
+    onRemove() {
+        this.parent = null
+    }
 }
 
 export default Orb
