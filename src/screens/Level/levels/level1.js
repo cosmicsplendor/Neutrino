@@ -3,10 +3,8 @@ import TiledLevel from "@utils/TiledLevel"
 
 import initUI from "./initUI"
 
-import levelDataId from "@assets/levels/level.cson"
-
 class Level1 extends Camera {
-    constructor({ player, uiRoot, assetsCache, bg, fbg, factories, ...cameraProps }) {
+    constructor({ player, uiRoot, assetsCache, bg, fbg, factories, levelDataId, ...cameraProps }) {
         const arena = new TiledLevel({ 
             data: assetsCache.get(levelDataId),
             bg, fbg, player,
