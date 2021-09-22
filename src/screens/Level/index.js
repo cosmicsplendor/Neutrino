@@ -52,7 +52,9 @@ class LevelScreen extends Node { // can only have cameras as children
             }
         })
     }
-    setLevel(level) {
+    setLevel(levelDataId) {
+        const data = this.game.assetsCache.get(levelDataId)
+        const level = new Level1({ player: this.player, uiRoot: this.uiRoot, data, viewport: config.viewport, subject: this.player, factories: this.factories })
         this.add(level)
         // this.game.renderer.gTint = [ 0.05, 0, -0.05, 0 ]
         this.bg && this.bg.layoutTiles(level.world)
@@ -66,8 +68,7 @@ class LevelScreen extends Node { // can only have cameras as children
         }
     }
     onEnter() { 
-        const startingLevel = new Level1({ player: this.player, levelDataId, uiRoot: this.uiRoot, assetsCache: this.game.assetsCache, viewport: config.viewport, subject: this.player, factories: this.factories })
-        this.setLevel(startingLevel)
+        this.setLevel(levelDataId)
     }
     onExit() {
         this.unsetLevel()
