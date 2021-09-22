@@ -13,20 +13,10 @@ import orbDataId from "@assets/particles/orb.cson"
 import crateUpDataId from "@assets/particles/crate-up.cson"
 import crateDownDataId from "@assets/particles/crate-down.cson"
 
-const getDefault = EClass => (x, y, props) => {
-    return new EClass({
-        pos: { x, y },
-        ...props
-    })
-}
-
 export default ({ soundSprite, assetsCache }) => { // using sound sprite to create and pass objects and (cached) pools so that objects can just consume sound in ready-to-use form rather than by creating them on their own. This helps me make sound creation parameters changes at one place, making code more scalable.
     const gMovSound = soundSprite.createPool("gate")
     const orbMovSound = soundSprite.create("orb_mov")
-    const wSounds = {
-        snap: soundSprite.create("w_snap"),
-
-    }
+    
     const orbFactory = (x, y, props, player) => {
         return new Orb(Object.assign(
             assetsCache.get(orbDataId),
@@ -50,6 +40,10 @@ export default ({ soundSprite, assetsCache }) => { // using sound sprite to crea
         up: new ParticleEmitter(assetsCache.get(crateUpDataId)),
         down: new ParticleEmitter(assetsCache.get(crateDownDataId)),
     })
+    const wSounds = {
+        snap: soundSprite.create("w_snap"),
+        crack: soundSprite.create("w_crack")
+    }
     return ({
         gate: (x, y, props, player) => {
             return new Gate({

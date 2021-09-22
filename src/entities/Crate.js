@@ -22,7 +22,9 @@ class Crate extends TexRegion { // breakable crate class
     }
     takeDamage(vy) {
         if (Math.abs(vy) < 300) { return }
+        
         this.damage++
+        this.sounds.crack.play()
         if (this.damage > dmgToFrame.length) {
             this.break(vy)
             return
@@ -39,7 +41,7 @@ class Crate extends TexRegion { // breakable crate class
         if (Math.random() < this.luck / 100) { // chance of spawning is determined by luck factor
             const orb = this.orbPool.create(this.pos.x - 6 + this.width / 2, this.pos.y -6 + this.height / 2, null,  this.player )
             orb.active = false
-            orb.add(new Timer(1, null, () => {
+            orb.add(new Timer(0.6, null, () => {
                 orb.active = true
             }))
             Node.get(objLayerId).add(orb)
