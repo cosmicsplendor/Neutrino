@@ -20,7 +20,6 @@ import bgDataId from "@assets/levels/background.cson"
 
 class LevelScreen extends Node { // can only have cameras as children
     // background = "rgb(181 24 24)"
-    background = "#313143"
     initialized = false
     soundPools = [ "gate" ]
     constructor({ game, uiRoot }) {
@@ -56,10 +55,13 @@ class LevelScreen extends Node { // can only have cameras as children
         const data = this.game.assetsCache.get(levelDataId)
         const level = new Level1({ player: this.player, uiRoot: this.uiRoot, data, viewport: config.viewport, subject: this.player, factories: this.factories })
         this.add(level)
-        // this.game.renderer.gTint = [ 0.05, 0, -0.05, 0 ]
-        this.bg && this.bg.layoutTiles(level.world)
-        this.fbg && this.fbg.layoutTiles(level.world)
+        this.game.renderer.changeBackground(config.isMobile ? data.mob_bg: data.bg)
+        this.game.renderer.gTint = data.tint && data.tint.split(",")
         level.parent = null // sever the child to parent link
+        if (this.bg) {
+            this.bg.overlay = data.pxbg && data.pxbg.split(",")
+            this.bg.layoutTiles(level.world)
+        }
     }
     unsetLevel() {
         if (this.children) {
@@ -67,7 +69,7 @@ class LevelScreen extends Node { // can only have cameras as children
             idx > -1 && Node.removeChild(this, this.children[idx])
         }
     }
-    onEnter() { 
+    onEnter() {
         this.setLevel(levelDataId)
     }
     onExit() {
