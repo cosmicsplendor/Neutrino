@@ -78,7 +78,7 @@ export default ({ soundSprite, assetsCache }) => { // using sound sprite to crea
             return new SawBlade(x, y,  "sb3", props.toX, props.toY, props.speed, player)
         },
         lcr1: (x, y, props, player) => {
-            return new Crate(x, y, crateParticles, orbPool, wSounds, props.luck, props.dmg, player)
+            return new Crate(x, y, crateParticles, orbPool, wSounds, props.luck, props.dmg, props.temp, player)
         }
     })
 }
