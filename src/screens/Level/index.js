@@ -59,7 +59,7 @@ class LevelScreen extends Node { // can only have cameras as children
         this.game.renderer.gTint = data.tint && data.tint.split(",")
         level.parent = null // sever the child to parent link
         if (this.bg) {
-            this.bg.overlay = data.pxbg && data.pxbg.split(",")
+            this.bg.overlay = data.pxbg && data.pxbg.split(",").map(s => Number(s.trim()))
             this.bg.layoutTiles(level.world)
         }
     }
