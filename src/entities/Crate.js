@@ -3,22 +3,34 @@ import { objLayerId } from "@lib/constants"
 import { clamp } from "@utils/math"
 import Timer from "@utils/Timer"
 
+const initFrame = "lcr1"
 const dmgToFrame = [
     "lcr2",
     "lcr3"
 ]
 class Crate extends TexRegion { // breakable crate class
-    constructor(x, y, dmgParticles, orbPool, sounds, luck=50, dmg=0, player) {
-        super({ frame: "lcr1", pos: { x, y }})
+    constructor(x, y, dmgParticles, orbPool, sounds, luck=50, dmg=0, temp=false, player) {
+        super({ frame: initFrame, pos: { x, y }})
         this.dmgParticles = dmgParticles
         this.orbPool = orbPool
         this.player = player
         this.sounds = sounds
         this.luck = luck
+        this.temp = temp
+        this.setDamage(dmg)
+        if (!temp) {
+            this.reset = () => {
+                this.alpha = 1
+                this.setDamage(dmg)
+            }
+        }
+    }
+    setDamage(dmg) {
         this.damage = clamp(0, dmgToFrame.length, dmg)
         if (this.damage > 0) {
-            this.frame = dmgToFrame[this.damage - 1]
-        }
+            return  this.frame = dmgToFrame[this.damage - 1]
+        } 
+        this.frame = initFrame
     }
     takeDamage(vy) {
         if (Math.abs(vy) < 300) { return }
@@ -32,7 +44,7 @@ class Crate extends TexRegion { // breakable crate class
         this.frame = dmgToFrame[this.damage - 1]
     }
     break(vy) {
-        this.remove()
+        this.temp ? this.remove(): this.alpha = 0
         const dir = vy > 0 ? "down": "up" 
         const particle = this.dmgParticles[dir]
         particle.pos.x = this.pos.x
