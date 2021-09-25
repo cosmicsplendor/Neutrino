@@ -21,6 +21,7 @@ class Crate extends TexRegion { // breakable crate class
         if (!temp) {
             this.reset = () => {
                 this.alpha = 1
+
                 this.setDamage(dmg)
             }
         }

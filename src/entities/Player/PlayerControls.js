@@ -4,9 +4,6 @@ import { clamp } from "@utils/math"
 
 const extendPalyerControls = S => class extends S {
     stateSwitched = false // a helper flag for preventing multiple state updates every frame making sure the first one gets the precendence 
-    jmpVel = -260
-    maxJvelInc = 5
-    mxJmpVel = 375
     constructor(speed=100, mappings, onJump=() => {}) {
         super(mappings)
         this.speed = speed
@@ -58,15 +55,25 @@ class Rolling {
 
 class Jumping {
     name = "jumping"
+    jmpVel = -260
+    maxJvelInc = 5.5
+    minJmpVel = -375
+    mxJmpVel = 150
     constructor(controls, onJump) {
         this.controls = controls
         this.onJump = onJump
     }
     onEnter(entity, limReached=false) {
-        if (limReached) { return } // if jump state begins from peak height (like when falling off the edge of a wall), exit early
+        if (limReached || entity.velY > this.mxJmpVel) { 
+            // if jump state begins from peak height (like when falling off the edge of a wall)
+            // or if the player is not fast enough to press jump after floor underneath has collapsed
+            // no more height can be gained
+            this.limitReached = true
+            return
+        }
         this.limitReached = false
         this.onJump()
-        entity.velY += this.controls.jmpVel
+        entity.velY += this.jmpVel
     }
     onHalt() { // obstruct jump prematurely (mostly by collision with bottom edge of a rect)
         this.limitReached = true
@@ -79,9 +86,9 @@ class Jumping {
             entity.velX += (entity.velX < 0 ? 3 : 1) * this.controls.speed * dt 
         }
         if (this.controls.get("axn")) {
-            if (entity.velY < -this.controls.mxJmpVel) { this.limitReached = true }
+            if (entity.velY < this.minJmpVel || entity.velY > this.mxJmpVel) { this.limitReached = true }
             if (this.limitReached) { return }
-            entity.velY += this.controls.jmpVel * ( Math.min(5.5, (entity.velY * entity.velY) / 100)) * dt 
+            entity.velY += this.jmpVel * ( Math.min(this.maxJvelInc, (entity.velY * entity.velY) / 100)) * dt 
         } else { this.limitReached = true } // if the player has stopped pressing "axn" key, player won't gain anymore velocity in this jump
     }
 }
