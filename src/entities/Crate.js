@@ -9,7 +9,7 @@ const dmgToFrame = [
     "lcr3"
 ]
 class Crate extends TexRegion { // breakable crate class
-    constructor(x, y, dmgParticles, orbPool, sounds, luck=50, dmg=0, temp=false, player) {
+    constructor(x, y, dmgParticles, orbPool, sounds, luck=75, dmg=0, temp=false, player) {
         super({ frame: initFrame, pos: { x, y }})
         this.dmgParticles = dmgParticles
         this.orbPool = orbPool
