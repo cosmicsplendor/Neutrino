@@ -1,6 +1,7 @@
 import ParticleEmitter from "@lib/utils/ParticleEmitter"
 import Orb from "@entities/Orb"
 import Gate from "@entities/Gate"
+import Wind from "@entities/Wind"
 import Magnet from "@entities/Magnet"
 import Ball from "@entities/Ball"
 import SawBlade from "@entities/SawBlade"
@@ -12,11 +13,18 @@ import fireDataId from "@assets/particles/fire.cson"
 import orbDataId from "@assets/particles/orb.cson"
 import crateUpDataId from "@assets/particles/crate-up.cson"
 import crateDownDataId from "@assets/particles/crate-down.cson"
+import windDataId from "@assets/particles/wind.cson"
 
 export default ({ soundSprite, assetsCache }) => { // using sound sprite to create and pass objects and (cached) pools so that objects can just consume sound in ready-to-use form rather than by creating them on their own. This helps me make sound creation parameters changes at one place, making code more scalable.
     const gMovSound = soundSprite.createPool("gate")
     const orbMovSound = soundSprite.create("orb_mov")
     
+    const windFactory = (x, y, props, player) => {
+        return new Wind(
+            assetsCache.get(windDataId),
+            x, y, player
+        )
+    }
     const orbFactory = (x, y, props, player) => {
         return new Orb(Object.assign(
             assetsCache.get(orbDataId),
@@ -33,6 +41,17 @@ export default ({ soundSprite, assetsCache }) => { // using sound sprite to crea
         reset(obj, x, y) {
             obj.pos.x = x
             obj.pos.y = y
+        }
+    })
+    const windPool = new Pool({
+        factory: windFactory,
+        size: 2,
+        free(obj) {
+            obj.remove()
+        },
+        reset(obj, x, y) {
+            obj.pos.x = x
+            obj.pos.y = y - 10
         }
     })
     const fire = new Fire(assetsCache.get(fireDataId))
@@ -55,6 +74,7 @@ export default ({ soundSprite, assetsCache }) => { // using sound sprite to crea
             })
         },
         orb: orbPool.create.bind(orbPool),
+        wind: windPool.create.bind(windPool),
         fire: (x, y, _, player) => {
             fire.parent && fire.remove()
             fire.player = player
@@ -72,6 +92,7 @@ export default ({ soundSprite, assetsCache }) => { // using sound sprite to crea
             return new SawBlade(x, y,  "sb1", props.toX, props.toY, props.speed, player)
         },
         sb2: (x, y, props, player) => {
+            console.log(props)
             return new SawBlade(x, y,  "sb2", props.toX, props.toY, props.speed, player)
         },
         sb3: (x, y, props, player) => {
