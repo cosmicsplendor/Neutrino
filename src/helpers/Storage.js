@@ -9,7 +9,7 @@ const castToNum = (val, errParam) => {
 class Storage {
     constructor(id) {
         this.id = id
-        const txtData = localStorage.get(id)
+        const txtData = localStorage.getItem(id)
         this.data = !!txtData ? JSON.parse(txtData): { 
             curLevel: 1,
             orbCount: 6,
@@ -42,7 +42,7 @@ class Storage {
         return this.hiscores[String(level)]
     }
     save(data) {
-        this.localStorage.set(this.id, JSON.stringify(data))
+        this.localStorage.setItem(this.id, JSON.stringify(data))
     }
 }
 

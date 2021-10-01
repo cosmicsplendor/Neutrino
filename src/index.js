@@ -6,6 +6,7 @@ import TexRegion from "@lib/entities/TexRegion"
 import Storage from "./helpers/Storage"
 
 import config from "@config"
+import levels from "@config/levels"
 import * as screenNames from "@screens/names"
 import LoadingScreen from "@screens/Loading"
 import MainMenuScreen from "@screens/MainMenu"
@@ -17,7 +18,6 @@ import cartonImg from "@assets/images/carton.png"
 import cartonDarkImg from "@assets/images/cartonDark.png"
 import texatlasId from "@assets/images/texatlas.png"
 import atlasmetaId from "@assets/images/atlasmeta.cson"
-import levelDataId from "@assets/levels/level.cson"
 import bgDataId from "@assets/levels/background.cson"
 import fireDataId from "@assets/particles/fire.cson"
 import orbDataId from "@assets/particles/orb.cson"
@@ -32,6 +32,7 @@ const renderer = new Webgl2Renderer({ cnvQry: "#arena", scene: null, background:
 const assetsCache = new AssetsCache()
 const storage = new Storage(config.storageId)
 const uiRoot = UI.query("#ui-layer")
+const curLevel = storage.getCurLevel()
 const assets = [
     { url: soundSprite, msg: "loading audio sprite" },
     { url: soundSpriteMeta, msg: "loading audio sprite metadata"},
@@ -39,7 +40,7 @@ const assets = [
     { url: cartonDarkImg },
     { url: texatlasId },
     { url: atlasmetaId, msg: "loading texture atlas" },
-    { url: levelDataId, msg: "loading level data" },
+    { url: levels[curLevel - 1].id, msg: "loading level data" },
     { url: bgDataId },
     { url: fireDataId, msg: "loading particles" },
     { url: orbDataId },
