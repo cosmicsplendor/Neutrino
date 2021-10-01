@@ -39,7 +39,7 @@ class Storage {
         return this.data.orbCount
     }
     getHiscore(level) {
-        return this.hiscores[String(level)] || 0
+        return this.hiscores[String(level)]
     }
     save(data) {
         this.localStorage.set(this.id, JSON.stringify(data))

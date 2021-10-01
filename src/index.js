@@ -3,6 +3,7 @@ import UI from "@utils/UI"
 import { Canvas2DRenderer, Webgl2Renderer } from "@lib"
 import AssetsCache from "@utils/AssetsCache"
 import TexRegion from "@lib/entities/TexRegion"
+import Storage from "./helpers/Storage"
 
 import config from "@config"
 import * as screenNames from "@screens/names"
@@ -29,6 +30,7 @@ import windDataId from "@assets/particles/wind.cson"
 const { viewport } = config
 const renderer = new Webgl2Renderer({ cnvQry: "#arena", scene: null, background: "skyblue", viewport }) // scene will be injected by game
 const assetsCache = new AssetsCache()
+const storage = new Storage(config.storageId)
 const uiRoot = UI.query("#ui-layer")
 const assets = [
     { url: soundSprite, msg: "loading audio sprite" },
@@ -55,6 +57,7 @@ const screenFactories = {
 const game = new Game({
     renderer,
     assetsCache,
+    storage,
     screenFactories,
 })
 const onViewportChange = viewport => {
