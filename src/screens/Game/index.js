@@ -7,7 +7,7 @@ import TexRegion from "@lib/entities/TexRegion"
 
 import config from "@config"
 import levels from "@config/levels"
-import Level1 from "./levels/Level1"
+import Level from "./levels/Level"
 import makeFactories from "./makeFactories"
 import Player from "@entities/Player"
 import soundSpriteId from "@assets/audio/sprite.mp3"
@@ -53,7 +53,7 @@ class LevelScreen extends Node { // can only have cameras as children
     }
     setLevel(levelDataId) {
         const data = this.game.assetsCache.get(levelDataId)
-        const level = new Level1({ player: this.player, uiRoot: this.uiRoot, data, viewport: config.viewport, subject: this.player, factories: this.factories })
+        const level = new Level({ player: this.player, uiRoot: this.uiRoot, data, viewport: config.viewport, subject: this.player, factories: this.factories })
         this.add(level)
         this.game.renderer.changeBackground(config.isMobile ? data.mob_bg: data.bg)
         this.game.renderer.gTint = data.tint && data.tint.split(",")
