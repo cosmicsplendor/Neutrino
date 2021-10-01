@@ -22,9 +22,10 @@ class LevelScreen extends Node { // can only have cameras as children
     // background = "rgb(181 24 24)"
     initialized = false
     soundPools = [ "gate" ]
-    constructor({ game, uiRoot }) {
+    constructor({ game, uiRoot, storage }) {
         super()
         const { assetsCache } = game
+        this.storage = storage
         this.game = game
         this.uiRoot = uiRoot
         this.addTimer = Timer.attachedTo(this)
@@ -70,7 +71,7 @@ class LevelScreen extends Node { // can only have cameras as children
         }
     }
     onEnter() {
-        const curLevel = this.game.storage.getCurLevel()
+        const curLevel = this.storage.getCurLevel()
         const levelDataId = levels[curLevel - 1].id
         this.setLevel(levelDataId)
     }
