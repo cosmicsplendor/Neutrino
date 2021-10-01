@@ -54,8 +54,8 @@ const assets = [
 const screenFactories = {
     [screenNames.LOADING]: game => new LoadingScreen({ game, assets }),
     [screenNames.MAIN_MENU]: game => new MainMenuScreen({ game, uiRoot }),
-    [screenNames.GAME]: game => new GameScreen({ game, uiRoot }),
-    [screenNames.LEVEL]: game => new LevelScreen({ game, uiRoot }),
+    [screenNames.GAME]: game => new GameScreen({ game, uiRoot, storage }),
+    [screenNames.LEVEL]: game => new LevelScreen({ game, uiRoot, storage }),
 }
 const game = new Game({
     renderer,
