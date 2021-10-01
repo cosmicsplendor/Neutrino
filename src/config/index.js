@@ -31,10 +31,11 @@ const computeViewport = () => {
 
 export default Object.freeze({
     viewport: new Viewport(computeViewport),
+    storageId: "jshdf190",
     worldWidth: 1000,
     worldHeight: window.innerHeight,
     gravity: 1700,
     isMobile,
     scale,
-    resolution
+    resolution,
 })
