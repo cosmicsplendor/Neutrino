@@ -5,6 +5,7 @@ const castToNum = (val, errParam) => {
     }
     return num
 }
+
 class Storage {
     constructor(id) {
         this.id = id
