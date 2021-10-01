@@ -45,7 +45,7 @@ export default ({ soundSprite, assetsCache }) => { // using sound sprite to crea
     })
     const windPool = new Pool({
         factory: windFactory,
-        size: 2,
+        size: 1,
         free(obj) {
             obj.remove()
         },

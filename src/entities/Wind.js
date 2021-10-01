@@ -20,7 +20,7 @@ class Wind extends ParticleEmitter {
             const dPosX = this.player.pos.x + this.player.width / 2 - this.pos.x
             const dPosY = this.player.pos.y + this.player.width / 2 - this.pos.y
             const sqDist = sqLen(dPosX, dPosY)
-            if (sqDist < 6400) { return }
+            if (sqDist < 4096) { return }
             this.player.controls.switchState("jumping", this.player)
             this.player.velY -= config.gravity * (sqDist / 32400) * dt
         }
