@@ -1,3 +1,10 @@
+const castToNum = (val, errParam) => {
+    const num = Number(val)
+    if (num !== 0 && !num) {
+        throw new Error(`Attempting to set invalid ${errParam}: ${val}`)
+    }
+    return num
+}
 class Storage {
     constructor(id) {
         this.id = id
@@ -5,17 +12,11 @@ class Storage {
         this.data = !!txtData ? JSON.parse(txtData): { 
             curLevel: 1,
             orbCount: 6,
-            bestTimes: {}
-        }
-    }
-    validateNum(val, name) {
-        if (val !== 0 && !val) {
-            throw new Error(`Attempting to set invalid ${name}: ${val}`)
+            hiscores: {}
         }
     }
     setNum(key, val) {
-        const num = Number(val)
-        this.validateNum(num, key)
+        const num = castToNum(val, key)
         this.data[key] = num
         this.save(this.data)
     }
@@ -25,10 +26,9 @@ class Storage {
     setOrbCount(val) {
         this.setNum("orbCount", val)
     }
-    setBestTime(level, val) {
-        const time = Number(value) // time in seconds
-        this.validateNum(time, key)
-        this.data.bestTimes[String(level)] = time
+    setHiscore(level, val) {
+        const time  = castToNum(val, key)
+        this.data.hiscores[String(level)] = time
         this.save(this.data)
     }
     getCurLevel() {
@@ -37,8 +37,8 @@ class Storage {
     getOrbCount() {
         return this.data.orbCount
     }
-    getBestTime(level) {
-        return this.bestTimes[String(level)] || 0
+    getHiscore(level) {
+        return this.hiscores[String(level)] || 0
     }
     save(data) {
         this.localStorage.set(this.id, JSON.stringify(data))
