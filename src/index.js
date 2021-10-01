@@ -11,6 +11,7 @@ import * as screenNames from "@screens/names"
 import LoadingScreen from "@screens/Loading"
 import MainMenuScreen from "@screens/MainMenu"
 import GameScreen from "@screens/Game"
+import LevelScreen from "@screens/Level"
 
 import soundSprite from "@assets/audio/sprite.mp3"
 import soundSpriteMeta from "@assets/audio/sprite.cson"
@@ -53,7 +54,8 @@ const assets = [
 const screenFactories = {
     [screenNames.LOADING]: game => new LoadingScreen({ game, assets }),
     [screenNames.MAIN_MENU]: game => new MainMenuScreen({ game, uiRoot }),
-    [screenNames.GAME]: game => new GameScreen({ game, uiRoot })
+    [screenNames.GAME]: game => new GameScreen({ game, uiRoot }),
+    [screenNames.LEVEL]: game => new LevelScreen({ game, uiRoot }),
 }
 const game = new Game({
     renderer,
