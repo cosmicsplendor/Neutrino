@@ -70,8 +70,7 @@ class LevelScreen extends Node { // can only have cameras as children
             idx > -1 && Node.removeChild(this, this.children[idx])
         }
     }
-    onEnter() {
-        const curLevel = this.storage.getCurLevel()
+    onEnter(curLevel) {
         const levelDataId = levels[curLevel - 1].id
         this.setLevel(levelDataId)
     }

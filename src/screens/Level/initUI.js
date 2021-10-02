@@ -29,6 +29,8 @@ export default ({ onStart, uiRoot, curLevel, images }) => {
         nextBtn.pos = calcAligned(viewport, nextBtn.bounds, "right", "center", -50)
         startBtn.pos = calcAligned(viewport, startBtn.bounds, "center", "bottom", 0,  -100)
     }
+    
+    startBtn.on("click", () => onStart(levelState))
     config.viewport.on("change", realign)
     realign(config.viewport)
     return () => {
