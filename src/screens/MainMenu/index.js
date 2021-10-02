@@ -1,9 +1,10 @@
 import { Node } from "@lib"
-import initUI from "./initUI"
+import resumeImgId from "@assets/images/ui/resume.png"
 import { LEVEL } from "@screens/names"
+import initUI from "./initUI"
 
 class MainMenuScreen extends Node {
-    background = "black"
+    background = "#001122"
     constructor({ game, uiRoot }) {
         super()
         this.game = game
@@ -11,9 +12,9 @@ class MainMenuScreen extends Node {
     }
     onEnter() {
         const { uiRoot, game } = this
-        this.teardownUI = initUI({ uiRoot, onPlay: () => {
+        this.teardownUI = initUI({ uiRoot, btnImg: game.assetsCache.get(resumeImgId), onPlay: () => {
             game.switchScreen(LEVEL)
-        } })
+        }})
     }
     onExit() {
         this.teardownUI()
