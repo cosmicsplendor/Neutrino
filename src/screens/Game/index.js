@@ -18,6 +18,12 @@ import texatlasId from "@assets/images/texatlas.png"
 import atlasmetaId from "@assets/images/atlasmeta.cson"
 import bgDataId from "@assets/levels/background.cson"
 
+import resumeImgId from "@assets/images/ui/resume.png"
+import pauseImgId from "@assets/images/ui/pause.png"
+import crossImgId from "@assets/images/ui/cross.png"
+import resetImgId from "@assets/images/ui/reset.png"
+import orbImgId from "@assets/images/ui/orb.png"
+
 class LevelScreen extends Node { // can only have cameras as children
     // background = "rgb(181 24 24)"
     initialized = false
@@ -50,11 +56,18 @@ class LevelScreen extends Node { // can only have cameras as children
                 // this.bg.overlay = [ 0.5, 0.1, 0.1 ]
                 this.add(this.bg)
             }
+            this.uiImages = {
+                cross: assetsCache.get(crossImgId),
+                resume: assetsCache.get(resumeImgId),
+                pause: assetsCache.get(pauseImgId),
+                orb: assetsCache.get(orbImgId),
+                reset: assetsCache.get(resetImgId)
+            }
         })
     }
     setLevel(levelDataId) {
         const data = this.game.assetsCache.get(levelDataId)
-        const level = new Level({ player: this.player, uiRoot: this.uiRoot, data, viewport: config.viewport, subject: this.player, factories: this.factories })
+        const level = new Level({ player: this.player, uiRoot: this.uiRoot, data, viewport: config.viewport, subject: this.player, factories: this.factories, uiImages: this.uiImages })
         this.add(level)
         this.game.renderer.changeBackground(config.isMobile ? data.mob_bg: data.bg)
         this.game.renderer.gTint = data.tint && data.tint.split(",")

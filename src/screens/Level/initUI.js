@@ -21,11 +21,11 @@ const levelInfo = level => {
         <div class="${styles.infoTitle}" id="${INFO}">${"Level " + level}</div>
     `
 }
-const render = (images, level, levels) => {
+const render = (images, level) => {
     return `
         ${imgBtn(PREV, images.arrow, styles.prevBtn)}
         ${lock}
-        ${levelInfo(level, levels)}
+        ${levelInfo(level)}
         ${imgBtn(NEXT, images.arrow)}
         ${imgBtn(START, images.resume, styles.startBtn)}
     `
