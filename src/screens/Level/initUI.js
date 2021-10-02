@@ -29,12 +29,14 @@ export default ({ onStart, uiRoot, curLevel, images }) => {
         nextBtn.pos = calcAligned(viewport, nextBtn.bounds, "right", "center", -50)
         startBtn.pos = calcAligned(viewport, startBtn.bounds, "center", "bottom", 0,  -100)
     }
+    const onStartBtnClick = () => onStart(levelState)
     
-    startBtn.on("click", () => onStart(levelState))
+    startBtn.on("click", onStartBtnClick)
     config.viewport.on("change", realign)
     realign(config.viewport)
     return () => {
         uiRoot.clear()
         config.viewport.off("change", realign)
+        startBtn.off("click", onStartBtnClick)
     }
 }
