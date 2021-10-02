@@ -8,8 +8,14 @@ const PREV = "prev-btn"
 const NEXT = "next-btn"
 const START = "start-btn"
 const INFO = "lev-info"
+const LOCK = "lock"
 
-const levelInfo = (level, levels) => {
+const lock = `
+<div id="${LOCK}" class=${styles.lock}>
+    <svg xmlns="http://www.w3.org/2000/svg" fill="#ffe6d5" width="24" height="24" viewBox="0 0 24 24"><path d="M18 10v-4c0-3.313-2.687-6-6-6s-6 2.687-6 6v4h-3v14h18v-14h-3zm-5 7.723v2.277h-2v-2.277c-.595-.347-1-.984-1-1.723 0-1.104.896-2 2-2s2 .896 2 2c0 .738-.404 1.376-1 1.723zm-5-7.723v-4c0-2.206 1.794-4 4-4 2.205 0 4 1.794 4 4v4h-8z"/></svg>
+</div>
+`
+const levelInfo = level => {
     return `
         <div class="${styles.infoTitle}" id="${INFO}">${"Level " + level}</div>
     `
@@ -17,9 +23,10 @@ const levelInfo = (level, levels) => {
 const render = (images, level, levels) => {
     return `
         ${imgBtn(PREV, images.arrow, styles.prevBtn)}
+        ${lock}
         ${levelInfo(level, levels)}
         ${imgBtn(NEXT, images.arrow)}
-        ${imgBtn(START, images.resume)}
+        ${imgBtn(START, images.resume, styles.startBtn)}
     `
 }
 
@@ -31,22 +38,31 @@ export default ({ onStart, uiRoot, curLevel, images, assetsCache }) => {
     const nextBtn = uiRoot.get(`#${NEXT}`)
     const startBtn = uiRoot.get(`#${START}`)
     const levelInfo = uiRoot.get(`#${INFO}`)
+    const lockInd = uiRoot.get(`#${LOCK}`)
 
     const realign = viewport => {
         prevBtn.pos = calcAligned(viewport, prevBtn.bounds, "left", "center", 50)
         levelInfo.pos = calcAligned(viewport, levelInfo.bounds, "center", "center", 0, 0)
+        lockInd.pos = calcAligned(viewport, { width: 24, height: 24 }, "center", "center", 0, 40)
         nextBtn.pos = calcAligned(viewport, nextBtn.bounds, "right", "center", -50)
         startBtn.pos = calcAligned(viewport, startBtn.bounds, "center", "bottom", 0,  -100)
+    }
+    const updateBtnVis = (level, curLevel) => {
+        lockInd.domNode.style.opacity = level <= curLevel ? 0: 1
+        startBtn.domNode.style.opacity = level <= curLevel ? 1: 0
     }
     const onPrevBtnClick = () => {
         levelState = Math.max(levelState - 1, 1)
         levelInfo.content = `Level ${levelState}`
+        updateBtnVis(levelState, curLevel)
     }
     const onNextBtnClick = () => {
         levelState = Math.min(levelState  + 1, levels.length)
         levelInfo.content = `Level ${levelState}`
+        updateBtnVis(levelState, curLevel)
     }
     const onStartBtnClick = () =>{
+        if (levelState > curLevel) { return }
         const levelId = levels[levelState - 1].id
         uiRoot.clear()
         if (!assetsCache.get(levelId)) {
@@ -61,7 +77,7 @@ export default ({ onStart, uiRoot, curLevel, images, assetsCache }) => {
         }
         onStart(levelState)
     }
-    
+
     prevBtn.on("click", onPrevBtnClick)
     nextBtn.on("click", onNextBtnClick)
     startBtn.on("click", onStartBtnClick)

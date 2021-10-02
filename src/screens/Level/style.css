@@ -2,7 +2,7 @@
     transform: scale(-1, 1);
 }
 .infoTitle {
-    color: white;
+    color: #ffe6d5;
     font-size: 2em;
     font-family: monospace;
     font-weight: 700;
@@ -11,4 +11,11 @@
 }
 .infoSub {
     color: white;
+}
+.lock {
+    transition: opacity linear 0.125s;
+    opacity: 0;
+}
+.startBtn {
+    transition: opacity linear 0.125s;
 }
