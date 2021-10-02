@@ -43,7 +43,7 @@ const assets = [
     { url: soundSpriteMeta, msg: "loading audio sprite metadata"},
     { url: texatlasId, msg: "loading images" },
     { url: atlasmetaId, msg: "loading texture atlas" },
-    { url: levels[curLevel - 1].id, msg: "loading level data" },
+    { url: levels[curLevel - 1].id, msg: "loading level data" }, // pre-load the current level
     { url: bgDataId },
     { url: fireDataId, msg: "loading particles" },
     { url: orbDataId },

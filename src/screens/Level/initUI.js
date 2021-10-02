@@ -9,6 +9,7 @@ const NEXT = "next-btn"
 const START = "start-btn"
 const INFO = "lev-info"
 const LOCK = "lock"
+const LOADING = "loading"
 
 const lock = `
 <div id="${LOCK}" class=${styles.lock}>
@@ -27,6 +28,15 @@ const render = (images, level, levels) => {
         ${levelInfo(level, levels)}
         ${imgBtn(NEXT, images.arrow)}
         ${imgBtn(START, images.resume, styles.startBtn)}
+    `
+}
+const renderLoading = () => {
+    return `
+        <div id="${LOADING}">
+            <div class="${styles.loadingDot} ${styles.dotA}"></div>
+            <div class="${styles.loadingDot} ${styles.dotB}"></div>
+            <div class="${styles.loadingDot} ${styles.dotC}"></div>
+        </div>
     `
 }
 
@@ -64,8 +74,12 @@ export default ({ onStart, uiRoot, curLevel, images, assetsCache }) => {
     const onStartBtnClick = () =>{
         if (levelState > curLevel) { return }
         const levelId = levels[levelState - 1].id
+        config.viewport.off("change", realign)
         uiRoot.clear()
         if (!assetsCache.get(levelId)) {
+            uiRoot.content = renderLoading()
+            const loadingInd = uiRoot.get(`#${LOADING}`)
+            loadingInd.pos = calcAligned(config.viewport, { width: 56, height: 12 }, "center", "center")
             levels.forEach(level => {
                 assetsCache.unload(level.id)
             })
@@ -84,7 +98,8 @@ export default ({ onStart, uiRoot, curLevel, images, assetsCache }) => {
     config.viewport.on("change", realign)
     realign(config.viewport)
     return () => {
-        config.viewport.off("change", realign)
+        prevBtn.off("click", onPrevBtnClick)
+        nextBtn.off("click", onNextBtnClick)
         startBtn.off("click", onStartBtnClick)
     }
 }
