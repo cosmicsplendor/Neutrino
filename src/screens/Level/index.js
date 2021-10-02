@@ -5,6 +5,7 @@ import { GAME } from "@screens/names"
 import initUI from "./initUI"
 
 class LevelScreen extends Node {
+    background = "#001122"
     constructor({ game, uiRoot, storage }) {
         super()
         this.game = game

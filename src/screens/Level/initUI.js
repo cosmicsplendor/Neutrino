@@ -1,5 +1,10 @@
 import config from "@config"
 import "./style.css"
+const imgBtn = (img, onClick, id) => {
+    return `
+    
+    `
+}
 const render = (level, levels) => {
     return `
 
