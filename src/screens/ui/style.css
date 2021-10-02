@@ -1,0 +1,8 @@
+.imgB {
+    background-color: transparent;
+    cursor: pointer;
+    opacity: 0.95;
+}
+.imgB:hover {
+    opacity: 1;
+}
