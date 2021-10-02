@@ -1,3 +1,13 @@
 .prevBtn {
     transform: scale(-1, 1);
 }
+.infoTitle {
+    color: white;
+    font-size: 2em;
+    font-family: monospace;
+    font-weight: 700;
+    white-space: nowrap;
+}
+.infoSub {
+    color: white;
+}
