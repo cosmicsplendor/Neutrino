@@ -25,6 +25,12 @@ import cinderDataId from "@assets/particles/cinder.cson"
 import crateUpDataId from "@assets/particles/crate-up.cson"
 import crateDownDataId from "@assets/particles/crate-down.cson"
 import windDataId from "@assets/particles/wind.cson"
+import arrowImgId from "@assets/images/ui/arrow.png"
+import crossImgId from "@assets/images/ui/cross.png"
+import orbImgId from "@assets/images/ui/orb.png"
+import pauseImgId from "@assets/images/ui/pause.png"
+import resetImgId from "@assets/images/ui/reset.png"
+import resumeImgId from "@assets/images/ui/resume.png"
 
 const { viewport } = config
 const renderer = new Webgl2Renderer({ cnvQry: "#arena", scene: null, background: "skyblue", viewport }) // scene will be injected by game
@@ -46,6 +52,12 @@ const assets = [
     { url: crateUpDataId },
     { url: crateDownDataId },
     { url: windDataId },
+    { url: arrowImgId },
+    { url: crossImgId },
+    { url: orbImgId },
+    { url: pauseImgId },
+    { url: resetImgId },
+    { url: resumeImgId },
 ]
 const screenFactories = {
     [screenNames.LOADING]: game => new LoadingScreen({ game, assets }),
