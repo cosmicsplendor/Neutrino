@@ -2,6 +2,8 @@ import { Node } from "@lib"
 import levels from "@config/levels"
 import { GAME } from "@screens/names"
 
+import initUI from "./initUI"
+
 class LevelScreen extends Node {
     constructor({ game, uiRoot, storage }) {
         super()
@@ -10,7 +12,7 @@ class LevelScreen extends Node {
         this.uiRoot = uiRoot
     }
     onEnter() {
-        this.teardownUI = this.initUI({
+        this.teardownUI = initUI({
             onStart: level => {
                 this.game.switchScreen(GAME, level)
             },

@@ -15,8 +15,6 @@ import LevelScreen from "@screens/Level"
 
 import soundSprite from "@assets/audio/sprite.mp3"
 import soundSpriteMeta from "@assets/audio/sprite.cson"
-import cartonImg from "@assets/images/carton.png"
-import cartonDarkImg from "@assets/images/cartonDark.png"
 import texatlasId from "@assets/images/texatlas.png"
 import atlasmetaId from "@assets/images/atlasmeta.cson"
 import bgDataId from "@assets/levels/background.cson"
@@ -37,9 +35,7 @@ const curLevel = storage.getCurLevel()
 const assets = [
     { url: soundSprite, msg: "loading audio sprite" },
     { url: soundSpriteMeta, msg: "loading audio sprite metadata"},
-    { url: cartonImg, msg: "loading Images" },
-    { url: cartonDarkImg },
-    { url: texatlasId },
+    { url: texatlasId, msg: "loading images" },
     { url: atlasmetaId, msg: "loading texture atlas" },
     { url: levels[curLevel - 1].id, msg: "loading level data" },
     { url: bgDataId },

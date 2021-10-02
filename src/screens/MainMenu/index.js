@@ -1,6 +1,6 @@
 import { Node } from "@lib"
 import initUI from "./initUI"
-import { GAME } from "@screens/names"
+import { LEVEL } from "@screens/names"
 
 class MainMenuScreen extends Node {
     background = "black"
@@ -12,7 +12,7 @@ class MainMenuScreen extends Node {
     onEnter() {
         const { uiRoot, game } = this
         this.teardownUI = initUI({ uiRoot, onPlay: () => {
-            game.switchScreen(GAME)
+            game.switchScreen(LEVEL)
         } })
     }
     onExit() {

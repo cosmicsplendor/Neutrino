@@ -24,8 +24,8 @@ const initUI = ({ uiRoot, onPlay }) => {
     config.viewport.on("change", realign)
     realign(config.viewport)
     return () => {
-        uiRoot.clear()
         playBtn.off("click", onPlay)
+        uiRoot.clear()
         doc.off("keypress", onPlay)
         config.viewport.off("change", realign)
     }
