@@ -91,7 +91,7 @@ export default ({ onStart, uiRoot, curLevel, images, assetsCache }) => {
         }
         onStart(levelState)
     }
-
+    
     prevBtn.on("click", onPrevBtnClick)
     nextBtn.on("click", onNextBtnClick)
     startBtn.on("click", onStartBtnClick)

@@ -4,7 +4,7 @@ import { LEVEL } from "@screens/names"
 import initUI from "./initUI"
 
 class MainMenuScreen extends Node {
-    background = "#001122"
+    background = "#16161d"
     constructor({ game, uiRoot }) {
         super()
         this.game = game
