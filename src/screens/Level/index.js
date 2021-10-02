@@ -24,7 +24,8 @@ class LevelScreen extends Node {
             images: {
                 arrow: game.assetsCache.get(arrowImgId),
                 resume: game.assetsCache.get(resumeImgId)
-            }
+            },
+            assetsCache: game.assetsCache
         })
     }
     onExit() {

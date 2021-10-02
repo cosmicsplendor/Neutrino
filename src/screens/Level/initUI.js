@@ -23,7 +23,7 @@ const render = (images, level, levels) => {
     `
 }
 
-export default ({ onStart, uiRoot, curLevel, images }) => {
+export default ({ onStart, uiRoot, curLevel, images, assetsCache }) => {
     uiRoot.content = render(images, curLevel, levels)
     let levelState = curLevel
 
@@ -33,20 +33,41 @@ export default ({ onStart, uiRoot, curLevel, images }) => {
     const levelInfo = uiRoot.get(`#${INFO}`)
 
     const realign = viewport => {
-        console.log(prevBtn.bounds)
-        console.log(levelInfo.bounds)
         prevBtn.pos = calcAligned(viewport, prevBtn.bounds, "left", "center", 50)
         levelInfo.pos = calcAligned(viewport, levelInfo.bounds, "center", "center", 0, 0)
         nextBtn.pos = calcAligned(viewport, nextBtn.bounds, "right", "center", -50)
         startBtn.pos = calcAligned(viewport, startBtn.bounds, "center", "bottom", 0,  -100)
     }
-    const onStartBtnClick = () => onStart(levelState)
+    const onPrevBtnClick = () => {
+        levelState = Math.max(levelState - 1, 1)
+        levelInfo.content = `Level ${levelState}`
+    }
+    const onNextBtnClick = () => {
+        levelState = Math.min(levelState  + 1, levels.length)
+        levelInfo.content = `Level ${levelState}`
+    }
+    const onStartBtnClick = () =>{
+        const levelId = levels[levelState - 1].id
+        uiRoot.clear()
+        if (!assetsCache.get(levelId)) {
+            levels.forEach(level => {
+                assetsCache.unload(level.id)
+            })
+            assetsCache.load([{ url: levelId }])
+            assetsCache.once("load", () => {
+                onStart(levelState)
+            })
+            return
+        }
+        onStart(levelState)
+    }
     
+    prevBtn.on("click", onPrevBtnClick)
+    nextBtn.on("click", onNextBtnClick)
     startBtn.on("click", onStartBtnClick)
     config.viewport.on("change", realign)
     realign(config.viewport)
     return () => {
-        uiRoot.clear()
         config.viewport.off("change", realign)
         startBtn.off("click", onStartBtnClick)
     }

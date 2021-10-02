@@ -7,7 +7,6 @@ const BTN_ID = "play-btn"
 const doc = new UI(document)
 
 const initUI = ({ uiRoot, btnImg, onPlay }) => {
-    console.log(btnImg)
     uiRoot.content = imgBtn(BTN_ID, btnImg)
     const playBtn = uiRoot.get(`#${BTN_ID}`)
     const playBtnBounds = playBtn.bounds
