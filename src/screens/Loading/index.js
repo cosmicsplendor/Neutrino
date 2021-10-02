@@ -1,7 +1,7 @@
 import { Node } from "@lib"
 import { MAIN_MENU } from "@screens/names"
 
-class TitleScreen extends Node {
+class LoadingScreen extends Node {
     background = "black"
     constructor({ game, assets }) { 
         super()
@@ -37,4 +37,4 @@ class TitleScreen extends Node {
     }
 }
 
-export default TitleScreen
+export default LoadingScreen

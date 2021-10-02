@@ -1,6 +1,7 @@
 import { Node } from "@lib"
-import levels from "@config/levels"
 import { GAME } from "@screens/names"
+import resumeImgId from "@assets/images/ui/resume.png"
+import arrowImgId from "@assets/images/ui/arrow.png"
 
 import initUI from "./initUI"
 
@@ -13,13 +14,17 @@ class LevelScreen extends Node {
         this.uiRoot = uiRoot
     }
     onEnter() {
+        const { game, storage, uiRoot } = this
         this.teardownUI = initUI({
             onStart: level => {
-                this.game.switchScreen(GAME, level)
+                game.switchScreen(GAME, level)
             },
-            curLevel: this.storage.getCurLevel(),
-            uiRoot: this.uiRoot,
-            levels
+            curLevel: storage.getCurLevel(),
+            uiRoot,
+            images: {
+                arrow: game.assetsCache.get(arrowImgId),
+                resume: game.assetsCache.get(resumeImgId)
+            }
         })
     }
     onExit() {
