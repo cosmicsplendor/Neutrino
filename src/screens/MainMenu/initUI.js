@@ -9,9 +9,8 @@ const doc = new UI(document)
 const initUI = ({ uiRoot, btnImg, onPlay }) => {
     uiRoot.content = imgBtn(BTN_ID, btnImg)
     const playBtn = uiRoot.get(`#${BTN_ID}`)
-    const playBtnBounds = playBtn.bounds
     const realign = viewport => { 
-        playBtn.pos = calcCentered(viewport, playBtnBounds)
+        playBtn.pos = calcCentered(viewport, playBtn)
     }
     playBtn.on("click", onPlay)
     doc.on("keypress", onPlay)
