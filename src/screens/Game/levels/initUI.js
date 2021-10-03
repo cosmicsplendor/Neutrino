@@ -1,4 +1,4 @@
-import { calcAligned } from "@utils/entity"
+import { calcAligned, calcStacked } from "@utils/entity"
 import config from "@config"
 import imgBtn from "@screens/ui/imgBtn"
 import styles from "./style.css"
@@ -45,10 +45,10 @@ export default (uiRoot, player, images) => {
         const orbExpBounds = orbExp.bounds
         orbInd.pos = calcAligned(viewport, images.orb, "left", "top", margin, margin)
         pauseBtn.pos = calcAligned(viewport, images.pause, "right", "top", -margin, margin)
-        resumeBtn.pos = calcAligned(viewport, images.resume, "center", "center", 0, -images.reset.height - (margin / 2))
+        restartBtn.pos = calcAligned(viewport, images.reset, "center", "center")
+        resumeBtn.pos = calcStacked(restartBtn.bounds, images.resume, "top")
         orbExpInd.pos = calcAligned(viewport, images.orb, "center", "center", (images.reset.width / 2) + margin + images.orb.width / 2, -images.reset.height - (margin / 2))
         orbExp.pos = calcAligned(viewport, orbExpBounds, "center", "center", (images.reset.width / 2) + margin * 3 / 2 +  images.orb.width + orbExpBounds.width / 2, -images.reset.height - (margin / 2))
-        restartBtn.pos = calcAligned(viewport, images.reset, "center", "center")
         crossBtn.pos = calcAligned(viewport, images.cross, "center", "center", 0, images.reset.height + (margin / 2))
         if (!ctrlBtns) { return }
         ctrlBtns.left.pos = calcAligned(viewport, ctrlBtns.left.bounds, "left", "bottom", margin, -margin)
