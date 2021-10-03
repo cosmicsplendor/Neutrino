@@ -51,11 +51,11 @@ export default ({ onStart, uiRoot, curLevel, images, assetsCache }) => {
     const lockInd = uiRoot.get(`#${LOCK}`)
 
     const realign = viewport => {
-        prevBtn.pos = calcAligned(viewport, prevBtn.bounds, "left", "center", 50)
-        levelInfo.pos = calcAligned(viewport, levelInfo.bounds, "center", "center", 0, 0)
+        prevBtn.pos = calcAligned(viewport, prevBtn, "left", "center", 50)
+        levelInfo.pos = calcAligned(viewport, levelInfo, "center", "center", 0, 0)
         lockInd.pos = calcAligned(viewport, { width: 24, height: 24 }, "center", "center", 0, 40)
-        nextBtn.pos = calcAligned(viewport, nextBtn.bounds, "right", "center", -50)
-        startBtn.pos = calcAligned(viewport, startBtn.bounds, "center", "bottom", 0,  -100)
+        nextBtn.pos = calcAligned(viewport, nextBtn, "right", "center", -50)
+        startBtn.pos = calcAligned(viewport, startBtn, "center", "bottom", 0,  -100)
     }
     const updateBtnVis = (level, curLevel) => {
         lockInd.domNode.style.opacity = level <= curLevel ? 0: 1
