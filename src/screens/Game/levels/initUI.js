@@ -20,7 +20,7 @@ const RESET = "reset-btn"
 const render = (images, orbAv) => {
     return `
         ${imgBtn(ORB_IND, images.orb)}
-        <div id="${TIMER}" class="${styles.timer}"> 000:0 </div>
+        <div id="${TIMER}" class="${styles.timer}"> 000:00 </div>
         <div id="${ORB_AV}" class="${styles.orbTxt}"> ${orbAv} </div>
         ${imgBtn(PAUSE, images.pause)}
         ${imgBtn(RESUME, images.resume)}
