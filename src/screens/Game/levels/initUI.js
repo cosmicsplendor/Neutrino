@@ -4,6 +4,7 @@ import imgBtn from "@screens/ui/imgBtn"
 import styles from "./style.css"
 
 const margin = 20
+const hMargin = margin / 2 // hMargin
 const orbExpAmt = 2
 
 const PAUSE = "pause-btn"
@@ -42,18 +43,17 @@ export default (uiRoot, player, images) => {
               .add(ctrlBtns.axn)
     }
     const realign = viewport => {
-        const orbExpBounds = orbExp.bounds
-        orbInd.pos = calcAligned(viewport, images.orb, "left", "top", margin, margin)
-        pauseBtn.pos = calcAligned(viewport, images.pause, "right", "top", -margin, margin)
-        restartBtn.pos = calcAligned(viewport, images.reset, "center", "center")
-        resumeBtn.pos = calcStacked(restartBtn.bounds, images.resume, "top")
-        orbExpInd.pos = calcAligned(viewport, images.orb, "center", "center", (images.reset.width / 2) + margin + images.orb.width / 2, -images.reset.height - (margin / 2))
-        orbExp.pos = calcAligned(viewport, orbExpBounds, "center", "center", (images.reset.width / 2) + margin * 3 / 2 +  images.orb.width + orbExpBounds.width / 2, -images.reset.height - (margin / 2))
-        crossBtn.pos = calcAligned(viewport, images.cross, "center", "center", 0, images.reset.height + (margin / 2))
+        orbInd.pos = calcAligned(viewport, orbInd, "left", "top", margin, margin)
+        pauseBtn.pos = calcAligned(viewport, pauseBtn, "right", "top", -margin, margin)
+        restartBtn.pos = calcAligned(viewport, restartBtn, "center", "center")
+        resumeBtn.pos = calcStacked(restartBtn, resumeBtn, "top", 0, -hMargin)
+        orbExpInd.pos = calcStacked(resumeBtn, orbExpInd, "right", margin)
+        orbExp.pos = calcStacked(orbExpInd, orbExp, "right", hMargin)
+        crossBtn.pos = calcStacked(restartBtn, crossBtn, "bottom", 0, hMargin)
         if (!ctrlBtns) { return }
-        ctrlBtns.left.pos = calcAligned(viewport, ctrlBtns.left.bounds, "left", "bottom", margin, -margin)
-        ctrlBtns.right.pos = calcAligned(viewport, ctrlBtns.right.bounds, "left", "bottom", 40 + (ctrlBtns.left.bounds.width), -margin)
-        ctrlBtns.axn.pos = calcAligned(viewport, ctrlBtns.right.bounds, "right", "bottom", -margin, -margin)
+        ctrlBtns.left.pos = calcAligned(viewport, ctrlBtns.left, "left", "bottom", margin, -margin)
+        ctrlBtns.right.pos = calcAligned(viewport, ctrlBtns.right, "left", "bottom", 40 + (ctrlBtns.left.width), -margin)
+        ctrlBtns.axn.pos = calcAligned(viewport, ctrlBtns.right, "right", "bottom", -margin, -margin)
     }
     realign(config.viewport)
     config.viewport.on("change", realign)
