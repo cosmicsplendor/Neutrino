@@ -5,7 +5,7 @@ import TiledLevel from "@utils/TiledLevel"
 import initUI from "./initUI"
 
 class Level extends Camera {
-    constructor({ player, uiRoot, data, bg, fbg, factories, levelDataId, uiImages, ...cameraProps }) {
+    constructor({ player, uiRoot, data, bg, fbg, factories, levelDataId, uiImages, storage, ...cameraProps }) {
         const arena = new TiledLevel({ 
             data,
             bg, fbg, player,
@@ -16,7 +16,7 @@ class Level extends Camera {
         this.player = player
                                                                                                                                                                                                                                                                                                                                                                  
         this.add(arena)
-        const teardownUI = initUI(uiRoot, player, uiImages)
+        const teardownUI = initUI(uiRoot, player, uiImages, storage)
         this.onRemove = () => teardownUI()
         // music.play()
     }

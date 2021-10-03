@@ -1,5 +1,12 @@
-.orbExp {
+.orbTxt {
     white-space: nowrap;
     font-size: 2em;
-    color: white;
+    font-family: monospace;
+    color: #ffe6d5;
+}
+.timer {
+    font-family: monospace;
+    color: #ffe6d5;
+    font-size: 16px;
+    letter-spacing: 2px;
 }

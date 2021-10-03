@@ -1,3 +1,5 @@
+import Observable from "@lib/utils/Observable"
+
 const castToNum = (val, errParam) => {
     const num = Number(val)
     if (num !== 0 && !num) {
@@ -6,8 +8,9 @@ const castToNum = (val, errParam) => {
     return num
 }
 
-class Storage {
+class Storage extends Observable {
     constructor(id) {
+        super([ "orb-update" ])
         this.id = id
         const txtData = localStorage.getItem(id)
         this.data = !!txtData ? JSON.parse(txtData): { 
@@ -20,12 +23,14 @@ class Storage {
         const num = castToNum(val, key)
         this.data[key] = num
         this.save(this.data)
+        return num
     }
     setCurLevel(val) {
         this.setNum("curLevel", val)
     }
     setOrbCount(val) {
-        this.setNum("orbCount", val)
+        const num = this.setNum("orbCount", val)
+        this.emit("orb-update", num)
     }
     setHiscore(level, val) {
         const time  = castToNum(val, key)
