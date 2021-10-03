@@ -15,7 +15,7 @@ import crateUpDataId from "@assets/particles/crate-up.cson"
 import crateDownDataId from "@assets/particles/crate-down.cson"
 import windDataId from "@assets/particles/wind.cson"
 
-export default ({ soundSprite, assetsCache }) => { // using sound sprite to create and pass objects and (cached) pools so that objects can just consume sound in ready-to-use form rather than by creating them on their own. This helps me make sound creation parameters changes at one place, making code more scalable.
+export default ({ soundSprite, assetsCache, storage }) => { // using sound sprite to create and pass objects and (cached) pools so that objects can just consume sound in ready-to-use form rather than by creating them on their own. This helps me make sound creation parameters changes at one place, making code more scalable.
     const gMovSound = soundSprite.createPool("gate")
     const orbMovSound = soundSprite.create("orb_mov")
     
@@ -28,8 +28,7 @@ export default ({ soundSprite, assetsCache }) => { // using sound sprite to crea
     const orbFactory = (x, y, props, player) => {
         return new Orb(Object.assign(
             assetsCache.get(orbDataId),
-            { player, pos: { x, y }, sound: soundSprite.create("orb"), movSound: orbMovSound },
-            props
+            { player, pos: { x, y }, sound: soundSprite.create("orb"), movSound: orbMovSound, storage },
         ))
     }
     const orbPool = new Pool({

@@ -47,7 +47,7 @@ class Storage extends Observable {
         return this.hiscores[String(level)]
     }
     save(data) {
-        this.localStorage.setItem(this.id, JSON.stringify(data))
+        localStorage.setItem(this.id, JSON.stringify(data))
     }
 }
 
