@@ -108,9 +108,12 @@ export default (uiRoot, ctrlBtns, images, storage, gameState) => {
     gameState.on("play", onPlay)
     gameState.on("pause", onPause)
     gameState.on("over", onOver)
-    realign(config.viewport)
     config.viewport.on("change", realign)
     storage.on("orb-update", changeOrbCount)
+    pauseBtn.on("click", () => {
+        gameState.pause()
+    })
+    realign(config.viewport)
     return {
         teardownUI: () => {
             config.viewport.off("change", realign)
