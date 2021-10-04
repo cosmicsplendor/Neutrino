@@ -20,7 +20,7 @@ const RESET = "reset-btn"
 const render = (images, orbAv) => {
     return `
         ${imgBtn(ORB_IND, images.orb)}
-        <div id="${TIMER}" class="${styles.timer}"> 000:00 </div>
+        <div id="${TIMER}" class="${styles.timer}"> 0000:0 </div>
         <div id="${ORB_AV}" class="${styles.orbTxt}"> ${orbAv} </div>
         ${imgBtn(PAUSE, images.pause)}
         ${imgBtn(RESUME, images.resume)}
@@ -69,9 +69,19 @@ export default (uiRoot, player, images, storage) => {
     realign(config.viewport)
     config.viewport.on("change", realign)
     storage.on("orb-update", changeOrbCount)
-    return () => {
-        config.viewport.off("change", realign)
-        storage.off("orb-update", changeOrbCount)
-        uiRoot.clear()
+    return {
+        teardownUI: () => {
+            config.viewport.off("change", realign)
+            storage.off("orb-update", changeOrbCount)
+            uiRoot.clear()
+        },
+        updateTimer: t => {
+            const secs = Math.floor(t)
+            const ds = Math.floor((t - secs) * 10) // deciseconds
+            const pad = t < 10 ? "000":
+                        t < 100 ? "00":
+                        t < 1000 ? "0": ""
+            timer.content = `${pad}${secs}:${ds}`
+        }
     }
 }

@@ -16,8 +16,14 @@ class Level extends Camera {
         this.player = player
                                                                                                                                                                                                                                                                                                                                                                  
         this.add(arena)
-        const teardownUI = initUI(uiRoot, player, uiImages, storage)
-        this.onRemove = () => teardownUI()
+        const { teardownUI, updateTimer } = initUI(uiRoot, player, uiImages, storage)
+        this.onRemove = teardownUI
+        this.elapsed = 0
+        this.update = dt => {
+            super.update(dt)
+            this.elapsed += dt
+            updateTimer(this.elapsed)
+        }
         // music.play()
     }
 }
