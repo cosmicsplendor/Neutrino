@@ -2,6 +2,7 @@ import { calcAligned, calcStacked } from "@utils/entity"
 import config from "@config"
 import imgBtn from "@screens/ui/imgBtn"
 import styles from "./style.css"
+import * as states from "./states.js"
 
 const margin = 20
 const hMargin = margin / 2 // hMargin
@@ -66,6 +67,58 @@ export default (uiRoot, player, images, storage) => {
         ctrlBtns.right.pos = calcAligned(viewport, ctrlBtns.right, "left", "bottom", 40 + (ctrlBtns.left.width), -margin)
         ctrlBtns.axn.pos = calcAligned(viewport, ctrlBtns.right, "right", "bottom", -margin, -margin)
     }
+    const state = {
+        _name: "",
+        elapsed: 0,
+        get() {
+            return this._name
+        },
+        set(name) {
+            this._name = name
+            switch (name) {
+                case states.PLAYING:
+                    resumeBtn.opacity = 0
+                    restartBtn.opacity = 0
+                    crossBtn.opacity = 0
+
+                    orbExpInd.opacity = 0
+                    orbExp.opacity = 0
+
+                    pauseBtn.opacity = 1
+                    orbInd.opacity = 1
+                    orbCount.opacity = 1
+                    timer.opacity = 1
+                break
+                case states.PAUSED:
+                    resumeBtn.opacity = 1
+                    restartBtn.opacity = 1
+                    crossBtn.opacity = 1
+
+                    orbExpInd.opacity = 0
+                    orbExp.opacity = 0
+
+                    pauseBtn.opacity = 0
+                    orbInd.opacity = 0
+                    orbCount.opacity = 0
+                    timer.opacity = 0
+                break
+                case states.GAME_OVER:
+                    resumeBtn.opacity = 1
+                    restartBtn.opacity = 1
+                    crossBtn.opacity = 1
+
+                    orbExpInd.opacity = 1
+                    orbExp.opacity = 1
+
+                    pauseBtn.opacity = 0
+                    orbInd.opacity = 0
+                    orbCount.opacity = 0
+                    timer.opacity = 0
+                break
+            }
+        }
+    }
+    state.set(states.PLAYING)
     realign(config.viewport)
     config.viewport.on("change", realign)
     storage.on("orb-update", changeOrbCount)
@@ -75,13 +128,19 @@ export default (uiRoot, player, images, storage) => {
             storage.off("orb-update", changeOrbCount)
             uiRoot.clear()
         },
-        updateTimer: t => {
+        updateTimer: dt => {
+            if (state.get() !== states.PLAYING) {
+                return
+            }
+            const t = state.elapsed + dt
             const secs = Math.floor(t)
             const ds = Math.floor((t - secs) * 10) // deciseconds
             const pad = t < 10 ? "000":
                         t < 100 ? "00":
                         t < 1000 ? "0": ""
             timer.content = `${pad}${secs}:${ds}`
-        }
+            state.elapsed = t
+        },
+        state
     }
 }
