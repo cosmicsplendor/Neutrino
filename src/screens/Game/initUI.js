@@ -32,9 +32,8 @@ const render = (images, orbAv) => {
     `
 }
 
-export default (uiRoot, player, images, storage, onStateChange) => {
+export default (uiRoot, ctrlBtns, images, storage, gameState) => {
     uiRoot.content = render(images, storage.getOrbCount())
-    const ctrlBtns = config.isMobile && player.getCtrlBtns()
     const orbInd = uiRoot.get(`#${ORB_IND}`)
     const orbCount = uiRoot.get(`#${ORB_AV}`)
     const orbExp = uiRoot.get(`#${ORB_EXP}`)
@@ -67,61 +66,49 @@ export default (uiRoot, player, images, storage, onStateChange) => {
         ctrlBtns.right.pos = calcAligned(viewport, ctrlBtns.right, "left", "bottom", 40 + (ctrlBtns.left.width), -margin)
         ctrlBtns.axn.pos = calcAligned(viewport, ctrlBtns.right, "right", "bottom", -margin, -margin)
     }
-    const state = {
-        _name: "",
-        elapsed: 0,
-        get() {
-            return this._name
-        },
-        set(name) {
-            this._name = name
-            onStateChange(name)
-            switch (name) {
-                case states.PLAYING:
-                    resumeBtn.hide()
-                    restartBtn.hide()
-                    crossBtn.hide()
+    const onPlay = () => {
+        resumeBtn.hide()
+        restartBtn.hide()
+        crossBtn.hide()
 
-                    orbExpInd.hide()
-                    orbExp.hide()
+        orbExpInd.hide()
+        orbExp.hide()
 
-                    pauseBtn.show()
-                    orbInd.show()
-                    orbCount.show()
-                    timer.show()
-                break
-                case states.PAUSED:
-                    resumeBtn.show()
-                    restartBtn.show()
-                    crossBtn.show()
-
-                    orbExpInd.hide()
-                    orbExp.hide()
-
-                    pauseBtn.hide()
-                    orbInd.hide()
-                    orbCount.hide()
-                    timer.hide()
-                break
-                case states.GAME_OVER:
-                    resumeBtn.show()
-                    restartBtn.show()
-                    crossBtn.show()
-
-                    orbExpInd.show()
-                    orbExp.show()
-
-                    pauseBtn.hide()
-                    orbInd.hide()
-                    orbCount.hide()
-                    timer.hide()
-                break
-                default:
-                    throw new Error(`Invalid state: ${name}`)
-            }
-        }
+        pauseBtn.show()
+        orbInd.show()
+        orbCount.show()
+        timer.show()
     }
-    state.set(states.PLAYING)
+    const onPause = () => {
+        resumeBtn.show()
+        restartBtn.show()
+        crossBtn.show()
+
+        orbExpInd.hide()
+        orbExp.hide()
+
+        pauseBtn.hide()
+        orbInd.hide()
+        orbCount.hide()
+        timer.hide()
+    }
+    const onOver = () => {
+        resumeBtn.show()
+        restartBtn.show()
+        crossBtn.show()
+
+        orbExpInd.show()
+        orbExp.show()
+
+        pauseBtn.hide()
+        orbInd.hide()
+        orbCount.hide()
+        timer.hide()
+    }
+
+    gameState.on("play", onPlay)
+    gameState.on("pause", onPause)
+    gameState.on("over", onOver)
     realign(config.viewport)
     config.viewport.on("change", realign)
     storage.on("orb-update", changeOrbCount)
@@ -129,21 +116,21 @@ export default (uiRoot, player, images, storage, onStateChange) => {
         teardownUI: () => {
             config.viewport.off("change", realign)
             storage.off("orb-update", changeOrbCount)
+            gameState.off("play", onPlay)
+            gameState.off("pause", onPause)
+            gameState.off("over", onOver)
             uiRoot.clear()
         },
-        updateTimer: dt => {
-            if (state.get() !== states.PLAYING) {
+        updateTimer: t => {
+            if (!gameState.is("playing")) {
                 return
             }
-            const t = state.elapsed + dt
             const secs = Math.floor(t)
             const ds = Math.floor((t - secs) * 10) // deciseconds
             const pad = t < 10 ? "000":
                         t < 100 ? "00":
                         t < 1000 ? "0": ""
             timer.content = `${pad}${secs}:${ds}`
-            state.elapsed = t
-        },
-        changeState: state.set.bind(state)
+        }
     }
 }

@@ -5,10 +5,10 @@ import SoundSprite from "@utils/Sound/SoundSprite"
 import ParticleEmitter from "@lib/utils/ParticleEmitter"
 import TexRegion from "@lib/entities/TexRegion"
 import State from "./"
+import initUI from "./"
 
 import config from "@config"
 import levels from "@config/levels"
-import * as states from "./levels/states"
 import Level from "./levels/Level"
 import makeFactories from "./makeFactories"
 import Player from "@entities/Player"
@@ -30,6 +30,7 @@ class GameScreen extends Node { // can only have cameras as children
     // background = "rgb(181 24 24)"
     initialized = false
     soundPools = [ "gate" ]
+    elapsed = 0
     constructor({ game, uiRoot, storage }) {
         super()
         const { assetsCache } = game
@@ -41,7 +42,7 @@ class GameScreen extends Node { // can only have cameras as children
         this.state.on("pause", () => {
             game.pause()
         })
-        this.state.on("suspend", () => {
+        this.state.on("over", () => {
             game.pause()
         }) 
         this.state.on("play", () => {
@@ -79,7 +80,7 @@ class GameScreen extends Node { // can only have cameras as children
     }
     setLevel(levelDataId) {
         const data = this.game.assetsCache.get(levelDataId)
-        const level = new Level({ player: this.player, uiRoot: this.uiRoot, data, viewport: config.viewport, subject: this.player, factories: this.factories, uiImages: this.uiImages, storage: this.storage })
+        const level = new Level({ player: this.player, data, viewport: config.viewport, subject: this.player, factories: this.factories })
         this.add(level)
         this.game.renderer.changeBackground(config.isMobile ? data.mob_bg: data.bg)
         this.game.renderer.gTint = data.tint && data.tint.split(",")
@@ -97,15 +98,27 @@ class GameScreen extends Node { // can only have cameras as children
     }
     onEnter(curLevel) {
         const levelDataId = levels[curLevel - 1].id
+        const { teardownUI, updateTimer } = initUI(this.uiRoot, config.mobile && this.player.getCtrlBtns(), this.uiImages, this.storage, this.state )
+
         this.setLevel(levelDataId)
+        this.teardownUI = teardownUI
+        this.update = dt => {
+            super.update(dt)
+            updateTimer(dt)
+        }
     }
     onExit() {
         this.unsetLevel()
+        this.teardownUI && this.teardownUI()
+        this.game.reset()
+        this.elapsed = 0
     }
     update(dt, t) {
+        this.elapsed += dt
         this.children.forEach(child => {
             Node.updateRecursively(child, dt, t, child) // out-of-view culling on a per-camera basis
         })
+        this.updateTimer(this.elapsed)
     }
 }
 
