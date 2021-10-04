@@ -113,6 +113,14 @@ export default (uiRoot, ctrlBtns, images, storage, gameState) => {
     pauseBtn.on("click", () => {
         gameState.pause()
     })
+    resumeBtn.on("click", () => {
+        if (gameState.is("paused")) {
+            return gameState.play()
+        } 
+        if (gameState.is("over")) {
+
+        }
+    })
     realign(config.viewport)
     return {
         teardownUI: () => {
