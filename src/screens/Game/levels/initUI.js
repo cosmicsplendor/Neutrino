@@ -32,7 +32,7 @@ const render = (images, orbAv) => {
     `
 }
 
-export default (uiRoot, player, images, storage) => {
+export default (uiRoot, player, images, storage, onStateChange) => {
     uiRoot.content = render(images, storage.getOrbCount())
     const ctrlBtns = config.isMobile && player.getCtrlBtns()
     const orbInd = uiRoot.get(`#${ORB_IND}`)
@@ -75,6 +75,7 @@ export default (uiRoot, player, images, storage) => {
         },
         set(name) {
             this._name = name
+            onStateChange(name)
             switch (name) {
                 case states.PLAYING:
                     resumeBtn.hide()
@@ -115,6 +116,8 @@ export default (uiRoot, player, images, storage) => {
                     orbCount.hide()
                     timer.hide()
                 break
+                default:
+                    throw new Error(`Invalid state: ${name}`)
             }
         }
     }
@@ -141,6 +144,6 @@ export default (uiRoot, player, images, storage) => {
             timer.content = `${pad}${secs}:${ds}`
             state.elapsed = t
         },
-        switchState: state.set.bind(state)
+        changeState: state.set.bind(state)
     }
 }

@@ -7,6 +7,7 @@ import TexRegion from "@lib/entities/TexRegion"
 
 import config from "@config"
 import levels from "@config/levels"
+import * as states from "./levels/states"
 import Level from "./levels/Level"
 import makeFactories from "./makeFactories"
 import Player from "@entities/Player"
@@ -55,6 +56,19 @@ class LevelScreen extends Node { // can only have cameras as children
                 this.bg = new ParallaxCamera({ z: 2.5, zAtop: 1, viewport: config.viewport, subject: this.player, entYOffset: 0, tiles: bgData.map(dataToTile) }) // parallax bg
                 // this.bg.overlay = [ 0.5, 0.1, 0.1 ]
                 this.add(this.bg)
+            }
+            this.onStateChange = name => {
+                switch(name) {
+                    case states.PLAYING:
+                        !!this.resume && this.resume()
+                        break
+                    case states.PAUSED:
+                        this.resume = game.pause()
+                        break
+                    case states.GAME_OVER:
+                        this.resume = game.pause()
+                    break
+                }
             }
             this.uiImages = {
                 cross: assetsCache.get(crossImgId),
