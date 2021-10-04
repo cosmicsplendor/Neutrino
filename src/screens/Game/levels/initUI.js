@@ -77,43 +77,43 @@ export default (uiRoot, player, images, storage) => {
             this._name = name
             switch (name) {
                 case states.PLAYING:
-                    resumeBtn.opacity = 0
-                    restartBtn.opacity = 0
-                    crossBtn.opacity = 0
+                    resumeBtn.hide()
+                    restartBtn.hide()
+                    crossBtn.hide()
 
-                    orbExpInd.opacity = 0
-                    orbExp.opacity = 0
+                    orbExpInd.hide()
+                    orbExp.hide()
 
-                    pauseBtn.opacity = 1
-                    orbInd.opacity = 1
-                    orbCount.opacity = 1
-                    timer.opacity = 1
+                    pauseBtn.show()
+                    orbInd.show()
+                    orbCount.show()
+                    timer.show()
                 break
                 case states.PAUSED:
-                    resumeBtn.opacity = 1
-                    restartBtn.opacity = 1
-                    crossBtn.opacity = 1
+                    resumeBtn.show()
+                    restartBtn.show()
+                    crossBtn.show()
 
-                    orbExpInd.opacity = 0
-                    orbExp.opacity = 0
+                    orbExpInd.hide()
+                    orbExp.hide()
 
-                    pauseBtn.opacity = 0
-                    orbInd.opacity = 0
-                    orbCount.opacity = 0
-                    timer.opacity = 0
+                    pauseBtn.hide()
+                    orbInd.hide()
+                    orbCount.hide()
+                    timer.hide()
                 break
                 case states.GAME_OVER:
-                    resumeBtn.opacity = 1
-                    restartBtn.opacity = 1
-                    crossBtn.opacity = 1
+                    resumeBtn.show()
+                    restartBtn.show()
+                    crossBtn.show()
 
-                    orbExpInd.opacity = 1
-                    orbExp.opacity = 1
+                    orbExpInd.show()
+                    orbExp.show()
 
-                    pauseBtn.opacity = 0
-                    orbInd.opacity = 0
-                    orbCount.opacity = 0
-                    timer.opacity = 0
+                    pauseBtn.hide()
+                    orbInd.hide()
+                    orbCount.hide()
+                    timer.hide()
                 break
             }
         }
