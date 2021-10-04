@@ -6,6 +6,7 @@ import ParticleEmitter from "@lib/utils/ParticleEmitter"
 import TexRegion from "@lib/entities/TexRegion"
 import State from "./State"
 import initUI from "./initUI"
+import { LEVEL } from "../names"
 
 import config from "@config"
 import levels from "@config/levels"
@@ -98,7 +99,8 @@ class GameScreen extends Node { // can only have cameras as children
     }
     onEnter(curLevel) {
         const levelDataId = levels[curLevel - 1].id
-        const { teardownUI, updateTimer } = initUI(this.uiRoot, config.mobile && this.player.getCtrlBtns(), this.uiImages, this.storage, this.state )
+        const onClose = () => this.game.switchScreen(LEVEL)
+        const { teardownUI, updateTimer } = initUI(this.uiRoot, config.mobile && this.player.getCtrlBtns(), this.uiImages, this.storage, this.state, onClose )
 
         this.setLevel(levelDataId)
         this.teardownUI = teardownUI

@@ -31,7 +31,7 @@ const render = (images, orbAv) => {
     `
 }
 
-export default (uiRoot, ctrlBtns, images, storage, gameState) => {
+export default (uiRoot, ctrlBtns, images, storage, gameState, onClose) => {
     uiRoot.content = render(images, storage.getOrbCount())
     const orbInd = uiRoot.get(`#${ORB_IND}`)
     const orbCount = uiRoot.get(`#${ORB_AV}`)
@@ -111,15 +111,21 @@ export default (uiRoot, ctrlBtns, images, storage, gameState) => {
     config.viewport.on("change", realign)
     storage.on("orb-update", changeOrbCount)
     pauseBtn.on("click", () => {
+        if (gameState.is("paused")) return
         gameState.pause()
     })
     resumeBtn.on("click", () => {
+        if (gameState.is("playing")) return
         if (gameState.is("paused")) {
             return gameState.play()
         } 
         if (gameState.is("over")) {
-
+            
         }
+    })
+    crossBtn.on("click", () => {
+        if (gameState.is("over")) return
+        onClose()
     })
     realign(config.viewport)
     return {
