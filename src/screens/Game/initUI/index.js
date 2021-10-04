@@ -2,7 +2,6 @@ import { calcAligned, calcStacked } from "@utils/entity"
 import config from "@config"
 import imgBtn from "@screens/ui/imgBtn"
 import styles from "./style.css"
-import * as states from "./states.js"
 
 const margin = 20
 const hMargin = margin / 2 // hMargin

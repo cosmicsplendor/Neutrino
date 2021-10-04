@@ -1,24 +1,33 @@
 import Observable from "@lib/utils/Observable";
 
 class State extends Observable {
-    name = "playing"
+    name = null
     constructor() {
-        super([ "pause", "suspend", "play" ])
+        super([ "pause", "over", "play" ])
+    }
+    set(n) {
+        this.name = n
     }
     is(n) {
         return n === this.name
     }
     pause() {
+        if (this.is("paused")) return
         this.emit("pause")
-        this.name = "paused"
+        this.set("paused")
     }
     play() {
+        if (this.is("playing")) return
         this.emit("play")
-        this.name = "playing"
+        this.set("playing")
     }
-    suspend() {
-        this.emit("suspend")
-        this.name = "suspended"
+    over() {
+        if (this.is("over")) return
+        this.emit("over")
+        this.set("over")
+    }
+    reset() {
+        this.name = null
     }
 }
 

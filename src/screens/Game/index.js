@@ -4,8 +4,8 @@ import Timer from "@utils/Timer"
 import SoundSprite from "@utils/Sound/SoundSprite"
 import ParticleEmitter from "@lib/utils/ParticleEmitter"
 import TexRegion from "@lib/entities/TexRegion"
-import State from "./"
-import initUI from "./"
+import State from "./State"
+import initUI from "./initUI"
 
 import config from "@config"
 import levels from "@config/levels"
@@ -102,15 +102,14 @@ class GameScreen extends Node { // can only have cameras as children
 
         this.setLevel(levelDataId)
         this.teardownUI = teardownUI
-        this.update = dt => {
-            super.update(dt)
-            updateTimer(dt)
-        }
+        this.updateTimer = updateTimer
+        this.state.play()
     }
     onExit() {
         this.unsetLevel()
         this.teardownUI && this.teardownUI()
         this.game.reset()
+        this.state.reset()
         this.elapsed = 0
     }
     update(dt, t) {
