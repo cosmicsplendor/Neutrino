@@ -141,6 +141,6 @@ export default (uiRoot, player, images, storage) => {
             timer.content = `${pad}${secs}:${ds}`
             state.elapsed = t
         },
-        state
+        switchState: state.set.bind(state)
     }
 }
