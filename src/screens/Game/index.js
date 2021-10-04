@@ -4,6 +4,7 @@ import Timer from "@utils/Timer"
 import SoundSprite from "@utils/Sound/SoundSprite"
 import ParticleEmitter from "@lib/utils/ParticleEmitter"
 import TexRegion from "@lib/entities/TexRegion"
+import State from "./"
 
 import config from "@config"
 import levels from "@config/levels"
@@ -25,7 +26,7 @@ import crossImgId from "@assets/images/ui/cross.png"
 import resetImgId from "@assets/images/ui/reset.png"
 import orbImgId from "@assets/images/ui/orb.png"
 
-class LevelScreen extends Node { // can only have cameras as children
+class GameScreen extends Node { // can only have cameras as children
     // background = "rgb(181 24 24)"
     initialized = false
     soundPools = [ "gate" ]
@@ -36,6 +37,16 @@ class LevelScreen extends Node { // can only have cameras as children
         this.game = game
         this.uiRoot = uiRoot
         this.addTimer = Timer.attachedTo(this)
+        this.state = new State()
+        this.state.on("pause", () => {
+            game.pause()
+        })
+        this.state.on("suspend", () => {
+            game.pause()
+        }) 
+        this.state.on("play", () => {
+            game.resume()
+        })
         assetsCache.once("load", () => {
             const meta = assetsCache.get(soundMetaId)
             const soundResource = assetsCache.get(soundSpriteId)
@@ -56,19 +67,6 @@ class LevelScreen extends Node { // can only have cameras as children
                 this.bg = new ParallaxCamera({ z: 2.5, zAtop: 1, viewport: config.viewport, subject: this.player, entYOffset: 0, tiles: bgData.map(dataToTile) }) // parallax bg
                 // this.bg.overlay = [ 0.5, 0.1, 0.1 ]
                 this.add(this.bg)
-            }
-            this.onStateChange = name => {
-                switch(name) {
-                    case states.PLAYING:
-                        !!this.resume && this.resume()
-                        break
-                    case states.PAUSED:
-                        this.resume = game.pause()
-                        break
-                    case states.GAME_OVER:
-                        this.resume = game.pause()
-                    break
-                }
             }
             this.uiImages = {
                 cross: assetsCache.get(crossImgId),
@@ -111,4 +109,4 @@ class LevelScreen extends Node { // can only have cameras as children
     }
 }
 
-export default LevelScreen
+export default GameScreen
