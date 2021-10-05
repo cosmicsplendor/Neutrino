@@ -8,6 +8,7 @@ import SawBlade from "@entities/SawBlade"
 import Fire from "@entities/Fire"
 import Crate from "@entities/Crate"
 import Pool from "@utils/Pool"
+import levels from "@config/levels"
 
 import fireDataId from "@assets/particles/fire.cson"
 import orbDataId from "@assets/particles/orb.cson"
@@ -73,6 +74,9 @@ export default ({ soundSprite, assetsCache, storage, player, state }) => { // us
     })
     const onFireTouch = () => {
         state.complete()
+        if (state.level === storage.getCurLevel() && state.level < levels.length) {
+            storage.setCurLevel(state.level + 1)
+        }
     }
     const fire = new Fire(assetsCache.get(fireDataId), onFireTouch)
     const crateParticles = Object.freeze({
