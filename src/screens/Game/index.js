@@ -90,6 +90,7 @@ class GameScreen extends Node { // can only have cameras as children
             this.bg.overlay = data.pxbg && data.pxbg.split(",").map(s => Number(s.trim()))
             this.bg.layoutTiles(level.world)
         }
+        return level
     }
     unsetLevel() {
         if (this.children) {
@@ -99,10 +100,11 @@ class GameScreen extends Node { // can only have cameras as children
     }
     onEnter(curLevel) {
         const levelDataId = levels[curLevel - 1].id
+        const level = this.setLevel(levelDataId)
         const onClose = () => this.game.switchScreen(LEVEL)
-        const { teardownUI, updateTimer } = initUI(this.uiRoot, config.mobile && this.player.getCtrlBtns(), this.uiImages, this.storage, this.state, onClose )
+        const onRestart = () => level.resetRecursively()
+        const { teardownUI, updateTimer } = initUI(this.uiRoot, config.mobile && this.player.getCtrlBtns(), this.uiImages, this.storage, this.state, onClose, onRestart )
 
-        this.setLevel(levelDataId)
         this.teardownUI = teardownUI
         this.updateTimer = updateTimer
         this.state.play()

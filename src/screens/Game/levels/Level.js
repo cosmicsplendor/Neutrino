@@ -2,6 +2,7 @@ import { Camera } from "@lib"
 import TiledLevel from "@utils/TiledLevel"
 
 class Level extends Camera {
+
     constructor({ player, uiRoot, data, bg, fbg, factories, levelDataId, uiImages, storage, onStateChange, ...cameraProps }) {
         const arena = new TiledLevel({ 
             data,
@@ -13,7 +14,9 @@ class Level extends Camera {
         this.player = player
                                                                                                                                                                                                                                                                                                                                                                  
         this.add(arena)
-        // music.play()
+        this.resetRecursively = () => {
+            arena.resetRecursively()
+        }
     }
 }
 
