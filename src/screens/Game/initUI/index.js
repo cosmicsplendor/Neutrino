@@ -152,6 +152,7 @@ export default (uiRoot, ctrlBtns, images, storage, gameState, onClose, onRestart
             gameState.off("play", onPlay)
             gameState.off("pause", onPause)
             gameState.off("over", onOver)
+            gameState.off("complete", onComplete)
             uiRoot.clear()
         },
         updateTimer: t => {
