@@ -17,6 +17,11 @@ const ORB_EXP_IND = "orb-exp-ind"
 const CROSS = "cross-btn"
 const RESET = "reset-btn"
 
+const OVERLAY = "overlay"
+const CUR_TIME = "cur-time"
+const BEST_TIME = "best-time"
+const CONTINUE = "continue"
+
 const render = (images, orbAv) => {
     return `
         ${imgBtn(ORB_IND, images.orb, styles.hidden)}
@@ -31,16 +36,12 @@ const render = (images, orbAv) => {
     `
 }
 
-const OVERLAY = "overlay"
-const CUR_TIME = "cur-time"
-const BEST_TIME = "best-time"
-const CONTINUE = "continue"
-const renderResult = (curTime, bestTime) => {
+const renderResult = (resumeImg, curTime, bestTime) => {
     return `
         <div class="${styles.overlay} ${styles.hidden}" id="${OVERLAY}">  </div>
         <div class="${styles.time} ${styles.hidden}" id="${CUR_TIME}"> completion time: ${curTime.toFixed(2)}s </div>
-        <div class="${styles.time} ${styles.hidden}" id="${BEST_TIME}"> best time: ${bestTime ? bestTime.toFixed(2): "9999"}s </div>
-        ${imgBtn(CONTINUE, images.resume, styles.hidden)}
+        <div class="${styles.time} ${styles.hidden}" id="${BEST_TIME}"> best time: ${bestTime ? bestTime.toFixed(2) + "s": "not set"} </div>
+        ${imgBtn(CONTINUE, resumeImg, styles.hidden)}
     `
 }
 
@@ -119,7 +120,19 @@ export default (uiRoot, ctrlBtns, images, storage, gameState, onClose, onRestart
     }
     const onComplete = (curTime, bestTime) => {
         uiRoot.clear()
-        uiRoot.content = renderResult()
+        uiRoot.content = renderResult(images.resume, curTime, bestTime)
+        const overlay = uiRoot.get(`#${OVERLAY}`)
+        const curTimeInd = uiRoot.get(`#${CUR_TIME}`)
+        const bestTimeInd = uiRoot.get(`#${BEST_TIME}`)
+
+        overlay.domNode.style.width = `${config.viewport.width}px`
+        overlay.domNode.style.height = `${config.viewport.height}px`
+        curTimeInd.pos = calcAligned(config.viewport, curTimeInd, "center", "center")
+        bestTimeInd.pos = calcStacked(curTimeInd, bestTimeInd, "bottom-start", 0, 10)
+
+        overlay.show()
+        curTimeInd.show()
+        bestTimeInd.show()
     }
 
     gameState.on("play", onPlay)
