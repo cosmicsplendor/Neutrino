@@ -175,6 +175,9 @@ class Player extends TexRegion {
         this.crateCollision.update()
         this.updateAudio()
     }
+    onRemove() {
+        this.parent = null // free-up the reference for garbage collector
+    }
 }
 
 export default Player

@@ -61,8 +61,8 @@ class GameScreen extends Node { // can only have cameras as children
             }, {})
             
             this.soundSprite = soundSprite
-            this.factories = makeFactories({ soundSprite, assetsCache, storage })
             this.player = new Player({ width: 64, height: 64, fill: "brown", speed: 350, fricX: 3, pos: { x: 300, y: 0 }, shard, cinder, sounds: playerSounds })
+            this.factories = makeFactories({ soundSprite, assetsCache, storage, player: this.player })
             if (!config.isMobile) {
                 const bgData = assetsCache.get(bgDataId)
                 const dataToTile = tile => new TexRegion({ frame: tile.name, pos: { x: tile.x, y: tile.y }})
