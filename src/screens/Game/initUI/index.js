@@ -105,7 +105,7 @@ export default (uiRoot, ctrlBtns, images, storage, gameState, onClose, onRestart
         timer.hide()
     }
     const onComplete = () => {
-        resumeBtn.show()
+        resumeBtn.hide()
         restartBtn.hide()
         crossBtn.hide()
 
@@ -125,11 +125,11 @@ export default (uiRoot, ctrlBtns, images, storage, gameState, onClose, onRestart
     config.viewport.on("change", realign)
     storage.on("orb-update", changeOrbCount)
     pauseBtn.on("click", () => {
-        if (gameState.is("paused")) return
+        if (!gameState.is("playing")) return
         gameState.pause()
     })
     resumeBtn.on("click", () => {
-        if (gameState.is("playing")) return
+        if (gameState.is("playing") || gameState.is("completed")) return
         if (gameState.is("paused")) {
             return gameState.play()
         } 
@@ -138,9 +138,11 @@ export default (uiRoot, ctrlBtns, images, storage, gameState, onClose, onRestart
         }
     })
     crossBtn.on("click", () => {
+        if (gameState.is("playing") || gameState.is("completed")) return
         onClose()
     })
     restartBtn.on("click", () => {
+        if (gameState.is("playing") || gameState.is("completed")) return
         onRestart()
         gameState.play()
     })
