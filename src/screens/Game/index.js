@@ -43,9 +43,9 @@ class GameScreen extends Node { // can only have cameras as children
         this.state.on("pause", () => {
             game.pause()
         })
-        this.state.on("over", () => {
-            game.pause()
-        }) 
+        // this.state.on("over", () => {
+        //     game.pause()
+        // }) 
         this.state.on("play", () => {
             game.resume()
         })
@@ -61,7 +61,7 @@ class GameScreen extends Node { // can only have cameras as children
             }, {})
             
             this.soundSprite = soundSprite
-            this.player = new Player({ width: 64, height: 64, fill: "brown", speed: 350, fricX: 3, pos: { x: 300, y: 0 }, shard, cinder, sounds: playerSounds })
+            this.player = new Player({ width: 64, height: 64, fill: "brown", speed: 350, fricX: 3, pos: { x: 300, y: 0 }, shard, cinder, sounds: playerSounds, state: this.state })
             this.factories = makeFactories({ soundSprite, assetsCache, storage, player: this.player })
             if (!config.isMobile) {
                 const bgData = assetsCache.get(bgDataId)

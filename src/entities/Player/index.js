@@ -5,7 +5,7 @@ import Collision from "@components/Collision"
 import Movement from "@components/Movement"
 import UI from "@utils/UI"
 import { PlayerKeyControls, PlayerTouchControls } from "./PlayerControls"
-import { colRectsId, curLevelId, objLayerId } from "@lib/constants"
+import { colRectsId, objLayerId } from "@lib/constants"
 import styles from "./style.css"
 
 const getTouchMappings = () => {
@@ -36,7 +36,7 @@ const getControlsMapping = config.isMobile ? getTouchMappings: getKeyMappings
 
 class Player extends TexRegion {
     static sounds = [ "player_din", "concrete", "wood", "metal", "jump", "rolling", "player_exp" ]
-    constructor({ speed = 48, width = 64, height = 64, fricX=4, shard, cinder, controls, sounds, ...rest }) {
+    constructor({ speed = 48, width = 64, height = 64, fricX=4, shard, cinder, controls, sounds, state, ...rest }) {
         super({ frame: "ball", ...rest })
         this.width = width
         this.height = height
@@ -52,15 +52,17 @@ class Player extends TexRegion {
         this.cinder = cinder
         this.sounds = sounds
         this.fricX0 = fricX
+        this.state = state
 
-        this.shard.onDead = () => { // what should happen upon player explosion
-            /**
-             * implicit assumptions: 
-             * 1. both cinder and shard should have same "lifetime"
-             * 2. ParticleEmitters with finite "lifetime" (loop set to false) remove themselves from the parent once they're dead 
-             */
-            Node.get(curLevelId).resetRecursively() // this also sets player's alpha field to 1
-        }
+        // this.shard.onDead = () => { // what should happen upon player explosion
+        //     /**
+        //      * implicit assumptions: 
+        //      * 1. both cinder and shard should have same "lifetime"
+        //      * 2. ParticleEmitters with finite "lifetime" (loop set to false) remove themselves from the parent once they're dead 
+        //      */
+        //     state.over()
+        //     // Node.get(curLevelId).resetRecursively() // this also sets player's alpha field to 1
+        // }
   
         this.controls = controls || new PlayerControlsClass(speed, getControlsMapping(), () => {
             sounds.jump.play()
@@ -154,6 +156,7 @@ class Player extends TexRegion {
         this.alpha = 0  // forces off the visibility (ensuring no update or rendering)
         Node.get(objLayerId).add(this.cinder) // particle emitters have to be manually inserted into the scene graph, since it doesn't implicitly know where it should be located
         Node.get(objLayerId).add(this.shard)
+        this.state.over()
         this.sounds.player_exp.play(0.6)
         this.sounds.player_din.play(0.2)
         this.velX = this.velY = 0
@@ -167,6 +170,7 @@ class Player extends TexRegion {
         }
     }
     update(dt) {
+        if (!this.state.is("playing")) return
         this.controls.update(this, dt)
         Boolean(this.offEdge) ? Movement.updateOffEdge(this, dt): Movement.update(this, dt)
         this.wallCollision.update()
