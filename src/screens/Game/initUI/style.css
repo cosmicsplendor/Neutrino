@@ -4,6 +4,7 @@
     font-family: monospace;
     color: #ffe6d5;
     user-select: none;
+    transition: opacity 0.25s linear;
 }
 .timer {
     font-family: monospace;
@@ -11,4 +12,8 @@
     font-size: 16px;
     letter-spacing: 2px;
     user-select: none;
+    transition: opacity 0.25s linear;
+}
+.hidden {
+    opacity: 0;
 }

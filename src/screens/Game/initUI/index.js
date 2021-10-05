@@ -19,15 +19,15 @@ const RESET = "reset-btn"
 
 const render = (images, orbAv) => {
     return `
-        ${imgBtn(ORB_IND, images.orb)}
-        <div id="${TIMER}" class="${styles.timer}"> 0000:0 </div>
-        <div id="${ORB_AV}" class="${styles.orbTxt}"> ${orbAv} </div>
-        ${imgBtn(PAUSE, images.pause)}
-        ${imgBtn(RESUME, images.resume)}
-        ${imgBtn(ORB_EXP_IND, images.orb)}
-        <div id="${ORB_EXP}" class="${styles.orbTxt}"> &times; ${orbExpAmt} </div>
-        ${imgBtn(RESET, images.reset)}
-        ${imgBtn(CROSS, images.cross)}
+        ${imgBtn(ORB_IND, images.orb, styles.hidden)}
+        <div id="${TIMER}" class="${styles.timer} ${styles.hidden}"> 0000:0 </div>
+        <div id="${ORB_AV}" class="${styles.orbTxt} ${styles.hidden}"> ${orbAv} </div>
+        ${imgBtn(PAUSE, images.pause, styles.hidden)}
+        ${imgBtn(RESUME, images.resume, styles.hidden)}
+        ${imgBtn(ORB_EXP_IND, images.orb, styles.hidden)}
+        <div id="${ORB_EXP}" class="${styles.orbTxt} ${styles.hidden}"> &times; ${orbExpAmt} </div>
+        ${imgBtn(RESET, images.reset, styles.hidden)}
+        ${imgBtn(CROSS, images.cross, styles.hidden)}
     `
 }
 
