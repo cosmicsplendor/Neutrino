@@ -28,9 +28,9 @@ class State extends Observable {
         this.emit("over")
         this.set("over")
     }
-    complete() {
+    complete(curTime, bestTime) {
         if (this.is("completed")) return
-        this.emit("complete")
+        this.emit("complete", curTime, bestTime)
         this.set("completed")
     }
     reset() {
