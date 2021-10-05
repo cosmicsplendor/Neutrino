@@ -4,8 +4,9 @@ import { clamp } from "@utils/math"
 
 const extendPalyerControls = S => class extends S {
     stateSwitched = false // a helper flag for preventing multiple state updates every frame making sure the first one gets the precendence 
-    constructor(speed=100, mappings, onJump=() => {}) {
+    constructor(speed=100, mappings, onJump=() => {}, gameState) {
         super(mappings)
+        this.gameState = gameState
         this.speed = speed
         this.states = {
             offEdge: new OffEdge(this),
@@ -26,6 +27,7 @@ const extendPalyerControls = S => class extends S {
         this.stateSwitched = true
     }
     update(entity, dt) {
+        if (this.gameState.is("completed")) return
         this.state.update(entity, dt)
         this.cleanup()
     }

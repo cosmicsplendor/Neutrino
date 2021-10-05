@@ -33,7 +33,7 @@ export const resettable = factories => { // returns a new hashmap of resettable 
     return exports
 }
 
-export default ({ soundSprite, assetsCache, storage, player }) => { // using sound sprite to create and pass objects and (cached) pools so that objects can just consume sound in ready-to-use form rather than by creating them on their own. This helps me make sound creation parameters changes at one place, making code more scalable.
+export default ({ soundSprite, assetsCache, storage, player, state }) => { // using sound sprite to create and pass objects and (cached) pools so that objects can just consume sound in ready-to-use form rather than by creating them on their own. This helps me make sound creation parameters changes at one place, making code more scalable.
     const gMovSound = soundSprite.createPool("gate")
     const orbMovSound = soundSprite.create("orb_mov")
     
@@ -71,7 +71,10 @@ export default ({ soundSprite, assetsCache, storage, player }) => { // using sou
             obj.pos.y = y - 10
         }
     })
-    const fire = new Fire(assetsCache.get(fireDataId))
+    const onFireTouch = () => {
+        state.complete()
+    }
+    const fire = new Fire(assetsCache.get(fireDataId), onFireTouch)
     const crateParticles = Object.freeze({
         up: new ParticleEmitter(assetsCache.get(crateUpDataId)),
         down: new ParticleEmitter(assetsCache.get(crateDownDataId)),

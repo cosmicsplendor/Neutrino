@@ -98,16 +98,30 @@ export default (uiRoot, ctrlBtns, images, storage, gameState, onClose, onRestart
 
         orbExpInd.show()
         orbExp.show()
+        orbInd.show()
+        orbCount.show()
 
         pauseBtn.hide()
+        timer.hide()
+    }
+    const onComplete = () => {
+        resumeBtn.show()
+        restartBtn.hide()
+        crossBtn.hide()
+
+        orbExpInd.hide()
+        orbExp.hide()
         orbInd.hide()
         orbCount.hide()
+
+        pauseBtn.hide()
         timer.hide()
     }
 
     gameState.on("play", onPlay)
     gameState.on("pause", onPause)
     gameState.on("over", onOver)
+    gameState.on("complete", onComplete)
     config.viewport.on("change", realign)
     storage.on("orb-update", changeOrbCount)
     pauseBtn.on("click", () => {

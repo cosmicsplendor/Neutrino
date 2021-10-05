@@ -43,9 +43,9 @@ class GameScreen extends Node { // can only have cameras as children
         this.state.on("pause", () => {
             game.pause()
         })
-        // this.state.on("over", () => {
-        //     game.pause()
-        // }) 
+        this.state.on("complete", () => {
+            // game.pause()
+        }) 
         this.state.on("play", () => {
             game.resume()
         })
@@ -62,7 +62,7 @@ class GameScreen extends Node { // can only have cameras as children
             
             this.soundSprite = soundSprite
             this.player = new Player({ width: 64, height: 64, fill: "brown", speed: 350, fricX: 3, pos: { x: 300, y: 0 }, shard, cinder, sounds: playerSounds, state: this.state })
-            this.factories = makeFactories({ soundSprite, assetsCache, storage, player: this.player })
+            this.factories = makeFactories({ soundSprite, assetsCache, storage, player: this.player, state: this.state })
             if (!config.isMobile) {
                 const bgData = assetsCache.get(bgDataId)
                 const dataToTile = tile => new TexRegion({ frame: tile.name, pos: { x: tile.x, y: tile.y }})
@@ -102,7 +102,10 @@ class GameScreen extends Node { // can only have cameras as children
         const levelDataId = levels[curLevel - 1].id
         const level = this.setLevel(levelDataId)
         const onClose = () => this.game.switchScreen(LEVEL)
-        const onRestart = () => level.resetRecursively()
+        const onRestart = () => {
+            level.resetRecursively()
+            this.elapsed = 0
+        }
         const { teardownUI, updateTimer } = initUI(this.uiRoot, config.mobile && this.player.getCtrlBtns(), this.uiImages, this.storage, this.state, onClose, onRestart )
 
         this.teardownUI = teardownUI

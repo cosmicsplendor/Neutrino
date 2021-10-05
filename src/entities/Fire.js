@@ -4,13 +4,14 @@ import ParticleEmitter from "@lib/utils/ParticleEmitter"
 class Fire extends ParticleEmitter { // it's no ordinary fire, it's an end-marker fire
     _player = null
     testCol = null
-    constructor(props) {
-        super(props)
+    constructor(supProps, onTouch) {
+        super(supProps)
         ParticleEmitter.feed(this, 120, 0.02) // feed 2.4 (120 iterations * 0.02 second time step ) seconds worth of update to stabilize the fire
         this.hitbox = {
             x: -20, width: 40, 
             y: -15, height: 17
         }
+        this.onTouch = onTouch
     }
     get player() {
         return this._player
@@ -28,6 +29,7 @@ class Fire extends ParticleEmitter { // it's no ordinary fire, it's an end-marke
             this.pos.y - 64
             this.player.onEndReached()
             this.remove()
+            this.onTouch()
         }
     }
 }

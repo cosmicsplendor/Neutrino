@@ -66,7 +66,7 @@ class Player extends TexRegion {
   
         this.controls = controls || new PlayerControlsClass(speed, getControlsMapping(), () => {
             sounds.jump.play()
-        })
+        }, this.state)
         this.wallCollision = new Collision({ entity: this, blocks: colRectsId, rigid: true, movable: false, onHit: this.onWallCol.bind(this) })
         this.spikeCollision = new Collision({ entity: this, blocks: "spikes", rigid: false, movable: false, onHit: this.explode.bind(this) })
         this.magnetCollision = new Collision({ entity: this, blocks: "magnets", rigid: true, movable: false, onHit: this.onMagnetCol.bind(this) })
@@ -170,7 +170,7 @@ class Player extends TexRegion {
         }
     }
     update(dt) {
-        if (!this.state.is("playing")) return
+        if (this.state.is("game-over") || this.state.is("paused")) return
         this.controls.update(this, dt)
         Boolean(this.offEdge) ? Movement.updateOffEdge(this, dt): Movement.update(this, dt)
         this.wallCollision.update()
