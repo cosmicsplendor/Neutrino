@@ -3,6 +3,7 @@ import Observable from "@lib/utils/Observable";
 class State extends Observable {
     name = null
     level = 1
+    elapsed = 0
     constructor() {
         super([ "pause", "over", "play", "complete" ])
     }

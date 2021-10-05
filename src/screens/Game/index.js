@@ -31,7 +31,6 @@ class GameScreen extends Node { // can only have cameras as children
     // background = "rgb(181 24 24)"
     initialized = false
     soundPools = [ "gate" ]
-    elapsed = 0
     constructor({ game, uiRoot, storage }) {
         super()
         const { assetsCache } = game
@@ -118,14 +117,14 @@ class GameScreen extends Node { // can only have cameras as children
         this.teardownUI && this.teardownUI()
         this.game.reset()
         this.state.reset()
-        this.elapsed = 0
+        this.state.elapsed = 0
     }
     update(dt, t) {
-        this.elapsed += dt
+        this.state.elapsed += dt
         this.children.forEach(child => {
             Node.updateRecursively(child, dt, t, child) // out-of-view culling on a per-camera basis
         })
-        this.updateTimer(this.elapsed)
+        this.updateTimer(this.state.elapsed)
     }
 }
 
