@@ -98,8 +98,8 @@ class GameScreen extends Node { // can only have cameras as children
             idx > -1 && Node.removeChild(this, this.children[idx])
         }
     }
-    onEnter(curLevel) {
-        const levelDataId = levels[curLevel - 1].id
+    onEnter(l) {
+        const levelDataId = levels[l - 1].id
         const level = this.setLevel(levelDataId)
         const onClose = () => this.game.switchScreen(LEVEL)
         const onRestart = () => {
@@ -108,6 +108,7 @@ class GameScreen extends Node { // can only have cameras as children
         }
         const { teardownUI, updateTimer } = initUI(this.uiRoot, config.mobile && this.player.getCtrlBtns(), this.uiImages, this.storage, this.state, onClose, onRestart )
 
+        this.state.level = l
         this.teardownUI = teardownUI
         this.updateTimer = updateTimer
         this.state.play()
