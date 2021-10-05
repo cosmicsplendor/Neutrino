@@ -31,6 +31,19 @@ const render = (images, orbAv) => {
     `
 }
 
+const OVERLAY = "overlay"
+const CUR_TIME = "cur-time"
+const BEST_TIME = "best-time"
+const CONTINUE = "continue"
+const renderResult = (curTime, bestTime) => {
+    return `
+        <div class="${styles.overlay} ${styles.hidden}" id="${OVERLAY}">  </div>
+        <div class="${styles.time} ${styles.hidden}" id="${CUR_TIME}"> completion time: ${curTime.toFixed(2)}s </div>
+        <div class="${styles.time} ${styles.hidden}" id="${BEST_TIME}"> best time: ${bestTime ? bestTime.toFixed(2): "9999"}s </div>
+        ${imgBtn(CONTINUE, images.resume, styles.hidden)}
+    `
+}
+
 export default (uiRoot, ctrlBtns, images, storage, gameState, onClose, onRestart) => {
     uiRoot.content = render(images, storage.getOrbCount())
     const orbInd = uiRoot.get(`#${ORB_IND}`)
@@ -104,18 +117,9 @@ export default (uiRoot, ctrlBtns, images, storage, gameState, onClose, onRestart
         pauseBtn.hide()
         timer.hide()
     }
-    const onComplete = () => {
-        resumeBtn.hide()
-        restartBtn.hide()
-        crossBtn.hide()
-
-        orbExpInd.hide()
-        orbExp.hide()
-        orbInd.hide()
-        orbCount.hide()
-
-        pauseBtn.hide()
-        timer.hide()
+    const onComplete = (curTime, bestTime) => {
+        uiRoot.clear()
+        uiRoot.content = renderResult()
     }
 
     gameState.on("play", onPlay)
