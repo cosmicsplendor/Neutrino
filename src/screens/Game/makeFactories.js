@@ -73,12 +73,12 @@ export default ({ soundSprite, assetsCache, storage, player, state }) => { // us
         }
     })
     const onFireTouch = () => {
-        const bestTime = storage.getHiscore(state.level)
+        const bestTime = storage.getHiscore(state.level) || 0
         const curTime = state.elapsed
         if (state.level === storage.getCurLevel() && state.level < levels.length) {
             storage.setCurLevel(state.level + 1)
         }
-        if (curTime < bestTime) {
+        if (bestTime === 0 || curTime < bestTime) {
             storage.setHiscore(state.level, curTime)
         }
         state.complete(curTime, bestTime)

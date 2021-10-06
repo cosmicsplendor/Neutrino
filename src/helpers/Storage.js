@@ -33,7 +33,7 @@ class Storage extends Observable {
         this.emit("orb-update", num)
     }
     setHiscore(level, val) {
-        const time  = castToNum(val, key)
+        const time  = castToNum(val, "hiscore")
         this.data.hiscores[String(level)] = time
         this.save(this.data)
     }
