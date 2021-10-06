@@ -10,7 +10,7 @@
     z-index: 999999;
 }
 .infoSub {
-    color: white;
+    font-size: 1.2em;
 }
 .lock {
     transition: opacity linear 0.125s;

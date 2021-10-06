@@ -19,13 +19,13 @@ class LevelScreen extends Node {
             onStart: level => {
                 game.switchScreen(GAME, level)
             },
-            curLevel: storage.getCurLevel(),
             uiRoot,
             images: {
                 arrow: game.assetsCache.get(arrowImgId),
                 resume: game.assetsCache.get(resumeImgId)
             },
             assetsCache: game.assetsCache,
+            storage
         })
     }
     onExit() {
