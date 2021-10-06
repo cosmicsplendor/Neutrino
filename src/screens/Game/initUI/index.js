@@ -1,4 +1,4 @@
-import { calcAligned, calcStacked } from "@utils/entity"
+import { calcAligned, calcStacked, calcComposite } from "@utils/entity"
 import config from "@config"
 import imgBtn from "@screens/ui/imgBtn"
 import styles from "./style.css"
@@ -132,14 +132,16 @@ export default (uiRoot, ctrlBtns, images, storage, gameState, onClose, onRestart
         const bestTimeVal = uiRoot.get(`#${BEST_TIME}`)
         const continueBtn = uiRoot.get(`#${CONTINUE}`)
 
-        overlay.domNode.style.width = `${config.viewport.width}px`
-        overlay.domNode.style.height = `${config.viewport.height}px`
-        continueBtn.pos = calcAligned(config.viewport, continueBtn, "center", "center", 0, 10)
-        bestTimeInd.pos = calcStacked(continueBtn, curTimeInd, "top", 0, -10)
-        bestTimeVal.pos = calcStacked(bestTimeInd, curTimeVal, "right", 8)
-        curTimeInd.pos = calcStacked(bestTimeInd, bestTimeInd, "top-start", 0, -5)
+        curTimeInd.pos = calcAligned(config.viewport, curTimeInd, "center", "center")
         curTimeVal.pos = calcStacked(curTimeInd, curTimeVal, "right", 8)
-
+        bestTimeInd.pos = calcStacked(curTimeInd, bestTimeInd, "bottom", 0, 5)
+        bestTimeVal.pos = calcStacked(bestTimeInd, bestTimeVal, "right", 8)
+        continueBtn.pos = calcStacked(calcComposite([ bestTimeInd, bestTimeVal ]), continueBtn, "bottom", 0, 10)
+        const composite = calcComposite([ bestTimeInd, bestTimeVal ])
+        overlay.pos = composite
+        overlay.domNode.style.width = `${composite.width}px`
+        overlay.domNode.style.height = `${composite.height}px`
+        
         overlay.domNode.style.opacity = 0.8
         curTimeInd.show()
         curTimeVal.show()
