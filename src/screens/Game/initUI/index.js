@@ -44,7 +44,7 @@ const renderResult = (resumeImg, curTime, bestTime) => {
         <div class="${styles.time} ${styles.hidden}" id="${CUR_TIME_IND}">finished in:</div>
         <div class="${styles.timeVal} ${styles.hidden}" id="${CUR_TIME}"> ${curTime.toFixed(2)}s </div>
         <div class="${styles.time} ${styles.hidden}" id="${BEST_TIME_IND}"> record time: </div>
-        <div class="${styles.timeVal} ${styles.recTimeVal} ${styles.hidden}" id="${BEST_TIME}"> ${bestTime === 0 || bestTime > curTime ? bestTime.toFixed(2) + "s": "new record!"} </div>
+        <div class="${styles.timeVal} ${styles.recTimeVal} ${styles.hidden}" id="${BEST_TIME}"> ${bestTime === 0 || curTime < bestTime ? "new record!": bestTime.toFixed(2) + "s"} </div>
         ${imgBtn(CONTINUE, resumeImg, `${styles.hidden} ${styles.continue}`)}
     `
 }
