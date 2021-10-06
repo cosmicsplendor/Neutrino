@@ -171,9 +171,8 @@ class Player extends TexRegion {
     }
     update(dt) {
         if (this.state.is("game-over") || this.state.is("paused")) return
-        Boolean(this.offEdge) ? Movement.updateOffEdge(this, dt): Movement.update(this, dt)
-        if (this.state.is("completed")) { return }
         this.controls.update(this, dt)
+        Boolean(this.offEdge) ? Movement.updateOffEdge(this, dt): Movement.update(this, dt)
         this.wallCollision.update()
         this.magnetCollision.update()
         this.spikeCollision.update()

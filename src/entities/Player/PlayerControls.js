@@ -27,6 +27,7 @@ const extendPalyerControls = S => class extends S {
         this.stateSwitched = true
     }
     update(entity, dt) {
+        if (this.gameState.is("completed")) return
         this.state.update(entity, dt)
         this.cleanup()
     }
