@@ -39,8 +39,8 @@ const render = (images, orbAv) => {
 const renderResult = (resumeImg, curTime, bestTime) => {
     return `
         <div class="${styles.overlay} ${styles.hidden}" id="${OVERLAY}">  </div>
-        <div class="${styles.time} ${styles.hidden}" id="${CUR_TIME}"> completion time: ${curTime.toFixed(2)}s </div>
-        <div class="${styles.time} ${styles.hidden}" id="${BEST_TIME}"> best time: ${bestTime ? bestTime.toFixed(2) + "s": "not set"} </div>
+        <div class="${styles.time} ${styles.hidden}" id="${CUR_TIME}"> finished in: ${curTime.toFixed(2)}s </div>
+        <div class="${styles.time} ${styles.hidden}" id="${BEST_TIME}"> record time: ${bestTime ? bestTime.toFixed(2) + "s": "not set"} </div>
         ${imgBtn(CONTINUE, resumeImg, styles.hidden)}
     `
 }
