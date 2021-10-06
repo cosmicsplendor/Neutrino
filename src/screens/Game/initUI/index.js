@@ -44,8 +44,8 @@ const renderResult = (resumeImg, curTime, bestTime) => {
         <div class="${styles.time} ${styles.hidden}" id="${CUR_TIME_IND}">finished in:</div>
         <div class="${styles.timeVal} ${styles.hidden}" id="${CUR_TIME}"> ${curTime.toFixed(2)}s </div>
         <div class="${styles.time} ${styles.hidden}" id="${BEST_TIME_IND}"> record time: </div>
-        <div class="${styles.timeVal} ${styles.hidden}" id="${BEST_TIME}"> ${bestTime ? bestTime.toFixed(2) + "s": "not set"} </div>
-        ${imgBtn(CONTINUE, resumeImg, styles.hidden)}
+        <div class="${styles.timeVal} ${styles.recTimeVal} ${styles.hidden}" id="${BEST_TIME}"> ${bestTime ? bestTime.toFixed(2) + "s": "not set"} </div>
+        ${imgBtn(CONTINUE, resumeImg, `${styles.hidden} ${styles.continue}`)}
     `
 }
 
@@ -132,15 +132,13 @@ export default (uiRoot, ctrlBtns, images, storage, gameState, onClose, onRestart
         const bestTimeVal = uiRoot.get(`#${BEST_TIME}`)
         const continueBtn = uiRoot.get(`#${CONTINUE}`)
 
+        overlay.domNode.style.width = `${config.viewport.width}px`
+        overlay.domNode.style.height = `${config.viewport.height}px`
         curTimeInd.pos = calcAligned(config.viewport, curTimeInd, "center", "center")
         curTimeVal.pos = calcStacked(curTimeInd, curTimeVal, "right", 8)
         bestTimeInd.pos = calcStacked(curTimeInd, bestTimeInd, "bottom", 0, 5)
         bestTimeVal.pos = calcStacked(bestTimeInd, bestTimeVal, "right", 8)
-        continueBtn.pos = calcStacked(calcComposite([ bestTimeInd, bestTimeVal ]), continueBtn, "bottom", 0, 10)
-        const composite = calcComposite([ bestTimeInd, bestTimeVal ])
-        overlay.pos = composite
-        overlay.domNode.style.width = `${composite.width}px`
-        overlay.domNode.style.height = `${composite.height}px`
+        continueBtn.pos = calcStacked(calcComposite([ bestTimeInd, bestTimeVal ]), continueBtn, "bottom", 0, 16)
         
         overlay.domNode.style.opacity = 0.8
         curTimeInd.show()

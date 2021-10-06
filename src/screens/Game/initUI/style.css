@@ -16,13 +16,14 @@
 }
 .hidden {
     opacity: 0;
+    transition: opacity 0.5s linear;
 }
 .overlay {
     border-radius: 5px;
     background: #333366;
-    transition: opacity 0.5s linear;
     opacity: 0;
     z-index: 9999;
+    transition: opacity 1s linear;
 }
 .time {
     color: #ffe6d5;
@@ -30,12 +31,21 @@
     font-family: monospace;
     white-space: nowrap;
     z-index: 99999;
+    transition: opacity 1s linear;
 }
 .timeVal {
-    color: #d45500;
+    color: #fa664b;
     font-size: 16px;
     font-weight: bold;
     font-family: monospace;
     white-space: nowrap;
     z-index: 99999;
+    transition: opacity 1s linear;
+}
+.recTimeVal {
+    color: #e0c6e0;
+}
+.continue {
+    z-index: 99999;
+    transition: opacity 1s linear;
 }
