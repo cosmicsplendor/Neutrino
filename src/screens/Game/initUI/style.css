@@ -19,15 +19,23 @@
 }
 .overlay {
     border-radius: 5px;
-    background: black;
+    background: #333366;
     transition: opacity 0.5s linear;
     opacity: 0;
     z-index: 9999;
 }
 .time {
     color: #ffe6d5;
+    font-size: 16px;
     font-family: monospace;
     white-space: nowrap;
+    z-index: 99999;
+}
+.timeVal {
+    color: #d45500;
     font-size: 16px;
+    font-weight: bold;
+    font-family: monospace;
+    white-space: nowrap;
     z-index: 99999;
 }

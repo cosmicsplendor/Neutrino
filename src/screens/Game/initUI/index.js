@@ -18,7 +18,9 @@ const CROSS = "cross-btn"
 const RESET = "reset-btn"
 
 const OVERLAY = "overlay"
+const CUR_TIME_IND = "cur-time-ind"
 const CUR_TIME = "cur-time"
+const BEST_TIME_IND = "best-time-ind"
 const BEST_TIME = "best-time"
 const CONTINUE = "continue"
 
@@ -39,8 +41,10 @@ const render = (images, orbAv) => {
 const renderResult = (resumeImg, curTime, bestTime) => {
     return `
         <div class="${styles.overlay} ${styles.hidden}" id="${OVERLAY}">  </div>
-        <div class="${styles.time} ${styles.hidden}" id="${CUR_TIME}"> finished in: ${curTime.toFixed(2)}s </div>
-        <div class="${styles.time} ${styles.hidden}" id="${BEST_TIME}"> record time: ${bestTime ? bestTime.toFixed(2) + "s": "not set"} </div>
+        <div class="${styles.time} ${styles.hidden}" id="${CUR_TIME_IND}">finished in:</div>
+        <div class="${styles.timeVal} ${styles.hidden}" id="${CUR_TIME}"> ${curTime.toFixed(2)}s </div>
+        <div class="${styles.time} ${styles.hidden}" id="${BEST_TIME_IND}"> record time: </div>
+        <div class="${styles.timeVal} ${styles.hidden}" id="${BEST_TIME}"> ${bestTime ? bestTime.toFixed(2) + "s": "not set"} </div>
         ${imgBtn(CONTINUE, resumeImg, styles.hidden)}
     `
 }
@@ -122,17 +126,26 @@ export default (uiRoot, ctrlBtns, images, storage, gameState, onClose, onRestart
         uiRoot.clear()
         uiRoot.content = renderResult(images.resume, curTime, bestTime)
         const overlay = uiRoot.get(`#${OVERLAY}`)
-        const curTimeInd = uiRoot.get(`#${CUR_TIME}`)
-        const bestTimeInd = uiRoot.get(`#${BEST_TIME}`)
+        const curTimeInd = uiRoot.get(`#${CUR_TIME_IND}`)
+        const curTimeVal = uiRoot.get(`#${CUR_TIME}`)
+        const bestTimeInd = uiRoot.get(`#${BEST_TIME_IND}`)
+        const bestTimeVal = uiRoot.get(`#${BEST_TIME}`)
+        const continueBtn = uiRoot.get(`#${CONTINUE}`)
 
         overlay.domNode.style.width = `${config.viewport.width}px`
         overlay.domNode.style.height = `${config.viewport.height}px`
-        curTimeInd.pos = calcAligned(config.viewport, curTimeInd, "center", "center")
-        bestTimeInd.pos = calcStacked(curTimeInd, bestTimeInd, "bottom-start", 0, 10)
+        continueBtn.pos = calcAligned(config.viewport, continueBtn, "center", "center", 0, 10)
+        bestTimeInd.pos = calcStacked(continueBtn, curTimeInd, "top", 0, -10)
+        bestTimeVal.pos = calcStacked(bestTimeInd, curTimeVal, "right", 8)
+        curTimeInd.pos = calcStacked(bestTimeInd, bestTimeInd, "top-start", 0, -5)
+        curTimeVal.pos = calcStacked(curTimeInd, curTimeVal, "right", 8)
 
-        overlay.show()
+        overlay.domNode.style.opacity = 0.8
         curTimeInd.show()
+        curTimeVal.show()
         bestTimeInd.show()
+        bestTimeVal.show()
+        continueBtn.show()
     }
 
     gameState.on("play", onPlay)
