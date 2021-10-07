@@ -49,8 +49,10 @@ const renderResult = (resumeImg, curTime, bestTime) => {
     `
 }
 
-export default (uiRoot, ctrlBtns, images, storage, gameState, onClose, onRestart) => {
+export default (uiRoot, player, images, storage, gameState, onClose, onRestart, getCheckpoint) => {
     uiRoot.content = render(images, storage.getOrbCount())
+    let checkpoint
+    const ctrlBtns = config.mobile && player.getCtrlBtns()
     const orbInd = uiRoot.get(`#${ORB_IND}`)
     const orbCount = uiRoot.get(`#${ORB_AV}`)
     const orbExp = uiRoot.get(`#${ORB_EXP}`)
@@ -109,18 +111,26 @@ export default (uiRoot, ctrlBtns, images, storage, gameState, onClose, onRestart
         orbCount.hide()
         timer.hide()
     }
-    const onOver = () => {
+    const onOver = x => {
+        checkpoint = getCheckpoint(x)
         resumeBtn.show()
         restartBtn.show()
         crossBtn.show()
-
-        orbExpInd.show()
-        orbExp.show()
+        
         orbInd.show()
         orbCount.show()
-
+        
         pauseBtn.hide()
         timer.hide()
+
+        if (!!checkpoint) {
+            orbExpInd.show()
+            orbExp.show()
+            return
+        }
+        // if checkpoint doesn't exist there is no point in showing orb expend indicator
+        orbExpInd.hide()
+        orbExp.hide()
     }
     const onComplete = (curTime, bestTime) => {
         uiRoot.clear()
@@ -167,8 +177,20 @@ export default (uiRoot, ctrlBtns, images, storage, gameState, onClose, onRestart
         if (gameState.is("paused")) {
             return gameState.play()
         } 
-        if (gameState.is("over")) {
-            
+        if (!gameState.is("over")) return
+
+        // have players pay 2 orbs
+        const orbs = storage.getOrbCount()
+        if (orbs < 2) { // may be signal to player that there's not enough orbs to continue
+            return
+        }
+        storage.setOrbCount(orbs - 2)
+        gameState.play()
+        onRestart()
+        gameState.play()
+        if (!!checkpoint) {
+            player.pos.x = checkpoint.x
+            player.pos.y = checkpoint.y
         }
     })
     crossBtn.on("click", () => {
