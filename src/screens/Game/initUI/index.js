@@ -1,4 +1,4 @@
-import { calcAligned, calcStacked, calcComposite } from "@utils/entity"
+import { calcAligned, calcStacked, calcComposite, combine } from "@utils/entity"
 import config from "@config"
 import imgBtn from "@screens/ui/imgBtn"
 import styles from "./style.css"
@@ -144,12 +144,14 @@ export default (uiRoot, player, images, storage, gameState, onClose, onRestart, 
 
         overlay.domNode.style.width = `${config.viewport.width}px`
         overlay.domNode.style.height = `${config.viewport.height}px`
-        curTimeInd.pos = calcAligned(config.viewport, curTimeInd, "center", "center")
-        curTimeVal.pos = calcStacked(curTimeInd, curTimeVal, "right", 8)
-        bestTimeInd.pos = calcStacked(curTimeInd, bestTimeInd, "bottom", 0, 5)
-        bestTimeVal.pos = calcStacked(bestTimeInd, bestTimeVal, "right", 8)
-        continueBtn.pos = calcStacked(calcComposite([ bestTimeInd, bestTimeVal ]), continueBtn, "bottom", 0, 16)
 
+        bestTimeInd.pos = calcAligned(config.viewport, combine(bestTimeInd, bestTimeVal, "x"), "center", "center")
+        bestTimeVal.pos = calcStacked(bestTimeInd, bestTimeVal, "right", 8)
+        curTimeInd.pos = calcStacked(bestTimeInd, bestTimeInd, "top-start", 0, -8)
+        curTimeVal.pos = calcStacked(curTimeInd, curTimeVal, "right", 8)
+        continueBtn.pos = calcStacked(calcComposite([ bestTimeInd, bestTimeVal ]), continueBtn, "bottom", 0, 16)
+        
+        
         continueBtn.on("click", () => {
             onClose()
         })
