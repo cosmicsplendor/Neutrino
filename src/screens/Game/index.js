@@ -10,7 +10,7 @@ import { LEVEL } from "../names"
 
 import config from "@config"
 import levels from "@config/levels"
-import Level from "./levels/Level"
+import Level from "./Level"
 import makeFactories from "./makeFactories"
 import Player from "@entities/Player"
 import soundSpriteId from "@assets/audio/sprite.mp3"
