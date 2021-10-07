@@ -23,9 +23,9 @@ class State extends Observable {
         this.emit("play")
         this.set("playing")
     }
-    over() {
+    over(x) { // at what x-coordinates did the player die
         if (this.is("over")) return
-        this.emit("over")
+        this.emit("over", x)
         this.set("over")
     }
     complete(curTime, bestTime) {
