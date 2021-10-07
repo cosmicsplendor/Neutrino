@@ -139,6 +139,10 @@ export default (uiRoot, ctrlBtns, images, storage, gameState, onClose, onRestart
         bestTimeInd.pos = calcStacked(curTimeInd, bestTimeInd, "bottom", 0, 5)
         bestTimeVal.pos = calcStacked(bestTimeInd, bestTimeVal, "right", 8)
         continueBtn.pos = calcStacked(calcComposite([ bestTimeInd, bestTimeVal ]), continueBtn, "bottom", 0, 16)
+
+        continueBtn.on("click", () => {
+            onClose()
+        })
         
         overlay.domNode.style.opacity = 0.8
         curTimeInd.show()
