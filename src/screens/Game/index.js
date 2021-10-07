@@ -78,8 +78,7 @@ class GameScreen extends Node { // can only have cameras as children
             }
         })
     }
-    setLevel(levelDataId) {
-        const data = this.game.assetsCache.get(levelDataId)
+    setLevel(data) {
         const level = new Level({ player: this.player, data, viewport: config.viewport, subject: this.player, factories: this.factories })
         this.add(level)
         this.game.renderer.changeBackground(config.isMobile ? data.mob_bg: data.bg)
@@ -99,14 +98,25 @@ class GameScreen extends Node { // can only have cameras as children
     }
     onEnter(l) {
         const levelDataId = levels[l - 1].id
-        const level = this.setLevel(levelDataId)
+        const data = this.game.assetsCache.get(levelDataId)
+        const level = this.setLevel(data)
         const onClose = () => this.game.switchScreen(LEVEL)
         const onRestart = () => {
             level.resetRecursively()
             this.elapsed = 0
         }
-        const { teardownUI, updateTimer } = initUI(this.uiRoot, config.mobile && this.player.getCtrlBtns(), this.uiImages, this.storage, this.state, onClose, onRestart )
-
+        data.checkpoints && data.checkpoints.sort((a, b) => a.x - b.x) // sorting in ascending order of x-coordinates
+        const getCheckpoint = x => { // restore to checkpoint
+            if (!data.checkpoints) return
+            let checkpoint
+            for (let point of data.checkpoints) {
+                if (x < point.x) continue
+                checkpoint = point
+                break
+            }
+            return checkpoint
+        }
+        const { teardownUI, updateTimer } = initUI(this.uiRoot, this.player, this.uiImages, this.storage, this.state, onClose, onRestart, getCheckpoint)
         this.state.level = l
         this.teardownUI = teardownUI
         this.updateTimer = updateTimer
