@@ -106,7 +106,7 @@ export default ({ onStart, uiRoot, storage, images, assetsCache }) => {
             levels.forEach(level => {
                 assetsCache.unload(level.id)
             })
-            assetsCache.load([{ url: levelId }])
+            assetsCache.load([ levelId ])
             assetsCache.once("load", () => {
                 onStart(levelState)
             })

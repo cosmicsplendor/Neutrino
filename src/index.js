@@ -45,21 +45,21 @@ const assets = [
     { url: atlasmetaId, msg: "loading texture atlas" },
     { url: levels[curLevel - 1].id, msg: "loading level data" }, // pre-load the current level
     { url: fireDataId, msg: "loading particles" },
-    { url: orbDataId },
-    { url: cinderDataId },
-    { url: shardDataId },
-    { url: crateUpDataId },
-    { url: crateDownDataId },
-    { url: windDataId },
-    { url: arrowImgId },
-    { url: crossImgId },
-    { url: orbImgId },
-    { url: pauseImgId },
-    { url: resetImgId },
-    { url: resumeImgId },
+    orbDataId,
+    cinderDataId,
+    shardDataId,
+    crateUpDataId,
+    crateDownDataId,
+    windDataId,
+    { url: arrowImgId, msg: "loading ui assets" },
+    crossImgId,
+    orbImgId,
+    pauseImgId,
+    resetImgId,
+    resumeImgId,
 ]
 if (!config.mobile) {
-    assets.push({ url: bgDataId })
+    assets.push(bgDataId)
 }
 const screenFactories = {
     [screenNames.LOADING]: game => new LoadingScreen({ game, assets }),
