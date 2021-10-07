@@ -17,21 +17,13 @@ import crateDownDataId from "@assets/particles/crate-down.cson"
 import windDataId from "@assets/particles/wind.cson"
 
 
-const _resettable = factory => (x, y, props={}, player) => { // returns a new factory same as the input, except that it's instances have reset method 
+const resettable = factory => (x, y, props={}, player) => { // returns a new factory same as the input, except that it's instances have reset method 
     const ent = factory(x, y, props, player)
     ent.reset = !!ent.reset ? ent.reset : () => {
         ent.pos.x = x
         ent.pos.y = y
     }
     return ent
-}
-
-export const resettable = factories => { // returns a new hashmap of resettable factories
-    const exports = {}
-    for (let name in factories) {
-        exports[name] = _resettable(factories[name])
-    }
-    return exports
 }
 
 export default ({ soundSprite, assetsCache, storage, player, state }) => { // using sound sprite to create and pass objects and (cached) pools so that objects can just consume sound in ready-to-use form rather than by creating them on their own. This helps me make sound creation parameters changes at one place, making code more scalable.
@@ -92,17 +84,18 @@ export default ({ soundSprite, assetsCache, storage, player, state }) => { // us
         snap: soundSprite.create("w_snap"),
         crack: soundSprite.create("w_crack")
     }
-    return resettable({
-        player: (x, y) => {
-            player.reset = () => {
-                player.pos.x = x
-                player.pos.y = y
-                player.alpha = 1
-                player.velY = player.velX = 0
-            }
-            player.reset()
-            return player
-        },
+    const playerFac = (x, y) => {
+        player.reset = () => {
+            player.pos.x = x
+            player.pos.y = y
+            player.alpha = 1
+            player.velY = player.velX = 0
+        }
+        player.reset()
+        return player
+    }
+    return ({
+        player: resettable(playerFac),
         gate: (x, y, props, player) => {
             return new Gate({
                 pos: { x, y },
