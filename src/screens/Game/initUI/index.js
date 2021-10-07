@@ -202,6 +202,7 @@ export default (uiRoot, player, images, storage, gameState, onClose, onRestart, 
     restartBtn.on("click", () => {
         if (gameState.is("playing") || gameState.is("completed")) return
         onRestart()
+        gameState.elapsed = 0
         gameState.play()
     })
     realign(config.viewport)
