@@ -49,7 +49,7 @@ const renderResult = (resumeImg, curTime, bestTime) => {
     `
 }
 
-export default (uiRoot, player, images, storage, gameState, onClose, onRestart, getCheckpoint) => {
+export default (uiRoot, player, images, storage, gameState, onClose, resetLevel, getCheckpoint) => {
     uiRoot.content = render(images, storage.getOrbCount())
     let checkpoint
     const ctrlBtns = config.mobile && player.getCtrlBtns()
@@ -187,7 +187,7 @@ export default (uiRoot, player, images, storage, gameState, onClose, onRestart, 
             return
         }
         gameState.play()
-        onRestart()
+        resetLevel()
         gameState.play()
         if (!!checkpoint) {
             storage.setOrbCount(orbs - 2)
@@ -201,7 +201,7 @@ export default (uiRoot, player, images, storage, gameState, onClose, onRestart, 
     })
     restartBtn.on("click", () => {
         if (gameState.is("playing") || gameState.is("completed")) return
-        onRestart()
+        resetLevel()
         gameState.elapsed = 0
         gameState.play()
     })
