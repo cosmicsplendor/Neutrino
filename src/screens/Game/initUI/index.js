@@ -181,14 +181,14 @@ export default (uiRoot, player, images, storage, gameState, onClose, onRestart, 
 
         // have players pay 2 orbs
         const orbs = storage.getOrbCount()
-        if (orbs < 2) { // may be signal to player that there's not enough orbs to continue
+        if (orbs < 2 && !!checkpoint) { // may be signal to player that there's not enough orbs to continue, provide that there's also a checkpoint available for player restore
             return
         }
-        storage.setOrbCount(orbs - 2)
         gameState.play()
         onRestart()
         gameState.play()
         if (!!checkpoint) {
+            storage.setOrbCount(orbs - 2)
             player.pos.x = checkpoint.x
             player.pos.y = checkpoint.y
         }
