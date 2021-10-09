@@ -11,6 +11,7 @@ import arrowImgId from "@assets/images/ui/arrow.png"
 import resumeImgId from "@assets/images/ui/resume.png"
 import styles from "./style.css"
 
+const DT = 1 / 60
 const getTouchMappings = () => {
     const data = [
         { name: "left", style: `background: url(${arrowImgId}); transform: scale(-1, 1);`, width: 65, height: 55 },
@@ -44,6 +45,7 @@ const getControlsMapping = config.isMobile ? getTouchMappings: getKeyMappings
 
 class Player extends TexRegion {
     static sounds = [ "player_din", "concrete", "wood", "metal", "jump", "rolling", "player_exp" ]
+    remDt = 0 // remnant dt
     constructor({ speed = 48, width = 64, height = 64, fricX=4, shard, cinder, controls, sounds, state, ...rest }) {
         super({ frame: "ball", ...rest })
         this.width = width
@@ -178,6 +180,7 @@ class Player extends TexRegion {
         if (this.state.is("game-over") || this.state.is("paused")) return
         this.controls.update(this, dt)
         Boolean(this.offEdge) ? Movement.updateOffEdge(this, dt): Movement.update(this, dt)
+
         this.wallCollision.update()
         this.magnetCollision.update()
         this.spikeCollision.update()

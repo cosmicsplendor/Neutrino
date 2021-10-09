@@ -6,6 +6,7 @@ import styles from "./style.css"
 const margin = 20
 const hMargin = margin / 2 // hMargin
 const orbExpAmt = 2
+const instFocThres = 1400
 
 const PAUSE = "pause-btn"
 const RESUME  = "resume-btn"
@@ -49,7 +50,7 @@ const renderResult = (resumeImg, curTime, bestTime) => {
     `
 }
 
-export default (uiRoot, player, images, storage, gameState, onClose, resetLevel, getCheckpoint) => {
+export default (uiRoot, player, images, storage, gameState, onClose, resetLevel, focusInst, getCheckpoint) => {
     uiRoot.content = render(images, storage.getOrbCount())
     let checkpoint
     const ctrlBtns = config.isMobile && player.getCtrlBtns()
@@ -222,7 +223,9 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
     })
     restartBtn.on("click", () => {
         if (gameState.is("playing") || gameState.is("completed")) return
+        const posXAtReset = player.pos.x
         resetLevel()
+        posXAtReset > instFocThres && focusInst() // if the player is not near enough to it's reset spawn point, focus the camera to player position instantly to avoid jarring focus
         gameState.elapsed = 0
         gameState.play()
     })

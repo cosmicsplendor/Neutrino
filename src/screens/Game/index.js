@@ -7,6 +7,7 @@ import TexRegion from "@lib/entities/TexRegion"
 import State from "./State"
 import initUI from "./initUI"
 import { LEVEL } from "../names"
+import * as rendApis  from "@lib/renderer/apis"
 
 import config from "@config"
 import levels from "@config/levels"
@@ -62,7 +63,7 @@ class GameScreen extends Node { // can only have cameras as children
             this.soundSprite = soundSprite
             this.player = new Player({ width: 64, height: 64, fill: "brown", speed: 350, fricX: 3, pos: { x: 300, y: 0 }, shard, cinder, sounds: playerSounds, state: this.state })
             this.factories = makeFactories({ soundSprite, assetsCache, storage, player: this.player, state: this.state })
-            if (!config.isMobile) {
+            if (game.renderer.api === rendApis.WEBGL && !config.isMobile) {
                 const bgData = assetsCache.get(bgDataId)
                 const dataToTile = tile => new TexRegion({ frame: tile.name, pos: { x: tile.x, y: tile.y }})
                 this.bg = new ParallaxCamera({ z: 2.5, zAtop: 1, viewport: config.viewport, subject: this.player, entYOffset: 0, tiles: bgData.map(dataToTile) }) // parallax bg
@@ -81,7 +82,7 @@ class GameScreen extends Node { // can only have cameras as children
     setLevel(data) {
         const level = new Level({ player: this.player, data, viewport: config.viewport, subject: this.player, factories: this.factories })
         this.add(level)
-        this.game.renderer.changeBackground(config.isMobile ? data.mob_bg: data.bg)
+        this.game.renderer.changeBackground(config.isMobile || this.game.renderer.type === rendApis.CNV_2D ? data.mob_bg: data.bg)
         this.game.renderer.gTint = data.tint && data.tint.split(",")
         level.parent = null // sever the child to parent link
         if (this.bg) {
