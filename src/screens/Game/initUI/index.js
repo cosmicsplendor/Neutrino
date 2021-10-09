@@ -52,7 +52,7 @@ const renderResult = (resumeImg, curTime, bestTime) => {
 export default (uiRoot, player, images, storage, gameState, onClose, resetLevel, getCheckpoint) => {
     uiRoot.content = render(images, storage.getOrbCount())
     let checkpoint
-    const ctrlBtns = config.mobile && player.getCtrlBtns()
+    const ctrlBtns = config.isMobile && player.getCtrlBtns()
     const orbInd = uiRoot.get(`#${ORB_IND}`)
     const orbCount = uiRoot.get(`#${ORB_AV}`)
     const orbExp = uiRoot.get(`#${ORB_EXP}`)
@@ -70,6 +70,24 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
     const changeOrbCount = num => {
         orbCount.content = num
     }
+    const showCtrlBtns = () => {
+        if (!config.isMobile) return
+        ctrlBtns.left.show()
+        ctrlBtns.right.show()
+        ctrlBtns.axn.show()
+    }
+    const hideCtrlBtns = () => {
+        if (!config.isMobile) return
+        ctrlBtns.left.hide()
+        ctrlBtns.right.hide()
+        ctrlBtns.axn.hide()
+    }
+    const alginCtrlBtns = (viewport) => {
+        if (!config.isMobile) { return }
+        ctrlBtns.left.pos = calcAligned(viewport, ctrlBtns.left, "left", "bottom", margin * 2, -margin)
+        ctrlBtns.right.pos = calcStacked(ctrlBtns.left, ctrlBtns.right, "right", margin)
+        ctrlBtns.axn.pos = calcAligned(viewport, ctrlBtns.right, "right", "bottom", -margin * 2, -margin)
+    }
     const realign = viewport => {
         orbInd.pos = calcAligned(viewport, orbInd, "left", "top", margin, margin)
         orbCount.pos = calcStacked(orbInd, orbCount, "right", hMargin)
@@ -80,10 +98,7 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         orbExpInd.pos = calcStacked(resumeBtn, orbExpInd, "right", margin)
         orbExp.pos = calcStacked(orbExpInd, orbExp, "right", hMargin)
         crossBtn.pos = calcStacked(restartBtn, crossBtn, "bottom", 0, hMargin)
-        if (!ctrlBtns) { return }
-        ctrlBtns.left.pos = calcAligned(viewport, ctrlBtns.left, "left", "bottom", margin, -margin)
-        ctrlBtns.right.pos = calcAligned(viewport, ctrlBtns.right, "left", "bottom", 40 + (ctrlBtns.left.width), -margin)
-        ctrlBtns.axn.pos = calcAligned(viewport, ctrlBtns.right, "right", "bottom", -margin, -margin)
+        alginCtrlBtns(viewport)
     }
     const onPlay = () => {
         resumeBtn.hide()
@@ -97,6 +112,8 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         orbInd.show()
         orbCount.show()
         timer.show()
+
+        showCtrlBtns()
     }
     const onPause = () => {
         resumeBtn.show()
@@ -110,6 +127,8 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         orbInd.hide()
         orbCount.hide()
         timer.hide()
+
+        hideCtrlBtns()
     }
     const onOver = x => {
         checkpoint = getCheckpoint(x)
@@ -131,6 +150,8 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         // if checkpoint doesn't exist there is no point in showing orb expend indicator
         orbExpInd.hide()
         orbExp.hide()
+
+        hideCtrlBtns()
     }
     const onComplete = (curTime, bestTime) => {
         uiRoot.clear()

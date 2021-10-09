@@ -6,19 +6,26 @@ import Movement from "@components/Movement"
 import UI from "@utils/UI"
 import { PlayerKeyControls, PlayerTouchControls } from "./PlayerControls"
 import { colRectsId, objLayerId } from "@lib/constants"
+
+import arrowImgId from "@assets/images/ui/arrow.png"
+import resumeImgId from "@assets/images/ui/resume.png"
 import styles from "./style.css"
 
 const getTouchMappings = () => {
     const data = [
-        { name: "left", markup: `<` },
-        { name: "right", markup: `>` },
-        { name: "axn", markup: `^` },
+        { name: "left", style: `background: url(${arrowImgId}); transform: scale(-1, 1);`, width: 65, height: 55 },
+        { name: "right", style: `background: url(${arrowImgId});`, width: 65, height: 55 },
+        { name: "axn", style: `background: url(${resumeImgId}); transform: rotate(270deg);`, width: 64, height: 64 },
     ]
     return Object.freeze(
         data.reduce((acc, x) => {
             const el = UI.create("div")
-            el.classList.add(styles.controlBtn)
-            el.content = x.markup
+            el.classList.add(styles.ctrlBtn)
+            el.domNode.style = x.style
+            el.domNode.style.width = `${x.width}px`
+            el.domNode.style.height = `${x.height}px`
+            el.width = x.width
+            el.height = x.height
             acc[x.name] = el
             return acc
         }, {})
