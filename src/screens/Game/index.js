@@ -104,6 +104,8 @@ class GameScreen extends Node { // can only have cameras as children
         const resetLevel = () => {
             level.resetRecursively()
         }
+        level.focusInst()
+        this.bg && this.bg.focusInst()
         data.checkpoints && data.checkpoints.sort((a, b) => b.x - a.x) // sorting in ascending order of x-coordinates
         const getCheckpoint = x => { // restore to checkpoint
             if (!data.checkpoints) return
