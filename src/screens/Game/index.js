@@ -104,8 +104,12 @@ class GameScreen extends Node { // can only have cameras as children
         const resetLevel = () => {
             level.resetRecursively()
         }
-        level.focusInst()
-        this.bg && this.bg.focusInst()
+        const focusInst = () => {
+            level.focusInst()
+            this.bg && this.bg.focusInst()
+        }
+        
+        focusInst()
         data.checkpoints && data.checkpoints.sort((a, b) => b.x - a.x) // sorting in ascending order of x-coordinates
         const getCheckpoint = x => { // restore to checkpoint
             if (!data.checkpoints) return
@@ -117,7 +121,7 @@ class GameScreen extends Node { // can only have cameras as children
             }
             return checkpoint
         }
-        const { teardownUI, updateTimer } = initUI(this.uiRoot, this.player, this.uiImages, this.storage, this.state, onClose, resetLevel, getCheckpoint)
+        const { teardownUI, updateTimer } = initUI(this.uiRoot, this.player, this.uiImages, this.storage, this.state, onClose, resetLevel, focusInst, getCheckpoint)
         this.state.level = l
         this.teardownUI = teardownUI
         this.updateTimer = updateTimer
