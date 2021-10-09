@@ -67,10 +67,10 @@ export default ({ onStart, uiRoot, storage, images, assetsCache }) => {
         lockInd.pos = calcStacked(bestTime, lockDims, "bottom", 0, 20)
     }
     const realign = viewport => {
+        realignTxt(viewport)
         prevBtn.pos = calcAligned(viewport, prevBtn, "left", "center", 50)
         nextBtn.pos = calcAligned(viewport, nextBtn, "right", "center", -50)
-        startBtn.pos = calcAligned(viewport, startBtn, "center", "bottom", 0,  -100)
-        realignTxt(viewport)
+        startBtn.pos = calcStacked(bestTime, startBtn, "bottom", 0,  64)
     }
     const updateBtnVis = (level, curLevel) => {
         lockInd.domNode.style.opacity = level <= curLevel || level > levels.length ? 0: 1

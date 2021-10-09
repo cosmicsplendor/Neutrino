@@ -27,6 +27,7 @@ const getTouchMappings = () => {
             el.width = x.width
             el.height = x.height
             acc[x.name] = el
+
             return acc
         }, {})
     )
@@ -100,9 +101,6 @@ class Player extends TexRegion {
     }
     onFall() {
         this.controls.switchState("jumping", this, true)
-    }
-    testCol(entity) {
-
     }
     getCtrlBtns() {
         if (!config.isMobile) {
