@@ -27,8 +27,10 @@ const resettable = factory => (x, y, props={}, player) => { // returns a new fac
 }
 
 export default ({ soundSprite, assetsCache, storage, player, state }) => { // using sound sprite to create and pass objects and (cached) pools so that objects can just consume sound in ready-to-use form rather than by creating them on their own. This helps me make sound creation parameters changes at one place, making code more scalable.
-    const gateSound = soundSprite.createPool("gate")
+    const gateUSound = soundSprite.create("gate_u") // collision with ceiling
+    const gateDSound = soundSprite.create("gate_d")
     const orbMovSound = soundSprite.create("orb_mov")
+    const orbSound = soundSprite.create("orb")
     const endSound = soundSprite.create("end")
     
     const windFactory = (x, y, props, player) => {
@@ -40,7 +42,7 @@ export default ({ soundSprite, assetsCache, storage, player, state }) => { // us
     const orbFactory = (x, y, props, player) => {
         return new Orb(Object.assign(
             assetsCache.get(orbDataId),
-            { player, pos: { x, y }, sound: soundSprite.create("orb"), movSound: orbMovSound, storage },
+            { player, pos: { x, y }, sound: orbSound, movSound: orbMovSound, storage },
         ))
     }
     const orbPool = new Pool({
@@ -102,7 +104,8 @@ export default ({ soundSprite, assetsCache, storage, player, state }) => { // us
             return new Gate({
                 pos: { x, y },
                 colSound: null,
-                sound: gateSound,
+                uSound: gateUSound,
+                dSound: gateDSound,
                 player,
                 ...props
             })

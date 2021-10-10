@@ -3,7 +3,7 @@ import { clamp, sign, easingFns } from "@utils/math"
 import getTestFn from "@lib/components/Collision/helpers/getTestFn"
 
 class Gate extends TexRegion {
-    constructor({ endY, sound, speed=150, pos, player, ...rest }) {
+    constructor({ endY, uSound, dSound, speed=150, pos, player, ...rest }) {
         super({ frame: "gate", pos, ...rest })
         this.endY = endY
         this.startY = pos.y
@@ -12,8 +12,9 @@ class Gate extends TexRegion {
         this.dist = Math.abs(this.endY - this.startY)
         this.period = this.dist / speed
         this.t = 0
+        this.uSound = uSound
+        this.dSound = dSound
         this.player = player
-        this.sound = sound
         this.testCol = getTestFn(this, player)
     }
     updatePos(dt) {
@@ -28,7 +29,10 @@ class Gate extends TexRegion {
             const dPX = this.pos.x + this.w / 2 - this.player.pos.x
             const dPY = this.pos.y + this.h / 2 - this.player.pos.y
             if (dPX * dPX + dPY * dPY > 160000) return // if the distance is less than 400px return
-            this.sound.play()
+            if (this.dir === 1) { // just collided with ceiling
+                return this.uSound.play()
+            }
+            this.dSound.play()
         }
     }
     reset() {
