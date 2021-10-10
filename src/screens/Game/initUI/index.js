@@ -5,7 +5,7 @@ import styles from "./style.css"
 
 const margin = 20
 const hMargin = margin / 2 // hMargin
-const orbExpAmt = 2
+const orbExpAmt = 3
 const instFocThres = 1400
 
 const PAUSE = "pause-btn"
@@ -205,14 +205,14 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
 
         // have players pay 2 orbs
         const orbs = storage.getOrbCount()
-        if (orbs < 2 && !!checkpoint) { // may be signal to player that there's not enough orbs to continue, provide that there's also a checkpoint available for player restore
+        if (orbs < orbExpAmt && !!checkpoint) { // may be signal to player that there's not enough orbs to continue, provide that there's also a checkpoint available for player restore
             return
         }
         gameState.play()
         resetLevel()
         gameState.play()
         if (!!checkpoint) {
-            storage.setOrbCount(orbs - 2)
+            storage.setOrbCount(orbs - orbExpAmt)
             player.pos.x = checkpoint.x
             player.pos.y = checkpoint.y
         }

@@ -3,7 +3,7 @@ import { clamp, sign, easingFns } from "@utils/math"
 import getTestFn from "@lib/components/Collision/helpers/getTestFn"
 
 class Gate extends TexRegion {
-    constructor({ endY, soundSprite, speed=150, pos, player, ...rest }) {
+    constructor({ endY, sound, speed=150, pos, player, ...rest }) {
         super({ frame: "gate", pos, ...rest })
         this.endY = endY
         this.startY = pos.y
@@ -13,6 +13,7 @@ class Gate extends TexRegion {
         this.period = this.dist / speed
         this.t = 0
         this.player = player
+        this.sound = sound
         this.testCol = getTestFn(this, player)
     }
     updatePos(dt) {
@@ -21,6 +22,7 @@ class Gate extends TexRegion {
         this.pos.y = (this.dir === this.initDir ? this.startY: this.endY) + dp * this.dir
         const newPosY = this.startToEndDir === 1 ? clamp(this.startY, this.endY, this.pos.y): clamp(this.endY, this.startY, this.pos.y)
         if (newPosY !== this.pos.y) { // if the gate has gone beyond extremes
+            this.sound.play()
             this.t = 0
             this.dir *= -1
             this.pos.y = newPosY

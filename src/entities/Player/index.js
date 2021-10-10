@@ -44,7 +44,7 @@ const PlayerControlsClass = config.isMobile ? PlayerTouchControls: PlayerKeyCont
 const getControlsMapping = config.isMobile ? getTouchMappings: getKeyMappings
 
 class Player extends TexRegion {
-    static sounds = [ "player_din", "concrete", "wood", "metal", "jump", "rolling", "player_exp" ]
+    static sounds = [ "player_din", "concrete", "wood", "metal", "jump", "player_exp" ]
     remDt = 0 // remnant dt
     constructor({ speed = 48, width = 64, height = 64, fricX=4, shard, cinder, controls, sounds, state, ...rest }) {
         super({ frame: "ball", ...rest })
@@ -84,7 +84,6 @@ class Player extends TexRegion {
         // this.gateCollision = new Collision({ entity: this, blocks: "gates", rigid: false, movable: false, onHit: this.explode.bind(this) })
         
         Movement.makeMovable(this, { accY: config.gravity, roll: true, fricX })
-        sounds.rolling.speed = 1.2
     }
     onEndReached() {
         // play sound
@@ -167,14 +166,6 @@ class Player extends TexRegion {
         this.sounds.player_din.play(0.2)
         this.velX = this.velY = 0
     }
-    updateAudio() {
-        if (this.controls.state.name !== "jumping" && this.pos.x !== this.prevPosX) {
-            this.sounds.rolling.volume = Math.abs(this.pos.x - this.prevPosX) / 8
-            this.sounds.rolling.play()
-        } else {
-            this.sounds.rolling.pause()
-        }
-    }
     update(dt) {
         if (this.state.is("game-over") || this.state.is("paused")) return
         this.controls.update(this, dt)
@@ -184,7 +175,6 @@ class Player extends TexRegion {
         this.magnetCollision.update()
         this.spikeCollision.update()
         this.crateCollision.update()
-        this.updateAudio()
     }
     onRemove() {
         this.parent = null // free-up the reference for garbage collector
