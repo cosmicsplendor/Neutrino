@@ -8,9 +8,8 @@ const desktopRes = {
 const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 const scale = false
 const computeViewport = () => {
-    const width = window.innerWidth, height = window.innerHeight
+    const width = window.innerWidth * window.devicePixelRatio, height = window.innerHeight * window.devicePixelRatio // drawing buffer dimensions (how manny actual pixels are there in the screen regardless of scaling)
     const portraitMode = height > width
-    console.log(isMobile)
     if (isMobile) {
         /**
          * 100% of the smaller side
@@ -19,17 +18,17 @@ const computeViewport = () => {
         const vpWidth = portraitMode ? width: Math.max(0.75 * width, height)
         const vpHeight = portraitMode ? Math.max(0.75 * height, width): height
         return ({
-            width: vpWidth,
-            height: vpHeight
+            width: vpWidth / window.devicePixelRatio,
+            height: vpHeight / window.devicePixelRatio
         })
     }
     const maxWidth = portraitMode ? desktopRes.min: desktopRes.max
     const maxHeight = portraitMode ? desktopRes.max: desktopRes.min
     const vpWidth = Math.min(width, maxWidth)
     const vpHeight = Math.min(height, maxHeight)
-    return ({
-        width: vpWidth,
-        height: vpHeight,
+    return ({ // canvas dimensions
+        width: vpWidth / devicePixelRatio,
+        height: vpHeight / devicePixelRatio,
     })
 }
 
