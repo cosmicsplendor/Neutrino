@@ -33,7 +33,7 @@ import resetImgId from "@assets/images/ui/reset.png"
 import resumeImgId from "@assets/images/ui/resume.png"
 
 const { viewport } = config
-const renderer = new Canvas2DRenderer({ cnvQry: "#arena", scene: null, background: "skyblue", viewport }) // scene will be injected by game
+const renderer = new Webgl2Renderer({ cnvQry: "#arena", scene: null, background: "skyblue", viewport }) // scene will be injected by game
 const assetsCache = new AssetsCache()
 const storage = new Storage(config.storageId)
 const uiRoot = UI.query("#ui-layer")
@@ -73,10 +73,6 @@ const game = new Game({
     storage,
     screenFactories,
 })
-const onViewportChange = viewport => {
-    document.getElementById("game-container").style.transform = `scale(${viewport.scale})` // scaling up the entire game container
-}
-viewport.on("change", onViewportChange)
 assetsCache.once("prog-end", () =>  { // listening to "progress-end" instead of "load" to ensure critical engine setup tasks happen before emission of load event
     const atlasmeta = assetsCache.get(atlasmetaId)
     renderer.setTexatlas(
@@ -85,6 +81,5 @@ assetsCache.once("prog-end", () =>  { // listening to "progress-end" instead of 
     )
     TexRegion.injectAtlasmeta(atlasmeta)
 })
-onViewportChange(viewport)
 game.switchScreen(screenNames.LOADING)
 game.start()

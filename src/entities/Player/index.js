@@ -84,7 +84,6 @@ class Player extends TexRegion {
         // this.gateCollision = new Collision({ entity: this, blocks: "gates", rigid: false, movable: false, onHit: this.explode.bind(this) })
         
         Movement.makeMovable(this, { accY: config.gravity, roll: true, fricX })
-        window.temp1 = sounds.jump
         sounds.rolling.speed = 1.2
     }
     onEndReached() {
