@@ -18,7 +18,6 @@ const computeViewport = () => {
          */
         const vpWidth = portraitMode ? width: Math.max(0.75 * width, height)
         const vpHeight = portraitMode ? Math.max(0.75 * height, width): height
-        console.log({ vpWidth, vpHeight })
         return ({
             width: vpWidth,
             height: vpHeight
