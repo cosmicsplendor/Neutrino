@@ -25,8 +25,8 @@ class Gate extends TexRegion {
             this.t = 0
             this.dir *= -1
             this.pos.y = newPosY
-            const dPX = this.pos.x - this.player.pos.x
-            const dPY = this.pos.y - this.player.pos.y
+            const dPX = this.pos.x + this.w / 2 - this.player.pos.x
+            const dPY = this.pos.y + this.h / 2 - this.player.pos.y
             if (dPX * dPX + dPY * dPY > 160000) return // if the distance is less than 400px return
             this.sound.play()
         }
