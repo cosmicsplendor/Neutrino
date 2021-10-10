@@ -33,7 +33,7 @@ import resetImgId from "@assets/images/ui/reset.png"
 import resumeImgId from "@assets/images/ui/resume.png"
 
 const { viewport } = config
-const renderer = new Canvas2DRenderer({ cnvQry: "#arena", scene: null, background: "skyblue", viewport }) // scene will be injected by game
+const renderer = new Webgl2Renderer({ cnvQry: "#arena", scene: null, background: "skyblue", viewport }) // scene will be injected by game
 const assetsCache = new AssetsCache()
 const storage = new Storage(config.storageId)
 const uiRoot = UI.query("#ui-layer")

@@ -89,8 +89,8 @@ export default ({ onStart, uiRoot, storage, images, assetsCache }) => {
         if (levelState > levels.length) return
         levelState = Math.min(levelState  + 1, levels.length + 1)
         const best = storage.getHiscore(levelState)
-        levelInfo.content = levelState <= levels.length ? `Level ${levelState}`: "More Coming Soon"
-        bestTime.content = levelState <= levels.length ? renderBest(best): "please like for more levels"
+        levelInfo.content = levelState <= levels.length ? `Level ${levelState}`: "Coming Soon"
+        bestTime.content = levelState <= levels.length ? renderBest(best): "please like for more"
         updateBtnVis(levelState, curLevel)
         realignTxt(config.viewport)
     }
