@@ -5,7 +5,7 @@ import styles from "./style.css"
 
 const margin = 20
 const hMargin = margin / 2 // hMargin
-const orbExpAmt = 3
+const orbExpAmt = 4
 const instFocThres = 1400
 
 const PAUSE = "pause-btn"

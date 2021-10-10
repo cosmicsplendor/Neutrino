@@ -1,7 +1,7 @@
 import Viewport  from "@utils/ViewPort"
 
 const desktopRes = {
-    max: 1000, min: 750
+    max: 1024, min: 760
 }
 
 // the following three are config variables 
