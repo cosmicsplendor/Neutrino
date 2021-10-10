@@ -22,10 +22,13 @@ class Gate extends TexRegion {
         this.pos.y = (this.dir === this.initDir ? this.startY: this.endY) + dp * this.dir
         const newPosY = this.startToEndDir === 1 ? clamp(this.startY, this.endY, this.pos.y): clamp(this.endY, this.startY, this.pos.y)
         if (newPosY !== this.pos.y) { // if the gate has gone beyond extremes
-            this.sound.play()
             this.t = 0
             this.dir *= -1
             this.pos.y = newPosY
+            const dPX = this.pos.x - this.player.pos.x
+            const dPY = this.pos.y - this.player.pos.y
+            if (dPX * dPX + dPY * dPY > 160000) return // if the distance is less than 400px return
+            this.sound.play()
         }
     }
     reset() {
