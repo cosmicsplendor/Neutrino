@@ -163,7 +163,7 @@ class Player extends TexRegion {
         Node.get(objLayerId).add(this.shard)
         this.state.over(this.pos.x)
         this.sounds.player_exp.play(0.6)
-        this.sounds.player_din.play(0.2)
+        this.sounds.player_din.play()
         this.velX = this.velY = 0
     }
     update(dt) {
