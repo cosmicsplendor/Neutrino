@@ -6,7 +6,7 @@ import arrowImgId from "@assets/images/ui/arrow.png"
 import initUI from "./initUI"
 
 class LevelScreen extends Node {
-    background = "#16161d"
+    background = "#000000"
     constructor({ game, uiRoot, storage }) {
         super()
         this.game = game

@@ -51,7 +51,6 @@ class Rolling {
         if (this.controls.get("axn")) {
             this.controls.switchState("jumping", entity)
         }
-        // }
     }
 }
 
@@ -61,6 +60,7 @@ class Jumping {
     maxJvelInc = 5.5
     minJmpVel = -375
     mxJmpVel = 150
+    first = false // whether it is the first frame since last
     constructor(controls, onJump) {
         this.controls = controls
         this.onJump = onJump
@@ -74,13 +74,17 @@ class Jumping {
             return
         }
         this.limitReached = false
-        this.onJump()
         entity.velY += this.jmpVel
+        this.first = true // indicating whether this is the first "Jump" state frame
     }
     onHalt() { // obstruct jump prematurely (mostly by collision with bottom edge of a rect)
         this.limitReached = true
     }
     update(entity, dt) {
+        if (this.first && entity.velY < 0) { // if the jump is actually possible (there's nothing above blocking the player)
+            this.onJump()
+        }
+        this.first = false
         if (this.controls.get("left")) {
             entity.velX -= (entity.velX > 0 ? 3 : 1) * this.controls.speed * dt 
         }

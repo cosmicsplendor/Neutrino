@@ -2,7 +2,7 @@ import { Node } from "@lib"
 import { MAIN_MENU } from "@screens/names"
 
 class LoadingScreen extends Node {
-    background = "black"
+    background = "#000000"
     constructor({ game, assets }) { 
         super()
         this.game = game
