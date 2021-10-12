@@ -3,7 +3,7 @@ import { sqLen } from "@lib/utils/math"
 import getTestFn from "@lib/components/Collision/helpers/getTestFn"
 
 class Orb extends ParticleEmitter {
-    constructor({ player, sound, movSound, storage, ...rest }) {
+    constructor({ player, sound, movSound, storage, temp = false, ...rest }) {
         super({ ...rest })
         this.player = player
         this.sound = sound
@@ -12,6 +12,7 @@ class Orb extends ParticleEmitter {
         this.testCol = getTestFn(this, player)
         this.active = true
         this.storage = storage
+        this.temp = temp
     }
     update() {
         if (!this.active) { return }
@@ -33,7 +34,7 @@ class Orb extends ParticleEmitter {
         }
     }
     reset() { 
-        this.remove()
+        this.temp && this.remove()
     }
     onRemove() {
         this.parent = null

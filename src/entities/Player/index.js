@@ -162,8 +162,8 @@ class Player extends TexRegion {
         Node.get(objLayerId).add(this.cinder) // particle emitters have to be manually inserted into the scene graph, since it doesn't implicitly know where it should be located
         Node.get(objLayerId).add(this.shard)
         this.state.over(this.pos.x)
-        this.sounds.player_exp.play(0.6)
-        this.sounds.player_din.play()
+        this.sounds.player_exp.play()
+        this.sounds.player_din.play(0.8)
         this.velX = this.velY = 0
     }
     update(dt) {

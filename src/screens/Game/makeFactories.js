@@ -33,31 +33,35 @@ export default ({ soundSprite, assetsCache, storage, player, state }) => { // us
     const orbSound = soundSprite.create("orb")
     const endSound = soundSprite.create("end")
     
-    const windFactory = (x, y, props, player) => {
-        return new Wind(
-            assetsCache.get(windDataId),
-            x, y, player
-        )
-    }
-    const orbFactory = (x, y, props, player) => {
-        return new Orb(Object.assign(
-            assetsCache.get(orbDataId),
-            { player, pos: { x, y }, sound: orbSound, movSound: orbMovSound, storage },
-        ))
-    }
-    const orbPool = new Pool({
-        factory: orbFactory,
-        size: 4,
-        free(obj) {
-            obj.remove() // remove the object from it's parent
-        },
-        reset(obj, x, y) {
-            obj.pos.x = x
-            obj.pos.y = y
+    const createOrbPool = (temp, size, orbSound, orbMovSound, storage, orbDataId) => {
+        const orbFac = (x, y, props, player) => { // factory for creating orbs at orb spawn points in the map
+            return new Orb(Object.assign(
+                assetsCache.get(orbDataId),
+                { player, pos: { x, y }, sound: orbSound, movSound: orbMovSound, storage, temp },
+            ))
         }
-    })
+        const orbPool = new Pool({
+            factory: orbFac,
+            size,
+            free(obj) {
+                obj.remove() // remove the object from it's parent
+            },
+            reset(obj, x, y) {
+                obj.pos.x = x
+                obj.pos.y = y
+            }
+        })
+        return orbPool
+    }
+    const orbPool = createOrbPool(false, 2, orbSound, orbMovSound, storage, orbDataId)
+    const tempOrbPool = createOrbPool(true, 2, orbSound, orbMovSound, storage, orbDataId)
     const windPool = new Pool({
-        factory: windFactory,
+        factory: (x, y, props, player) => {
+            return new Wind(
+                assetsCache.get(windDataId),
+                x, y, player
+            )
+        },
         size: 1,
         free(obj) {
             obj.remove()
@@ -67,6 +71,7 @@ export default ({ soundSprite, assetsCache, storage, player, state }) => { // us
             obj.pos.y = y - 10
         }
     })
+
     const onFireTouch = () => {
         const bestTime = storage.getHiscore(state.level) || 0
         const curTime = state.elapsed
@@ -84,7 +89,7 @@ export default ({ soundSprite, assetsCache, storage, player, state }) => { // us
         up: new ParticleEmitter(assetsCache.get(crateUpDataId)),
         down: new ParticleEmitter(assetsCache.get(crateDownDataId)),
     })
-    const wSounds = {
+    const wSounds = { // wood sounds
         snap: soundSprite.create("w_snap"),
         crack: soundSprite.create("w_crack")
     }
@@ -141,7 +146,7 @@ export default ({ soundSprite, assetsCache, storage, player, state }) => { // us
             return new SawBlade(x, y,  "sb5", props.toX, props.toY, props.speed, player)
         },
         lcr1: (x, y, props, player) => {
-            return new Crate(x, y, crateParticles, orbPool, wSounds, props.luck, props.dmg, props.temp, player)
+            return new Crate(x, y, crateParticles, tempOrbPool, wSounds, props.luck, props.dmg, props.temp, player)
         }
     })
 }
