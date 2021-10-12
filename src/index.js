@@ -1,6 +1,6 @@
 import Game from "@utils/Game"
 import UI from "@utils/UI"
-import { Canvas2DRenderer, Webgl2Renderer } from "@lib"
+import createRenderer from "@lib/renderer/create"
 import AssetsCache from "@utils/AssetsCache"
 import TexRegion from "@lib/entities/TexRegion"
 import Storage from "./helpers/Storage"
@@ -33,7 +33,7 @@ import resetImgId from "@assets/images/ui/reset.png"
 import resumeImgId from "@assets/images/ui/resume.png"
 
 const { viewport } = config
-const renderer = new Webgl2Renderer({ cnvQry: "#arena", scene: null, background: "skyblue", viewport }) // scene will be injected by game
+const renderer = createRenderer({ cnvQry: "#arena", scene: null, background: "#000000", viewport }) // scene will be injected by game
 const assetsCache = new AssetsCache()
 const storage = new Storage(config.storageId)
 const uiRoot = UI.query("#ui-layer")
