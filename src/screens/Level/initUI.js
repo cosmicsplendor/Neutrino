@@ -41,7 +41,7 @@ const renderLoading = () => {
     `
 }
 
-export default ({ onStart, uiRoot, storage, images, assetsCache, contSound, chSound }) => {
+export default ({ onStart, uiRoot, storage, images, assetsCache, contSound, chSound, errSound }) => {
     const curLevel = storage.getCurLevel()
     let levelState = curLevel
     uiRoot.content = render(images, curLevel, storage.getHiscore(levelState))
@@ -77,7 +77,7 @@ export default ({ onStart, uiRoot, storage, images, assetsCache, contSound, chSo
         startBtn.domNode.style.opacity = level <= curLevel ? 1: 0   
     }
     const onPrevBtnClick = () => {
-        if (levelState === 1) return
+        if (levelState === 1) return errSound.play()
         levelState = Math.max(levelState - 1, 1)
         const best = storage.getHiscore(levelState)
         bestTime.content = renderBest(best)
@@ -87,7 +87,7 @@ export default ({ onStart, uiRoot, storage, images, assetsCache, contSound, chSo
         chSound.play()
     }
     const onNextBtnClick = () => {
-        if (levelState > levels.length) return
+        if (levelState > levels.length) return errSound.play()
         levelState = Math.min(levelState  + 1, levels.length + 1)
         const best = storage.getHiscore(levelState)
         levelInfo.content = levelState <= levels.length ? `Level ${levelState}`: "Coming Soon"

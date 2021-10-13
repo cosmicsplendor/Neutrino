@@ -24,10 +24,11 @@ class LevelScreen extends Node {
             })
             this.contSound = soundSprite.createPool("continue")
             this.chSound = soundSprite.createPool("change") 
+            this.errSound = soundSprite.createPool("error")
         })
     }
     onEnter(fromMenu=false) {
-        const { game, storage, uiRoot, contSound, chSound } = this
+        const { game, storage, uiRoot, contSound, chSound, errSound } = this
         fromMenu && this.contSound.play()
         this.teardownUI = initUI({
             onStart: level => {
@@ -41,7 +42,8 @@ class LevelScreen extends Node {
             assetsCache: game.assetsCache,
             storage,
             contSound,
-            chSound
+            chSound,
+            errSound
         })
     }
     onExit() {
