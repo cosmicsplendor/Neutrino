@@ -22,7 +22,7 @@ class LevelScreen extends Node {
                 resourceId: soundSpriteId, 
                 meta: assetsCache.get(soundMetaId)
             })
-            this.contSound = soundSprite.create("continue")
+            this.contSound = soundSprite.createPool("continue")
             this.chSound = soundSprite.createPool("change") 
         })
     }
