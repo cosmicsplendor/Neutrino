@@ -41,7 +41,7 @@ const renderLoading = () => {
     `
 }
 
-export default ({ onStart, uiRoot, storage, images, assetsCache }) => {
+export default ({ onStart, uiRoot, storage, images, assetsCache, contSound, chSound }) => {
     const curLevel = storage.getCurLevel()
     let levelState = curLevel
     uiRoot.content = render(images, curLevel, storage.getHiscore(levelState))
@@ -84,6 +84,7 @@ export default ({ onStart, uiRoot, storage, images, assetsCache }) => {
         levelInfo.content = `Level ${levelState}`
         updateBtnVis(levelState, curLevel)
         realignTxt(config.viewport)
+        chSound.play()
     }
     const onNextBtnClick = () => {
         if (levelState > levels.length) return
@@ -93,12 +94,14 @@ export default ({ onStart, uiRoot, storage, images, assetsCache }) => {
         bestTime.content = levelState <= levels.length ? renderBest(best): "please like for more"
         updateBtnVis(levelState, curLevel)
         realignTxt(config.viewport)
+        chSound.play()
     }
     const onStartBtnClick = () =>{
         if (levelState > curLevel) { return }
         const levelId = levels[levelState - 1].id
         config.viewport.off("change", realign)
         uiRoot.clear()
+        contSound.play()
         if (!assetsCache.get(levelId)) {
             uiRoot.content = renderLoading()
             const loadingInd = uiRoot.get(`#${LOADING}`)

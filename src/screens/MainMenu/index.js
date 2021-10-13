@@ -13,7 +13,7 @@ class MainMenuScreen extends Node {
     onEnter() {
         const { uiRoot, game } = this
         this.teardownUI = initUI({ uiRoot, btnImg: game.assetsCache.get(resumeImgId), onPlay: () => {
-            game.switchScreen(LEVEL)
+            game.switchScreen(LEVEL, true)
         }})
     }
     onExit() {

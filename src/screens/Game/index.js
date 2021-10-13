@@ -50,9 +50,11 @@ class GameScreen extends Node { // can only have cameras as children
             game.resume()
         })
         assetsCache.once("load", () => {
-            const meta = assetsCache.get(soundMetaId)
-            const soundResource = assetsCache.get(soundSpriteId)
-            const soundSprite = new SoundSprite({ resource: soundResource, resourceId: soundSpriteId, meta })
+            const soundSprite = new SoundSprite({ 
+                resource: assetsCache.get(soundSpriteId), 
+                resourceId: soundSpriteId, 
+                meta: assetsCache.get(soundMetaId)
+            })
             const shard = new ParticleEmitter(Object.assign(assetsCache.get(shardDataUrl), { metaId: atlasmetaId, imgId: texatlasId}))
             const cinder = new ParticleEmitter(Object.assign(assetsCache.get(cinderDataUrl), { metaId: atlasmetaId, imgId: texatlasId}))
             const playerSounds = Player.sounds.reduce((spritemap, frame) => {

@@ -1,6 +1,8 @@
+import { Node } from "@lib"
 import ParticleEmitter from "@lib/utils/ParticleEmitter"
 import { sqLen } from "@lib/utils/math"
 import getTestFn from "@lib/components/Collision/helpers/getTestFn"
+import { objLayerId } from "@lib/constants"
 
 class Orb extends ParticleEmitter {
     constructor({ player, sound, movSound, storage, temp = false, ...rest }) {
