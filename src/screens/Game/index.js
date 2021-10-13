@@ -63,6 +63,8 @@ class GameScreen extends Node { // can only have cameras as children
             }, {})
             
             this.soundSprite = soundSprite
+            this.btnSound = soundSprite.create("btn")
+            this.errSound = soundSprite.create("error")
             this.player = new Player({ width: 64, height: 64, fill: "brown", speed: 350, fricX: 3, pos: { x: 300, y: 0 }, shard, cinder, sounds: playerSounds, state: this.state })
             this.factories = makeFactories({ soundSprite, assetsCache, storage, player: this.player, state: this.state })
             if (game.renderer.api === rendApis.WEBGL && !config.isMobile) {
@@ -124,7 +126,7 @@ class GameScreen extends Node { // can only have cameras as children
             }
             return checkpoint
         }
-        const { teardownUI, updateTimer } = initUI(this.uiRoot, this.player, this.uiImages, this.storage, this.state, onClose, resetLevel, focusInst, getCheckpoint)
+        const { teardownUI, updateTimer } = initUI(this.uiRoot, this.player, this.uiImages, this.storage, this.state, onClose, resetLevel, focusInst, getCheckpoint, this.btnSound, this.errSound)
         this.state.level = l
         this.teardownUI = teardownUI
         this.updateTimer = updateTimer

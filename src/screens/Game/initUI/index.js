@@ -5,7 +5,7 @@ import styles from "./style.css"
 
 const margin = 20
 const hMargin = margin / 2 // hMargin
-const orbExpAmt = 4
+const orbExpAmt = 5
 const instFocThres = 1400
 
 const PAUSE = "pause-btn"
@@ -50,7 +50,7 @@ const renderResult = (resumeImg, curTime, bestTime) => {
     `
 }
 
-export default (uiRoot, player, images, storage, gameState, onClose, resetLevel, focusInst, getCheckpoint) => {
+export default (uiRoot, player, images, storage, gameState, onClose, resetLevel, focusInst, getCheckpoint, btnSound, errSound) => {
     uiRoot.content = render(images, storage.getOrbCount())
     let checkpoint
     const ctrlBtns = config.isMobile && player.getCtrlBtns()
@@ -195,19 +195,23 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
     pauseBtn.on("click", () => {
         if (!gameState.is("playing")) return
         gameState.pause()
+        btnSound.play()
     })
     resumeBtn.on("click", () => {
         if (gameState.is("playing") || gameState.is("completed")) return
         if (gameState.is("paused")) {
-            return gameState.play()
+            gameState.play()
+            return btnSound.play()
         } 
         if (!gameState.is("over")) return
 
         // have players pay 2 orbs
         const orbs = storage.getOrbCount()
         if (orbs < orbExpAmt && !!checkpoint) { // may be signal to player that there's not enough orbs to continue, provide that there's also a checkpoint available for player restore
-            return
+            return errSound.play()
         }
+        
+        btnSound.play()
         gameState.play()
         resetLevel()
         gameState.play()
@@ -220,6 +224,7 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
     crossBtn.on("click", () => {
         if (gameState.is("playing") || gameState.is("completed")) return
         onClose()
+        btnSound.play()
     })
     restartBtn.on("click", () => {
         if (gameState.is("playing") || gameState.is("completed")) return
@@ -228,6 +233,7 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         posXAtReset > instFocThres && focusInst() // if the player is not near enough to it's reset spawn point, focus the camera to player position instantly to avoid jarring focus
         gameState.elapsed = 0
         gameState.play()
+        btnSound.play()
     })
     realign(config.viewport)
     return {
