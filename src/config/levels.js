@@ -6,22 +6,27 @@ import level5 from "@assets/levels/level5.cson"
 export default [
     {
         id: level1,
-        bg: "#2e2e3d"
+        bg: "#2e2e3d",
+        music: "music2"
     },
     {
         id: level2,
-        bg: "#121218"
+        bg: "#121218",
+        music: "music1"
     },
     {
         id: level3,
-        bg: "#2e2e3d"
+        bg: "#2e2e3d",
+        music: "music3"
     },
     {
         id: level4,
-        bg: "#121218"
+        bg: "#121218",
+        music: "music4"
     },
     {
         id: level5,
-        bg: "#10103a"
+        bg: "#10103a",
+        music: "music5"
     },
 ]

@@ -65,6 +65,10 @@ class GameScreen extends Node { // can only have cameras as children
             this.soundSprite = soundSprite
             this.btnSound = soundSprite.create("btn")
             this.errSound = soundSprite.create("error")
+            this.music = [ "music1", "music2", "music3", "music4", "music5" ].reduce((acc, m) => {
+                acc[m] = soundSprite.create(m)
+                return acc
+            }, {})
             this.player = new Player({ width: 64, height: 64, fill: "brown", speed: 350, fricX: 3, pos: { x: 300, y: 0 }, shard, cinder, sounds: playerSounds, state: this.state })
             this.factories = makeFactories({ soundSprite, assetsCache, storage, player: this.player, state: this.state })
             if (game.renderer.api === rendApis.WEBGL && !config.isMobile) {
@@ -103,6 +107,7 @@ class GameScreen extends Node { // can only have cameras as children
     }
     onEnter(l) {
         const levelDataId = levels[l - 1].id
+        const music = levels[l - 1].music
         const data = this.game.assetsCache.get(levelDataId)
         const level = this.setLevel(data)
         const onClose = () => this.game.switchScreen(LEVEL)
@@ -130,6 +135,7 @@ class GameScreen extends Node { // can only have cameras as children
         this.state.level = l
         this.teardownUI = teardownUI
         this.updateTimer = updateTimer
+        // music && this.music[music].play()
         this.state.play()
     }
     onExit() {
@@ -138,6 +144,9 @@ class GameScreen extends Node { // can only have cameras as children
         this.game.reset()
         this.state.reset()
         this.state.elapsed = 0
+        for (let i = this.music.length - 1; i > -1; i--) {
+            this.music[i].pause()
+        }
     }
     update(dt, t) {
         this.state.elapsed += dt
