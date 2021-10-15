@@ -14,7 +14,7 @@ import GameScreen from "@screens/Game"
 import LevelScreen from "@screens/Level"
 
 import soundSprite from "@assets/audio/sprite.mp3"
-import soundSpriteMeta from "@assets/audio/sprite.cson"
+import soundMeta from "@assets/audio/sprite.cson"
 import texatlasId from "@assets/images/texatlas.png"
 import atlasmetaId from "@assets/images/atlasmeta.cson"
 import bgDataId from "@assets/levels/background.cson"
@@ -40,7 +40,7 @@ const uiRoot = UI.query("#ui-layer")
 const curLevel = storage.getCurLevel()
 const assets = [
     { url: soundSprite, msg: "loading audio sprite" },
-    { url: soundSpriteMeta, msg: "loading audio sprite metadata"},
+    { url: soundMeta, msg: "loading audio sprite metadata"},
     { url: texatlasId, msg: "loading images" },
     { url: atlasmetaId, msg: "loading texture atlas" },
     { url: levels[curLevel - 1].id, msg: "loading level data" }, // pre-load the current level
@@ -62,7 +62,7 @@ if (!config.mobile) {
     assets.push(bgDataId)
 }
 const screenFactories = {
-    [screenNames.LOADING]: game => new LoadingScreen({ game, assets }),
+    [screenNames.LOADING]: game => new LoadingScreen({ game, uiRoot, assets }),
     [screenNames.MAIN_MENU]: game => new MainMenuScreen({ game, uiRoot }),
     [screenNames.GAME]: game => new GameScreen({ game, uiRoot, storage }),
     [screenNames.LEVEL]: game => new LevelScreen({ game, uiRoot, storage }),

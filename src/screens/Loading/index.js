@@ -3,10 +3,11 @@ import { MAIN_MENU } from "@screens/names"
 
 class LoadingScreen extends Node {
     background = "#000000"
-    constructor({ game, assets }) { 
+    constructor({ game, assets, uiRoot }) { 
         super()
         this.game = game
         this.assets = assets
+        this.uiROot = uiRoot
     }
     onEnter() {
         const { assetsCache } = this.game
