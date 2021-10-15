@@ -2,6 +2,7 @@ import { calcAligned, calcStacked } from "@lib/utils/entity"
 import config from "@config"
 import levels from "@config/levels"
 import imgBtn from "@screens/ui/imgBtn"
+import loadingDot from "@screens/ui/loadingDot"
 import styles from "./style.css"
 
 const PREV = "prev-btn"
@@ -29,15 +30,6 @@ const render = (images, level, time) => {
         <div class="${styles.infoTitle} ${styles.infoSub}" id="${BEST_TIME}">${renderBest(time)}</div>
         ${imgBtn(NEXT, images.arrow)}
         ${imgBtn(START, images.resume, styles.startBtn)}
-    `
-}
-const renderLoading = () => {
-    return `
-        <div id="${LOADING}">
-            <div class="${styles.loadingDot} ${styles.dotA}"></div>
-            <div class="${styles.loadingDot} ${styles.dotB}"></div>
-            <div class="${styles.loadingDot} ${styles.dotC}"></div>
-        </div>
     `
 }
 
@@ -103,7 +95,7 @@ export default ({ onStart, uiRoot, storage, images, assetsCache, contSound, chSo
         uiRoot.clear()
         contSound.play()
         if (!assetsCache.get(levelId)) {
-            uiRoot.content = renderLoading()
+            uiRoot.content = loadingDot(LOADING)
             const loadingInd = uiRoot.get(`#${LOADING}`)
             loadingInd.pos = calcAligned(config.viewport, { width: 56, height: 12 }, "center", "center")
             levels.forEach(level => {
