@@ -39,6 +39,11 @@ const initUI = (uiRoot) => {
                 info.content = msg
             }
             realign(config.viewport)
+        },
+        onError: e => {
+            info.content = `Error: no internet connection`
+            info.domNode.style.color = "tomato"
+            realign(config.viewport)
         }
     }
 }
