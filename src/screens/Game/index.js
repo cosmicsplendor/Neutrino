@@ -65,6 +65,7 @@ class GameScreen extends Node { // can only have cameras as children
             this.soundSprite = soundSprite
             this.btnSound = soundSprite.create("btn")
             this.errSound = soundSprite.create("error")
+            this.contSound = soundSprite.create("continue")
             this.music = [ "music1", "music2", "music3", "music4", "music5" ].reduce((acc, m) => {
                 acc[m] = soundSprite.create(m)
                 return acc
@@ -131,7 +132,7 @@ class GameScreen extends Node { // can only have cameras as children
             }
             return checkpoint
         }
-        const { teardownUI, updateTimer } = initUI(this.uiRoot, this.player, this.uiImages, this.storage, this.state, onClose, resetLevel, focusInst, getCheckpoint, this.btnSound, this.errSound)
+        const { teardownUI, updateTimer } = initUI(this.uiRoot, this.player, this.uiImages, this.storage, this.state, onClose, resetLevel, focusInst, getCheckpoint, this.btnSound, this.errSound, this.contSound)
         this.state.level = l
         this.teardownUI = teardownUI
         this.updateTimer = updateTimer

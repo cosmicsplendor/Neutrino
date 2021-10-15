@@ -50,7 +50,7 @@ const renderResult = (resumeImg, curTime, bestTime) => {
     `
 }
 
-export default (uiRoot, player, images, storage, gameState, onClose, resetLevel, focusInst, getCheckpoint, btnSound, errSound) => {
+export default (uiRoot, player, images, storage, gameState, onClose, resetLevel, focusInst, getCheckpoint, btnSound, errSound, contSound) => {
     uiRoot.content = render(images, storage.getOrbCount())
     let checkpoint
     const ctrlBtns = config.isMobile && player.getCtrlBtns()
@@ -175,6 +175,7 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         
         
         continueBtn.on("click", () => {
+            contSound.play()
             onClose()
         })
         
