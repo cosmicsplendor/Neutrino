@@ -97,7 +97,7 @@ export default ({ onStart, uiRoot, storage, images, assetsCache, contSound, chSo
         if (!assetsCache.get(levelId)) {
             uiRoot.content = loadingDot(LOADING)
             const loadingInd = uiRoot.get(`#${LOADING}`)
-            loadingInd.pos = calcAligned(config.viewport, { width: 56, height: 12 }, "center", "center")
+            loadingInd.pos = calcAligned(config.viewport, loadingInd, "center", "center")
             levels.forEach(level => {
                 assetsCache.unload(level.id)
             })
