@@ -1,1 +1,0 @@
-{"blendMode":"source-over","loop":true,"params":[{"alphaDecayFn":"quadIn","weight":1,"frame":"wind","width":9,"height":9,"offsetX":[-30,20],"offsetY":[0,0],"lifetime":[0.7,1.3],"velX":[0,0],"velY":[-150,-90],"accX":[0,0],"accY":[0,0],"rotVel":[0,0],"alpha":[0.9,1]}],"hitbox":{"x":-34.5,"y":-199.5,"width":59,"height":87},"randomDistribution":true,"size":25}

@@ -1,1 +1,0 @@
-{"blendMode":"source-over","loop":true,"params":[{"alphaDecayFn":"quadIn","weight":1,"frame":"orb","width":22,"height":22,"offsetX":[0,0],"offsetY":[0,0],"lifetime":[0.7,1.2],"velX":[-3,3],"velY":[-3,3],"accX":[0,0],"accY":[0,0],"rotVel":[0,0],"alpha":[0.9,1]}],"randomDistribution":true,"size":6}

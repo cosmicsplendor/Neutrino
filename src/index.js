@@ -18,13 +18,7 @@ import soundMeta from "@assets/audio/sprite.cson"
 import texatlasId from "@assets/images/texatlas.png"
 import atlasmetaId from "@assets/images/atlasmeta.cson"
 import bgDataId from "@assets/levels/background.cson"
-import fireDataId from "@assets/particles/fire.cson"
-import orbDataId from "@assets/particles/orb.cson"
-import shardDataId from "@assets/particles/shard.cson"
-import cinderDataId from "@assets/particles/cinder.cson"
-import crateUpDataId from "@assets/particles/crate-up.cson"
-import crateDownDataId from "@assets/particles/crate-down.cson"
-import windDataId from "@assets/particles/wind.cson"
+import particlesId from "@assets/particles/all.cson"
 import arrowImgId from "@assets/images/ui/arrow.png"
 import crossImgId from "@assets/images/ui/cross.png"
 import orbImgId from "@assets/images/ui/orb.png"
@@ -44,13 +38,7 @@ const assets = [
     { url: texatlasId, msg: "loading images" },
     { url: atlasmetaId, msg: "loading texture atlas" },
     { url: levels[curLevel - 1].id, msg: "loading level data" }, // pre-load the current level
-    { url: fireDataId, msg: "loading particles" },
-    orbDataId,
-    cinderDataId,
-    shardDataId,
-    crateUpDataId,
-    crateDownDataId,
-    windDataId,
+    { url: particlesId, msg: "loading particles" },
     { url: arrowImgId, msg: "loading ui assets" },
     crossImgId,
     orbImgId,

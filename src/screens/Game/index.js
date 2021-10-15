@@ -16,10 +16,7 @@ import makeFactories from "./makeFactories"
 import Player from "@entities/Player"
 import soundSpriteId from "@assets/audio/sprite.mp3"
 import soundMetaId from "@assets/audio/sprite.cson"
-import shardDataUrl from "@assets/particles/shard.cson"
-import cinderDataUrl from "@assets/particles/cinder.cson"
-import texatlasId from "@assets/images/texatlas.png"
-import atlasmetaId from "@assets/images/atlasmeta.cson"
+import particlesUrl from "@assets/particles/all.cson"
 import bgDataId from "@assets/levels/background.cson"
 
 import resumeImgId from "@assets/images/ui/resume.png"
@@ -55,8 +52,9 @@ class GameScreen extends Node { // can only have cameras as children
                 resourceId: soundSpriteId, 
                 meta: assetsCache.get(soundMetaId)
             })
-            const shard = new ParticleEmitter(Object.assign(assetsCache.get(shardDataUrl), { metaId: atlasmetaId, imgId: texatlasId}))
-            const cinder = new ParticleEmitter(Object.assign(assetsCache.get(cinderDataUrl), { metaId: atlasmetaId, imgId: texatlasId}))
+            const particles = assetsCache.get(particlesUrl)
+            const shard = new ParticleEmitter(particles.shard)
+            const cinder = new ParticleEmitter(particles.cinder)
             const playerSounds = Player.sounds.reduce((spritemap, frame) => {
                 spritemap[frame] = soundSprite.create(frame)
                 return spritemap

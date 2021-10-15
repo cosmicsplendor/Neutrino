@@ -10,12 +10,7 @@ import Crate from "@entities/Crate"
 import Pool from "@utils/Pool"
 import levels from "@config/levels"
 
-import fireDataId from "@assets/particles/fire.cson"
-import orbDataId from "@assets/particles/orb.cson"
-import crateUpDataId from "@assets/particles/crate-up.cson"
-import crateDownDataId from "@assets/particles/crate-down.cson"
-import windDataId from "@assets/particles/wind.cson"
-
+import particlesId from "@assets/particles/all.cson"
 
 const resettable = factory => (x, y, props={}, player) => { // returns a new factory same as the input, except that it's instances have reset method 
     const ent = factory(x, y, props, player)
@@ -33,10 +28,12 @@ export default ({ soundSprite, assetsCache, storage, player, state }) => { // us
     const orbSound = soundSprite.createPool("orb")
     const endSound = soundSprite.create("end")
     
-    const createOrbPool = (temp, size, orbSound, orbMovSound, storage, orbDataId) => {
+    const particles = assetsCache.get(particlesId)
+    const createOrbPool = (temp, size, orbSound, orbMovSound, storage) => {
         const orbFac = (x, y, props, player) => { // factory for creating orbs at orb spawn points in the map
             return new Orb(Object.assign(
-                assetsCache.get(orbDataId),
+                { },
+                particles.orb,
                 { player, pos: { x, y }, sound: orbSound, movSound: orbMovSound, storage, temp },
             ))
         }
@@ -53,12 +50,12 @@ export default ({ soundSprite, assetsCache, storage, player, state }) => { // us
         })
         return orbPool
     }
-    const orbPool = createOrbPool(false, 2, orbSound, orbMovSound, storage, orbDataId)
-    const tempOrbPool = createOrbPool(true, 2, orbSound, orbMovSound, storage, orbDataId)
+    const orbPool = createOrbPool(false, 2, orbSound, orbMovSound, storage)
+    const tempOrbPool = createOrbPool(true, 2, orbSound, orbMovSound, storage)
     const windPool = new Pool({
         factory: (x, y, props, player) => {
             return new Wind(
-                assetsCache.get(windDataId),
+                particles.wind,
                 x, y, player
             )
         },
@@ -84,10 +81,10 @@ export default ({ soundSprite, assetsCache, storage, player, state }) => { // us
         endSound.play()
         state.complete(curTime, bestTime)
     }
-    const fire = new Fire(assetsCache.get(fireDataId), onFireTouch)
+    const fire = new Fire(particles.fire, onFireTouch)
     const crateParticles = Object.freeze({
-        up: new ParticleEmitter(assetsCache.get(crateUpDataId)),
-        down: new ParticleEmitter(assetsCache.get(crateDownDataId)),
+        up: new ParticleEmitter(particles.crateUp),
+        down: new ParticleEmitter(particles.crateDown),
     })
     const wSounds = { // wood sounds
         snap: soundSprite.create("w_snap"),
