@@ -30,7 +30,7 @@ export default ({ soundSprite, assetsCache, storage, player, state }) => { // us
     const gateUSound = soundSprite.create("gate_u") // collision with ceiling
     const gateDSound = soundSprite.create("gate_d")
     const orbMovSound = soundSprite.create("orb_mov")
-    const orbSound = soundSprite.create("orb")
+    const orbSound = soundSprite.createPool("orb")
     const endSound = soundSprite.create("end")
     
     const createOrbPool = (temp, size, orbSound, orbMovSound, storage, orbDataId) => {
