@@ -1,4 +1,5 @@
 import config from "@config"
+import UI from "@lib/utils/UI"
 import { calcAligned, calcStacked } from "@utils/entity"
 import loadingDot from "@screens/ui/loadingDot"
 import styles from "./style.css"
@@ -10,8 +11,8 @@ const INFO = "info"
 const render = (loadingId, progId, infoId) => {
    return `
         ${loadingDot(loadingId)}
-        <div id="${progId}" class="${styles.prog}">0%</div>
-        <div id="${infoId}" class="${styles.prog}">loading assets</div>
+        <div id="${progId}" class="${styles.txt}">0%</div>
+        <div id="${infoId}" class="${styles.txt} ${styles.info}">loading assets</div>
     `
 }
 
@@ -22,8 +23,8 @@ const initUI = (uiRoot) => {
     const info = uiRoot .get(`#${INFO}`)
     const realign = viewport => { 
         loadingInd.pos = calcAligned(viewport, loadingInd, "center", "center")
-        progInd.pos = calcStacked(loadingInd, progInd, "bottom", 0, 20)
-        info.pos = calcStacked(progInd, info, "bottom", 0, 20)
+        progInd.pos = calcStacked(loadingInd, UI.bounds(progInd), "bottom", 0, 20)
+        info.pos = calcStacked(progInd, UI.bounds(info), "bottom", 0, 20)
     }
     config.viewport.on("change", realign)
     realign(config.viewport)

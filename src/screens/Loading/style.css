@@ -1,7 +1,10 @@
-.prog {
+.txt {
     font-size: 16px;
     color: #ffe6d5;
     font-family: monospace;
     letter-spacing: 4px;
     white-space: nowrap;
+}
+.info {
+    letter-spacing: 0;
 }
