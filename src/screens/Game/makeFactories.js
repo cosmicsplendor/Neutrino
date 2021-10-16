@@ -81,9 +81,27 @@ export default ({ soundSprite, assetsCache, storage, player, state }) => { // us
         state.complete(curTime, bestTime)
     }
     const fire = new Fire(particles.fire, onFireTouch)
-    const crateParticles = Object.freeze({
-        up: new ParticleEmitter(particles.crateUp),
-        down: new ParticleEmitter(particles.crateDown),
+    const crateDmgFacs = Object.freeze({
+        up: new Pool({
+            factory: () => {
+                const particle = new ParticleEmitter(particles.crateUp)
+                particle.onRemove = () => { // clear reference for garbage collector
+                    particle.parent = null
+                }
+                return particle
+            },
+            size: 2
+        }),
+        down: new Pool({
+            factory: () => {
+                const particle = new ParticleEmitter(particles.crateDown)
+                particle.onRemove = () => { // clear reference for garbage collector
+                    particle.parent = null
+                }
+                return particle
+            },
+            size: 2
+        }),
     })
     const wSounds = { // wood sounds
         snap: soundSprite.create("w_snap"),
@@ -142,7 +160,7 @@ export default ({ soundSprite, assetsCache, storage, player, state }) => { // us
             return new SawBlade(x, y,  "sb5", props.toX, props.toY, props.speed, player)
         },
         lcr1: (x, y, props, player) => {
-            return new Crate(x, y, crateParticles, tempOrbPool, wSounds, props.luck, props.dmg, props.temp, player)
+            return new Crate(x, y, crateDmgFacs, tempOrbPool, wSounds, props.luck, props.dmg, props.temp, player)
         }
     })
 }

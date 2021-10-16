@@ -32,6 +32,9 @@ class Fire extends ParticleEmitter { // it's no ordinary fire, it's an end-marke
             this.onTouch()
         }
     }
+    onRemove() {
+        this.parent = null
+    }
 }
 
 export default Fire
