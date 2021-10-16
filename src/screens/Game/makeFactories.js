@@ -24,17 +24,16 @@ const resettable = factory => (x, y, props={}, player) => { // returns a new fac
 export default ({ soundSprite, assetsCache, storage, player, state }) => { // using sound sprite to create and pass objects and (cached) pools so that objects can just consume sound in ready-to-use form rather than by creating them on their own. This helps me make sound creation parameters changes at one place, making code more scalable.
     const gateUSound = soundSprite.create("gate_u") // collision with ceiling
     const gateDSound = soundSprite.create("gate_d")
-    const orbMovSound = soundSprite.create("orb_mov")
     const orbSound = soundSprite.createPool("orb")
     const endSound = soundSprite.create("end")
     
     const particles = assetsCache.get(particlesId)
-    const createOrbPool = (temp, size, orbSound, orbMovSound, storage) => {
+    const createOrbPool = (temp, size, orbSound, storage) => {
         const orbFac = (x, y, props, player) => { // factory for creating orbs at orb spawn points in the map
             return new Orb(Object.assign(
                 { },
                 particles.orb,
-                { player, pos: { x, y }, sound: orbSound, movSound: orbMovSound, storage, temp },
+                { player, pos: { x, y }, sound: orbSound, storage, temp },
             ))
         }
         const orbPool = new Pool({
@@ -50,8 +49,8 @@ export default ({ soundSprite, assetsCache, storage, player, state }) => { // us
         })
         return orbPool
     }
-    const orbPool = createOrbPool(false, 2, orbSound, orbMovSound, storage)
-    const tempOrbPool = createOrbPool(true, 2, orbSound, orbMovSound, storage)
+    const orbPool = createOrbPool(false, 2, orbSound, storage)
+    const tempOrbPool = createOrbPool(true, 2, orbSound, storage)
     const windPool = new Pool({
         factory: (x, y, props, player) => {
             return new Wind(

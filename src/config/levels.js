@@ -7,26 +7,26 @@ export default [
     {
         id: level1,
         bg: "#2e2e3d",
-        music: "music2"
+        music: "music3"
     },
     {
         id: level2,
         bg: "#121218",
-        music: "music1"
+        music: "music2"
     },
     {
         id: level3,
         bg: "#2e2e3d",
-        music: "music3"
+        music: "music4"
     },
     {
         id: level4,
         bg: "#121218",
-        music: "music4"
+        music: "music1"
     },
     {
         id: level5,
         bg: "#10103a",
-        music: "music5"
+        music: "music3"
     },
 ]

@@ -62,9 +62,9 @@ class GameScreen extends Node { // can only have cameras as children
             
             this.soundSprite = soundSprite
             this.btnSound = soundSprite.create("btn")
-            this.errSound = soundSprite.create("error")
+            this.errSound = soundSprite.createPool("err_alt")
             this.contSound = soundSprite.create("continue")
-            this.music = [ "music1", "music2", "music3", "music4", "music5" ].reduce((acc, m) => {
+            this.music = [ "music1", "music2", "music3", "music4" ].reduce((acc, m) => {
                 acc[m] = soundSprite.create(m)
                 return acc
             }, {})
@@ -86,8 +86,8 @@ class GameScreen extends Node { // can only have cameras as children
             }
         })
     }
-    setLevel(data) {
-        const level = new Level({ player: this.player, data, viewport: config.viewport, subject: this.player, factories: this.factories })
+    setLevel(data, music) {
+        const level = new Level({ player: this.player, data, viewport: config.viewport, subject: this.player, factories: this.factories, music })
         this.add(level)
         this.game.renderer.changeBackground(config.isMobile || this.game.renderer.type === rendApis.CNV_2D ? data.mob_bg: data.bg)
         this.game.renderer.gTint = data.tint && data.tint.split(",")
@@ -108,7 +108,7 @@ class GameScreen extends Node { // can only have cameras as children
         const levelDataId = levels[l - 1].id
         const music = levels[l - 1].music
         const data = this.game.assetsCache.get(levelDataId)
-        const level = this.setLevel(data)
+        const level = this.setLevel(data, music && this.music[music])
         const onClose = () => this.game.switchScreen(LEVEL)
         const resetLevel = () => {
             level.resetRecursively()
@@ -134,7 +134,6 @@ class GameScreen extends Node { // can only have cameras as children
         this.state.level = l
         this.teardownUI = teardownUI
         this.updateTimer = updateTimer
-        // music && this.music[music].play()
         this.state.play()
     }
     onExit() {
@@ -143,9 +142,6 @@ class GameScreen extends Node { // can only have cameras as children
         this.game.reset()
         this.state.reset()
         this.state.elapsed = 0
-        for (let i = this.music.length - 1; i > -1; i--) {
-            this.music[i].pause()
-        }
     }
     update(dt, t) {
         this.state.elapsed += dt
