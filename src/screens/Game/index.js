@@ -109,7 +109,7 @@ class GameScreen extends Node { // can only have cameras as children
         const music = levels[l - 1].music
         const data = this.game.assetsCache.get(levelDataId)
         const level = this.setLevel(data, music && this.music[music])
-        const onClose = () => this.game.switchScreen(LEVEL)
+        const onClose = advance => this.game.switchScreen(LEVEL, false, advance)
         const resetLevel = () => {
             level.resetRecursively()
         }

@@ -33,10 +33,9 @@ const render = (images, level, time) => {
     `
 }
 
-export default ({ onStart, uiRoot, storage, images, assetsCache, contSound, chSound, errSound }) => {
-    const curLevel = storage.getCurLevel()
-    let levelState = curLevel
-    uiRoot.content = render(images, curLevel, storage.getHiscore(levelState))
+export default ({ onStart, uiRoot, storage, level, maxLevel, images, assetsCache, contSound, chSound, errSound }) => {
+    let levelState = level
+    uiRoot.content = render(images, level, storage.getHiscore(levelState))
 
     const prevBtn = uiRoot.get(`#${PREV}`)
     const nextBtn = uiRoot.get(`#${NEXT}`)
@@ -64,9 +63,9 @@ export default ({ onStart, uiRoot, storage, images, assetsCache, contSound, chSo
         nextBtn.pos = calcAligned(viewport, nextBtn, "right", "center", -50)
         startBtn.pos = calcStacked(bestTime, startBtn, "bottom", 0,  64)
     }
-    const updateBtnVis = (level, curLevel) => {
-        lockInd.domNode.style.opacity = level <= curLevel || level > levels.length ? 0: 1
-        startBtn.domNode.style.opacity = level <= curLevel ? 1: 0   
+    const updateBtnVis = (level, maxLevel) => {
+        lockInd.domNode.style.opacity = level <= maxLevel || level > levels.length ? 0: 1
+        startBtn.domNode.style.opacity = level <= maxLevel ? 1: 0   
     }
     const onPrevBtnClick = () => {
         if (levelState === 1) return errSound.play()
@@ -74,7 +73,7 @@ export default ({ onStart, uiRoot, storage, images, assetsCache, contSound, chSo
         const best = storage.getHiscore(levelState)
         bestTime.content = renderBest(best)
         levelInfo.content = `Level ${levelState}`
-        updateBtnVis(levelState, curLevel)
+        updateBtnVis(levelState, maxLevel)
         realignTxt(config.viewport)
         chSound.play()
     }
@@ -84,12 +83,12 @@ export default ({ onStart, uiRoot, storage, images, assetsCache, contSound, chSo
         const best = storage.getHiscore(levelState)
         levelInfo.content = levelState <= levels.length ? `Level ${levelState}`: "Coming Soon"
         bestTime.content = levelState <= levels.length ? renderBest(best): "please like for more"
-        updateBtnVis(levelState, curLevel)
+        updateBtnVis(levelState, maxLevel)
         realignTxt(config.viewport)
         chSound.play()
     }
     const onStartBtnClick = () =>{
-        if (levelState > curLevel) { return }
+        if (levelState > maxLevel) { return }
         const levelId = levels[levelState - 1].id
         config.viewport.off("change", realign)
         uiRoot.clear()

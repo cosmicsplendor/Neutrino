@@ -176,7 +176,7 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         
         continueBtn.on("click", () => {
             contSound.play()
-            onClose()
+            onClose(true)
         })
         
         overlay.domNode.style.opacity = 0.8
@@ -224,7 +224,7 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
     })
     crossBtn.on("click", () => {
         if (gameState.is("playing") || gameState.is("completed")) return
-        onClose()
+        onClose(false)
         btnSound.play()
     })
     restartBtn.on("click", () => {
