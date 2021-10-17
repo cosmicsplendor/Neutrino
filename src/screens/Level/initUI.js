@@ -13,6 +13,7 @@ const LOCK = "lock"
 const LOADING = "loading"
 const BEST_TIME = "best-time"
 
+const paddingX = config.isMobile ? 20: 60
 const lockDims = Object.freeze({ width: 24, height: 24 })
 const lock = `
 <div id="${LOCK}" class=${styles.lock}>
@@ -59,8 +60,8 @@ export default ({ onStart, uiRoot, storage, level, maxLevel, images, assetsCache
     }
     const realign = viewport => {
         realignTxt(viewport)
-        prevBtn.pos = calcAligned(viewport, prevBtn, "left", "center", 50)
-        nextBtn.pos = calcAligned(viewport, nextBtn, "right", "center", -50)
+        prevBtn.pos = calcAligned(viewport, prevBtn, "left", "center", paddingX)
+        nextBtn.pos = calcAligned(viewport, nextBtn, "right", "center", -paddingX)
         startBtn.pos = calcStacked(bestTime, startBtn, "bottom", 0,  64)
     }
     const updateBtnVis = (level, maxLevel) => {
