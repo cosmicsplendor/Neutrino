@@ -2,7 +2,7 @@ import { TexRegion } from "@lib"
 import getTestFn from "@lib/components/Collision/helpers/getTestFn"
 import { clamp, sign } from "@utils/math"
 
-const ANG_VEL = -1 * Math.PI
+const ANG_VEL = Math.PI
 class SawBlade extends TexRegion {
     constructor(x, y, frame, toX=x, toY=y, speed=100, player) {
         super({ frame, pos: { x, y } })
