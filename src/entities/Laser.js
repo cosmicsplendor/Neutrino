@@ -14,7 +14,7 @@ class Laser extends MovableEnt {
         const yOffset = vert ? hheight: hheight - offset - bWidth
         const xStep = vert ? 0: bLen
         const yStep = vert ? bLen: 0
-        super(x, y, frame, toX=x, toY=y, speed=100, player)
+        super(x, y, frame, toX, toY, speed=100, player)
         for (let i = 0; i < num; i++) {
             const body = new TexRegion({ frame: bFrame })
             body.pos.x += xOffset + xStep * i
@@ -37,4 +37,5 @@ class Laser extends MovableEnt {
         }
     }
 }
+
 export default Laser
