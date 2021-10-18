@@ -161,6 +161,6 @@ export default ({ soundSprite, assetsCache, storage, player, state }) => { // us
         },
         lcr1: (x, y, props, player) => {
             return new Crate(x, y, crateDmgFacs, tempOrbPool, wSounds, props.luck, props.dmg, props.temp, player)
-        }
+        },
     })
 }
