@@ -7,7 +7,7 @@ const hheight = 24 // laser head height
 const bLen = 48 // laser body length
 const bWidth = 12 // laser body width
 class Laser extends MovableEnt {
-    constructor(x, y, toX=x, toY=y, speed=100, num=2, vert, period, player) {
+    constructor(x, y, toX=x, toY=y, speed=100, num=2, vert, period, player, sound) {
         const frame = vert ? "vlhd": "hlhd"
         const bFrame = vert ? "vlbod": "hlbod" // body frame
         const xOffset = vert ? offset: hheight
@@ -32,6 +32,7 @@ class Laser extends MovableEnt {
             this.period = period
             this.t = 0
             this.on = true
+            this.sound = sound
         }
     }
     update(dt) {
@@ -45,9 +46,10 @@ class Laser extends MovableEnt {
             if (this.t > this.period) {
                 this.on = !this.on
                 this.t = 0
-            }
-            for (let child of this.children) {
-                child.alpha = this.on ? 1: 0
+                for (let child of this.children) {
+                    child.alpha = this.on ? 1: 0
+                }
+                this.on && this.sound.play()
             }
         }
     }
