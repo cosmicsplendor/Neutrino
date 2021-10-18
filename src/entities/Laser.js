@@ -3,12 +3,13 @@ import getTestFn from "@lib/components/Collision/helpers/getTestFn"
 import MovableEnt from "./MovableEnt"
 
 const offset = 6
+const hheight = 24 // laser head height
 const bLen = 48 // laser body length
-const bWidth = 16 // laser body width
+const bWidth = 12 // laser body width
 class Laser extends MovableEnt {
-    constructor(x, y, toX=x, toY=y, speed=100, player, num, vert) {
+    constructor(x, y, toX=x, toY=y, speed=100, player, num, vert, period) {
         const frame = vert ? "vlhead": "hlhead"
-        const bFrame = vert ? "vlbody": "hlbody" // body frame
+        const bFrame = vert ? "vlbod": "hlbod" // body frame
         const xOffset = vert ? 0: offset
         const yOffset = vert ? offset: 0
         const xStep = vert ? 0: bLen
@@ -24,13 +25,14 @@ class Laser extends MovableEnt {
         this.hitbox = {
             x: vert ? offset: 0,
             y: vert ? 0: offset,
-            width: vert ? bWidth: bLen * num,
-            height: vert ? bLen * num: height 
+            width: vert ? bWidth: hheight + bLen * num,
+            height: vert ? hheight + bLen * num: height 
         }
         this.testCol = getTestFn(this.player)
     }
     update(dt) {
         super.update(dt)
+        this.elapsed += dt
         if (this.testCol(this, this.player) && this.player.visible) {
             this.player.explode()
         }
