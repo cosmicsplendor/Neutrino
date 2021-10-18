@@ -11,7 +11,6 @@ import arrowImgId from "@assets/images/ui/arrow.png"
 import resumeImgId from "@assets/images/ui/resume.png"
 import styles from "./style.css"
 
-const DT = 1 / 60
 const getTouchMappings = () => {
     const data = [
         { name: "left", style: `background: url(${arrowImgId}); transform: scale(-1, 1);`, width: 65, height: 55 },
@@ -84,10 +83,6 @@ class Player extends TexRegion {
         // this.gateCollision = new Collision({ entity: this, blocks: "gates", rigid: false, movable: false, onHit: this.explode.bind(this) })
         
         Movement.makeMovable(this, { accY: config.gravity, roll: true, fricX })
-    }
-    onEndReached() {
-        // play sound
-        // fadeOut(this, 0.5, () => this.game.nextLevel())
     }
     get visible() {
         return this.alpha !== 0 && this._visible
