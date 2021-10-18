@@ -28,12 +28,27 @@ class Laser extends MovableEnt {
             height: vert ? hheight + bLen * num: height 
         }
         this.testCol = getTestFn(this, this.player)
+        if (!!period) { 
+            this.period = period
+            this.t = 0
+            this.on = true
+        }
     }
     update(dt) {
         super.update(dt)
         this.elapsed += dt
-        if (this.testCol(this, this.player) && this.player.visible) {
+        if (this.testCol(this, this.player) && this.player.visible && this.on) {
             this.player.explode()
+        }
+        if (!!this.period) {
+            this.t += dt
+            if (this.t > this.period) {
+                this.on = !this.on
+                this.t = 0
+            }
+            for (let child of this.children) {
+                child.alpha = this.on ? 1: 0
+            }
         }
     }
 }
