@@ -27,7 +27,6 @@ class Fire extends ParticleEmitter { // it's no ordinary fire, it's an end-marke
         if (this.testCol(this, this.player)) {
             this.pos.x - 32
             this.pos.y - 64
-            this.player.onEndReached()
             this.remove()
             this.onTouch()
         }
