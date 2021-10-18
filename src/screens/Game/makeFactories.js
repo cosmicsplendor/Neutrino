@@ -5,6 +5,7 @@ import Wind from "@entities/Wind"
 import Magnet from "@entities/Magnet"
 import Ball from "@entities/Ball"
 import SawBlade from "@entities/SawBlade"
+import Laser from "@entities/Laser"
 import Fire from "@entities/Fire"
 import Crate from "@entities/Crate"
 import Pool from "@utils/Pool"
@@ -161,6 +162,12 @@ export default ({ soundSprite, assetsCache, storage, player, state }) => { // us
         },
         lcr1: (x, y, props, player) => {
             return new Crate(x, y, crateDmgFacs, tempOrbPool, wSounds, props.luck, props.dmg, props.temp, player)
+        },
+        vlhd: (x, y, props, player) => {
+            return new Laser(x, y, props.toX, props.toY, props.speed, props.num, true, props.period, player)
+        },
+        hlhd: (x, y, props, player) => {
+            return new Laser(x, y, props.toX, props.toY, props.speed, props.num, false, props.period, player)
         },
     })
 }
