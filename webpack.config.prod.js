@@ -66,10 +66,4 @@ module.exports = {
             }
         ]
     },
-    plugins: [],
-    devtool: "source-map",
-    devServer: {
-        port: 3000,
-        contentBase: "./dist"
-    }
 }
