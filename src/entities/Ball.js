@@ -32,7 +32,7 @@ import { fadeOut } from "@utils/functions"
 
 // tutorial ball
 class Ball extends TexRegion {
-    constructor(x, y, seq=defaultSeq, player) {
+    constructor(x, y, seq, player) {
         super({ frame: "ball", pos: { x, y } })
         this.pos0 = { x, y }
         this.player = player
