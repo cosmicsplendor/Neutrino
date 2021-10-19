@@ -27,7 +27,10 @@ export default ({ soundSprite, assetsCache, storage, player, state }) => { // us
     const gateDSound = soundSprite.create("gate_d")
     const orbSound = soundSprite.createPool("orb")
     const endSound = soundSprite.create("end")
-    const swSound = soundSprite.create("switch")
+    const lasSounds = {
+        on: soundSprite.createPool("las_on"),
+        off: soundSprite.createPool("las_off")
+    }
     
     const particles = assetsCache.get(particlesId)
     const createOrbPool = (temp, size, orbSound, storage) => {
@@ -165,10 +168,10 @@ export default ({ soundSprite, assetsCache, storage, player, state }) => { // us
             return new Crate(x, y, crateDmgFacs, tempOrbPool, wSounds, props.luck, props.dmg, props.temp, player)
         },
         vlhd: (x, y, props, player) => {
-            return new Laser(x, y, props.toX, props.toY, props.speed, props.num, true, props.period, props.on, player, swSound)
+            return new Laser(x, y, props.toX, props.toY, props.speed, props.num, true, props.period, props.on, player, lasSounds)
         },
         hlhd: (x, y, props, player) => {
-            return new Laser(x, y, props.toX, props.toY, props.speed, props.num, false, props.period, props.on, player, swSound)
+            return new Laser(x, y, props.toX, props.toY, props.speed, props.num, false, props.period, props.on, player, lasSounds)
         },
     })
 }

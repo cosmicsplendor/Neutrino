@@ -20,7 +20,7 @@ class Level extends Camera {
     }
     update(dt) {
         super.update(dt)
-        // this.music && !this.music.playing && this.music.play()
+        this.music && !this.music.playing && this.music.play()
     }
     onRemove() {
         this.music && this.music.pause()

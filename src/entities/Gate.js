@@ -30,7 +30,7 @@ class Gate extends TexRegion {
             this.pos.y = newPosY
             const dPX = this.pos.x + this.w / 2 - this.player.pos.x
             const dPY = this.pos.y + this.h / 2 - this.player.pos.y
-            if (dPX * dPX + dPY * dPY > 160000) return // if the distance is less than 400px return
+            if (dPX * dPX + dPY * dPY > 160000) return // if the distance is greater than 400px return
             if (this.dir === 1) { // just collided with ceiling
                 return this.uSound.play()
             }
