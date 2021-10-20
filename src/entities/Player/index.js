@@ -36,7 +36,7 @@ const getTouchMappings = () => {
 const getKeyMappings = () => Object.freeze({
     left: [ 37, 65 ],
     right: [ 39, 68 ],
-    axn: 32
+    axn: [ 32, 87, 38 ]
 })
 
 const PlayerControlsClass = config.isMobile ? PlayerTouchControls: PlayerKeyControls
