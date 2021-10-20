@@ -3,7 +3,6 @@ import Viewport  from "@utils/ViewPort"
 const desktopRes = {
     max: 1000, min: 750
 }
-
 // the following three are config variables 
 const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 const scale = false
@@ -40,4 +39,5 @@ export default Object.freeze({
     gravity: 1700,
     isMobile,
     scale,
+    devicePixelRatio: isMobile ? Math.min(1.4, window.devicePixelRatio): window.devicePixelRatio
 })
