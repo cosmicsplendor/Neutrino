@@ -13,7 +13,7 @@
     font-size: 1.2em;
     color: #da7b42;
 }
-.lock {
+.icon {
     transition: opacity linear 0.125s;
     opacity: 0;
 }
