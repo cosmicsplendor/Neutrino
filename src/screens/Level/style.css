@@ -23,3 +23,9 @@
 .playBtn:hover {
     opacity: 1;
 }
+.error {
+    color: tomato;
+    font-size: 1.5em;
+    font-family: monospace;
+    white-space: nowrap;
+}
