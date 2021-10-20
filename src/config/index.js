@@ -39,5 +39,5 @@ export default Object.freeze({
     gravity: 1700,
     isMobile,
     scale,
-    devicePixelRatio: isMobile ? Math.min(1.4, window.devicePixelRatio): window.devicePixelRatio
+    devicePixelRatio: isMobile ? Math.min(1.5, window.devicePixelRatio): window.devicePixelRatio
 })
