@@ -52,7 +52,7 @@ class Laser extends MovableEnt {
                 }
                 const dPX = this.pos.x - this.player.pos.x
                 const dPY = this.pos.y - this.player.pos.y
-                if (dPX * dPX + dPY * dPY > 202500) return // if the player is farther than 450px return
+                if (dPX * dPX + dPY * dPY > 360000) return // if the player is farther than 600px return
                 if (this.on) {
                     this.sounds.on.play()
                     return
