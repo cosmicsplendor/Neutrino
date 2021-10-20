@@ -150,6 +150,7 @@ class Player extends TexRegion {
         }
     } 
     explode() {
+        if (this.state.is("completed")) return
         this.cinder.pos.x = this.shard.pos.x = this.pos.x + this.width / 2
         this.cinder.pos.y = this.shard.pos.y = this.pos.y + this.height / 2
         
