@@ -85,9 +85,9 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
     }
     const alginCtrlBtns = (viewport) => {
         if (!config.isMobile) { return }
-        ctrlBtns.left.pos = calcAligned(viewport, ctrlBtns.left, "left", "bottom", margin, -margin)
+        ctrlBtns.left.pos = calcAligned(viewport, ctrlBtns.left, "left", "bottom", margin * 2.25, -margin * 1.5)
         ctrlBtns.right.pos = calcStacked(ctrlBtns.left, ctrlBtns.right, "right", margin)
-        ctrlBtns.axn.pos = calcAligned(viewport, ctrlBtns.right, "right", "bottom", -margin, -margin * 4 / 3)
+        ctrlBtns.axn.pos = calcAligned(viewport, ctrlBtns.right, "right", "bottom", - margin * 2.25, - margin * 1.75)
     }
     const realign = viewport => {
         orbInd.pos = calcAligned(viewport, orbInd, "left", "top", margin, margin)
