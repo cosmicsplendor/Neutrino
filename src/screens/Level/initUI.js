@@ -36,7 +36,7 @@ const renderErr = (id, msg) => `
 </div>
 `
 const renderBest = val => {
-    return `Best Time: ${!!val ? val.toFixed(2) + "s": "N/A"}`
+    return `Best Time: ${!!val ? val.toFixed(2) + "s": "n/a"}`
 }
 const render = (images, level, time) => {
     return `
@@ -102,7 +102,7 @@ export default ({ onStart, uiRoot, storage, level, maxLevel, images, assetsCache
         levelState = Math.min(levelState  + 1, levels.length + 1)
         const best = storage.getHiscore(levelState)
         levelInfo.content = levelState <= levels.length ? `Level ${levelState}`: "Coming Soon"
-        bestTime.content = levelState <= levels.length ? renderBest(best): "more levels coming soon"
+        bestTime.content = levelState <= levels.length ? renderBest(best): "more coming soon"
         updateBtnVis(levelState, maxLevel)
         realignTxt(config.viewport)
         chSound.play()
