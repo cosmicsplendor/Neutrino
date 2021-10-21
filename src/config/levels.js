@@ -27,6 +27,6 @@ export default [
     },
     {
         id: level6,
-        music: "music1"
+        music: "music2"
     }
 ]
