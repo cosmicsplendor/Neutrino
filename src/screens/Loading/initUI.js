@@ -1,30 +1,42 @@
 import config from "@config"
 import UI from "@lib/utils/UI"
 import { calcAligned, calcStacked } from "@utils/entity"
-import loadingDot from "@screens/ui/loadingDot"
 import styles from "./style.css"
 
-const LOADING = "loading"
-const PROG = "progress"
-const INFO = "info"
+const progBarDims = {
+    width: 150,
+    height: 25
+}
 
-const render = (loadingId, progId, infoId) => {
+const INFO = "info"
+const PROG_BAR = "prog-bar"
+const PROG_IND = "prog-ind"
+const progressBar = (width, height, barId, indId) => {
+    return `
+        <div id="${barId}" style="width: ${width}px; height: ${height}px; background: #ffe6d5; z-index: 99999;">
+        </div>
+        <div id="${indId}" style="width: 4px; height: ${height}px; background: tomato; z-index: 100000;">
+        </div>
+    `
+}
+
+const render = (barId, indId, infoId) => {
    return `
-        ${loadingDot(loadingId)}
-        <div id="${progId}" class="${styles.txt}">0%</div>
-        <div id="${infoId}" class="${styles.txt} ${styles.info}">loading assets</div>
+        ${progressBar(progBarDims.width, progBarDims.height, PROG_BAR, PROG_IND, barId, indId)}
+        <div id="${infoId}" class="${styles.txt} ${styles.info}">loading</div>
+        <div id="${infoId}" class="${styles.txt} ${styles.info}"></div>
     `
 }
 
 const initUI = (uiRoot) => {
-    uiRoot.content = render(LOADING, PROG, INFO)
-    const loadingInd = uiRoot.get(`#${LOADING}`)
-    const progInd = uiRoot.get(`#${PROG}`)
+    uiRoot.content = render(PROG_BAR, PROG_IND, INFO)
+    const progBar = uiRoot.get(`#${PROG_BAR}`)
+    const progInd = uiRoot.get(`#${PROG_IND}`)
     const info = uiRoot .get(`#${INFO}`)
     const realign = viewport => { 
-        loadingInd.pos = calcAligned(viewport, loadingInd, "center", "center")
-        progInd.pos = calcStacked(loadingInd, UI.bounds(progInd), "bottom", 0, 20)
-        info.pos = calcStacked(progInd, UI.bounds(info), "bottom", 0, 20)
+        progBar.pos = calcAligned(viewport, progBarDims, "center", "center")
+        progInd.pos = calcAligned(viewport, progBarDims, "center", "center",)
+        info.pos = calcStacked(progBar, UI.bounds(info), "bottom", 0, 20)
     }
     config.viewport.on("change", realign)
     realign(config.viewport)
@@ -34,10 +46,8 @@ const initUI = (uiRoot) => {
             uiRoot.clear()
         },
         onProg: (p, msg) => {
-            progInd.content = `${Math.floor(p * 100)}%`
-            if (!!msg) {
-                info.content = msg
-            }
+            progInd.domNode.style.width = `${Math.round(p * progBarDims.width)}px`
+            info.content = `${Math.round(p * 100)}%`
             realign(config.viewport)
         },
         onError: e => {
