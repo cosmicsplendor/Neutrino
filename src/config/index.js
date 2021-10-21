@@ -1,7 +1,7 @@
 import Viewport  from "@utils/ViewPort"
 
 const desktopRes = {
-    max: 1128, min: 515
+    max: 1128, min: 615
 }
 // the following three are config variables 
 const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
