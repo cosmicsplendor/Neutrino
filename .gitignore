@@ -2,3 +2,4 @@ node_modules
 /dist/assets
 dist/app.bundle.js.map
 dist/app.bundle.js
+dist/script.js

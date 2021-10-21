@@ -3,8 +3,8 @@ const cwd = process.cwd()
 module.exports = {
     entry: "/src/index.js",
     output: {
-        filename: "app.bundle.js",
-        path: path.join(cwd, "/dist")
+        filename: "script.js",
+        path: path.join(cwd, "dist")
     },
     mode: "development",
     resolve: {
