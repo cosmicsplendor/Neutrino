@@ -47,7 +47,7 @@ const render = (images, level, time) => {
         <div class="${styles.infoTitle}" id="${INFO}">${"Level " + level}</div> 
         <div class="${styles.infoTitle} ${styles.infoSub}" id="${BEST_TIME}">${renderBest(time)}</div>
         ${imgBtn(NEXT, images.arrow)}
-        ${btn(START, "PLAY")}
+        ${btn(START, "START")}
     `
 }
 

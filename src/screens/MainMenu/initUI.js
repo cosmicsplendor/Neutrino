@@ -7,7 +7,7 @@ const BTN_ID = "play-btn"
 const doc = new UI(document)
 
 const initUI = ({ uiRoot, onPlay, logo, ball }) => {
-    uiRoot.content = btn(BTN_ID, "START")
+    uiRoot.content = btn(BTN_ID, "PLAY")
     const playBtn = uiRoot.get(`#${BTN_ID}`)
     const realign = viewport => { 
         playBtn.pos = calcAligned(viewport, playBtn, "center", "center", 0, 0)

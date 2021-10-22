@@ -1,7 +1,6 @@
 import { Node } from "@lib"
 import { LEVEL } from "@screens/names"
 import initUI from "./initUI"
-import { TexRegion } from "@lib"
 
 class MainMenuScreen extends Node {
     background = "#000000"
