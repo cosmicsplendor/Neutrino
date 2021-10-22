@@ -1,3 +1,4 @@
+import "@lib/polyfills.js"
 import Game from "@utils/Game"
 import UI from "@utils/UI"
 import createRenderer from "@lib/renderer/create"

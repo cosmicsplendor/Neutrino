@@ -4,6 +4,7 @@ import levels from "@config/levels"
 import imgBtn from "@screens/ui/imgBtn"
 import loadingDot from "@screens/ui/loadingDot"
 import styles from "./style.css"
+import btn from "@screens/ui/btn"
 
 const PREV = "prev-btn"
 const NEXT = "next-btn"
@@ -46,7 +47,7 @@ const render = (images, level, time) => {
         <div class="${styles.infoTitle}" id="${INFO}">${"Level " + level}</div> 
         <div class="${styles.infoTitle} ${styles.infoSub}" id="${BEST_TIME}">${renderBest(time)}</div>
         ${imgBtn(NEXT, images.arrow)}
-        ${imgBtn(START, images.resume, styles.startBtn)}
+        ${btn(START, "PLAY")}
     `
 }
 
@@ -102,7 +103,7 @@ export default ({ onStart, uiRoot, storage, level, maxLevel, images, assetsCache
         levelState = Math.min(levelState  + 1, levels.length + 1)
         const best = storage.getHiscore(levelState)
         levelInfo.content = levelState <= levels.length ? `Level ${levelState}`: "Coming Soon"
-        bestTime.content = levelState <= levels.length ? renderBest(best): "more coming soon"
+        bestTime.content = levelState <= levels.length ? renderBest(best): "new level every week"
         updateBtnVis(levelState, maxLevel)
         realignTxt(config.viewport)
         chSound.play()

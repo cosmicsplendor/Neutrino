@@ -14,8 +14,8 @@ const computeViewport = () => {
          * 100% of the smaller side
          * and max(100% of the smaller side, 75% of the bigger side)
          */
-        const vpWidth = portraitMode ? width: Math.max(0.9 * width, height)
-        const vpHeight = portraitMode ? Math.max(0.9 * height, width): height
+        const vpWidth = portraitMode ? width: Math.max(0.8 * width, height)
+        const vpHeight = portraitMode ? Math.max(0.8 * height, width): height
         return ({
             width: vpWidth / window.devicePixelRatio,
             height: vpHeight / window.devicePixelRatio
@@ -39,6 +39,6 @@ export default Object.freeze({
     gravity: 1700,
     isMobile,
     scale,
-    devicePixelRatio: isMobile ? Math.min(1.25, window.devicePixelRatio): window.devicePixelRatio,
+    devicePixelRatio: isMobile ? Math.min(1.4, window.devicePixelRatio): window.devicePixelRatio,
     twitLink: "https://twitter.com/defiantextropia"
 })

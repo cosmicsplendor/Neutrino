@@ -1,16 +1,16 @@
 import UI from "@utils/UI"
 import config from "@config"
-import { calcCentered } from "@utils/entity"
-import imgBtn from "@screens/ui/imgBtn"
-const BTN_ID = "play-btn"
+import { calcAligned } from "@utils/entity"
+import btn from "@screens/ui/btn"
 
+const BTN_ID = "play-btn"
 const doc = new UI(document)
 
-const initUI = ({ uiRoot, btnImg, onPlay }) => {
-    uiRoot.content = imgBtn(BTN_ID, btnImg)
+const initUI = ({ uiRoot, onPlay, logo, ball }) => {
+    uiRoot.content = btn(BTN_ID, "START")
     const playBtn = uiRoot.get(`#${BTN_ID}`)
     const realign = viewport => { 
-        playBtn.pos = calcCentered(viewport, playBtn)
+        playBtn.pos = calcAligned(viewport, playBtn, "center", "center", 0, 0)
     }
     playBtn.on("click", onPlay)
     doc.on("keypress", onPlay)

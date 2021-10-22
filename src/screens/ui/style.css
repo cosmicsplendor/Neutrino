@@ -28,3 +28,18 @@
     0% { opacity: 0 }
     100% { opacity: 1 }
 }
+
+.playBtn {
+    background: #eeeeee;
+    font-size: 1.5em;
+    color: #e15c22;
+    padding: 0.55em;
+    border-radius: 0.2em;
+    cursor: pointer;
+    font-weight: bold;
+    font-family: monospace;
+    letter-spacing: 1px;
+}
+.playBtn:hover {
+    box-shadow: 0px 0px 3px 3px #7a371c;
+}
