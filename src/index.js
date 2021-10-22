@@ -26,8 +26,8 @@ import orbImgId from "@assets/images/ui/orb.png"
 import pauseImgId from "@assets/images/ui/pause.png"
 import resetImgId from "@assets/images/ui/reset.png"
 import resumeImgId from "@assets/images/ui/resume.png"
-import musOnImgId from "@assets/images/ui/musOn.png"
-import musOffImgId from "@assets/images/ui/musOff.png"
+import musOnImgId from "@assets/images/ui/mus_on.png"
+import musOffImgId from "@assets/images/ui/mus_off.png"
 
 const { viewport } = config
 const renderer = createRenderer({ cnvQry: "#arena", scene: null, background: "#000000", viewport }) // scene will be injected by game

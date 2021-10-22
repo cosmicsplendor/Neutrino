@@ -8,6 +8,7 @@ const hMargin = margin / 2 // hMargin
 const orbExpAmt = 5
 const instFocThres = 1400
 
+const MUSIC = "music"
 const PAUSE = "pause-btn"
 const RESUME  = "resume-btn"
 const ORB_AV = "orb-av" // orb available
@@ -25,11 +26,12 @@ const BEST_TIME_IND = "best-time-ind"
 const BEST_TIME = "best-time"
 const CONTINUE = "continue"
 
-const render = (images, orbAv) => {
+const render = (images, orbAv, webAudioSupported) => {
     return `
         ${imgBtn(ORB_IND, images.orb, styles.hidden)}
         <div id="${TIMER}" class="${styles.timer} ${styles.hidden}"> 0000:0 </div>
         <div id="${ORB_AV}" class="${styles.orbTxt} ${styles.hidden}"> ${orbAv} </div>
+        ${imgBtn(MUSIC, images.music, webAudioSupported ? styles.hidden: styles.dead)}
         ${imgBtn(PAUSE, images.pause, styles.hidden)}
         ${imgBtn(RESUME, images.resume, styles.hidden)}
         ${imgBtn(ORB_EXP_IND, images.orb, styles.hidden)}
@@ -50,8 +52,9 @@ const renderResult = (resumeImg, curTime, bestTime) => {
     `
 }
 
-export default (uiRoot, player, images, storage, gameState, onClose, resetLevel, focusInst, getCheckpoint, btnSound, errSound, contSound) => {
-    uiRoot.content = render(images, storage.getOrbCount())
+export default (uiRoot, player, images, storage, gameState, onClose, resetLevel, focusInst, getCheckpoint, btnSound, errSound, contSound, webAudioSupported) => {
+    images.music = storage.getMusic() ? images.musOn: images.musOff
+    uiRoot.content = render(images, storage.getOrbCount(), webAudioSupported)
     let checkpoint
     const ctrlBtns = config.isMobile && player.getCtrlBtns()
     const orbInd = uiRoot.get(`#${ORB_IND}`)
@@ -63,6 +66,7 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
     const restartBtn = uiRoot.get(`#${RESET}`)
     const crossBtn = uiRoot.get(`#${CROSS}`)
     const timer = uiRoot.get(`#${TIMER}`)
+    const music = uiRoot.get(`#${MUSIC}`)
     if (ctrlBtns) {
         uiRoot.add(ctrlBtns.left)
               .add(ctrlBtns.right)
@@ -93,6 +97,7 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         orbInd.pos = calcAligned(viewport, orbInd, "left", "top", margin, margin)
         orbCount.pos = calcStacked(orbInd, orbCount, "right", hMargin)
         pauseBtn.pos = calcAligned(viewport, pauseBtn, "right", "top", -margin, margin)
+        music.pos = calcStacked(pauseBtn, music, "left", -margin)
         timer.pos = calcStacked(pauseBtn, timer, "bottom", 0, hMargin)
         restartBtn.pos = calcAligned(viewport, restartBtn, "center", "center")
         resumeBtn.pos = calcStacked(restartBtn, resumeBtn, "top", 0, -hMargin)
@@ -109,6 +114,7 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         orbExpInd.hide()
         orbExp.hide()
 
+        music.show()
         pauseBtn.show()
         orbInd.show()
         orbCount.show()
@@ -124,6 +130,7 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         orbExpInd.hide()
         orbExp.hide()
 
+        music.hide()
         pauseBtn.hide()
         orbInd.hide()
         orbCount.hide()
@@ -140,6 +147,7 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         orbInd.show()
         orbCount.show()
         
+        music.hide()
         pauseBtn.hide()
         timer.hide()
 
@@ -235,6 +243,12 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         gameState.elapsed = 0
         gameState.play()
         btnSound.play()
+    })
+    music.on("click", () => {
+        if (!gameState.is("playing")) return
+        const musicOn = storage.getMusic()
+        storage.setMusic(!musicOn)
+        music.domNode.style.background = `url(${musicOn ? images.musOff.src: images.musOn.src})`
     })
     realign(config.viewport)
     return {

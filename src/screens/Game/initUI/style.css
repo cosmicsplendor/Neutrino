@@ -49,3 +49,6 @@
     z-index: 99999;
     transition: opacity 1s linear;
 }
+.dead {
+    display: none;
+}

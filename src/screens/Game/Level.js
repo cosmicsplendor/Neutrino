@@ -13,6 +13,10 @@ class Level extends Camera {
 
         this.player = player
         this.music = music                                                                                                                                                                                                                                                                                                                                           
+        this.musicOn = storage.getMusic()
+        storage.on("music-update", state => {
+            this.musicOn = state
+        })
         this.add(arena)
         this.resetRecursively = () => {
             arena.resetRecursively()
@@ -20,7 +24,11 @@ class Level extends Camera {
     }
     update(dt) {
         super.update(dt)
-        this.music && !this.music.playing && this.music.play()
+        if (this.musicOn) {
+            this.music && !this.music.playing && this.music.play()
+            return
+        }
+        this.music && this.music.playing && this.music.pause()
     }
     onRemove() {
         this.music && this.music.pause()

@@ -1,4 +1,5 @@
 import { Node } from "@lib"
+import { supported as WebAudioSupported } from "@utils/Sound/APIs/WebAudio"
 import ParallaxCamera from "@lib/entities/ParallaxCamera"
 import Timer from "@utils/Timer"
 import SoundSprite from "@utils/Sound/SoundSprite"
@@ -24,6 +25,8 @@ import pauseImgId from "@assets/images/ui/pause.png"
 import crossImgId from "@assets/images/ui/cross.png"
 import resetImgId from "@assets/images/ui/reset.png"
 import orbImgId from "@assets/images/ui/orb.png"
+import musOnImgId from "@assets/images/ui/mus_on.png"
+import musOffImgId from "@assets/images/ui/mus_off.png"
 
 class GameScreen extends Node { // can only have cameras as children
     // background = "rgb(181 24 24)"
@@ -82,12 +85,14 @@ class GameScreen extends Node { // can only have cameras as children
                 resume: assetsCache.get(resumeImgId),
                 pause: assetsCache.get(pauseImgId),
                 orb: assetsCache.get(orbImgId),
-                reset: assetsCache.get(resetImgId)
+                reset: assetsCache.get(resetImgId),
+                musOn: assetsCache.get(musOnImgId),
+                musOff: assetsCache.get(musOffImgId),
             }
         })
     }
     setLevel(data, music) {
-        const level = new Level({ player: this.player, data, viewport: config.viewport, subject: this.player, factories: this.factories, music })
+        const level = new Level({ player: this.player, data, viewport: config.viewport, subject: this.player, factories: this.factories, music, storage: this.storage })
         this.add(level)
         this.game.renderer.changeBackground(config.isMobile || this.game.renderer.api === rendApis.CNV_2D ? data.mob_bg: data.bg)
         this.game.renderer.gTint = data.tint && data.tint.split(",")
@@ -130,7 +135,7 @@ class GameScreen extends Node { // can only have cameras as children
             }
             return checkpoint
         }
-        const { teardownUI, updateTimer } = initUI(this.uiRoot, this.player, this.uiImages, this.storage, this.state, onClose, resetLevel, focusInst, getCheckpoint, this.btnSound, this.errSound, this.contSound)
+        const { teardownUI, updateTimer } = initUI(this.uiRoot, this.player, this.uiImages, this.storage, this.state, onClose, resetLevel, focusInst, getCheckpoint, this.btnSound, this.errSound, this.contSound, WebAudioSupported)
         this.state.level = l
         this.teardownUI = teardownUI
         this.updateTimer = updateTimer
