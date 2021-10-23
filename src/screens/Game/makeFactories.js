@@ -109,8 +109,8 @@ export default ({ soundSprite, assetsCache, storage, player, state }) => { // us
         }),
     })
     const wSounds = { // wood sounds
-        snap: soundSprite.create("w_snap"),
-        crack: soundSprite.create("w_crack")
+        snap: soundSprite.createPool("w_snap"),
+        crack: soundSprite.createPool("w_crack")
     }
     const playerFac = (x, y) => {
         player.reset = () => {

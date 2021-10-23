@@ -34,8 +34,4 @@ export default [
         id: level7,
         music: "music2"
     },
-    {
-        id: level7,
-        music: "music1"
-    },
 ]
