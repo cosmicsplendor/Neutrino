@@ -10,7 +10,7 @@ const castToNum = (val, errParam) => {
 
 class Storage extends Observable {
     constructor(id) {
-        super([ "orb-update", "music-update", "sfx-update" ])
+        super([ "orb-update", "music-update", "sound-update" ])
         this.id = id
         const txtData = localStorage.getItem(id)
         this.data = !!txtData ? JSON.parse(txtData): { 
@@ -18,7 +18,7 @@ class Storage extends Observable {
             orbCount: 6,
             hiscores: {},
             music: true,
-            sfx: true
+            sound: true
         }
     }
     setNum(key, val) {
@@ -56,12 +56,12 @@ class Storage extends Observable {
         this.emit("music-update", this.data.music)
         this.save(this.data)
     }
-    getSfx() {
-        return this.data.sfx
+    getSound() {
+        return this.data.sound
     }
-    setSfx(val) {
-        this.data.sfx = val
-        this.emit("sfx-update", this.data.sfx)
+    setSound(val) {
+        this.data.sound = val
+        this.emit("sound-update", this.data.sound)
         this.save(this.data)
     }
     save(data) {

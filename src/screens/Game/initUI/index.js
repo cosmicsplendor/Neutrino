@@ -65,7 +65,7 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
     const crossBtn = uiRoot.get(`#${CROSS}`)
     const timer = uiRoot.get(`#${TIMER}`)
     const music = soundBtn(storage, "getMusic", "setMusic", gameState, images.musOn, images.musOff, contSound, webAudioSupported, "toggle music")
-    const sfx = soundBtn(storage, "getSfx", "setSfx", gameState, images.sfxOn, images.sfxOff, contSound, webAudioSupported, "toggle audio")
+    const sfx = soundBtn(storage, "getSound", "setSound", gameState, images.soundOn, images.soundOff, contSound, webAudioSupported, "toggle audio")
 
     uiRoot.add(music)
           .add(sfx)

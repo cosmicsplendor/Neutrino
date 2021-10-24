@@ -28,8 +28,8 @@ import resetImgId from "@assets/images/ui/reset.png"
 import resumeImgId from "@assets/images/ui/resume.png"
 import musOnImgId from "@assets/images/ui/mus_on.png"
 import musOffImgId from "@assets/images/ui/mus_off.png"
-import sfxOnImgId from "@assets/images/ui/sfx_on.png"
-import sfxOffImgId from "@assets/images/ui/sfx_off.png"
+import soundOnImgId from "@assets/images/ui/sound_on.png"
+import soundOffImgId from "@assets/images/ui/sound_off.png"
 
 const { viewport } = config
 const renderer = createRenderer({ cnvQry: "#arena", scene: null, background: "#000000", viewport }) // scene will be injected by game
@@ -52,8 +52,8 @@ const assets = [
     resumeImgId,
     musOnImgId,
     musOffImgId,
-    sfxOnImgId,
-    sfxOffImgId
+    soundOnImgId,
+    soundOffImgId
 ]
 if (!config.mobile) {
     assets.push(bgDataId)
@@ -70,6 +70,11 @@ const game = new Game({
     storage,
     screenFactories,
 })
+
+if (!storage.getSound()) {
+    game.turnOffSound()
+}
+
 assetsCache.once("prog-end", () =>  { // listening to "progress-end" instead of "load" to ensure critical engine setup tasks happen before emission of load event
     const atlasmeta = assetsCache.get(atlasmetaId)
     renderer.setTexatlas(
