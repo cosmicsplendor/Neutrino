@@ -1,4 +1,6 @@
 import { Node } from "@lib"
+import config from "@config"
+import { calcAligned, getGlobalPos } from "@utils/entity"
 import { LEVEL } from "@screens/names"
 import Title from "./Title"
 import initUI from "./initUI"
@@ -9,10 +11,18 @@ class MainMenuScreen extends Node {
         super()
         this.game = game
         this.uiRoot = uiRoot
-        this.pos.x = 400
-        this.pos.y = 100
         game.assetsCache.on("load", () => {
-            this.add(new Title())
+            const { viewport } = config
+            this.gameTitle = new Title()
+            this.realign = vp => {
+                const { devicePixelRatio } = config
+                this.gameTitle.pos = { ...calcAligned({
+                    x: 0, y:0, width: vp.width * devicePixelRatio, height: vp.height * devicePixelRatio
+                }, { width: this.gameTitle.width, height: this.gameTitle.height }, "center", "top", 15, 100) }
+            }
+            viewport.on("change", this.realign)
+            this.realign(viewport)
+            this.add(this.gameTitle)
         })
     }
     onEnter() {
@@ -23,6 +33,7 @@ class MainMenuScreen extends Node {
     }
     onExit() {
         this.teardownUI()
+        config.viewport.off("change", this.realign)
     }
 }
 

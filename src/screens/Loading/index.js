@@ -18,7 +18,6 @@ class LoadingScreen extends Node {
         const { teardown, onProg, onError } =  initUI(this.uiRoot)
         this.teardown = teardown
         this.onProg = onProg
-        assetsCache.once("error", console.log)
         assetsCache.once("load", () => {
             this.game.switchScreen(MAIN_MENU)
         })

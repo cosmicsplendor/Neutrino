@@ -98,7 +98,7 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         orbInd.pos = calcAligned(viewport, orbInd, "left", "top", margin, margin)
         orbCount.pos = calcStacked(orbInd, orbCount, "right", hMargin)
         pauseBtn.pos = calcAligned(viewport, pauseBtn, "right", "top", -margin, margin)
-        soundBtn.pos = calcStacked(pauseBtn, soundBtn, "left", -margin)
+        soundBtn.pos = calcStacked(pauseBtn, soundBtn, "left", -margin * 0.625)
         timer.pos = calcStacked(pauseBtn, timer, "bottom", 0, hMargin)
         restartBtn.pos = calcAligned(viewport, restartBtn, "center", "center")
         resumeBtn.pos = calcStacked(restartBtn, resumeBtn, "top", 0, -hMargin)
