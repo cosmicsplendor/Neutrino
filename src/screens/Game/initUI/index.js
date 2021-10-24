@@ -200,7 +200,15 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         if (!gameState.is("playing")) return
         gameState.pause()
     }
+    const onKeyDown = e => {
+        if (gameState.is("playing") && e.key === "Escape") {
+            return gameState.pause()
+        } 
+        if (!gameState.is("paused") || e.key !== "Enter") return
+        gameState.play()
+    }
 
+    if (!config.isMobile) document.addEventListener("keydown", onKeyDown)
     window.addEventListener("blur", onBlur)
     document.addEventListener("blur", onBlur)
     gameState.on("play", onPlay)
@@ -220,7 +228,6 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
             gameState.play()
             return btnSound.play()
         } 
-        if (!gameState.is("over")) return
 
         // have players pay 2 orbs
         const orbs = storage.getOrbCount()
@@ -255,6 +262,7 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
     realign(config.viewport)
     return {
         teardownUI: () => {
+            if (!config.isMobile) document.removeEventListener("keydown", onKeyDown)
             window.removeEventListener("blur", onBlur)
             document.removeEventListener("blur", onBlur)
             config.viewport.off("change", realign)
