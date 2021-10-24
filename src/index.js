@@ -51,6 +51,7 @@ const assets = [
     soundOnImgId,
     soundOffImgId
 ]
+
 if (!config.mobile) {
     assets.push(bgDataId)
 }

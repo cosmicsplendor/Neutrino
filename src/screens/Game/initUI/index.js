@@ -196,6 +196,13 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         continueBtn.show()
     }
 
+    const onBlur = () => {
+        if (!gameState.is("playing")) return
+        gameState.pause()
+    }
+
+    window.addEventListener("blur", onBlur)
+    document.addEventListener("blur", onBlur)
     gameState.on("play", onPlay)
     gameState.on("pause", onPause)
     gameState.on("over", onOver)
@@ -248,6 +255,8 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
     realign(config.viewport)
     return {
         teardownUI: () => {
+            window.removeEventListener("blur", onBlur)
+            document.removeEventListener("blur", onBlur)
             config.viewport.off("change", realign)
             storage.off("orb-update", changeOrbCount)
             gameState.off("play", onPlay)

@@ -1,5 +1,6 @@
 import { Node } from "@lib"
 import { LEVEL } from "@screens/names"
+import Title from "./Title"
 import initUI from "./initUI"
 
 class MainMenuScreen extends Node {
@@ -8,17 +9,11 @@ class MainMenuScreen extends Node {
         super()
         this.game = game
         this.uiRoot = uiRoot
-        // game.assetsCache.on("load", () => {
-        //     this.logo = new TexRegion({ frame: "logo" })
-        //     this.ball = new TexRegion({ frame: "ball" })
-        //     this.ball.anchor = {
-        //         x: this.ball.w / 2,
-        //         y: this.ball.h / 2
-        //     }
-        //     this.ball.rotation = 0
-        //     // this.add(this.logo)
-        //     // this.add(this.ball)
-        // })
+        this.pos.x = 400
+        this.pos.y = 100
+        game.assetsCache.on("load", () => {
+            this.add(new Title())
+        })
     }
     onEnter() {
         const { uiRoot, game } = this

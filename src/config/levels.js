@@ -8,15 +8,15 @@ import level7 from "@assets/levels/level7.cson"
 export default [
     {
         id: level1,
-        music: "music4"
+        music: "music3"
     },
     {
         id: level2,
-        music: "music2"
+        music: "music1"
     },
     {
         id: level3,
-        music: "music3"
+        music: "music4"
     },
     {
         id: level4,
@@ -24,14 +24,14 @@ export default [
     },
     {
         id: level5,
-        music: "music3"
+        music: "music2"
     },
     {
         id: level6,
-        music: "music4"
+        music: "music5"
     },
     {
         id: level7,
-        music: "music2"
+        music: "music3"
     },
 ]
