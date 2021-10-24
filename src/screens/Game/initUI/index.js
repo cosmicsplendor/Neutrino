@@ -182,7 +182,6 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         curTimeVal.pos = calcStacked(curTimeInd, curTimeVal, "right", 8)
         continueBtn.pos = calcStacked(calcComposite([ bestTimeInd, bestTimeVal ]), continueBtn, "bottom", 0, 16)
         
-        
         continueBtn.on("click", () => {
             contSound.play()
             onClose(true)
@@ -223,7 +222,12 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
             return continuePlay()
         }
         if (gameState.is("paused") && e.key === "Enter") {
-            gameState.play()
+            return gameState.play()
+        }
+        // if gameState.is("completed")
+        if (e.key === "Enter") {
+            contSound.play()
+            onClose(true)
         }
     }
 
