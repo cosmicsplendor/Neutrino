@@ -28,6 +28,8 @@ import resetImgId from "@assets/images/ui/reset.png"
 import resumeImgId from "@assets/images/ui/resume.png"
 import musOnImgId from "@assets/images/ui/mus_on.png"
 import musOffImgId from "@assets/images/ui/mus_off.png"
+import sfxOnImgId from "@assets/images/ui/sfx_on.png"
+import sfxOffImgId from "@assets/images/ui/sfx_off.png"
 
 const { viewport } = config
 const renderer = createRenderer({ cnvQry: "#arena", scene: null, background: "#000000", viewport }) // scene will be injected by game
@@ -49,7 +51,9 @@ const assets = [
     resetImgId,
     resumeImgId,
     musOnImgId,
-    musOffImgId
+    musOffImgId,
+    sfxOnImgId,
+    sfxOffImgId
 ]
 if (!config.mobile) {
     assets.push(bgDataId)

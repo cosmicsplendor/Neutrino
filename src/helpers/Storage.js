@@ -17,7 +17,8 @@ class Storage extends Observable {
             curLevel: 1,
             orbCount: 6,
             hiscores: {},
-            music: true
+            music: true,
+            sfx: true
         }
     }
     setNum(key, val) {
@@ -47,13 +48,21 @@ class Storage extends Observable {
     getHiscore(level) {
         return this.data.hiscores[String(level)]
     }
+    getMusic() {
+        return this.data.music
+    }
     setMusic(val) {
         this.data.music = val
         this.emit("music-update", this.data.music)
         this.save(this.data)
     }
-    getMusic() {
-        return this.data.music
+    getSfx() {
+        return this.data.sfx
+    }
+    setSfx() {
+        this.data.sfx = val
+        this.emit("sfx-update", this.data.sfx)
+        this.save(this.data)
     }
     save(data) {
         localStorage.setItem(this.id, JSON.stringify(data))

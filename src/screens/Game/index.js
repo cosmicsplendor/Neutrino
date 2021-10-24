@@ -27,6 +27,8 @@ import resetImgId from "@assets/images/ui/reset.png"
 import orbImgId from "@assets/images/ui/orb.png"
 import musOnImgId from "@assets/images/ui/mus_on.png"
 import musOffImgId from "@assets/images/ui/mus_off.png"
+import sfxOnImgId from "@assets/images/ui/sfx_on.png"
+import sfxOffImgId from "@assets/images/ui/sfx_off.png"
 
 class GameScreen extends Node { // can only have cameras as children
     // background = "rgb(181 24 24)"
@@ -88,6 +90,8 @@ class GameScreen extends Node { // can only have cameras as children
                 reset: assetsCache.get(resetImgId),
                 musOn: assetsCache.get(musOnImgId),
                 musOff: assetsCache.get(musOffImgId),
+                sfxOn: assetsCache.get(sfxOnImgId),
+                sfxOff: assetsCache.get(sfxOffImgId),
             }
         })
     }
