@@ -18,7 +18,7 @@ class MainMenuScreen extends Node {
                 const { devicePixelRatio } = config
                 this.gameTitle.pos = { ...calcAligned({
                     x: 0, y:0, width: vp.width * devicePixelRatio, height: vp.height * devicePixelRatio
-                }, { width: this.gameTitle.width, height: this.gameTitle.height }, "center", "top", 15, 100) }
+                }, { width: this.gameTitle.width, height: this.gameTitle.height }, "center", "top", 15, 80) }
             }
             viewport.on("change", this.realign)
             this.realign(viewport)
