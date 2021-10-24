@@ -13,13 +13,13 @@ const initUI = ({ uiRoot, onPlay }) => {
         playBtn.pos = calcAligned(viewport, playBtn, "center", "center", 0, 0)
     }
     playBtn.on("click", onPlay)
-    doc.on("keypress", onPlay)
+    if (config.isMobile === false) doc.on("keydown", onPlay)
     config.viewport.on("change", realign)
     realign(config.viewport)
     return () => {
         playBtn.off("click", onPlay)
         uiRoot.clear()
-        doc.off("keypress", onPlay)
+        if (config.isMobile === false) doc.off("keydown", onPlay)
         config.viewport.off("change", realign)
     }
 }

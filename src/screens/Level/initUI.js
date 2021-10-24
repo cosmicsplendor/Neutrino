@@ -109,7 +109,7 @@ export default ({ onStart, uiRoot, storage, level, maxLevel, images, assetsCache
         chSound.play()
     }
     const onStartBtnClick = () => {
-        if (levelState > maxLevel) { return }
+        if (levelState > maxLevel) { return  errSound.play() }
         const levelId = levels[levelState - 1].id
         config.viewport.off("change", realign)
         uiRoot.clear()
@@ -134,15 +134,34 @@ export default ({ onStart, uiRoot, storage, level, maxLevel, images, assetsCache
         }
         onStart(levelState)
     }
+    const onKeyDown = e => {
+        const keyCode = e.which || e.keyCode
+
+        if (!!keyCode) {
+            switch(keyCode) {
+                case 39: // right arrow
+                case 68: // D
+                    onNextBtnClick()
+                break
+                case 37: // left arrow
+                case 65: // A
+                    onPrevBtnClick()
+                break
+                default: // rest of the keys
+                    onStartBtnClick()
+            }
+            return
+        }
+    }
     
-    document.addEventListener("keypress", onStartBtnClick)
+    if (config.isMobile === false) document.addEventListener("keydown", onKeyDown)
     prevBtn.on("click", onPrevBtnClick)
     nextBtn.on("click", onNextBtnClick)
     startBtn.on("click", onStartBtnClick)
     config.viewport.on("change", realign)
     realign(config.viewport)
     return () => {
-        document.removeEventListener("keypress", onStartBtnClick)
+        if (config.isMobile === false) document.removeEventListener("keydown", onKeyDown)
         prevBtn.off("click", onPrevBtnClick)
         nextBtn.off("click", onNextBtnClick)
         startBtn.off("click", onStartBtnClick)
