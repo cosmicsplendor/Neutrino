@@ -26,8 +26,6 @@ import orbImgId from "@assets/images/ui/orb.png"
 import pauseImgId from "@assets/images/ui/pause.png"
 import resetImgId from "@assets/images/ui/reset.png"
 import resumeImgId from "@assets/images/ui/resume.png"
-import musOnImgId from "@assets/images/ui/mus_on.png"
-import musOffImgId from "@assets/images/ui/mus_off.png"
 import soundOnImgId from "@assets/images/ui/sound_on.png"
 import soundOffImgId from "@assets/images/ui/sound_off.png"
 
@@ -50,8 +48,6 @@ const assets = [
     pauseImgId,
     resetImgId,
     resumeImgId,
-    musOnImgId,
-    musOffImgId,
     soundOnImgId,
     soundOffImgId
 ]

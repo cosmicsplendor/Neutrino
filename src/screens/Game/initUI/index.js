@@ -1,7 +1,7 @@
 import { calcAligned, calcStacked, calcComposite, combine } from "@utils/entity"
 import config from "@config"
 import imgBtn from "@screens/ui/imgBtn"
-import soundBtn from "./soundBtn"
+import soundImgBtn from "./soundImgBtn"
 import styles from "./style.css"
 
 const margin = 20
@@ -64,11 +64,10 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
     const restartBtn = uiRoot.get(`#${RESET}`)
     const crossBtn = uiRoot.get(`#${CROSS}`)
     const timer = uiRoot.get(`#${TIMER}`)
-    const music = soundBtn(storage, "getMusic", "setMusic", gameState, images.musOn, images.musOff, contSound, webAudioSupported, "toggle music")
-    const sfx = soundBtn(storage, "getSound", "setSound", gameState, images.soundOn, images.soundOff, contSound, webAudioSupported, "toggle audio")
+    // const music = soundBtn(storage, "getMusic", "setMusic", gameState, images.musOn, images.musOff, contSound, webAudioSupported, "toggle music")
+    const soundBtn = soundImgBtn(storage, "getSound", "setSound", gameState, images.soundOn, images.soundOff, contSound, webAudioSupported, "toggle audio")
 
-    uiRoot.add(music)
-          .add(sfx)
+    uiRoot.add(soundBtn)
     if (ctrlBtns) {
         uiRoot.add(ctrlBtns.left)
               .add(ctrlBtns.right)
@@ -96,11 +95,10 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         ctrlBtns.axn.pos = calcAligned(viewport, ctrlBtns.right, "right", "bottom", - margin, - margin * 1.75)
     }
     const realign = viewport => {
-        music.pos = calcAligned(viewport, music, "left", "top", margin, margin)
-        orbInd.pos = calcStacked(music, orbInd, "right", margin)
+        orbInd.pos = calcAligned(viewport, orbInd, "left", "top", margin, margin)
         orbCount.pos = calcStacked(orbInd, orbCount, "right", hMargin)
         pauseBtn.pos = calcAligned(viewport, pauseBtn, "right", "top", -margin, margin)
-        sfx.pos = calcStacked(pauseBtn, sfx, "left", -margin)
+        soundBtn.pos = calcStacked(pauseBtn, soundBtn, "left", -margin)
         timer.pos = calcStacked(pauseBtn, timer, "bottom", 0, hMargin)
         restartBtn.pos = calcAligned(viewport, restartBtn, "center", "center")
         resumeBtn.pos = calcStacked(restartBtn, resumeBtn, "top", 0, -hMargin)
@@ -117,8 +115,7 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         orbExpInd.hide()
         orbExp.hide()
 
-        music.show()
-        sfx.show()
+        soundBtn.show()
         pauseBtn.show()
         orbInd.show()
         orbCount.show()
@@ -134,8 +131,7 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         orbExpInd.hide()
         orbExp.hide()
 
-        music.hide()
-        sfx.hide()
+        soundBtn.hide()
         pauseBtn.hide()
         orbInd.hide()
         orbCount.hide()
@@ -152,8 +148,7 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         orbInd.show()
         orbCount.show()
         
-        music.hide()
-        sfx.hide()
+        soundBtn.hide()
         pauseBtn.hide()
         timer.hide()
 

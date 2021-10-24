@@ -25,8 +25,6 @@ import pauseImgId from "@assets/images/ui/pause.png"
 import crossImgId from "@assets/images/ui/cross.png"
 import resetImgId from "@assets/images/ui/reset.png"
 import orbImgId from "@assets/images/ui/orb.png"
-import musOnImgId from "@assets/images/ui/mus_on.png"
-import musOffImgId from "@assets/images/ui/mus_off.png"
 import soundOnImgId from "@assets/images/ui/sound_on.png"
 import soundOffImgId from "@assets/images/ui/sound_off.png"
 
@@ -88,15 +86,13 @@ class GameScreen extends Node { // can only have cameras as children
                 pause: assetsCache.get(pauseImgId),
                 orb: assetsCache.get(orbImgId),
                 reset: assetsCache.get(resetImgId),
-                musOn: assetsCache.get(musOnImgId),
-                musOff: assetsCache.get(musOffImgId),
                 soundOn: assetsCache.get(soundOnImgId),
                 soundOff: assetsCache.get(soundOffImgId),
             }
         })
     }
     setLevel(data, music) {
-        const level = new Level({ player: this.player, data, viewport: config.viewport, subject: this.player, factories: this.factories, music, storage: this.storage })
+        const level = new Level({ player: this.player, data, viewport: config.viewport, subject: this.player, factories: this.factories, music })
         this.add(level)
         this.game.renderer.changeBackground(config.isMobile || this.game.renderer.api === rendApis.CNV_2D ? data.mob_bg: data.bg)
         this.game.renderer.gTint = data.tint && data.tint.split(",")
