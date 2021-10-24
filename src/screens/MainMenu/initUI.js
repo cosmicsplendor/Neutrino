@@ -4,9 +4,9 @@ import { calcAligned } from "@utils/entity"
 import btn from "@screens/ui/btn"
 
 const BTN_ID = "play-btn"
-const doc = new UI(document)
 
-const initUI = ({ uiRoot, onPlay, logo, ball }) => {
+const initUI = ({ uiRoot, onPlay }) => {
+    const doc = new UI(document)
     uiRoot.content = btn(BTN_ID, "PLAY")
     const playBtn = uiRoot.get(`#${BTN_ID}`)
     const realign = viewport => { 

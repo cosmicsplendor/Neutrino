@@ -135,12 +135,14 @@ export default ({ onStart, uiRoot, storage, level, maxLevel, images, assetsCache
         onStart(levelState)
     }
     
+    document.addEventListener("keypress", onStartBtnClick)
     prevBtn.on("click", onPrevBtnClick)
     nextBtn.on("click", onNextBtnClick)
     startBtn.on("click", onStartBtnClick)
     config.viewport.on("change", realign)
     realign(config.viewport)
     return () => {
+        document.removeEventListener("keypress", onStartBtnClick)
         prevBtn.off("click", onPrevBtnClick)
         nextBtn.off("click", onNextBtnClick)
         startBtn.off("click", onStartBtnClick)
