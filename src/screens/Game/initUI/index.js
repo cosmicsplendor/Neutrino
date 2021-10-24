@@ -195,7 +195,22 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         bestTimeVal.show()
         continueBtn.show()
     }
-
+    const continuePlay = () => {
+        // have players pay 2 orbs
+        const orbs = storage.getOrbCount()
+        if (orbs < orbExpAmt && !!checkpoint) { // may be signal to player that there's not enough orbs to continue, provide that there's also a checkpoint available for player restore
+            return errSound.play()
+        }
+        
+        btnSound.play()
+        gameState.play()
+        resetLevel()
+        if (!!checkpoint) {
+            storage.setOrbCount(orbs - orbExpAmt)
+            player.pos.x = checkpoint.x
+            player.pos.y = checkpoint.y
+        }
+    }
     const onBlur = () => {
         if (!gameState.is("playing")) return
         gameState.pause()
@@ -204,8 +219,12 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         if (gameState.is("playing") && e.key === "Escape") {
             return gameState.pause()
         } 
-        if (!gameState.is("paused") || e.key !== "Enter") return
-        gameState.play()
+        if (gameState.is("over") && e.key === "Enter") { 
+            return continuePlay()
+        }
+        if (gameState.is("paused") && e.key === "Enter") {
+            gameState.play()
+        }
     }
 
     if (!config.isMobile) document.addEventListener("keydown", onKeyDown)
@@ -229,21 +248,7 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
             return btnSound.play()
         } 
 
-        // have players pay 2 orbs
-        const orbs = storage.getOrbCount()
-        if (orbs < orbExpAmt && !!checkpoint) { // may be signal to player that there's not enough orbs to continue, provide that there's also a checkpoint available for player restore
-            return errSound.play()
-        }
-        
-        btnSound.play()
-        gameState.play()
-        resetLevel()
-        gameState.play()
-        if (!!checkpoint) {
-            storage.setOrbCount(orbs - orbExpAmt)
-            player.pos.x = checkpoint.x
-            player.pos.y = checkpoint.y
-        }
+        continuePlay()
     })
     crossBtn.on("click", () => {
         if (gameState.is("playing") || gameState.is("completed")) return
