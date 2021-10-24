@@ -6,8 +6,8 @@ export default (storage, getterKey, setterKey, gameState, onImg, offImg, sound, 
     const el = domImgBtn(img, _class, title)
     el.on("click", () => {
         if (!gameState.is("playing")) return
-        const musicOn = storage[getterKey]()
-        storage[setterKey](!musicOn)
+        const musicOn = !storage[getterKey]()
+        storage[setterKey](musicOn)
         el.domNode.style.background = `url(${musicOn ? onImg.src: offImg.src})`
         sound.play()
     })

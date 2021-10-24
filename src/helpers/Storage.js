@@ -10,7 +10,7 @@ const castToNum = (val, errParam) => {
 
 class Storage extends Observable {
     constructor(id) {
-        super([ "orb-update", "music-update" ])
+        super([ "orb-update", "music-update", "sfx-update" ])
         this.id = id
         const txtData = localStorage.getItem(id)
         this.data = !!txtData ? JSON.parse(txtData): { 
@@ -59,7 +59,7 @@ class Storage extends Observable {
     getSfx() {
         return this.data.sfx
     }
-    setSfx() {
+    setSfx(val) {
         this.data.sfx = val
         this.emit("sfx-update", this.data.sfx)
         this.save(this.data)

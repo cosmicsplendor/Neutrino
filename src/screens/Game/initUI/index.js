@@ -250,12 +250,6 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         gameState.play()
         btnSound.play()
     })
-    music.on("click", () => {
-        if (!gameState.is("playing")) return
-        const musicOn = storage.getMusic()
-        storage.setMusic(!musicOn)
-        music.domNode.style.background = `url(${musicOn ? images.musOff.src: images.musOn.src})`
-    })
     realign(config.viewport)
     return {
         teardownUI: () => {
