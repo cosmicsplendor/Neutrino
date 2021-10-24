@@ -28,15 +28,15 @@ const CONTINUE = "continue"
 
 const render = (images, orbAv) => {
     return `
-        ${imgBtn(ORB_IND, images.orb, styles.hidden)}
+        ${imgBtn(ORB_IND, images.orb, styles.hidden, "orb count")}
         <div id="${TIMER}" class="${styles.timer} ${styles.hidden}"> 0000:0 </div>
         <div id="${ORB_AV}" class="${styles.orbTxt} ${styles.hidden}"> ${orbAv} </div>
-        ${imgBtn(PAUSE, images.pause, styles.hidden)}
-        ${imgBtn(RESUME, images.resume, styles.hidden)}
+        ${imgBtn(PAUSE, images.pause, styles.hidden, "pause game")}
+        ${imgBtn(RESUME, images.resume, styles.hidden, "resume")}
         ${imgBtn(ORB_EXP_IND, images.orb, styles.hidden)}
         <div id="${ORB_EXP}" class="${styles.orbTxt} ${styles.hidden}"> &times; ${orbExpAmt} </div>
-        ${imgBtn(RESET, images.reset, styles.hidden)}
-        ${imgBtn(CROSS, images.cross, styles.hidden)}
+        ${imgBtn(RESET, images.reset, styles.hidden, "restart")}
+        ${imgBtn(CROSS, images.cross, styles.hidden, "exit to level screen")}
     `
 }
 
@@ -64,8 +64,8 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
     const restartBtn = uiRoot.get(`#${RESET}`)
     const crossBtn = uiRoot.get(`#${CROSS}`)
     const timer = uiRoot.get(`#${TIMER}`)
-    const music = soundBtn(storage, "getMusic", "setMusic", gameState, images.musOn, images.musOff, contSound, webAudioSupported)
-    const sfx = soundBtn(storage, "getSfx", "setSfx", gameState, images.sfxOn, images.sfxOff, contSound, webAudioSupported)
+    const music = soundBtn(storage, "getMusic", "setMusic", gameState, images.musOn, images.musOff, contSound, webAudioSupported, "toggle music")
+    const sfx = soundBtn(storage, "getSfx", "setSfx", gameState, images.sfxOn, images.sfxOff, contSound, webAudioSupported, "toggle audio")
 
     uiRoot.add(music)
           .add(sfx)
