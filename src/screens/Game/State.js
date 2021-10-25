@@ -1,7 +1,7 @@
 import Observable from "@lib/utils/Observable";
 
 class State extends Observable {
-    name = null
+    name = null // starting with null state before any state transition call
     level = 1
     elapsed = 0
     constructor() {
@@ -34,7 +34,7 @@ class State extends Observable {
         this.set("completed")
     }
     reset() {
-        this.name = null
+        this.name = null // reverting to null state on reset
     }
 }
 

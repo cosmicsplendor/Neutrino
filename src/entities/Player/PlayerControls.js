@@ -27,7 +27,7 @@ const extendPalyerControls = S => class extends S {
         this.stateSwitched = true
     }
     update(entity, dt) {
-        if (this.gameState.is("completed")) return
+        if (!this.gameState.is("playing")) return
         this.state.update(entity, dt)
         this.cleanup()
     }
@@ -81,7 +81,7 @@ class Jumping {
         this.limitReached = true
     }
     update(entity, dt) {
-        if (this.first && entity.velY < 0) { // if the jump is actually possible (there's nothing above blocking the player)
+        if (this.first && entity.velY < 0) { // if the jump is actually possible (there's nothing above blocking the player) and the player isn't falling down
             this.onJump()
         }
         this.first = false
