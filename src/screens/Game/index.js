@@ -92,7 +92,7 @@ class GameScreen extends Node { // can only have cameras as children
         })
     }
     setLevel(data, music) {
-        const level = new Level({ player: this.player, data, viewport: config.viewport, subject: this.player, factories: this.factories, music })
+        const level = new Level({ player: this.player, data, viewport: config.viewport, subject: this.player, factories: this.factories, music, gameState: this.state })
         this.add(level)
         this.game.renderer.changeBackground(config.isMobile || this.game.renderer.api === rendApis.CNV_2D ? data.mob_bg: data.bg)
         this.game.renderer.gTint = data.tint && data.tint.split(",")
@@ -110,7 +110,7 @@ class GameScreen extends Node { // can only have cameras as children
         }
     }
     onEnter(l) {
-        const levelDataId = levels[l - 1].id
+        const levelDataId = levels[Math.min(l - 1, levels.length - 1)].id
         const music = levels[l - 1].music
         const data = this.game.assetsCache.get(levelDataId)
         const level = this.setLevel(data, music && this.music[music])
