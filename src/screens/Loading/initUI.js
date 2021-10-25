@@ -1,6 +1,7 @@
 import config from "@config"
 import UI from "@lib/utils/UI"
 import { calcAligned, calcStacked } from "@utils/entity"
+import { offlineErrMsg } from "@lib/constants"
 import styles from "./style.css"
 
 const progBarDims = {
@@ -52,7 +53,7 @@ const initUI = (uiRoot) => {
         },
         onError: e => {
             console.log(e)
-            info.content = !!e && e.message === "offline" ? "Error: Connection Problem": "Error: Unsupported Device"
+            info.content = !!e && e.message === offlineErrMsg ? "Error: Connection Problem": "Error: Unsupported Device"
             info.domNode.style.color = "#d34545"
             realign(config.viewport)
         }
