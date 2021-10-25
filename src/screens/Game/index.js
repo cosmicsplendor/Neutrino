@@ -1,5 +1,5 @@
 import { Node } from "@lib"
-import { supported as WebAudioSupported } from "@utils/Sound/APIs/WebAudio"
+import { webAudioSupported } from "@utils/Sound"
 import ParallaxCamera from "@lib/entities/ParallaxCamera"
 import Timer from "@utils/Timer"
 import SoundSprite from "@utils/Sound/SoundSprite"
@@ -135,7 +135,7 @@ class GameScreen extends Node { // can only have cameras as children
             }
             return checkpoint
         }
-        const { teardownUI, updateTimer } = initUI(this.uiRoot, this.player, this.uiImages, this.storage, this.state, onClose, resetLevel, focusInst, getCheckpoint, this.btnSound, this.errSound, this.contSound, WebAudioSupported)
+        const { teardownUI, updateTimer } = initUI(this.uiRoot, this.player, this.uiImages, this.storage, this.state, onClose, resetLevel, focusInst, getCheckpoint, this.btnSound, this.errSound, this.contSound, webAudioSupported)
         this.state.level = l
         this.teardownUI = teardownUI
         this.updateTimer = updateTimer
