@@ -146,8 +146,10 @@ export default ({ onStart, uiRoot, storage, level, maxLevel, images, assetsCache
                 case 68: // D
                     onNextBtnClick()
                 break
-                default: // rest of the keys
+                case 32: // on one of enter and space the keys
+                case 13:
                     onStartBtnClick()
+                break
             }
             return
         }
@@ -165,7 +167,8 @@ export default ({ onStart, uiRoot, storage, level, maxLevel, images, assetsCache
             case "d":
                 onNextBtnClick()
             break
-            default:
+            case " ":
+            case "Enter":
                 onStartBtnClick()
             break
         }
