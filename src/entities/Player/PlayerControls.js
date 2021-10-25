@@ -14,6 +14,7 @@ const extendPalyerControls = S => class extends S {
             rolling: new Rolling(this),
         }
         this.state = this.states.jumping
+        this.state.limitReached = true
     }
     cleanup() {
         this.reset() // reset pressed attribute on all keys
