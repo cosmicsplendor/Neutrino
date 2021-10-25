@@ -52,7 +52,7 @@ const initUI = (uiRoot) => {
         },
         onError: e => {
             console.log(e)
-            info.content = !!e && e.message === "offline" ? "Error: No Internet": "Error: Unsupported Device"
+            info.content = !!e && e.message === "offline" ? "Connection Error": "Error: Unsupported Device"
             info.domNode.style.color = "#d34545"
             realign(config.viewport)
         }

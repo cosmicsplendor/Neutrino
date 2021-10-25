@@ -126,7 +126,7 @@ export default ({ onStart, uiRoot, storage, level, maxLevel, images, assetsCache
                 onStart(levelState)
             })
             assetsCache.on("error", () => {
-                uiRoot.content = renderErr(ERROR, "No Internet")
+                uiRoot.content = renderErr(ERROR, "Connection Problem")
                 const errMsg = uiRoot.get(`#${ERROR}`)
                 errMsg.pos = calcAligned(config.viewport, errMsg, "center", "center")
             })
@@ -136,21 +136,21 @@ export default ({ onStart, uiRoot, storage, level, maxLevel, images, assetsCache
     }
     const onKeyDown = e => {
         const keyCode = e.which || e.keyCode
-        // if (!!keyCode) {
-        //     switch(keyCode) {
-        //         case 37: // left arrow
-        //         case 65: // A
-        //             onPrevBtnClick()
-        //         break
-        //         case 39: // right arrow
-        //         case 68: // D
-        //             onNextBtnClick()
-        //         break
-        //         default: // rest of the keys
-        //             onStartBtnClick()
-        //     }
-        //     return
-        // }
+        if (!!keyCode) {
+            switch(keyCode) {
+                case 37: // left arrow
+                case 65: // A
+                    onPrevBtnClick()
+                break
+                case 39: // right arrow
+                case 68: // D
+                    onNextBtnClick()
+                break
+                default: // rest of the keys
+                    onStartBtnClick()
+            }
+            return
+        }
 
         switch(e.key) {
             case "Left": // for IE and Older Versions of Edge
