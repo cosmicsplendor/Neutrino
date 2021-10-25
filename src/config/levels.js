@@ -12,11 +12,11 @@ export default [
     },
     {
         id: level2,
-        music: "music1"
+        music: "music2"
     },
     {
         id: level3,
-        music: "music4"
+        music: "music3"
     },
     {
         id: level4,
@@ -28,7 +28,7 @@ export default [
     },
     {
         id: level6,
-        music: "music5"
+        music: "music1"
     },
     {
         id: level7,

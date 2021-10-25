@@ -67,7 +67,7 @@ class GameScreen extends Node { // can only have cameras as children
             this.btnSound = soundSprite.create("btn")
             this.errSound = soundSprite.createPool("err_alt")
             this.contSound = soundSprite.create("continue")
-            this.music = [ "music1", "music2", "music3", "music4", "music5" ].reduce((acc, m) => {
+            this.music = [ "music1", "music2", "music3" ].reduce((acc, m) => {
                 acc[m] = soundSprite.create(m)
                 return acc
             }, {})
