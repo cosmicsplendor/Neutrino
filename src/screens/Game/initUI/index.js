@@ -214,6 +214,12 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         if (!gameState.is("playing")) return
         gameState.pause()
     }
+    const onFocus = () => {
+        if (!gameState.is("paused")) {
+            return
+        }
+        gameState.play()
+    }
     const onKeyDown = e => {
         if (gameState.is("playing") && e.key === "Escape") {
             return gameState.pause()
@@ -232,8 +238,10 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
     }
 
     if (!config.isMobile) document.addEventListener("keydown", onKeyDown)
+    window.addEventListener("focus", onFocus)
     window.addEventListener("blur", onBlur)
     document.addEventListener("blur", onBlur)
+    document.addEventListener("focus", onFocus)
     gameState.on("play", onPlay)
     gameState.on("pause", onPause)
     gameState.on("over", onOver)
@@ -273,7 +281,9 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         teardownUI: () => {
             if (!config.isMobile) document.removeEventListener("keydown", onKeyDown)
             window.removeEventListener("blur", onBlur)
+            window.removeEventListener("focus", onFocus)
             document.removeEventListener("blur", onBlur)
+            document.removeEventListener("focus", onFocus)
             config.viewport.off("change", realign)
             storage.off("orb-update", changeOrbCount)
             gameState.off("play", onPlay)

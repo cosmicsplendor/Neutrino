@@ -40,6 +40,6 @@
     font-family: monospace;
     letter-spacing: 1px;
 }
-.playBtn:hover {
+.playBtn:hover, .playBtn:active, .playBtn:focus {
     box-shadow: 0px 0px 3px 3px #7a371c;
 }
