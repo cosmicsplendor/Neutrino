@@ -230,6 +230,10 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         if (gameState.is("paused") && e.key === "Enter") {
             return gameState.play()
         }
+        if (gameState.is("completed") && (e.key === "Enter" || e.key === " ")) {
+            contSound.play()
+            onClose(true)
+        }
     }
 
     if (!config.isMobile) document.addEventListener("keydown", onKeyDown)
