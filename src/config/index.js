@@ -5,7 +5,7 @@ const desktopRes = {
 }
 const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 const scale = false
-const maxDpr = 1.3
+const maxDpr = 1.25
 const maxMobileDpr = 1.5
 const computeViewport = () => {
     const width = window.innerWidth, height = window.innerHeight // drawing buffer dimensions (how manny actual pixels are there in the screen regardless of scaling)
