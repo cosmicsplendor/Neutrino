@@ -136,33 +136,33 @@ export default ({ onStart, uiRoot, storage, level, maxLevel, images, assetsCache
     }
     const onKeyDown = e => {
         const keyCode = e.which || e.keyCode
-        if (!!keyCode) {
-            switch(keyCode) {
-                case 37: // left arrow
-                case 65: // A
-                    onPrevBtnClick()
-                break
-                case 39: // right arrow
-                case 68: // D
-                    onNextBtnClick()
-                break
-                default: // rest of the keys
-                    onStartBtnClick()
-            }
-            return
-        }
+        // if (!!keyCode) {
+        //     switch(keyCode) {
+        //         case 37: // left arrow
+        //         case 65: // A
+        //             onPrevBtnClick()
+        //         break
+        //         case 39: // right arrow
+        //         case 68: // D
+        //             onNextBtnClick()
+        //         break
+        //         default: // rest of the keys
+        //             onStartBtnClick()
+        //     }
+        //     return
+        // }
 
         switch(e.key) {
             case "Left": // for IE and Older Versions of Edge
             case "ArrowLeft": // Standard
-            case "D":
-            case "d":
+            case "A":
+            case "a":
                 onPrevBtnClick()
             break
             case "Right":
             case "ArrowRight":
-            case "A":
-            case "a":
+            case "D":
+            case "d":
                 onNextBtnClick()
             break
             default:
