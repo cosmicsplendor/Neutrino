@@ -153,7 +153,7 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         timer.hide()
 
         hideCtrlBtns()
-        resumeBtn.domNode.style.background = `url(${images.resume})`
+        resumeBtn.domNode.style.background = `url(${images.resume.src})`
     }
     const onOver = x => {
         checkpoint = getCheckpoint(x)
