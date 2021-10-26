@@ -25,6 +25,7 @@ const CUR_TIME = "cur-time"
 const BEST_TIME_IND = "best-time-ind"
 const BEST_TIME = "best-time"
 const CONTINUE = "continue"
+const RVA_TXT = "rva"
 
 const render = (images, orbAv) => {
     return `
@@ -35,6 +36,7 @@ const render = (images, orbAv) => {
         ${imgBtn(RESUME, images.resume, styles.hidden, "resume")}
         ${imgBtn(ORB_EXP_IND, images.orb, styles.hidden)}
         <div id="${ORB_EXP}" class="${styles.orbTxt} ${styles.hidden}"> &times; ${orbExpAmt} </div>
+        <div id="${RVA_TXT}" class="${styles.orbTxt} ${styles.hidden}" style="font-size: 1.5em"> watch ad ${config.isMobile ? "": "to continue"}</div>
         ${imgBtn(RESET, images.reset, styles.hidden, "restart")}
         ${imgBtn(CROSS, images.cross, styles.hidden, "exit to level screen")}
     `
@@ -54,11 +56,13 @@ const renderResult = (resumeImg, curTime, bestTime) => {
 export default (uiRoot, player, images, storage, gameState, onClose, resetLevel, focusInst, getCheckpoint, btnSound, errSound, contSound, webAudioSupported, game, sdk) => {
     uiRoot.content = render(images, storage.getOrbCount(), webAudioSupported)
     let checkpoint
+    let playingRva = false
     const ctrlBtns = config.isMobile && player.getCtrlBtns()
     const orbInd = uiRoot.get(`#${ORB_IND}`)
     const orbCount = uiRoot.get(`#${ORB_AV}`)
     const orbExp = uiRoot.get(`#${ORB_EXP}`)
     const orbExpInd = uiRoot.get(`#${ORB_EXP_IND}`)
+    const rvaTxt = uiRoot.get(`#${RVA_TXT}`)
     const pauseBtn = uiRoot.get(`#${PAUSE}`)
     const resumeBtn = uiRoot.get(`#${RESUME}`)
     const restartBtn = uiRoot.get(`#${RESET}`)
@@ -104,6 +108,7 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         resumeBtn.pos = calcStacked(restartBtn, resumeBtn, "top", 0, -hMargin)
         orbExpInd.pos = calcStacked(resumeBtn, orbExpInd, "right", margin)
         orbExp.pos = calcStacked(orbExpInd, orbExp, "right", hMargin)
+        rvaTxt.pos = calcStacked(resumeBtn, rvaTxt, "right", margin)
         crossBtn.pos = calcStacked(restartBtn, crossBtn, "bottom", 0, hMargin)
         alginCtrlBtns(viewport)
     }
@@ -129,6 +134,7 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         orbInd.show()
         orbCount.show()
         timer.show()
+        rvaTxt.hide()
 
         showCtrlBtns()
     }
@@ -147,6 +153,7 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         timer.hide()
 
         hideCtrlBtns()
+        resumeBtn.domNode.style.background = `url(${images.resume})`
     }
     const onOver = x => {
         checkpoint = getCheckpoint(x)
@@ -160,9 +167,18 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         soundBtn.hide()
         pauseBtn.hide()
         timer.hide()
+        
+
         hideCtrlBtns()
 
+        const orbs = storage.getOrbCount()
+        resumeBtn.domNode.style.background = `url(${!checkpoint || (!!checkpoint && orbs >= orbExpAmt) ? images.resume.src: images.rva.src})`
+
         if (!!checkpoint) {
+            if (orbs < orbExpAmt) {
+                rvaTxt.show()
+                return
+            }
             orbExpInd.show()
             orbExp.show()
             return
@@ -203,10 +219,24 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         continueBtn.show()
     }
     const continuePlay = () => {
-        // have players pay 2 orbs
+        // have players pay "orbExpAmt" orbs
+        if (playingRva) {
+            return
+        }
         const orbs = storage.getOrbCount()
-        if (orbs < orbExpAmt && !!checkpoint) { // may be signal to player that there's not enough orbs to continue, provide that there's also a checkpoint available for player restore
-            return errSound.play()
+        if (orbs < orbExpAmt && !!checkpoint) { // may be signal to player that there's not enough orbs to continue, provided that there's also a checkpoint available for player restore
+            playingRva = true
+            const onDone = () => {
+                resetLevel()
+                playingRva = false
+                player.pos = { ...checkpoint }
+            }
+            sdk.playRva()
+                .then(onDone)
+                .catch(onDone)
+            btnSound.play()
+            gameState.play()
+            return
         }
         
         btnSound.play()
@@ -256,6 +286,7 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
     config.viewport.on("change", realign)
     storage.on("orb-update", changeOrbCount)
     pauseBtn.on("click", () => {
+        if (playingRva) return
         if (!gameState.is("playing")) return
         gameState.pause()
         btnSound.play()
@@ -266,15 +297,17 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
             gameState.play()
             return btnSound.play()
         } 
-
+        // if gameState.is("over")
         continuePlay()
     })
     crossBtn.on("click", () => {
+        if (playingRva) return
         if (gameState.is("playing") || gameState.is("completed")) return
         onClose(false)
         btnSound.play()
     })
     restartBtn.on("click", () => {
+        if (playingRva) return
         if (gameState.is("playing") || gameState.is("completed")) return
         const posXAtReset = player.pos.x
         resetLevel()
