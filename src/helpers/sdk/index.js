@@ -1,9 +1,6 @@
 class SDK {
-    constructor(strategy, onPause, onResume) {
-        if (!strategy) return
+    constructor(strategy) {
         this.strat = strategy
-        this.strat.onPause = onPause
-        this.strat.onResume = onResume
     }
     setLoadProg(val) {
         if (!this.strat) return
@@ -20,6 +17,14 @@ class SDK {
     playIntstAd() {
         if (!this.strat) return Promise.reject()
         return this.strat.playIntstAd()
+    }
+    setOnPause(fn) {
+        if (!this.strat) return
+        this.strat.setOnPause(fn)
+    }
+    setOnResume(fn) {
+        if (!this.strat) return
+        this.strat.setOnResume(fn)
     }
 }
 

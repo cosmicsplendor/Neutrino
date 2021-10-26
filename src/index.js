@@ -5,6 +5,7 @@ import createRenderer from "@lib/renderer/create"
 import AssetsCache from "@utils/AssetsCache"
 import TexRegion from "@lib/entities/TexRegion"
 import Storage from "./helpers/Storage"
+import SDK from "./helpers/SDK"
 
 import config from "@config"
 import levels from "@config/levels"
@@ -57,10 +58,11 @@ const assets = [
 if (!config.mobile) {
     assets.push(bgDataId)
 }
+const sdk = new SDK(config.sdkStrat)
 const screenFactories = {
-    [screenNames.LOADING]: game => new LoadingScreen({ game, uiRoot, assets }),
+    [screenNames.LOADING]: game => new LoadingScreen({ game, uiRoot, assets, sdk }),
     [screenNames.MAIN_MENU]: game => new MainMenuScreen({ game, uiRoot }),
-    [screenNames.GAME]: game => new GameScreen({ game, uiRoot, storage }),
+    [screenNames.GAME]: game => new GameScreen({ game, uiRoot, storage, sdk }),
     [screenNames.LEVEL]: game => new LevelScreen({ game, uiRoot, storage }),
 }
 const game = new Game({
@@ -69,6 +71,9 @@ const game = new Game({
     storage,
     screenFactories,
 })
+
+sdk.setOnPause(() => game.pause())
+sdk.setOnResume(() => game.resume())
 
 if (!storage.getSound()) {
     game.turnOffSound()

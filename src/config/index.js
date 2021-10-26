@@ -1,4 +1,5 @@
 import Viewport  from "@utils/ViewPort"
+import GPix from "../helpers/sdk/strategies/GPix"
 
 const desktopRes = {
     max: 1000, min: 750
@@ -42,5 +43,6 @@ export default Object.freeze({
     scale,
     get devicePixelRatio() {
         return Math.min(isMobile ? maxMobileDpr: maxDpr, window.devicePixelRatio)
-    }
+    },
+    sdkStrat: GPix
 })

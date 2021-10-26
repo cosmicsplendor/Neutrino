@@ -5,10 +5,10 @@ export default class {
     signalLoad() {
         GamePix.loaded()
     }
-    set onPause(fn) {
+    setOnPause(fn) {
         GamePix.pause = fn()
     }
-    set onResume(fn) {
+    setOnResume(fn) {
         GamePix.resume = fn()
     }
     playIntstAd() {
