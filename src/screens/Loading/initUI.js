@@ -55,6 +55,9 @@ const initUI = (uiRoot) => {
             info.content = !!e && e.message === offlineErrMsg ? "Error: Connection Problem": "Error: Unsupported Device"
             info.domNode.style.color = "#d34545"
             realign(config.viewport)
+        },
+        onLoad: () => {
+            uiRoot.content = ""
         }
     }
 }
