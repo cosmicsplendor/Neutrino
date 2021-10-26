@@ -20,7 +20,6 @@ class Storage extends Observable {
             music: true,
             sound: true
         }
-        console.log(this.data)
     }
     setNum(key, val) {
         const num = castToNum(val, key)

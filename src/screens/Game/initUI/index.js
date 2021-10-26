@@ -51,7 +51,7 @@ const renderResult = (resumeImg, curTime, bestTime) => {
     `
 }
 
-export default (uiRoot, player, images, storage, gameState, onClose, resetLevel, focusInst, getCheckpoint, btnSound, errSound, contSound, webAudioSupported, game) => {
+export default (uiRoot, player, images, storage, gameState, onClose, resetLevel, focusInst, getCheckpoint, btnSound, errSound, contSound, webAudioSupported, game, sdk) => {
     uiRoot.content = render(images, storage.getOrbCount(), webAudioSupported)
     let checkpoint
     const ctrlBtns = config.isMobile && player.getCtrlBtns()
@@ -106,6 +106,15 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         orbExp.pos = calcStacked(orbExpInd, orbExp, "right", hMargin)
         crossBtn.pos = calcStacked(restartBtn, crossBtn, "bottom", 0, hMargin)
         alginCtrlBtns(viewport)
+    }
+    const endLevel = () => {
+        contSound.play()
+        sdk.playIntstAd().then(() => {
+            onClose(true)
+        }).catch(() => {
+            onClose(true)
+        })
+        uiRoot.clear()
     }
     const onPlay = () => {
         resumeBtn.hide()
@@ -183,8 +192,7 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         continueBtn.pos = calcStacked(calcComposite([ bestTimeInd, bestTimeVal ]), continueBtn, "bottom", 0, 16)
         
         continueBtn.on("click", () => {
-            contSound.play()
-            onClose(true)
+            endLevel()
         })
         
         overlay.domNode.style.opacity = 0.8
@@ -231,8 +239,8 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
             return gameState.play()
         }
         if (gameState.is("completed") && (e.key === "Enter" || e.key === " ")) {
-            contSound.play()
-            onClose(true)
+            endLevel()
+            if (!config.isMobile) document.removeEventListener("keydown", onKeyDown) // remove keydown listener since it may result in multiple endLevel calls (and consequently multiple  interstitial ad load error) and we no longer need the listener
         }
     }
 
@@ -278,7 +286,6 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
     realign(config.viewport)
     return {
         teardownUI: () => {
-            if (!config.isMobile) document.removeEventListener("keydown", onKeyDown)
             window.removeEventListener("blur", onBlur)
             window.removeEventListener("focus", onFocus)
             document.removeEventListener("blur", onBlur)
@@ -289,7 +296,6 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
             gameState.off("pause", onPause)
             gameState.off("over", onOver)
             gameState.off("complete", onComplete)
-            uiRoot.clear()
         },
         updateTimer: t => {
             if (!gameState.is("playing")) {

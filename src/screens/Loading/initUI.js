@@ -57,7 +57,7 @@ const initUI = (uiRoot) => {
             realign(config.viewport)
         },
         onLoad: () => {
-            uiRoot.content = ""
+            uiRoot.clear()
         }
     }
 }

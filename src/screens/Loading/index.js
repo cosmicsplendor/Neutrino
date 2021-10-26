@@ -21,9 +21,12 @@ class LoadingScreen extends Node {
         this.onProg = onProg
         assetsCache.once("load", () => {
             onLoad()
-            this.sdk.signalLoad().then(() => {
+            const switchToMainMenu = () => {
                 this.game.switchScreen(MAIN_MENU)
-            })
+            }
+            this.sdk.signalLoad()
+                .then(switchToMainMenu)
+                .catch(switchToMainMenu)
         })
         assetsCache.on("prog", onProg)
         assetsCache.once("error", onError)

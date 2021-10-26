@@ -33,10 +33,11 @@ class GameScreen extends Node { // can only have cameras as children
     // background = "rgb(181 24 24)"
     initialized = false
     soundPools = [ "gate" ]
-    constructor({ game, uiRoot, storage }) {
+    constructor({ game, uiRoot, storage, sdk }) {
         super()
         const { assetsCache } = game
         this.storage = storage
+        this.sdk = sdk
         this.game = game
         this.uiRoot = uiRoot
         this.addTimer = Timer.attachedTo(this)
@@ -137,7 +138,7 @@ class GameScreen extends Node { // can only have cameras as children
             }
             return checkpoint
         }
-        const { teardownUI, updateTimer } = initUI(this.uiRoot, this.player, this.uiImages, this.storage, this.state, onClose, resetLevel, focusInst, getCheckpoint, this.btnSound, this.errSound, this.contSound, webAudioSupported, this.game)
+        const { teardownUI, updateTimer } = initUI(this.uiRoot, this.player, this.uiImages, this.storage, this.state, onClose, resetLevel, focusInst, getCheckpoint, this.btnSound, this.errSound, this.contSound, webAudioSupported, this.game, this.sdk)
         this.state.level = l
         this.teardownUI = teardownUI
         this.updateTimer = updateTimer

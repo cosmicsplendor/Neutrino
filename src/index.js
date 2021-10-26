@@ -59,7 +59,7 @@ const assets = [
 if (!config.mobile) {
     assets.push(bgDataId)
 }
-const sdkStrat = !!config.SDKStrat ? new config.SDKStrat(): null
+const sdkStrat = !!config.SDKStrat ? new config.SDKStrat(): false
 const sdk = new SDK(sdkStrat)
 const screenFactories = {
     [screenNames.LOADING]: game => new LoadingScreen({ game, uiRoot, assets, sdk }),
