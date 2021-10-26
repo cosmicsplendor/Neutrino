@@ -34,7 +34,8 @@ import rvaImgId from "@assets/images/ui/rva.png" // rewarded video add icon
 const { viewport } = config
 const renderer = createRenderer({ cnvQry: "#arena", scene: null, background: "#000000", viewport }) // scene will be injected by game
 const assetsCache = new AssetsCache()
-const storage = new Storage(config.storageId)
+const storageStrat = new config.StorageStrat(config.storageId)
+const storage = new Storage(storageStrat)
 const uiRoot = UI.query("#ui-layer")
 const curLevel = storage.getCurLevel()
 const assets = [
@@ -58,7 +59,8 @@ const assets = [
 if (!config.mobile) {
     assets.push(bgDataId)
 }
-const sdk = new SDK(config.sdkStrat)
+const sdkStrat = new config.SDKStrat()
+const sdk = new SDK(sdkStrat)
 const screenFactories = {
     [screenNames.LOADING]: game => new LoadingScreen({ game, uiRoot, assets, sdk }),
     [screenNames.MAIN_MENU]: game => new MainMenuScreen({ game, uiRoot }),

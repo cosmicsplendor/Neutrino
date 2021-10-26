@@ -1,5 +1,7 @@
 import Viewport  from "@utils/ViewPort"
 import GPix from "../helpers/sdk/strategies/GPix"
+import LocStorage from "../helpers/storage/strategies/LocStorage"
+import GPixStorage from "../helpers/storage/strategies/GPixStorage"
 
 const desktopRes = {
     max: 1000, min: 750
@@ -44,5 +46,6 @@ export default Object.freeze({
     get devicePixelRatio() {
         return Math.min(isMobile ? maxMobileDpr: maxDpr, window.devicePixelRatio)
     },
-    sdkStrat: GPix
+    SDKStrat: GPix,
+    StorageStrat: LocStorage
 })

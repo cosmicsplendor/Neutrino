@@ -6,10 +6,10 @@ export default class {
         GamePix.loaded()
     }
     setOnPause(fn) {
-        GamePix.pause = fn()
+        GamePix.pause = fn
     }
     setOnResume(fn) {
-        GamePix.resume = fn()
+        GamePix.resume = fn
     }
     playIntstAd() {
         return new Promise((resolve, reject) => {
