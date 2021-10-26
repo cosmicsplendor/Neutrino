@@ -28,6 +28,7 @@ import resetImgId from "@assets/images/ui/reset.png"
 import resumeImgId from "@assets/images/ui/resume.png"
 import soundOnImgId from "@assets/images/ui/sound_on.png"
 import soundOffImgId from "@assets/images/ui/sound_off.png"
+import rvaImgId from "@assets/images/ui/rva.png" // rewarded video add icon
 
 const { viewport } = config
 const renderer = createRenderer({ cnvQry: "#arena", scene: null, background: "#000000", viewport }) // scene will be injected by game
@@ -49,7 +50,8 @@ const assets = [
     { url: texatlasId, msg: "loading images" },
     { url: atlasmetaId, msg: "loading texture atlas" },
     soundOnImgId,
-    soundOffImgId
+    soundOffImgId,
+    rvaImgId
 ]
 
 if (!config.mobile) {

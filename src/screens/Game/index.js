@@ -27,6 +27,7 @@ import resetImgId from "@assets/images/ui/reset.png"
 import orbImgId from "@assets/images/ui/orb.png"
 import soundOnImgId from "@assets/images/ui/sound_on.png"
 import soundOffImgId from "@assets/images/ui/sound_off.png"
+import rvaImgId from "@assets/images/ui/rva.png" // rewarded video add icon
 
 class GameScreen extends Node { // can only have cameras as children
     // background = "rgb(181 24 24)"
@@ -88,6 +89,7 @@ class GameScreen extends Node { // can only have cameras as children
                 reset: assetsCache.get(resetImgId),
                 soundOn: assetsCache.get(soundOnImgId),
                 soundOff: assetsCache.get(soundOffImgId),
+                rva: assetsCache(rvaImgId)
             }
         })
     }
