@@ -37,10 +37,12 @@ class Title extends Node {
         this.add(this.ball)
         this.add(this.logo)
 
+        this.alpha = 0.01
         Object.assign(this, compositeDims(this))
     }
     update(dt) {
         this.ball.rotation += dt * Math.PI / 12
+        this.alpha = Math.min(1, this.alpha + 0.5 * dt)
     }
 }
 

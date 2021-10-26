@@ -39,6 +39,7 @@
     font-weight: bold;
     font-family: monospace;
     letter-spacing: 1px;
+    user-select: none;
 }
 .playBtn:hover, .playBtn:active, .playBtn:focus {
     box-shadow: 0px 0px 3px 3px #7a371c;
