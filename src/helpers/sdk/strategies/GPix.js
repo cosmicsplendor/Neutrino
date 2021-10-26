@@ -3,7 +3,7 @@ export default class {
         GamePix.loading(val)
     }
     signalLoad() {
-        GamePix.loaded()
+        return GamePix.loaded()
     }
     setOnPause(fn) {
         GamePix.pause = fn

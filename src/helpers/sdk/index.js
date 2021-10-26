@@ -7,8 +7,8 @@ class SDK {
         this.strat.setLoadProg(val)
     }
     signalLoad() {
-        if (!this.strat) return
-        this.strat.signalLoad()
+        if (!this.strat) return Promise.resolve()
+        return this.strat.signalLoad()
     }
     playRva() {
         if (!this.strat) return Promise.reject()

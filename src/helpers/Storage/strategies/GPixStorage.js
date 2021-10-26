@@ -1,8 +1,11 @@
 export default class {
-    get() {
-
+    constructor(key) {
+        this.key = key
     }
-    set() {
-        
+    get() {
+        return GamePix.localStorage.getItem(this.key)
+    }
+    set(val) {
+        GamePix.localStorage.setItem(this.key, val)
     }
 }
