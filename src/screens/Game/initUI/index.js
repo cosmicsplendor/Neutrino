@@ -160,6 +160,7 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         soundBtn.hide()
         pauseBtn.hide()
         timer.hide()
+        hideCtrlBtns()
 
         if (!!checkpoint) {
             orbExpInd.show()
@@ -170,7 +171,6 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         orbExpInd.hide()
         orbExp.hide()
 
-        hideCtrlBtns()
     }
     const onComplete = (curTime, bestTime) => {
         uiRoot.clear()
