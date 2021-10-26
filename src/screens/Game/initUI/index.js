@@ -51,7 +51,7 @@ const renderResult = (resumeImg, curTime, bestTime) => {
     `
 }
 
-export default (uiRoot, player, images, storage, gameState, onClose, resetLevel, focusInst, getCheckpoint, btnSound, errSound, contSound, webAudioSupported) => {
+export default (uiRoot, player, images, storage, gameState, onClose, resetLevel, focusInst, getCheckpoint, btnSound, errSound, contSound, webAudioSupported, game) => {
     uiRoot.content = render(images, storage.getOrbCount(), webAudioSupported)
     let checkpoint
     const ctrlBtns = config.isMobile && player.getCtrlBtns()
@@ -211,14 +211,14 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         }
     }
     const onBlur = () => {
-        if (!gameState.is("playing")) return
-        gameState.pause()
+        if (gameState.is("paused")) return
+        // gameState.pause()
+        game.pause()
     }
     const onFocus = () => {
-        if (!gameState.is("paused")) {
-            return
-        }
-        gameState.play()
+        if (gameState.is("paused")) return
+        // gameState.play()
+        game.resume()
     }
     const onKeyDown = e => {
         if (gameState.is("playing") && e.key === "Escape") {
