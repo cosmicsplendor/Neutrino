@@ -20,6 +20,7 @@ class Storage extends Observable {
             music: true,
             sound: true
         }
+        console.log(this.data)
     }
     setNum(key, val) {
         const num = castToNum(val, key)
@@ -65,7 +66,7 @@ class Storage extends Observable {
         this.save(this.data)
     }
     save(data) {
-        this.strat.set(this.id, JSON.stringify(data))
+        this.strat.set(JSON.stringify(data))
     }
 }
 
