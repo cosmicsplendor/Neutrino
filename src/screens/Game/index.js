@@ -53,7 +53,7 @@ class GameScreen extends Node { // can only have cameras as children
         this.state.on("over", () => {
             sdk.gameplayStop()
         })
-        this.state.on("completed", () => {
+        this.state.on("complete", () => {
             sdk.gameplayStop()
         })
         this.state.on("halt", () => {
