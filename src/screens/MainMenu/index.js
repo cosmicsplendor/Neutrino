@@ -11,7 +11,7 @@ class MainMenuScreen extends Node {
         super()
         this.game = game
         this.uiRoot = uiRoot
-        game.assetsCache.on("load", () => {
+        game.assetsCache.once("load", () => {
             const { viewport } = config
             this.gameTitle = new Title()
             this.realign = vp => {
