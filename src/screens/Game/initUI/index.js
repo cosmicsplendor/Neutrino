@@ -31,12 +31,12 @@ const render = (images, orbAv) => {
     return `
         ${imgBtn(ORB_IND, images.orb, styles.hidden, "orb count")}
         <div id="${TIMER}" class="${styles.timer} ${styles.hidden}"> 0000:0 </div>
-        <div id="${ORB_AV}" class="${styles.orbTxt} ${styles.hidden}"> ${orbAv} </div>
+        <div id="${ORB_AV}" class="${styles.txt} ${styles.hidden}"> ${orbAv} </div>
         ${imgBtn(PAUSE, images.pause, styles.hidden, "pause game")}
         ${imgBtn(RESUME, images.resume, styles.hidden, "resume")}
         ${imgBtn(ORB_EXP_IND, images.orb, styles.hidden)}
-        <div id="${ORB_EXP}" class="${styles.orbTxt} ${styles.hidden}"> &times; ${orbExpAmt} </div>
-        <div id="${RVA_TXT}" class="${styles.orbTxt} ${styles.hidden}" style="font-size: 1.5em"> watch ad to continue</div>
+        <div id="${ORB_EXP}" class="${styles.txt} ${styles.hidden}"> &times; ${orbExpAmt} </div>
+        <div id="${RVA_TXT}" class="${styles.tooltip} ${styles.hidden}" style="font-size: 1.5em"> watch ad to continue</div>
         ${imgBtn(RESET, images.reset, styles.hidden, "restart")}
         ${imgBtn(CROSS, images.cross, styles.hidden, "exit to level screen")}
     `
@@ -108,7 +108,7 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         resumeBtn.pos = calcStacked(restartBtn, resumeBtn, "top", 0, -hMargin)
         orbExpInd.pos = calcStacked(resumeBtn, orbExpInd, "right", margin)
         orbExp.pos = calcStacked(orbExpInd, orbExp, "right", hMargin)
-        rvaTxt.pos = calcStacked(resumeBtn, rvaTxt, "right", margin)
+        rvaTxt.pos = calcStacked(resumeBtn, rvaTxt, "top", 0, -margin * 3 / 4)
         crossBtn.pos = calcStacked(restartBtn, crossBtn, "bottom", 0, hMargin)
         alginCtrlBtns(viewport)
     }

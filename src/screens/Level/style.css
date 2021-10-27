@@ -8,6 +8,7 @@
     font-weight: 700;
     white-space: nowrap;
     z-index: 999999;
+    user-select: none;
 }
 .infoSub {
     font-size: 1.2em;
