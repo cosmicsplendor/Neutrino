@@ -2,6 +2,7 @@ export default class {
     constructor() {
         this.sdk = window.CrazyGames.CrazySDK.getInstance()
     }
+    playing = false
     ads = false
     setLoading() { }
     signalLoad() {
@@ -15,6 +16,14 @@ export default class {
     playRva() {
         return Promise.resolve()
     }
-    gameplayStart() { this.sdk.gameplayStart() }
-    gameplayStop() { this.sdk.gameplayStop() }
+    gameplayStart() { 
+        if (this.playing) return
+        this.playing = true
+        this.sdk.gameplayStart()
+    }
+    gameplayStop() { 
+        if (!this.playing) return
+        this.playing = false
+        this.sdk.gameplayStop()
+    }
 }
