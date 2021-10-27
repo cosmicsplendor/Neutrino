@@ -1,10 +1,10 @@
 const path = require("path")
 const cwd = process.cwd()
 module.exports = {
-    entry: ["/lib/polyfills.js", "/src/index.js"],
+    entry: "/src/index.js",
     output: {
         filename: "script.js",
-        path: path.join(cwd, "dist")
+        path: path.join(cwd, "/dist")
     },
     mode: "development",
     resolve: {
@@ -21,7 +21,6 @@ module.exports = {
             "@screens": path.join(cwd, "./src/screens"),
         }
     },
-    target: ["web", "es5"],
     module: {
         rules: [
             {
