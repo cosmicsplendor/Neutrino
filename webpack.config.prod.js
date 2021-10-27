@@ -7,6 +7,7 @@ module.exports = {
         path: path.join(cwd, "dist")
     },
     mode: "production",
+    target: [ "web", "es5" ],
     resolve: {
         alias: {
             // lib alias
@@ -39,7 +40,7 @@ module.exports = {
                 use: {
                     loader: "babel-loader",
                     options: {
-                        plugins: [ "@babel/plugin-proposal-class-properties" ],
+                        plugins: [ "@babel/plugin-proposal-class-properties", "@babel/plugin-transform-arrow-functions" ],
                         presets: [
                             [
                                 "@babel/preset-env",
