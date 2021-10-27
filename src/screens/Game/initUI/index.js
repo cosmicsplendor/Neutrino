@@ -36,7 +36,7 @@ const render = (images, orbAv) => {
         ${imgBtn(RESUME, images.resume, styles.hidden, "resume")}
         ${imgBtn(ORB_EXP_IND, images.orb, styles.hidden)}
         <div id="${ORB_EXP}" class="${styles.orbTxt} ${styles.hidden}"> &times; ${orbExpAmt} </div>
-        <div id="${RVA_TXT}" class="${styles.orbTxt} ${styles.hidden}" style="font-size: 1.5em"> watch ad ${config.isMobile ? "": "to continue"}</div>
+        <div id="${RVA_TXT}" class="${styles.orbTxt} ${styles.hidden}" style="font-size: 1.5em"> watch ad to continue</div>
         ${imgBtn(RESET, images.reset, styles.hidden, "restart")}
         ${imgBtn(CROSS, images.cross, styles.hidden, "exit to level screen")}
     `
@@ -238,7 +238,6 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
             gameState.play()
             return
         }
-        
         btnSound.play()
         gameState.play()
         resetLevel()
