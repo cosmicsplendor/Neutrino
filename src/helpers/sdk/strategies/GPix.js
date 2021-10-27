@@ -1,4 +1,5 @@
 export default class {
+    ads = true
     setLoading(val) {
         GamePix.loading(val)
     }
@@ -31,4 +32,6 @@ export default class {
             }).catch(reject)
         })
     }
+    gameplayStart() { }
+    gameplayStop() { }
 }

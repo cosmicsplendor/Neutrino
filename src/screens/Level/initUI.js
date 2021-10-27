@@ -121,7 +121,7 @@ export default ({ onStart, uiRoot, storage, level, maxLevel, images, assetsCache
             assetsCache.load([ levelId ])
 
             assetsCache.once("load", onLoad)
-            console.log(assetsCache)
+            
             assetsCache.once("error", () => {
                 assetsCache.off("load", onLoad)
                 uiRoot.content = renderErr(ERROR, RETRY, "Connection Problem")
