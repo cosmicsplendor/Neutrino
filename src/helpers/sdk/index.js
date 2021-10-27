@@ -2,6 +2,10 @@ class SDK {
     constructor(strategy) {
         this.strat = strategy
     }
+    adSupported() {
+        if (!this.strat) return
+        return this.strat.ads
+    }
     setLoadProg(val) {
         if (!this.strat) return
         this.strat.setLoadProg(val)

@@ -55,7 +55,6 @@ const renderResult = (resumeImg, curTime, bestTime) => {
 
 export default (uiRoot, player, images, storage, gameState, onClose, resetLevel, focusInst, getCheckpoint, btnSound, errSound, contSound, webAudioSupported, game, sdk) => {
     uiRoot.content = render(images, storage.getOrbCount(), webAudioSupported)
-    let checkpoint
     let playingRva = false
     const ctrlBtns = config.isMobile && player.getCtrlBtns()
     const orbInd = uiRoot.get(`#${ORB_IND}`)
@@ -155,38 +154,39 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         hideCtrlBtns()
         resumeBtn.domNode.style.background = `url(${images.resume.src})`
     }
-    const onOver = x => {
-        checkpoint = getCheckpoint(x)
+    const onOver = () => {
+        const checkpoint = getCheckpoint(player.pos.x)
         resumeBtn.show()
         restartBtn.show()
         crossBtn.show()
         
-        orbInd.show()
-        orbCount.show()
-        
         soundBtn.hide()
         pauseBtn.hide()
         timer.hide()
-        
-
         hideCtrlBtns()
 
+        const checkpointExists = !!checkpoint
         const orbs = storage.getOrbCount()
-        resumeBtn.domNode.style.background = `url(${!checkpoint || (!!checkpoint && orbs >= orbExpAmt) ? images.resume.src: images.rva.src})`
+        const canAfford = orbs >= orbExpAmt
+        const showRva = checkpointExists && !canAfford
+        resumeBtn.domNode.style.background = `url(${ showRva ? images.rva.src: images.resume.src})`
 
-        if (!!checkpoint) {
-            if (orbs < orbExpAmt) {
-                rvaTxt.show()
-                return
-            }
+        if (!checkpointExists) {
+            return
+        }
+
+        // if checkpoints exist, show players available orbs to expend
+        orbInd.show()
+        orbCount.show()
+
+        if (canAfford) { // if player can afford to pay for the checkpoint, show the price
             orbExpInd.show()
             orbExp.show()
             return
         }
-        // if checkpoint doesn't exist there is no point in showing orb expend indicator
-        orbExpInd.hide()
-        orbExp.hide()
 
+        // if the player can't afford, prompt them to watch ad (which makes me some money :)) in exchange of checkpoint
+        rvaTxt.show()
     }
     const onComplete = (curTime, bestTime) => {
         uiRoot.clear()
@@ -218,35 +218,62 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         bestTimeVal.show()
         continueBtn.show()
     }
-    const continuePlay = () => {
-        // have players pay "orbExpAmt" orbs
-        if (playingRva) {
-            return
+    const continuePlay = (() => {
+        const playingRva = {
+            _val: false,
+            setVal(val) {
+                this._val = val
+                if (val) { // if rva is playing, make restart and exit buttons non existent
+                    crossBtn.domNode.style.display = "none"
+                    restartBtn.domNode.style.display = "none"
+                    return
+                }
+                // if rva has stopped playing, bring back exit and restart buttons
+                crossBtn.domNode.style.display = ""
+                restartBtn.domNode.style.display = ""
+            },
+            getVal() {
+                return this._val
+            }
         }
-        const orbs = storage.getOrbCount()
-        if (orbs < orbExpAmt && !!checkpoint) { // may be signal to player that there's not enough orbs to continue, provided that there's also a checkpoint available for player restore
-            playingRva = true
+        const restorePlayer = point => {
+            resetLevel()
+            player.pos.x = point.x
+            player.pos.y = point.y
+        }
+        return () => {
+            if (playingRva.getVal()) return
+            const checkpoint = getCheckpoint(player.pos.x), checkpointExists = !!checkpoint
+            const orbs = storage.getOrbCount()
+            const canAfford = orbs < orbExpAmt
+
+            btnSound.play()
+            gameState.play()
+
+            if (!checkpointExists) { // if checkpoints doesn't exist, only thing there's left to do is restart the game
+                return resetLevel() // resets everything along with the player
+            }
+
+            if (canAfford) { // if the player has enough orbs to pay for checkpoint
+                // have them pay "orbExpAmt" orbs
+                storage.setOrbCount(orbs - orbExpAmt)
+                restorePlayer(checkpoint) // restore the player to the current checkpoint
+            }
+
+            /**
+             * if checkpoint exists and the player cannot afford to pay for it,
+             * prompt the player to watch ad, in case they want to have the ball restored to the checkpoint
+             */
+            playingRva.setVal(true)
             const onDone = () => {
-                resetLevel()
-                playingRva = false
-                player.pos = { ...checkpoint }
+                restorePlayer(checkpoint)
+                playingRva.setVal(false)
             }
             sdk.playRva()
                 .then(onDone)
                 .catch(onDone)
-            btnSound.play()
-            gameState.play()
-            return
         }
-        btnSound.play()
-        gameState.play()
-        resetLevel()
-        if (!!checkpoint) {
-            storage.setOrbCount(orbs - orbExpAmt)
-            player.pos.x = checkpoint.x
-            player.pos.y = checkpoint.y
-        }
-    }
+    })();
     const onBlur = () => {
         if (gameState.is("paused")) return
         // gameState.pause()
@@ -285,7 +312,6 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
     config.viewport.on("change", realign)
     storage.on("orb-update", changeOrbCount)
     pauseBtn.on("click", () => {
-        if (playingRva) return
         if (!gameState.is("playing")) return
         gameState.pause()
         btnSound.play()
@@ -296,7 +322,6 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
             gameState.play()
             return btnSound.play()
         } 
-        // if gameState.is("over")
         continuePlay()
     })
     crossBtn.on("click", () => {

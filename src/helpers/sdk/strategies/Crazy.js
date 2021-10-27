@@ -3,8 +3,7 @@ export default class {
         this.sdk = window.CrazyGames.CrazySDK.getInstance()
     }
     ads = false
-    setLoading() {
-    }
+    setLoading() { }
     signalLoad() {
         return Promise.resolve()
     }
