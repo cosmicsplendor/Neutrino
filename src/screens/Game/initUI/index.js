@@ -277,7 +277,8 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
                     .catch(onDone)
                 return
             }
-            
+
+            // restart level
             resetLevel()
             gameState.play()
         }

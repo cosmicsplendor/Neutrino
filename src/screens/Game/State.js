@@ -5,7 +5,7 @@ class State extends Observable {
     level = 1
     elapsed = 0
     constructor() {
-        super([ "pause", "over", "play", "complete" ])
+        super([ "pause", "over", "play", "complete", "halt" ])
     }
     set(n) {
         this.name = n
@@ -33,8 +33,10 @@ class State extends Observable {
         this.emit("complete", curTime, bestTime)
         this.set("completed")
     }
-    reset() {
-        this.name = null // reverting to null state on reset
+    halt() {
+        if (this.is("halted")) return
+        this.set("halted")
+        this.emit("halt")
     }
 }
 

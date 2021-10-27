@@ -44,9 +44,20 @@ class GameScreen extends Node { // can only have cameras as children
         this.state = new State()
         this.state.on("pause", () => {
             game.pause()
+            sdk.gameplayStop()
         })
         this.state.on("play", () => {
             game.resume()
+            sdk.gameplayStart()
+        })
+        this.state.on("over", () => {
+            sdk.gameplayStop()
+        })
+        this.state.on("completed", () => {
+            sdk.gameplayStop()
+        })
+        this.state.on("halt", () => {
+            sdk.gameplayStop()
         })
         storage.on("sound-update", state => {
             state ? game.turnOnSound(): game.turnOffSound()
@@ -148,7 +159,7 @@ class GameScreen extends Node { // can only have cameras as children
         this.unsetLevel()
         this.teardownUI && this.teardownUI()
         this.game.reset()
-        this.state.reset()
+        this.state.halt()
         this.state.elapsed = 0
     }
     update(dt, t) {
