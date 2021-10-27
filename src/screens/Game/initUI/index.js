@@ -172,12 +172,12 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         resumeBtn.domNode.style.background = `url(${ showRva ? images.rva.src: images.resume.src})`
 
         if (!checkpointExists) {
+            // if checkpoints exist, show players available orbs to expend
+            orbInd.hide()
+            orbCount.hide()
             return
         }
 
-        // if checkpoints exist, show players available orbs to expend
-        orbInd.show()
-        orbCount.show()
 
         if (canAfford) { // if player can afford to pay for the checkpoint, show the price
             orbExpInd.show()
@@ -245,12 +245,13 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
             if (playingRva.getVal()) return
             const checkpoint = getCheckpoint(player.pos.x), checkpointExists = !!checkpoint
             const orbs = storage.getOrbCount()
-            const canAfford = orbs < orbExpAmt
+            const canAfford = orbs >= orbExpAmt
 
             btnSound.play()
             gameState.play()
 
             if (!checkpointExists) { // if checkpoints doesn't exist, only thing there's left to do is restart the game
+                console.log("go to the start")
                 return resetLevel() // resets everything along with the player
             }
 
@@ -258,6 +259,7 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
                 // have them pay "orbExpAmt" orbs
                 storage.setOrbCount(orbs - orbExpAmt)
                 restorePlayer(checkpoint) // restore the player to the current checkpoint
+                return
             }
 
             /**
