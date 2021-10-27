@@ -165,28 +165,28 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         timer.hide()
         hideCtrlBtns()
 
+        const adSupported = sdk.adSupported()
         const checkpointExists = !!checkpoint
         const orbs = storage.getOrbCount()
         const canAfford = orbs >= orbExpAmt
-        const showRva = checkpointExists && !canAfford
+        const showRva = checkpointExists && !canAfford && adSupported
+        const showCost = checkpointExists && !showRva
         resumeBtn.domNode.style.background = `url(${ showRva ? images.rva.src: images.resume.src})`
 
-        if (!checkpointExists) {
-            // if checkpoints exist, show players available orbs to expend
-            orbInd.hide()
-            orbCount.hide()
-            return
+        if (showRva) {
+            // if the player can't afford, prompt them to watch ad (which makes me some money :)) in exchange of checkpoint
+            return rvaTxt.show()
         }
-
-
-        if (canAfford) { // if player can afford to pay for the checkpoint, show the price
+        
+        if (showCost) { // if player can afford to pay for the checkpoint, show the price
             orbExpInd.show()
             orbExp.show()
             return
         }
 
-        // if the player can't afford, prompt them to watch ad (which makes me some money :)) in exchange of checkpoint
-        rvaTxt.show()
+        // if checkpoints do not exist, hide available orbs to expend
+        orbInd.hide()
+        orbCount.hide()
     }
     const onComplete = (curTime, bestTime) => {
         uiRoot.clear()
@@ -243,37 +243,43 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         }
         return () => {
             if (playingRva.getVal()) return
-            const checkpoint = getCheckpoint(player.pos.x), checkpointExists = !!checkpoint
+            const checkpoint = getCheckpoint(player.pos.x)
+
+            const adSupported = sdk.adSupported()
+            const checkpointExists = !!checkpoint
             const orbs = storage.getOrbCount()
             const canAfford = orbs >= orbExpAmt
+            const watchRva = checkpointExists && !canAfford && adSupported
+            const payOrbs = checkpointExists && !watchRva
 
-            btnSound.play()
-            gameState.play()
-
-            if (!checkpointExists) { // if checkpoints doesn't exist, only thing there's left to do is restart the game
-                console.log("go to the start")
-                return resetLevel() // resets everything along with the player
+            if (payOrbs && !canAfford) {
+                return errSound.play()
             }
 
-            if (canAfford) { // if the player has enough orbs to pay for checkpoint
-                // have them pay "orbExpAmt" orbs
+            btnSound.play()
+
+            if (payOrbs && canAfford) {
                 storage.setOrbCount(orbs - orbExpAmt)
-                restorePlayer(checkpoint) // restore the player to the current checkpoint
+                restorePlayer(checkpoint)
+                gameState.play()
                 return
             }
 
-            /**
-             * if checkpoint exists and the player cannot afford to pay for it,
-             * prompt the player to watch ad, in case they want to have the ball restored to the checkpoint
-             */
-            playingRva.setVal(true)
-            const onDone = () => {
-                restorePlayer(checkpoint)
-                playingRva.setVal(false)
+            if (watchRva) {
+                playingRva.setVal(true)
+                const onDone = () => {
+                    restorePlayer(checkpoint)
+                    gameState.play()
+                    playingRva.setVal(false)
+                }
+                sdk.playRva()
+                    .then(onDone)
+                    .catch(onDone)
+                return
             }
-            sdk.playRva()
-                .then(onDone)
-                .catch(onDone)
+            
+            resetLevel()
+            gameState.play()
         }
     })();
     const onBlur = () => {
