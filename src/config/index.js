@@ -1,6 +1,5 @@
 import Viewport  from "@utils/ViewPort"
 import GPix from "../helpers/sdk/strategies/GPix"
-import Crazy from "../helpers/sdk/strategies/Crazy"
 import LocStorage from "../helpers/storage/strategies/LocStorage"
 import GPixStorage from "../helpers/storage/strategies/GPixStorage"
 
@@ -12,11 +11,10 @@ import GPixStorage from "../helpers/storage/strategies/GPixStorage"
  */
 
 const resolutions = {
-    crazy: { max: 1128, min:  615 },
     standard: { max: 1000, min: 750 }
 }
 
-const desktopRes = resolutions.crazy
+const desktopRes = resolutions.standard
 
 const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 const scale = false
@@ -58,7 +56,7 @@ export default Object.freeze({
     get devicePixelRatio() {
         return Math.min(isMobile ? maxMobileDpr: maxDpr, window.devicePixelRatio)
     },
-    SDKStrat: Crazy,
+    SDKStrat: null,
     StorageStrat: LocStorage,
     orientation: "portrait"
 })

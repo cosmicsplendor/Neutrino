@@ -44,20 +44,9 @@ class GameScreen extends Node { // can only have cameras as children
         this.state = new State()
         this.state.on("pause", () => {
             game.pause()
-            sdk.gameplayStop()
         })
         this.state.on("play", () => {
             game.resume()
-            sdk.gameplayStart()
-        })
-        this.state.on("over", () => {
-            sdk.gameplayStop()
-        })
-        this.state.on("complete", () => {
-            sdk.gameplayStop()
-        })
-        this.state.on("halt", () => {
-            sdk.gameplayStop()
         })
         storage.on("sound-update", state => {
             state ? game.turnOnSound(): game.turnOffSound()

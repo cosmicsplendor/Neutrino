@@ -32,6 +32,4 @@ export default class {
             }).catch(reject)
         })
     }
-    gameplayStart() { }
-    gameplayStop() { }
 }

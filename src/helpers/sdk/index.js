@@ -30,14 +30,6 @@ class SDK {
         if (!this.strat) return
         this.strat.setOnResume(fn)
     }
-    gameplayStart() {
-        if (!this.strat) return
-        this.strat.gameplayStart()
-    }
-    gameplayStop() {
-        if (!this.strat) return
-        this.strat.gameplayStop()
-    }
 }
 
 export default SDK

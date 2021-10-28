@@ -290,14 +290,12 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         }
     })();
     const onBlur = () => {
-        if (gameState.is("paused")) return
-        if (gameState.is("playing")) sdk.gameplayStop()
+        if (gameState.is("paused") || gameState.is("completed")) return
         blurOverlay.domNode.style.display = "block"
         game.pause()
     }
     const onFocus = () => {
-        if (gameState.is("paused")) return
-        if (gameState.is("playing")) sdk.gameplayStart()
+        if (gameState.is("paused") || gameState.is("completed")) return
         blurOverlay.domNode.style.display = "none"
         game.resume()
     }
