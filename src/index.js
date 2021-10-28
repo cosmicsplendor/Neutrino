@@ -39,21 +39,21 @@ const storage = new Storage(storageStrat)
 const uiRoot = UI.query("#ui-layer")
 const curLevel = storage.getCurLevel()
 const assets = [
-    { url: levels[curLevel - 1].id, msg: "loading level data" }, // pre-load the current level
     { url: particlesId, msg: "loading particles" },
-    { url: arrowImgId, msg: "loading ui assets" },
-    { url: soundSprite, msg: "loading audio sprite" },
-    { url: soundMeta, msg: "loading audio sprite metadata"},
     crossImgId,
     orbImgId,
     pauseImgId,
     resetImgId,
     resumeImgId,
-    { url: texatlasId, msg: "loading images" },
-    { url: atlasmetaId, msg: "loading texture atlas" },
     soundOnImgId,
     soundOffImgId,
-    rvaImgId
+    rvaImgId,
+    { url: levels[curLevel - 1].id, msg: "loading level data" }, // pre-load the current level
+    { url: arrowImgId, msg: "loading ui assets" },
+    { url: soundSprite, msg: "loading audio sprite" },
+    { url: soundMeta, msg: "loading audio sprite metadata"},
+    { url: texatlasId, msg: "loading images" },
+    { url: atlasmetaId, msg: "loading texture atlas" },
 ]
 
 if (!config.mobile) {
