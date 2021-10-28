@@ -72,3 +72,8 @@
 .dead {
     display: none;
 }
+.blurOverlay {
+    background:rgba(0, 0, 0, 0.5); 
+    z-index: 99;
+    display: none;
+}

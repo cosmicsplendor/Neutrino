@@ -20,6 +20,7 @@ const CROSS = "cross-btn"
 const RESET = "reset-btn"
 
 const OVERLAY = "overlay"
+const BLUR_OVERLAY = "pause-overlay"
 const CUR_TIME_IND = "cur-time-ind"
 const CUR_TIME = "cur-time"
 const BEST_TIME_IND = "best-time-ind"
@@ -29,6 +30,7 @@ const RVA_TXT = "rva"
 
 const render = (images, orbAv) => {
     return `
+        <div id="${BLUR_OVERLAY}" class="${styles.blurOverlay}"></div>
         ${imgBtn(ORB_IND, images.orb, styles.hidden, "orb count")}
         <div id="${TIMER}" class="${styles.timer} ${styles.hidden}"> 0000:0 </div>
         <div id="${ORB_AV}" class="${styles.txt} ${styles.hidden}"> ${orbAv} </div>
@@ -67,6 +69,7 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
     const restartBtn = uiRoot.get(`#${RESET}`)
     const crossBtn = uiRoot.get(`#${CROSS}`)
     const timer = uiRoot.get(`#${TIMER}`)
+    const blurOverlay = uiRoot.get(`#${BLUR_OVERLAY}`)
     // const music = soundBtn(storage, "getMusic", "setMusic", gameState, images.musOn, images.musOff, contSound, webAudioSupported, "toggle music")
     const soundBtn = soundImgBtn(storage, "getSound", "setSound", gameState, images.soundOn, images.soundOff, contSound, webAudioSupported, "toggle audio")
 
@@ -110,6 +113,9 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         rvaTxt.pos = calcStacked(resumeBtn, rvaTxt, "top", 0, -margin * 3 / 4)
         crossBtn.pos = calcStacked(restartBtn, crossBtn, "bottom", 0, hMargin)
         alginCtrlBtns(viewport)
+
+        blurOverlay.domNode.style.width = `${viewport.width}px`
+        blurOverlay.domNode.style.height = `${viewport.height}px`
     }
     const endLevel = () => {
         contSound.play()
@@ -285,12 +291,14 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
     })();
     const onBlur = () => {
         if (gameState.is("paused")) return
-        // gameState.pause()
+        if (gameState.is("playing")) sdk.gameplayStop()
+        blurOverlay.domNode.style.display = "block"
         game.pause()
     }
     const onFocus = () => {
         if (gameState.is("paused")) return
-        // gameState.play()
+        if (gameState.is("playing")) sdk.gameplayStart()
+        blurOverlay.domNode.style.display = "none"
         game.resume()
     }
     const onKeyDown = e => {

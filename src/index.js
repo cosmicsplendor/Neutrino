@@ -14,6 +14,7 @@ import LoadingScreen from "@screens/Loading"
 import MainMenuScreen from "@screens/MainMenu"
 import GameScreen from "@screens/Game"
 import LevelScreen from "@screens/Level"
+import { orient } from "@utils"
 
 import soundSprite from "@assets/audio/sprite.mp3"
 import soundMeta from "@assets/audio/sprite.cson"
@@ -56,9 +57,10 @@ const assets = [
     { url: atlasmetaId, msg: "loading texture atlas" },
 ]
 
-if (!config.mobile) {
+if (!config.isMobile) {
     assets.push(bgDataId)
 }
+
 const sdkStrat = !!config.SDKStrat ? new config.SDKStrat(): false
 const sdk = new SDK(sdkStrat)
 const screenFactories = {
