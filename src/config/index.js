@@ -58,5 +58,5 @@ export default Object.freeze({
     },
     SDKStrat: GPix,
     StorageStrat: GPixStorage,
-    orientation: "portrait"
+    orientation: "portrait",
 })
