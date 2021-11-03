@@ -1,8 +1,5 @@
 export default class {
     ads = true
-    setLoading(val) {
-        GamePix.loading(val)
-    }
     signalLoad() {
         return GamePix.loaded()
     }
@@ -11,6 +8,9 @@ export default class {
     }
     setOnResume(fn) {
         GamePix.resume = fn
+    }
+    setLoadProg(val) {
+        GamePix.loading(val)
     }
     playIntstAd() {
         return new Promise((resolve, reject) => {
