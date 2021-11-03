@@ -1,14 +1,14 @@
 import { Node, TexRegion } from "@lib"
-import { clamp, easingFns } from "@utils/math"
+import { clamp, randf, easingFns } from "@utils/math"
 
 class SurfaceElement extends TexRegion {
     constructor({ ...rest }) {
-        super({ frame: "water", isCustom: true, ...rest })
+        super({ frame: "wtr_b", isCustom: true, ...rest })
     }
 }
-
+const MAX_AMP = 9
 class Surface extends Node {
-    constructor({ pos: { x, y }, numEl }) {
+    constructor({ pos: { x, y }, numEl = 1 }) {
         super()
         const elWidth = 48, elHeight = 48
         this.numEl = numEl
@@ -22,7 +22,7 @@ class Surface extends Node {
         this.meanHeight = 24
         this.overflowHeight = this.meanHeight
         this.t = 0
-        this.amp = 8
+        this.amp = 6
         this.period = Math.PI
     }
     set overflowHeight(val) {
@@ -40,9 +40,10 @@ class Surface extends Node {
         this.t += dt
         if (this.t > this.period) {
             this.t = 0
-            this.amp = this.amp * 0.9 // amplitude decays exponentially
+            // this.phase += Math.PI / 15
+            // this.amp = MAX_AMP * Math.sin(this.phase) // amplitude decays exponentially
         }
-        this.overflowHeight = this.meanHeight + this.amp * Math.sin(2 * this.t) * Math.sin(2 * this.t)
+        this.overflowHeight = Math.round(this.meanHeight + this.amp * Math.sin(2 * this.t) * Math.sin(2 * this.t))
     }
 }
 
