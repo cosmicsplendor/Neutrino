@@ -8,24 +8,19 @@ import { fadeOut } from "@utils/functions"
 // seq 
 // `
 // [
-//     { 
-//         "jumpTo": 1008,
-//         "speed": 500,
-//         "acc": 1000,
-//         "velX": 200
-//     },
 //     {
-//         "rollTo": 2664,
+//         "rollTo": 536,
 //         "speed": 118
 //     },
 //     {
-//         "jumpTo": 1104,
+//         "jumpTo": 1238,
 //         "speed": 0,
-//         "velX": 118
+//         "velX": 20
 //     },
 //     {
-//         "rollTo": 2800,
-//         "speed": 118
+//         "jumpTo": 1200,
+//         "speed": 200,
+//         "velX": 100
 //     }
 // ]
 // `
