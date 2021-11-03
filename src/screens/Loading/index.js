@@ -28,7 +28,10 @@ class LoadingScreen extends Node {
                 .then(switchToMainMenu)
                 .catch(switchToMainMenu)
         })
-        assetsCache.on("prog", onProg)
+        assetsCache.on("prog", (val) => {
+            onProg(val)
+            this.sdk.setLoadProg(Math.round(val * 100))
+        })
         assetsCache.once("error", onError)
     }
     onExit() {

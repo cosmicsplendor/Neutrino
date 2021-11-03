@@ -118,7 +118,6 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         blurOverlay.domNode.style.height = `${viewport.height}px`
     }
     const endLevel = () => {
-        contSound.play()
         sdk.playIntstAd().then(() => {
             onClose(true)
         }).catch(() => {
