@@ -4,3 +4,4 @@ dist/app.bundle.js.map
 dist/app.bundle.js
 dist/script.js
 src/assets/audio
+dist/*.zip

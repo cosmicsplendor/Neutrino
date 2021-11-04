@@ -45,7 +45,11 @@ class Crate extends TexRegion { // breakable crate class
         this.frame = dmgToFrame[this.damage - 1]
     }
     break(vy) {
-        this.temp ? this.remove(): this.alpha = 0
+        if (this.temp) {
+            this.remove()
+        } else {
+            this.alpha = 0
+        }
         const dir = vy > 0 ? "down": "up" 
         const particle = this.dmgFacs[dir].create()
         particle.pos.x = this.pos.x
