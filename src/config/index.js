@@ -57,6 +57,6 @@ export default Object.freeze({
         return Math.min(isMobile ? maxMobileDpr: maxDpr, window.devicePixelRatio)
     },
     SDKStrat: null,
-    StorageStrat: GPixStorage,
+    StorageStrat: LocStorage,
     orientation: "portrait",
 })

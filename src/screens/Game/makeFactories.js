@@ -8,8 +8,8 @@ import SawBlade from "@entities/SawBlade"
 import Laser from "@entities/Laser"
 import Fire from "@entities/Fire"
 import Crate from "@entities/Crate"
-import WaterSurf from "@entities/WaterSurf"
 import Pool from "@utils/Pool"
+import Bus from "@entities/Bus"
 import levels from "@config/levels"
 
 import particlesId from "@assets/particles/all.cson"
@@ -166,8 +166,8 @@ export default ({ soundSprite, assetsCache, storage, player, state }) => { // us
         hlhd: (x, y, props, player) => {
             return new Laser(x, y, props.toX, props.toY, props.speed, props.num, false, props.period, props.on, player, lasSounds)
         },
-        surf: (x, y, props) => {
-            return new WaterSurf({ pos: { x, y }, numEl: props.numEl })
+        bus: (x, y) => {
+            return new Bus(x, y)
         }
     })
 }

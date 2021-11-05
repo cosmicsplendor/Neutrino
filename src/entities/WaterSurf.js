@@ -22,7 +22,7 @@ class Surface extends Node {
         this.meanHeight = 24
         this.overflowHeight = this.meanHeight
         this.t = 0
-        this.amp = 6
+        this.amp = 0
         this.period = Math.PI
     }
     set overflowHeight(val) {
