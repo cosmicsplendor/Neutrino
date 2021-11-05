@@ -65,6 +65,13 @@ class GameScreen extends Node { // can only have cameras as children
                 return spritemap
             }, {})
             
+            shard.onRemove = () => {
+                shard.parent = null
+            }
+            cinder.onRemove = () => {
+                cinder.parent = null
+            }
+
             this.soundSprite = soundSprite
             this.btnSound = soundSprite.create("btn")
             this.errSound = soundSprite.createPool("err_alt")
@@ -118,7 +125,10 @@ class GameScreen extends Node { // can only have cameras as children
         const data = this.game.assetsCache.get(levelDataId)
         const level = this.setLevel(data, music && this.music[music])
         const onClose = advance => this.game.switchScreen(LEVEL, false, advance)
+
         const resetLevel = () => {
+            window.Node = Node
+            window.level = level
             level.resetRecursively()
         }
         const focusInst = () => {

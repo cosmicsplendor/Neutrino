@@ -62,7 +62,7 @@ export default ({ soundSprite, assetsCache, storage, player, state }) => { // us
         reset(obj, x, y) {
             obj.pos.x = x
             obj.pos.y = y - 10
-        }
+        },
     })
 
     const onFireTouch = () => {
