@@ -4,7 +4,7 @@ module.exports = {
     entry: ["/lib/polyfills.js", "/src/index.js"],
     output: {
         filename: "script.js",
-        path: path.join(cwd, "dist")
+        path: path.join(cwd, "dist-gpix")
     },
     mode: "production",
     target: [ "web", "es5" ],
@@ -17,7 +17,7 @@ module.exports = {
             // source alias
             "@root": path.join(cwd, "./src"),
             "@assets": path.join(cwd, "./src/assets"),
-            "@config": path.join(cwd, "./src/config"),
+            "@config": path.join(cwd, "./src/config/gpix"),
             "@entities": path.join(cwd, "./src/entities"),
             "@screens": path.join(cwd, "./src/screens"),
         }

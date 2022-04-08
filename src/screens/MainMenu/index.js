@@ -7,10 +7,11 @@ import initUI from "./initUI"
 
 class MainMenuScreen extends Node {
     background = "#000000"
-    constructor({ game, uiRoot }) {
+    constructor({ game, uiRoot, sdk }) {
         super()
         this.game = game
         this.uiRoot = uiRoot
+        this.sdk = sdk
         game.assetsCache.once("load", () => {
             const { viewport } = config
             this.gameTitle = new Title()
@@ -26,9 +27,17 @@ class MainMenuScreen extends Node {
         })
     }
     onEnter() {
-        const { uiRoot, game } = this
+        const { uiRoot, game, sdk } = this
         this.teardownUI = initUI({ uiRoot, onPlay: () => {
-            game.switchScreen(LEVEL, true)
+            // on play button click
+            const proceed = () => game.switchScreen(LEVEL, true)
+            uiRoot.clear()
+            if (!config.prerollAd) {
+                return proceed()
+            }
+            sdk.prerollAd()
+                .then(proceed)
+                .catch(proceed)
         }})
     }
     onExit() {

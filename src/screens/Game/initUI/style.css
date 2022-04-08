@@ -42,7 +42,7 @@
     border-radius: 5px;
     background: #333366;
     opacity: 0;
-    z-index: 9999;
+    z-index: 1;
     transition: opacity 1s linear;
 }
 .time {
@@ -50,7 +50,7 @@
     font-size: 16px;
     font-family: monospace;
     white-space: nowrap;
-    z-index: 99999;
+    z-index: 2;
     transition: opacity 1s linear;
 }
 .timeVal {
@@ -59,14 +59,14 @@
     font-weight: bold;
     font-family: monospace;
     white-space: nowrap;
-    z-index: 99999;
+    z-index: 2;
     transition: opacity 1s linear;
 }
 .recTimeVal {
     color: #e0c6e0;
 }
 .continue {
-    z-index: 99999;
+    z-index: 2;
     transition: opacity 1s linear;
 }
 .dead {
@@ -74,6 +74,6 @@
 }
 .blurOverlay {
     background:rgba(0, 0, 0, 0.5); 
-    z-index: 99;
+    z-index: 1;
     display: none;
 }

@@ -55,9 +55,8 @@ const renderResult = (resumeImg, curTime, bestTime) => {
     `
 }
 
-export default (uiRoot, player, images, storage, gameState, onClose, resetLevel, focusInst, getCheckpoint, btnSound, errSound, contSound, webAudioSupported, game, sdk) => {
+export default (uiRoot, player, images, storage, gameState, onClose, resetLevel, focusInst, getCheckpoint, btnSound, errSound, contSound, webAudioSupported, game, sdkInst) => {
     uiRoot.content = render(images, storage.getOrbCount(), webAudioSupported)
-    let playingRva = false
     const ctrlBtns = config.isMobile && player.getCtrlBtns()
     const orbInd = uiRoot.get(`#${ORB_IND}`)
     const orbCount = uiRoot.get(`#${ORB_AV}`)
@@ -118,12 +117,13 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         blurOverlay.domNode.style.height = `${viewport.height}px`
     }
     const endLevel = () => {
-        sdk.playIntstAd().then(() => {
+        const onDone = () => {
+            uiRoot.clear()
             onClose(true)
-        }).catch(() => {
-            onClose(true)
-        })
-        uiRoot.clear()
+        }
+        sdkInst.playIntstAd()
+            .then(onDone)
+            .catch(onDone)
     }
     const onPlay = () => {
         resumeBtn.hide()
@@ -170,11 +170,11 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         timer.hide()
         hideCtrlBtns()
 
-        const adSupported = sdk.adSupported()
+        const rvaSupported = sdkInst.rvaSupported()
         const checkpointExists = !!checkpoint
         const orbs = storage.getOrbCount()
         const canAfford = orbs >= orbExpAmt
-        const showRva = checkpointExists && !canAfford && adSupported
+        const showRva = checkpointExists && !canAfford && rvaSupported
         const showCost = checkpointExists && !showRva
         resumeBtn.domNode.style.background = `url(${ showRva ? images.rva.src: images.resume.src})`
 
@@ -213,6 +213,11 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         continueBtn.pos = calcStacked(calcComposite([ bestTimeInd, bestTimeVal ]), continueBtn, "bottom", 0, 16)
         
         continueBtn.on("click", () => {
+            continueBtn.domNode.remove()
+            bestTimeInd.domNode.remove()
+            curTimeInd.domNode.remove()
+            bestTimeVal.domNode.remove()
+            curTimeVal.domNode.remove()
             endLevel()
         })
         
@@ -223,19 +228,28 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         bestTimeVal.show()
         continueBtn.show()
     }
-    const continuePlay = (() => {
-        const playingRva = {
+    const [ continuePlay, restartPlay ] = (() => {
+        const playingAd = {
             _val: false,
             setVal(val) {
+                if (val === this._val) return
                 this._val = val
                 if (val) { // if rva is playing, make restart and exit buttons non existent
                     crossBtn.domNode.style.display = "none"
                     restartBtn.domNode.style.display = "none"
+                    resumeBtn.domNode.style.display = "none"
+                    rvaTxt.domNode.style.display = "none"
+                    orbExp.domNode.style.display = "none"
+                    orbExpInd.domNode.style.display = "none"
                     return
                 }
                 // if rva has stopped playing, bring back exit and restart buttons
                 crossBtn.domNode.style.display = ""
                 restartBtn.domNode.style.display = ""
+                resumeBtn.domNode.style.display = ""
+                rvaTxt.domNode.style.display = ""
+                orbExp.domNode.style.display = "none"
+                orbExpInd.domNode.style.display = "none"
             },
             getVal() {
                 return this._val
@@ -246,15 +260,38 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
             player.pos.x = point.x
             player.pos.y = point.y
         }
-        return () => {
-            if (playingRva.getVal()) return
+        const restart = () => {
+            resetLevel()
+            const posXAtReset = player.pos.x
+            posXAtReset > instFocThres && focusInst() // if the player is not near enough to it's reset spawn point, focus the camera to player position instantly to avoid jarring focus
+            gameState.elapsed = 0
+            gameState.play()
+            btnSound.play()
+            // post restart hook (synchronize ad playing state)
+            playingAd.setVal(false)
+        }
+        const restartPlay = () => { 
+            if (playingAd.getVal()) return
+            playingAd.setVal(true)
+            // pre-restart hook: ad trigger point (configureable chance if restart is triggered programmatically triggred or explicitly by user)
+            if (Math.random() < config.showAdOnRestart) {
+                sdkInst.playIntstAd()
+                    .then(restart)
+                    .catch(restart)
+                return
+            }
+            restart()
+        }
+        const continuePlay = () => {
+            if (playingAd.getVal()) return
+            
             const checkpoint = getCheckpoint(player.pos.x)
 
-            const adSupported = sdk.adSupported()
+            const rvaSupported = sdkInst.rvaSupported()
             const checkpointExists = !!checkpoint
             const orbs = storage.getOrbCount()
             const canAfford = orbs >= orbExpAmt
-            const watchRva = checkpointExists && !canAfford && adSupported
+            const watchRva = checkpointExists && !canAfford && rvaSupported
             const payOrbs = checkpointExists && !watchRva
 
             if (payOrbs && !canAfford) {
@@ -264,29 +301,40 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
             btnSound.play()
 
             if (payOrbs && canAfford) {
-                storage.setOrbCount(orbs - orbExpAmt)
-                restorePlayer(checkpoint)
-                gameState.play()
+                playingAd.setVal(true)
+                const onDone = () => {
+                    storage.setOrbCount(orbs - orbExpAmt)
+                    restorePlayer(checkpoint)
+                    gameState.play()
+                    playingAd.setVal(false)
+                }
+                if (Math.random() < config.showAdOnResume) { // grabbing ad probability from configuration object
+                    sdkInst.playIntstAd()
+                        .then(onDone)
+                        .catch(onDone)
+                }
+                onDone()
                 return
             }
 
             if (watchRva) {
-                playingRva.setVal(true)
+                playingAd.setVal(true)
                 const onDone = () => {
                     restorePlayer(checkpoint)
                     gameState.play()
-                    playingRva.setVal(false)
+                    playingAd.setVal(false)
                 }
-                sdk.playRva()
+                sdkInst.playRva()
                     .then(onDone)
                     .catch(onDone)
                 return
             }
 
-            // restart level
-            resetLevel()
-            gameState.play()
+            restartPlay()
         }
+        return [
+            continuePlay, restartPlay
+        ]
     })();
     const onBlur = () => {
         if (gameState.is("paused") || gameState.is("completed")) return
@@ -308,10 +356,10 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         if (gameState.is("paused") && e.key === "Enter") {
             return gameState.play()
         }
-        if (gameState.is("completed") && (e.key === "Enter" || e.key === " ")) {
-            endLevel()
-            if (!config.isMobile) document.removeEventListener("keydown", onKeyDown) // remove keydown listener since it may result in multiple endLevel calls (and consequently multiple  interstitial ad load error) and we no longer need the listener
-        }
+        // if (gameState.is("completed") && (e.key === "Enter" || e.key === " ")) {
+        //     endLevel()
+        //     if (!config.isMobile) document.removeEventListener("keydown", onKeyDown) // remove keydown listener since it may result in multiple endLevel calls (and consequently multiple  interstitial ad load error) and we no longer need the listener
+        // }
     }
 
     if (!config.isMobile) document.addEventListener("keydown", onKeyDown)
@@ -339,24 +387,18 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         continuePlay()
     })
     crossBtn.on("click", () => {
-        if (playingRva) return
         if (gameState.is("playing") || gameState.is("completed")) return
         onClose(false)
         btnSound.play()
     })
     restartBtn.on("click", () => {
-        if (playingRva) return
         if (gameState.is("playing") || gameState.is("completed")) return
-        const posXAtReset = player.pos.x
-        resetLevel()
-        posXAtReset > instFocThres && focusInst() // if the player is not near enough to it's reset spawn point, focus the camera to player position instantly to avoid jarring focus
-        gameState.elapsed = 0
-        gameState.play()
-        btnSound.play()
+        restartPlay()
     })
     realign(config.viewport)
     return {
         teardownUI: () => {
+            if (!config.isMobile) document.removeEventListener("keydown", onKeyDown)
             window.removeEventListener("blur", onBlur)
             window.removeEventListener("focus", onFocus)
             document.removeEventListener("blur", onBlur)

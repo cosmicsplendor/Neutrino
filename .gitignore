@@ -1,7 +1,9 @@
 node_modules
-/dist/assets
 dist/app.bundle.js.map
-dist/app.bundle.js
-dist/script.js
 src/assets/audio
-dist/*.zip
+dist-gpix/*.js
+dist-gpix/assets
+dist-gpix/*.zip
+dist-gm/*.zip
+dist-gm/assets
+dist-gm/*.js

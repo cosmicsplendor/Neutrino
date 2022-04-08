@@ -1,7 +1,4 @@
 import Viewport  from "@utils/ViewPort"
-import GPix from "../helpers/sdk/strategies/GPix"
-import LocStorage from "../helpers/storage/strategies/LocStorage"
-import GPixStorage from "../helpers/storage/strategies/GPixStorage"
 
 /**
  * config checklist:
@@ -11,7 +8,7 @@ import GPixStorage from "../helpers/storage/strategies/GPixStorage"
  */
 
 const resolutions = {
-    standard: { max: 1080, min: 750 }
+    standard: { max: 1024, min: 768 }
 }
 
 const desktopRes = resolutions.standard
@@ -21,15 +18,15 @@ const scale = false
 const maxDpr = 1
 const maxMobileDpr = 1.5
 const computeViewport = () => {
-    const width = window.innerWidth, height = window.innerHeight // drawing buffer dimensions (how manny actual pixels are there in the screen regardless of scaling)
+    const width = window.innerWidth, height = window.innerHeight // drawing buffer dimensions (how manny actual pixels are there in the screen regardless of scaling) / devicePixelRatio
     const portraitMode = height > width
     if (isMobile) {
         /**
          * 100% of the smaller side
          * and max(100% of the smaller side, 70% of the bigger side)
          */
-        const vpWidth = portraitMode ? width: Math.max(0.7 * width, height)
-        const vpHeight = portraitMode ? Math.max(0.7 * height, width): height
+        const vpWidth = portraitMode ? width: Math.max(0.70 * width, height)
+        const vpHeight = portraitMode ? Math.max(0.70 * height, width): height
         return ({
             width: vpWidth,
             height: vpHeight
@@ -44,8 +41,7 @@ const computeViewport = () => {
         height: vpHeight,
     })
 }
-
-export default Object.freeze({
+const defaultConfig = {
     viewport: new Viewport(computeViewport),
     storageId: "jshdf190",
     worldWidth: 1000,
@@ -56,7 +52,7 @@ export default Object.freeze({
     get devicePixelRatio() {
         return Math.min(isMobile ? maxMobileDpr: maxDpr, window.devicePixelRatio)
     },
-    SDKStrat: null,
-    StorageStrat: LocStorage,
     orientation: "portrait",
-})
+}
+
+export default overrides => Object.assign(defaultConfig, overrides)

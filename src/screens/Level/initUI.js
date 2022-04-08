@@ -46,7 +46,7 @@ const render = (images, level, time) => {
 }
 
 export default ({ onStart, uiRoot, storage, level, maxLevel, images, assetsCache, contSound, chSound, errSound }) => {
-    let levelState = level
+    let levelState = level, loading = false
     uiRoot.content = render(images, level, storage.getHiscore(levelState))
 
     const prevBtn = uiRoot.get(`#${PREV}`)
@@ -80,6 +80,7 @@ export default ({ onStart, uiRoot, storage, level, maxLevel, images, assetsCache
         startBtn.domNode.style.opacity = level <= maxLevel ? 1: 0
     }
     const onPrevBtnClick = () => {
+        if (loading) return
         if (levelState === 1) return errSound.play()
         levelState = Math.max(levelState - 1, 1)
         const best = storage.getHiscore(levelState)
@@ -90,16 +91,18 @@ export default ({ onStart, uiRoot, storage, level, maxLevel, images, assetsCache
         chSound.play()
     }
     const onNextBtnClick = () => {
+        if (loading) return
         if (levelState > levels.length) return errSound.play()
         levelState = Math.min(levelState  + 1, levels.length + 1)
         const best = storage.getHiscore(levelState)
         levelInfo.content = levelState <= levels.length ? `Level ${levelState}`: "Coming Soon"
-        bestTime.content = levelState <= levels.length ? renderBest(best): "new level every week"
+        bestTime.content = levelState <= levels.length ? renderBest(best): "more coming soon"
         updateBtnVis(levelState, maxLevel)
         realignTxt(config.viewport)
         chSound.play()
     }
     const loadAndStart = () => {
+        loading = true
         uiRoot.clear()
         const levelId = levels[levelState - 1].id
         if (!assetsCache.get(levelId)) { // if level data doesn't exist in the cache
@@ -141,6 +144,7 @@ export default ({ onStart, uiRoot, storage, level, maxLevel, images, assetsCache
         onStart(levelState)
     }
     const onStartBtnClick = () => {
+        if (loading) return
         if (levelState > maxLevel) { return  errSound.play() }
         config.viewport.off("change", realign)
         contSound.play()

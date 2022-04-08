@@ -2,9 +2,8 @@ import { TexRegion } from "@lib"
 import { clamp, sign } from "@utils/math"
 
 class MovableEnt extends TexRegion {
-    constructor(x, y, frame, toX=x, toY=y, speed=100, player) {
+    constructor(x, y, frame, toX=x, toY=y, speed=100) {
         super({ frame, pos: { x, y } })
-        this.player = player
         this.fromX = x
         this.fromY = y
         this.toX = toX

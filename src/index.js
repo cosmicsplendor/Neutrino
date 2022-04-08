@@ -14,7 +14,6 @@ import LoadingScreen from "@screens/Loading"
 import MainMenuScreen from "@screens/MainMenu"
 import GameScreen from "@screens/Game"
 import LevelScreen from "@screens/Level"
-import { orient } from "@utils"
 
 import soundSprite from "@assets/audio/sprite.mp3"
 import soundMeta from "@assets/audio/sprite.cson"
@@ -31,7 +30,6 @@ import resumeImgId from "@assets/images/ui/resume.png"
 import soundOnImgId from "@assets/images/ui/sound_on.png"
 import soundOffImgId from "@assets/images/ui/sound_off.png"
 import rvaImgId from "@assets/images/ui/rva.png" // rewarded video add icon
-
 const { viewport } = config
 const renderer = createRenderer({ cnvQry: "#arena", scene: null, background: "#000000", viewport }) // scene will be injected by game
 const assetsCache = new AssetsCache()
@@ -62,10 +60,11 @@ if (!config.isMobile) {
 }
 
 const sdkStrat = !!config.SDKStrat ? new config.SDKStrat(): false
+console.log(config)
 const sdk = new SDK(sdkStrat)
 const screenFactories = {
     [screenNames.LOADING]: game => new LoadingScreen({ game, uiRoot, assets, sdk }),
-    [screenNames.MAIN_MENU]: game => new MainMenuScreen({ game, uiRoot }),
+    [screenNames.MAIN_MENU]: game => new MainMenuScreen({ game, uiRoot, sdk }),
     [screenNames.GAME]: game => new GameScreen({ game, uiRoot, storage, sdk }),
     [screenNames.LEVEL]: game => new LevelScreen({ game, uiRoot, storage }),
 }
@@ -85,8 +84,10 @@ if (!storage.getSound()) {
 
 assetsCache.once("prog-end", () =>  { // listening to "progress-end" instead of "load" to ensure critical engine setup tasks happen before emission of load event
     const atlasmeta = assetsCache.get(atlasmetaId)
+    const texatlas = assetsCache.get(texatlasId)
+    // texatlas.setAttribute("crossorigin", "anonymous")
     renderer.setTexatlas(
-        assetsCache.get(texatlasId),
+        texatlas,
         atlasmeta
     )
     TexRegion.injectAtlasmeta(atlasmeta)

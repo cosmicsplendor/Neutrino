@@ -1,10 +1,11 @@
 const path = require("path")
 const cwd = process.cwd()
+const contentBase = "dist"
 module.exports = {
     entry: "/src/index.js",
     output: {
         filename: "script.js",
-        path: path.join(cwd, "/dist")
+        path: path.join(cwd, `/${contentBase}`)
     },
     mode: "development",
     resolve: {
@@ -16,7 +17,7 @@ module.exports = {
             // source alias
             "@root": path.join(cwd, "./src"),
             "@assets": path.join(cwd, "./src/assets"),
-            "@config": path.join(cwd, "./src/config"),
+            "@config": path.join(cwd, "./src/config/dev"),
             "@entities": path.join(cwd, "./src/entities"),
             "@screens": path.join(cwd, "./src/screens"),
         }
@@ -70,6 +71,6 @@ module.exports = {
     devtool: "source-map",
     devServer: {
         port: 3000,
-        contentBase: "./dist"
+        contentBase: `./${contentBase}`
     }
 }

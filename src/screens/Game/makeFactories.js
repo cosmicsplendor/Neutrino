@@ -157,6 +157,9 @@ export default ({ soundSprite, assetsCache, storage, player, state }) => { // us
         sb5: (x, y, props, player) => {
             return new SawBlade(x, y,  "sb5", props.toX, props.toY, props.speed, player)
         },
+        sb6: (x, y, props, player) => {
+            return new SawBlade(x, y,  "sb6", props.toX, props.toY, props.speed, player)
+        },
         lcr1: (x, y, props, player) => {
             return new Crate(x, y, crateDmgFacs, tempOrbPool, wSounds, props.luck, props.dmg, props.temp, player)
         },
@@ -166,8 +169,8 @@ export default ({ soundSprite, assetsCache, storage, player, state }) => { // us
         hlhd: (x, y, props, player) => {
             return new Laser(x, y, props.toX, props.toY, props.speed, props.num, false, props.period, props.on, player, lasSounds)
         },
-        bus: (x, y) => {
-            return new Bus(x, y)
+        bus: (x, y, props) => {
+            return new Bus(x, y, props.toX, props.toY, props.period)
         }
     })
 }

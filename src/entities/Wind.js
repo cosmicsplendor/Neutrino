@@ -9,6 +9,7 @@ const amp = [ 16, 36 ]
 const height = [ 180, 180 ] 
 const swirlOffset = [ 0, PI]
 class WindParticle extends TexRegion {
+    forceUpdate = true
     constructor() {
         super({ frame: "wind" })
         this.period = randf(period[0], period[1])

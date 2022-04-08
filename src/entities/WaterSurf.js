@@ -1,5 +1,5 @@
 import { Node, TexRegion } from "@lib"
-import { clamp, randf, easingFns } from "@utils/math"
+import { clamp } from "@utils/math"
 
 class SurfaceElement extends TexRegion {
     constructor({ ...rest }) {

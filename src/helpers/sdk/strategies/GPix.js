@@ -1,5 +1,5 @@
-export default class {
-    ads = true
+export default class Gpix { // GamePix.com
+    rva = true
     signalLoad() {
         return GamePix.loaded()
     }
@@ -31,5 +31,8 @@ export default class {
                 reject(res)
             }).catch(reject)
         })
+    }
+    prerollAd() {
+        return Promise.reject()
     }
 }

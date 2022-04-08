@@ -106,10 +106,19 @@ class Player extends TexRegion {
     onWallCol(block, velX, velY, moved) {
         if (moved) { // hardcoding palyer collision audio threshold speed to 100
             const colSpeed = Math.abs(velY || velX) || 0
-            if (colSpeed > 100) {
+            const colThres = !!block.movable ? 200: 100
+            if (colSpeed > colThres) {
                 this.sounds[block.mat || "concrete"].play(Math.min(1, colSpeed / 800)) // hardcoding palyer collision audio cutoff speed to 600
             }
         }
+        // if (velX && this.controls.get("axn")) {
+        //     this.velY = this.controls.states.jumping.minJmpVel
+        //     if (velX < 0) {
+        //         this.velX = 30
+        //     } else {
+        //         this.velX = -30
+        //     }
+        // }
         if (velY) {
             if (velY > 0) {
                 this.fricX = this.fricX0
