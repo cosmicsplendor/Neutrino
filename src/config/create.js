@@ -8,7 +8,9 @@ import Viewport  from "@utils/ViewPort"
  */
 
 const resolutions = {
-    standard: { max: 1024, min: 768 }
+    standard: { max: 1024, min: 768 },
+    full: { max: 1980, min: 1024 },
+    hd: { max: 1440, min: 986 }
 }
 
 const desktopRes = resolutions.standard
