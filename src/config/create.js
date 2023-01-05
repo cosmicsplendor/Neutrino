@@ -13,7 +13,7 @@ const resolutions = {
     hd: { max: 1440, min: 986 }
 }
 
-const desktopRes = resolutions.standard
+const desktopRes = resolutions.full
 
 const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 const scale = false

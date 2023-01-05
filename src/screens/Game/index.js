@@ -80,13 +80,13 @@ class GameScreen extends Node { // can only have cameras as children
             }, {})
             this.player = new Player({ width: 64, height: 64, fill: "brown", speed: 350, fricX: 3, pos: { x: 300, y: 0 }, shard, cinder, sounds: playerSounds, state: this.state })
             this.factories = makeFactories({ soundSprite, assetsCache, storage, player: this.player, state: this.state })
-            // if (game.renderer.api === rendApis.WEBGL && !config.isMobile) {
-            //     const bgData = assetsCache.get(bgDataId)
-            //     const dataToTile = tile => new TexRegion({ frame: tile.name, pos: { x: tile.x, y: tile.y }})
-            //     this.bg = new ParallaxCamera({ z: 2.5, zAtop: 1, viewport: config.viewport, subject: this.player, entYOffset: 0, tiles: bgData.map(dataToTile) }) // parallax bg
-            //     // this.bg.overlay = [ 0.5, 0.1, 0.1 ]
-            //     this.add(this.bg)
-            // }
+            if (game.renderer.api === rendApis.WEBGL && !config.isMobile) {
+                const bgData = assetsCache.get(bgDataId)
+                const dataToTile = tile => new TexRegion({ frame: tile.name, pos: { x: tile.x, y: tile.y }})
+                this.bg = new ParallaxCamera({ z: 2.5, zAtop: 1, viewport: config.viewport, subject: this.player, entYOffset: 0, tiles: bgData.map(dataToTile) }) // parallax bg
+                // this.bg.overlay = [ 0.5, 0.1, 0.1 ]
+                this.add(this.bg)
+            }
             this.uiImages = {
                 cross: assetsCache.get(crossImgId),
                 resume: assetsCache.get(resumeImgId),

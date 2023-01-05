@@ -1,6 +1,5 @@
 node_modules
 dist/app.bundle.js.map
-src/assets/audio
 dist-gpix/*.js
 dist-gpix/assets
 dist-gpix/*.zip
