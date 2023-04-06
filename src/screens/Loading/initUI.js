@@ -52,10 +52,9 @@ const initUI = (uiRoot) => {
             realign(config.viewport)
         },
         onError: e => {
-            info.content = !!e && e.message === offlineErrMsg ? "Error: Connection Problem": "Error: Unsupported Device"
+            info.content = !!e && e.message === offlineErrMsg ? "Error: something went wrong": "Error: Unsupported Device"
             info.domNode.style.color = "#d34545"
             realign(config.viewport)
-            console.log(e)
         },
         onLoad: () => {
             uiRoot.clear()

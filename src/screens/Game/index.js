@@ -27,6 +27,8 @@ import orbImgId from "@assets/images/ui/orb.png"
 import soundOnImgId from "@assets/images/ui/sound_on.png"
 import soundOffImgId from "@assets/images/ui/sound_off.png"
 import rvaImgId from "@assets/images/ui/rva.png" // rewarded video add icon
+import { hexToNorm } from "@lib/utils/math"
+import Checkpoint from "./Checkpoint"
 
 class GameScreen extends Node { // can only have cameras as children
     // background = "rgb(181 24 24)"
@@ -84,7 +86,6 @@ class GameScreen extends Node { // can only have cameras as children
                 const bgData = assetsCache.get(bgDataId)
                 const dataToTile = tile => new TexRegion({ frame: tile.name, pos: { x: tile.x, y: tile.y }})
                 this.bg = new ParallaxCamera({ z: 2.5, zAtop: 1, viewport: config.viewport, subject: this.player, entYOffset: 0, tiles: bgData.map(dataToTile) }) // parallax bg
-                // this.bg.overlay = [ 0.5, 0.1, 0.1 ]
                 this.add(this.bg)
             }
             this.uiImages = {
@@ -106,7 +107,7 @@ class GameScreen extends Node { // can only have cameras as children
         this.game.renderer.gTint = data.tint && data.tint.split(",")
         level.parent = null // sever the child to parent link (necessary for correct collision detection when camera isn't the root node)
         if (this.bg) {
-            this.bg.overlay = data.pxbg && data.pxbg.split(",").map(s => Number(s.trim()))
+            this.bg.overlay = data.pxbg && hexToNorm(data.pxbg)
             this.bg.layoutTiles(level.world)
         }
         return level
@@ -137,17 +138,8 @@ class GameScreen extends Node { // can only have cameras as children
         
         focusInst()
         level.idx = levelIdx
-        data.checkpoints && data.checkpoints.sort((a, b) => b.x - a.x) // sorting in ascending order of x-coordinates
-        const getCheckpoint = x => { // restore to checkpoint
-            if (!data.checkpoints) return
-            let checkpoint
-            for (let point of data.checkpoints) {
-                if (x < point.x) continue
-                checkpoint = point
-                break
-            }
-            return checkpoint
-        }
+        const checkpoint = new Checkpoint(data.checkpoints)
+        const getCheckpoint = checkpoint.get.bind(checkpoint)
         const { teardownUI, updateTimer } = initUI(this.uiRoot, this.player, this.uiImages, this.storage, this.state, onClose, resetLevel, focusInst, getCheckpoint, this.btnSound, this.errSound, this.contSound, webAudioSupported, this.game, this.sdk)
         this.state.level = levelIdx + 1
         this.teardownUI = teardownUI

@@ -46,7 +46,7 @@ export default ({ soundSprite, assetsCache, storage, player, state }) => { // us
         })
         return orbPool
     }
-    const orbPool = createOrbPool(false, 2, orbSound, storage)
+    const orbPool = createOrbPool(false, 5, orbSound, storage)
     const tempOrbPool = createOrbPool(true, 2, orbSound, storage)
     const windPool = new Pool({
         factory: (x, y, props, player) => {
@@ -55,7 +55,7 @@ export default ({ soundSprite, assetsCache, storage, player, state }) => { // us
                 x, y, player
             )
         },
-        size: 1,
+        size: 2,
         free(obj) {
             obj.remove()
         },
@@ -164,10 +164,10 @@ export default ({ soundSprite, assetsCache, storage, player, state }) => { // us
             return new Crate(x, y, crateDmgFacs, tempOrbPool, wSounds, props.luck, props.dmg, props.temp, player)
         },
         vlhd: (x, y, props, player) => {
-            return new Laser(x, y, props.toX, props.toY, props.speed, props.num, true, props.period, props.on, player, lasSounds)
+            return new Laser(x, y, props.toX, props.toY, props.speed, props.num, true, props.period, props.delay, props.on, player, lasSounds)
         },
         hlhd: (x, y, props, player) => {
-            return new Laser(x, y, props.toX, props.toY, props.speed, props.num, false, props.period, props.on, player, lasSounds)
+            return new Laser(x, y, props.toX, props.toY, props.speed, props.num, false, props.period,props.delay, props.on, player, lasSounds)
         },
         bus: (x, y, props) => {
             return new Bus(x, y, props.toX, props.toY, props.period)

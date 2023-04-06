@@ -11,7 +11,7 @@ class SawBlade extends MovableEnt {
         }
         this.player = player
         this.radius = this.width / 2
-        this.hitCirc = { x: 0, y: 0, radius: this.radius }
+        this.hitCirc = this.hitCirc ?? { x: 0, y: 0, radius: this.radius - 2 }
         this.rotation = 0
         this.testCol = getTestFn(this, player)
         if (this.velX || this.velY) { this.forceUpdate = true }

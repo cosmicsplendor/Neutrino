@@ -3,6 +3,7 @@ import config from "@config"
 import imgBtn from "@screens/ui/imgBtn"
 import soundImgBtn from "./soundImgBtn"
 import styles from "./style.css"
+import { wait } from "@lib/utils"
 
 const margin = 20
 const hMargin = margin / 2 // hMargin
@@ -159,7 +160,7 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         hideCtrlBtns()
         resumeBtn.domNode.style.background = `url(${images.resume.src})`
     }
-    const onOver = () => {
+    const execOver = () => {
         const checkpoint = getCheckpoint(player.pos.x)
         resumeBtn.show()
         restartBtn.show()
@@ -192,6 +193,10 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         // if checkpoints do not exist, hide available orbs to expend
         orbInd.hide()
         orbCount.hide()
+    }
+    const onOver = () => {
+        // wait(0.75).then(execOver)
+        execOver()
     }
     const onComplete = (curTime, bestTime) => {
         uiRoot.clear()

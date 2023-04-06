@@ -8,12 +8,12 @@ import Viewport  from "@utils/ViewPort"
  */
 
 const resolutions = {
-    standard: { max: 1024, min: 768 },
+    standard: { max: 1024, min: 720 },
     full: { max: 1980, min: 1024 },
     hd: { max: 1440, min: 986 }
 }
 
-const desktopRes = resolutions.full
+const desktopRes = resolutions.standard
 
 const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 const scale = false

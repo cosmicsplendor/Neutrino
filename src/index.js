@@ -60,7 +60,6 @@ if (!config.isMobile) {
 }
 
 const sdkStrat = !!config.SDKStrat ? new config.SDKStrat(): false
-console.log(config)
 const sdk = new SDK(sdkStrat)
 const screenFactories = {
     [screenNames.LOADING]: game => new LoadingScreen({ game, uiRoot, assets, sdk }),
