@@ -4,6 +4,9 @@ class Checkpoint {
         this.checkpoints = checkpoints.sort((a, b) => a.x - b.x) // sorting in ascending order of x-coordinates
         // this.savedCheckpoint = this.firstCheckpoint
     }
+    reset() {
+        this.savedCheckpoint = this.checkpoints[0]
+    }
     get(x) {
         if (this.checkpoints.length === 0) return
         const cursoryCheckpoint = this.checkpoints.findLast(point => {

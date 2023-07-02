@@ -101,7 +101,7 @@ class GameScreen extends Node { // can only have cameras as children
         })
     }
     setLevel(data, music) {
-        const level = new Level({ player: this.player, data, viewport: config.viewport, subject: this.player, factories: this.factories, music, gameState: this.state })
+        const level = new Level({ player: this.player, data, viewport: config.viewport, subject: this.player, factories: this.factories, music: null, gameState: this.state })
         this.add(level)
         this.game.renderer.changeBackground(config.isMobile || this.game.renderer.api === rendApis.CNV_2D ? data.mob_bg: data.bg)
         this.game.renderer.gTint = data.tint && data.tint.split(",")
@@ -125,11 +125,12 @@ class GameScreen extends Node { // can only have cameras as children
         const data = this.game.assetsCache.get(levelDataId)
         const level = this.setLevel(data, music && this.music[music])
         const onClose = advance => this.game.switchScreen(LEVEL, false, advance)
-
+        const checkpoint = new Checkpoint(data.checkpoints)
         const resetLevel = () => {
             window.Node = Node
             window.level = level
             level.resetRecursively()
+            checkpoint.reset()
         }
         const focusInst = () => {
             level.focusInst()
@@ -138,7 +139,6 @@ class GameScreen extends Node { // can only have cameras as children
         
         focusInst()
         level.idx = levelIdx
-        const checkpoint = new Checkpoint(data.checkpoints)
         const getCheckpoint = checkpoint.get.bind(checkpoint)
         const { teardownUI, updateTimer } = initUI(this.uiRoot, this.player, this.uiImages, this.storage, this.state, onClose, resetLevel, focusInst, getCheckpoint, this.btnSound, this.errSound, this.contSound, webAudioSupported, this.game, this.sdk)
         this.state.level = levelIdx + 1
