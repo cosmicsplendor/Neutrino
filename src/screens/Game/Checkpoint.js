@@ -5,7 +5,7 @@ class Checkpoint {
         // this.savedCheckpoint = this.firstCheckpoint
     }
     reset() {
-        this.savedCheckpoint = this.checkpoints[0]
+        this.savedCheckpoint = null
     }
     get(x) {
         if (this.checkpoints.length === 0) return
