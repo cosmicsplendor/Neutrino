@@ -7,6 +7,8 @@ const hheight = 24 // laser head height
 const bLen = 48 // laser body length
 const bWidth = 12 // laser body width
 class Laser extends MovableEnt {
+    startX
+    startY
     constructor(x, y, toX = x, toY = y, speed = 100, num = 2, vert, period, delay=0, on = true, player, sounds) {
         const frame = vert ? "vlhd" : "hlhd"
         const bFrame = vert ? "vlbod" : "hlbod" // body frame
@@ -15,6 +17,8 @@ class Laser extends MovableEnt {
         const xStep = vert ? 0 : bLen
         const yStep = vert ? bLen : 0
         super(x, y, frame, toX, toY, speed)
+        this.startX = x
+        this.startY = y
         this.player = player
         for (let i = 0; i < num; i++) {
             const body = new TexRegion({ frame: bFrame })
@@ -68,6 +72,11 @@ class Laser extends MovableEnt {
             return
         }
         this.sounds.off.play()
+    }
+    reset() {
+        this.pos.x = this.startX
+        this.pos.y = this.startY
+        this.t = 0
     }
 }
 

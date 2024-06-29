@@ -5,6 +5,7 @@ import getTestFn from "@lib/components/Collision/helpers/getTestFn"
 import { objLayerId } from "@lib/constants"
 
 class Orb extends ParticleEmitter {
+    chasing = false
     constructor({ player, sound, storage, temp = false, ...rest }) {
         super({ ...rest })
         this.player = player
@@ -20,11 +21,12 @@ class Orb extends ParticleEmitter {
         const dPosX = this.player.pos.x + this.player.width / 2 - this.pos.x
         const dPosY = this.player.pos.y + this.player.width / 2 - this.pos.y
         const sqDist = sqLen(dPosX, dPosY)
-        if (sqDist > 14400) { // distance > 120
+        if (sqDist > 14400 && !this.chasing) { // distance > 120
             return 
         }
-        this.pos.x += dPosX / 30
-        this.pos.y += dPosY / 30
+        this.chasing = true
+        this.pos.x += dPosX / 60
+        this.pos.y += dPosY / 60
         if (this.testCol(this, this.player) && this.player.visible) {
             this.sound.play()
             this.storage.setOrbCount(this.storage.getOrbCount() + 1)
@@ -32,10 +34,12 @@ class Orb extends ParticleEmitter {
         }
     }
     reset() { 
+        this.chasing = false
         this.temp && this.remove()
     }
     onRemove() {
         this.parent = null
+        this.chasing = false
     }
 }
 

@@ -37,9 +37,11 @@ export default ({ soundSprite, assetsCache, storage, player, state }) => { // us
             factory: orbFac,
             size,
             free(obj) {
+                obj.chasing = false
                 obj.remove() // remove the object from it's parent
             },
             reset(obj, x, y) {
+                obj.chasing = false
                 obj.pos.x = x
                 obj.pos.y = y
             }
@@ -104,7 +106,8 @@ export default ({ soundSprite, assetsCache, storage, player, state }) => { // us
         snap: soundSprite.createPool("w_snap"),
         crack: soundSprite.createPool("w_crack")
     }
-    const playerFac = (x, y) => {
+    const playerFac = (x, y, props) => {
+        console.log("Player Fac", props)
         player.reset = () => {
             player.pos.x = x
             player.pos.y = y
@@ -112,6 +115,7 @@ export default ({ soundSprite, assetsCache, storage, player, state }) => { // us
             player.velY = player.velX = 0
             player.controls.switchState("jumping", player, true) // revert to jumping state
         }
+        player.rotation = props.slide === true ? NaN: 0
         player.reset()
         return player
     }

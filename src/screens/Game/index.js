@@ -76,10 +76,9 @@ class GameScreen extends Node { // can only have cameras as children
             this.btnSound = soundSprite.create("btn")
             this.errSound = soundSprite.createPool("err_alt")
             this.contSound = soundSprite.create("continue")
-            this.music = [ "music1", "music2", "music3" ].reduce((acc, m) => {
-                acc[m] = soundSprite.create(m)
-                return acc
-            }, {})
+            this.music = {
+                "music1": soundSprite.create("music1")
+            }
             this.player = new Player({ width: 64, height: 64, fill: "brown", speed: 350, fricX: 3, pos: { x: 300, y: 0 }, shard, cinder, sounds: playerSounds, state: this.state })
             this.factories = makeFactories({ soundSprite, assetsCache, storage, player: this.player, state: this.state })
             if (game.renderer.api === rendApis.WEBGL && !config.isMobile) {
@@ -101,7 +100,7 @@ class GameScreen extends Node { // can only have cameras as children
         })
     }
     setLevel(data, music) {
-        const level = new Level({ player: this.player, data, viewport: config.viewport, subject: this.player, factories: this.factories, music: null, gameState: this.state })
+        const level = new Level({ player: this.player, data, viewport: config.viewport, subject: this.player, factories: this.factories, music, gameState: this.state })
         this.add(level)
         this.game.renderer.changeBackground(config.isMobile || this.game.renderer.api === rendApis.CNV_2D ? data.mob_bg: data.bg)
         this.game.renderer.gTint = data.tint && data.tint.split(",")
