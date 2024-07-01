@@ -107,7 +107,6 @@ export default ({ soundSprite, assetsCache, storage, player, state }) => { // us
         crack: soundSprite.createPool("w_crack")
     }
     const playerFac = (x, y, props) => {
-        console.log("Player Fac", props)
         player.reset = () => {
             player.pos.x = x
             player.pos.y = y

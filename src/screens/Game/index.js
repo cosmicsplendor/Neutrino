@@ -8,7 +8,7 @@ import State from "./State"
 import initUI from "./initUI"
 import { LEVEL } from "../names"
 import * as rendApis  from "@lib/renderer/apis"
-
+import moonImg from "@assets/images/background.png"
 import config from "@config"
 import levels from "@config/levels"
 import Level from "./Level"
@@ -121,10 +121,15 @@ class GameScreen extends Node { // can only have cameras as children
         const levelIdx = Math.min(l - 1, levels.length - 1)
         const levelDataId = levels[levelIdx].id
         const music = levels[levelIdx].music
+        const moon = levels[levelIdx].moon
+        if (moon) {
+            this.game.renderer.canvas.setAttribute("style", "background-image:url(" + moonImg + ")")
+        }
         const data = this.game.assetsCache.get(levelDataId)
         const level = this.setLevel(data, music && this.music[music])
         const onClose = advance => this.game.switchScreen(LEVEL, false, advance)
         const checkpoint = new Checkpoint(data.checkpoints)
+        this.checkpoint = checkpoint
         const resetLevel = () => {
             window.Node = Node
             window.level = level
@@ -153,6 +158,7 @@ class GameScreen extends Node { // can only have cameras as children
         this.state.elapsed = 0
     }
     update(dt, t) {
+        this.checkpoint.updateX(this.player.pos.x)
         this.state.elapsed += dt
         this.children.forEach(child => {
             Node.updateRecursively(child, dt, t, child) // out-of-view culling on a per-camera basis

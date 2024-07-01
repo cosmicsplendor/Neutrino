@@ -45,6 +45,7 @@ const getControlsMapping = config.isMobile ? getTouchMappings: getKeyMappings
 class Player extends TexRegion {
     static sounds = [ "player_din", "concrete", "wood", "metal", "jump", "player_exp" ]
     remDt = 0 // remnant dt
+    smooth = true
     constructor({ speed = 48, width = 64, height = 64, fricX=4, shard, cinder, controls, sounds, state, ...rest }) {
         super({ frame: "ball", ...rest })
         this.width = width

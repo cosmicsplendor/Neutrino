@@ -39,14 +39,17 @@ export default [
     },
     {
         id: level8,
-        music: ""
+        music: "",
+        moon: true
     },
     {
         id: level9,
-        music: "music1"
+        music: "music1",
+        moon: true
     },
     {
         id: level10,
-        music: ""
+        music: "",
+        moon: true
     }
 ]
