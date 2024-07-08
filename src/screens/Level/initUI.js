@@ -45,10 +45,10 @@ const render = (images, level, time) => {
     `
 }
 
-export default ({ onStart, uiRoot, storage, level, maxLevel, images, assetsCache, contSound, chSound, errSound }) => {
+export default ({ onStart, uiRoot, storage, level, maxLevel, images, assetsCache, contSound, chSound, errSound, syncColor }) => {
     let levelState = level, loading = false
     uiRoot.content = render(images, level, storage.getHiscore(levelState))
-
+    syncColor(level)
     const prevBtn = uiRoot.get(`#${PREV}`)
     const nextBtn = uiRoot.get(`#${NEXT}`)
     const startBtn = uiRoot.get(`#${START}`)
@@ -79,6 +79,7 @@ export default ({ onStart, uiRoot, storage, level, maxLevel, images, assetsCache
         lockInd.domNode.style.opacity = level <= maxLevel || level > levels.length ? 0: 1
         startBtn.domNode.style.opacity = level <= maxLevel ? 1: 0
     }
+
     const onPrevBtnClick = () => {
         if (loading) return
         if (levelState === 1) return errSound.play()
@@ -89,6 +90,7 @@ export default ({ onStart, uiRoot, storage, level, maxLevel, images, assetsCache
         updateBtnVis(levelState, maxLevel)
         realignTxt(config.viewport)
         chSound.play()
+        syncColor(levelState)
     }
     const onNextBtnClick = () => {
         if (loading) return
@@ -100,6 +102,7 @@ export default ({ onStart, uiRoot, storage, level, maxLevel, images, assetsCache
         updateBtnVis(levelState, maxLevel)
         realignTxt(config.viewport)
         chSound.play()
+        syncColor(levelState)
     }
     const loadAndStart = () => {
         loading = true

@@ -102,7 +102,8 @@ class GameScreen extends Node { // can only have cameras as children
     setLevel(data, music) {
         const level = new Level({ player: this.player, data, viewport: config.viewport, subject: this.player, factories: this.factories, music, gameState: this.state })
         this.add(level)
-        this.game.renderer.changeBackground(config.isMobile || this.game.renderer.api === rendApis.CNV_2D ? data.mob_bg: data.bg)
+        this.game.renderer.changeBackground(config.isMobile || this.game.renderer.api === rendApis.CNV_2D ? data.mob_bg: data.bg, moonImg)
+        this.game.renderer.canvas.style.backgroundPosition = data.bgPos ?? "-50%"
         this.game.renderer.gTint = data.tint && data.tint.split(",")
         level.parent = null // sever the child to parent link (necessary for correct collision detection when camera isn't the root node)
         if (this.bg) {
@@ -121,11 +122,8 @@ class GameScreen extends Node { // can only have cameras as children
         const levelIdx = Math.min(l - 1, levels.length - 1)
         const levelDataId = levels[levelIdx].id
         const music = levels[levelIdx].music
-        const moon = levels[levelIdx].moon
-        if (moon) {
-            this.game.renderer.canvas.setAttribute("style", "background-image:url(" + moonImg + ")")
-        }
-        const data = this.game.assetsCache.get(levelDataId)
+
+        const data = Object.assign(this.game.assetsCache.get(levelDataId), levels[levelIdx])
         const level = this.setLevel(data, music && this.music[music])
         const onClose = advance => this.game.switchScreen(LEVEL, false, advance)
         const checkpoint = new Checkpoint(data.checkpoints)

@@ -1,5 +1,5 @@
 class Checkpoint {
-    maxX
+    maxX=0
     constructor(checkpoints = []) {
         this.checkpoints = checkpoints.sort((a, b) => a.x - b.x) // sorting in ascending order of x-coordinates
     }

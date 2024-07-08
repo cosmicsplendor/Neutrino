@@ -6,7 +6,7 @@ import Title from "./Title"
 import initUI from "./initUI"
 
 class MainMenuScreen extends Node {
-    background = "#000000"
+    background = "#041a27"
     constructor({ game, uiRoot, sdk }) {
         super()
         this.game = game

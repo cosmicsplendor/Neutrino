@@ -8,3 +8,6 @@
 .info {
     letter-spacing: 0;
 }
+.bar {
+    border-radius: 5px;
+}

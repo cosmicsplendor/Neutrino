@@ -15,11 +15,11 @@ export default [
     },
     {
         id: level2,
-        music: ""
+        bgPos: "15% 75w%"
+
     },
     {
         id: level3,
-        music: ""
     },
     {
         id: level4,
@@ -31,25 +31,26 @@ export default [
     },
     {
         id: level6,
-        music: "music1"
+        music: "music1",
+        bgPos: "-50%"
     },
     {
         id: level7,
-        music: ""
+        bgPos:  "40% 80%"
     },
     {
         id: level8,
         music: "",
-        moon: true
+        bgPos: "40% 32%"
     },
     {
         id: level9,
         music: "music1",
-        moon: true
+        bgPos: "75% 30%"
     },
     {
         id: level10,
         music: "",
-        moon: true
+        bgPos: "40% 80%"
     }
 ]

@@ -15,6 +15,7 @@ import MainMenuScreen from "@screens/MainMenu"
 import GameScreen from "@screens/Game"
 import LevelScreen from "@screens/Level"
 
+import backgroundTiles from "@assets/levels/background.cson"
 import soundSprite from "@assets/audio/sprite.mp3"
 import soundMeta from "@assets/audio/sprite.cson"
 import texatlasId from "@assets/images/texatlas.png"
@@ -48,6 +49,7 @@ const assets = [
     soundOffImgId,
     rvaImgId,
     { url: levels[curLevel - 1].id, msg: "loading level data" }, // pre-load the current level
+    { url: backgroundTiles, msg: "loading background tiles" }, // pre-load the current level
     { url: arrowImgId, msg: "loading ui assets" },
     { url: soundSprite, msg: "loading audio sprite" },
     { url: soundMeta, msg: "loading audio sprite metadata"},
@@ -55,9 +57,7 @@ const assets = [
     { url: atlasmetaId, msg: "loading texture atlas" },
 ]
 
-if (!config.isMobile) {
-    assets.push(bgDataId)
-}
+assets.push(bgDataId)
 
 const sdkStrat = !!config.SDKStrat ? new config.SDKStrat(): false
 const sdk = new SDK(sdkStrat)
