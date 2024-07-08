@@ -7,11 +7,10 @@ import soundSpriteId from "@assets/audio/sprite.mp3"
 import soundMetaId from "@assets/audio/sprite.cson"
 import levels from "@config/levels"
 import config from "@config"
-import { calcAligned, calcStacked } from "@lib/utils/entity"
+import { calcAligned } from "@lib/utils/entity"
 import atlasmetaId from "@assets/images/atlasmeta.cson"
 import TexRegion from "@lib/entities/TexRegion"
 import bgDataId from "@assets/levels/background.cson"
-
 import initUI from "./initUI"
 import { hexToNorm } from "@lib/utils/math"
 const levelColors = [
@@ -54,13 +53,19 @@ class LevelScreen extends Node {
                 this.container.add(new TexRegion({ frame: tile.name, pos: { x: tile.x, y: tile.y }}))
             })
             this.container.pos.y = -1016
-            console.log(bgData[0])
+            console.log(this.container)
             const atlasMeta = assetsCache.get(atlasmetaId)
             const height = bgData.reduce((max, tile) => Math.max(max, tile.y + atlasMeta[tile.name].height), 0) + this.container.pos.y
             this.container.overlay = [0.03529411764705882, 0.03529411764705882, 0.03529411764705882]
-            const aligned = calcAligned(config.viewport, { width: config.viewport.width, height: height },"center", "bottom")
-            this.container.pos.y += aligned.y
             this.add(this.container)
+
+            const realignBg = viewport => {
+                const aligned = calcAligned(viewport, { width: config.viewport.width, height: height },"center", "bottom")
+                this.container.pos.y = aligned.y - 1016
+            }
+
+            realignBg(config.viewport)
+            config.viewport.on("change", () => realignBg(config.viewport))
         })
     }
     onEnter(fromMenu, advance) { // second level tells whether to advance to the next level (relative to the current one)

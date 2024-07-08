@@ -15,7 +15,7 @@ const resolutions = {
     custom: { max: 1100, min: 720 }
 }
 
-const desktopRes = resolutions.full
+const desktopRes = resolutions.custom
 
 const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 const scale = false
