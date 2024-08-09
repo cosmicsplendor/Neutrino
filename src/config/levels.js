@@ -8,6 +8,7 @@ import level7 from "@assets/levels/level7.cson"
 import level8 from "@assets/levels/level8.cson"
 import level9 from "@assets/levels/level9.cson"
 import level10 from "@assets/levels/level10.cson"
+import level11 from "@assets/levels/testlevel.cson"
 export default [
     {
         id: level1,
@@ -52,5 +53,10 @@ export default [
         id: level10,
         music: "",
         bgPos: "40% 80%"
+    },
+    {
+        id: level11,
+        music: "",
+        bgPos: "0% 0%"
     }
 ]

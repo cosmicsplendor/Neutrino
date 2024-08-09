@@ -23,7 +23,8 @@ const levelColors = [
     { "bg":"#0f0f22","mob_bg":"#0f0f22", "pxbg":"0.039, 0.039, 0.090" },
     { "bg":"#0f0f22","mob_bg":"#0f0f22", "pxbg":"0.039, 0.039, 0.090" },
     { "bg":"#132b27","mob_bg":"#132b27", "pxbg": "#0a1614" },
-    { "bg":"rgb(18 18 18)", "mob_bg":"rgb(18 18 18)", "pxbg":"0.090, 0.090, 0.090" }
+    { "bg":"rgb(18 18 18)", "mob_bg":"rgb(18 18 18)", "pxbg":"0.090, 0.090, 0.090" },
+    {"bg":"#132b27","mob_bg":"#132b27","pxbg":"#0a1614","tint":"0.025, -0.025, -0.0125, 0"}
 ]
 class LevelScreen extends Node {
     background = "#000000"
@@ -53,7 +54,6 @@ class LevelScreen extends Node {
                 this.container.add(new TexRegion({ frame: tile.name, pos: { x: tile.x, y: tile.y }}))
             })
             this.container.pos.y = -1016
-            console.log(this.container)
             const atlasMeta = assetsCache.get(atlasmetaId)
             const height = bgData.reduce((max, tile) => Math.max(max, tile.y + atlasMeta[tile.name].height), 0) + this.container.pos.y
             this.container.overlay = [0.03529411764705882, 0.03529411764705882, 0.03529411764705882]

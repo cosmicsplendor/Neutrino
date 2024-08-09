@@ -84,7 +84,7 @@ class GameScreen extends Node { // can only have cameras as children
             if (game.renderer.api === rendApis.WEBGL && !config.isMobile) {
                 const bgData = assetsCache.get(bgDataId)
                 const dataToTile = tile => new TexRegion({ frame: tile.name, pos: { x: tile.x, y: tile.y }})
-                this.bg = new ParallaxCamera({ z: 2.5, zAtop: 1, viewport: config.viewport, subject: this.player, entYOffset: 0, tiles: bgData.map(dataToTile) }) // parallax bg
+                this.bg = new ParallaxCamera({ z: 2.5, zAtop: 1, viewport: config.viewport, subject: this.player, instF: false, entYOffset: 0, tiles: bgData.map(dataToTile) }) // parallax bg
                 this.add(this.bg)
             }
             this.uiImages = {
