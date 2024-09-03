@@ -16,10 +16,10 @@
 }
 @media (max-width:600px)  {
     .infoSub {
-        font-size: 0.5em !important;
+        font-size: 0.75em !important;
     }
     .infoTitle {
-        font-size: 1em;
+        font-size: 1.25em;
     }
 }
 .icon {

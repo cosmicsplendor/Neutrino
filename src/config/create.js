@@ -29,8 +29,8 @@ const computeViewport = () => {
          * 100% of the smaller side
          * and max(100% of the smaller side, 70% of the bigger side)
          */
-        const vpWidth = portraitMode ? width: Math.max(0.70 * width, height)
-        const vpHeight = portraitMode ? Math.max(0.70 * height, width): height
+        const vpWidth = portraitMode ? width: Math.max(0.9 * width, height)
+        const vpHeight = portraitMode ? Math.max(0.9 * height, width): height
         return ({
             width: vpWidth,
             height: vpHeight

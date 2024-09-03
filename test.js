@@ -248,6 +248,7 @@ class CompositeBlock extends Block {
         this.last = block
         this.collisionRects.push({ ...block })
         this.collisionRects = mergeRects(this.collisionRects)
+        return this
     }
     stack(block, dir, mx, my) { // stack itself onto sth
         const { x, y } = calcStacked(block, this, dir, mx, my)
@@ -266,6 +267,7 @@ class CompositeBlock extends Block {
             rect.x += dx
             rect.y += dy
         })
+        return this
     }
 }
 
@@ -286,8 +288,9 @@ class World extends Block {
     constructor(w, h, config={}) {
         super(w, h)
         Object.assign(this, config)
-        this.floor = calcAligned(this, new Block(w, config.floorHeight ?? 4), "left", "bottom")
+        this.floor = calcAligned(this, new Block(this.w, config.floorHeight ?? 4), "left", "bottom")
         this.addBlock(this.floor, "fg")
+        console.log(this.layers.fg.slice(-1))
     }
     addBlock(block, layer = "og", skipCollisionTest = false) {
         const { x, y } = block
@@ -295,11 +298,10 @@ class World extends Block {
             for (let j = 0; j < block.w; j++) {
                 this.layers[layer].push({ x: x + j, y: y + i, w: 1, h: 1 })
             }
-            if (skipCollisionTest) continue
-            this.collisionRects.push({ x: block.x, y: block.y, w: block.w, h: block.h })
         }
+        this.collisionRects.push({ x: block.x, y: block.y, w: block.w, h: block.h })
     }
-    addCompositeBlock(block, layer = "og", skipCollisionTest) {
+    addCompositeBlock(block, layer = "fg", skipCollisionTest) {
         if (!(block instanceof CompositeBlock)) return
         for (const child of block.children) {
             this.addBlock(child, layer, true)
@@ -353,22 +355,22 @@ class World extends Block {
         })
         const collisionRects = this.collisionRects.map(rect => {
             const { x, y, w, h, mat } = rect
-            return { x: x * tileW, y: y * tileW, width: w * tileW, height: w * h, rect, mat }
+            return { x: x * tileW, y: y * tileW, width: w * tileW, height: h * tileW, mat }
         })
         const spawnPoints = this.spawnPoints.map(point => {
             const { coords, ...rest } = point
             const gameCoords = Object.entries(coords).map(([k, v]) => {
-                return [ k, v / tileW ]
+                return [ k, v * tileW ]
             })
             return { ...rest, ...Object.fromEntries(gameCoords)}
         })
         const checkPoints = this.checkpoints.map(point => {
             return {
-                x: point.x / tileW,
-                y: point.y / tileW
+                x: point.x * tileW,
+                y: point.y * tileW
             }
         })
-        const exports = { collisionRects, spawnPoints, checkPoints, fgTiles, tiles, mgTiles, bg, mob_bg, pxbg, tint }
+        const exports = { collisionRects, spawnPoints, checkPoints, fgTiles, tiles, mgTiles, bg, mob_bg, pxbg, tint, width: this.w * tileW, height: this.h * tileW }
         await fs.writeFile(`./src/assets/levels/${levelName}.cson`, JSON.stringify(exports))
     }
 }
@@ -380,22 +382,15 @@ const map = new World(60, 20, {
     tint: "0.025, -0.025, -0.0125, 0",
 })
 
-const leftBound = new CompositeBlock(new Block(1, 8))
-leftBound.add(new Block(2, 3), "right-end")
-leftBound.stack(map.floor, "top-start")
+const compositeBlock = initialBlock => new CompositeBlock(initialBlock)
 
-const b1 = new Block(3, 3)
-Object.assign(b1, calcStacked(leftBound, b1, "right-end", 8))
+const leftBound = compositeBlock(new Block(1, 8)).add(new Block(2, 3), "right-end").stack(map.floor, "top-start")
+const b1 = compositeBlock(new Block(3, 3)).stack(leftBound, "right-end", 8)
+const b2 = compositeBlock(new Block(8, 3)).add(new Block(2, 2), "bottom-end").stack(b1, "top-start")
 
-const b2 = new CompositeBlock(new Block(8, 3))
-b2.add(new Block(2, 2), "bottom-end")
-b2.stack(b1, "top-start")
-
-map.addCompositeBlock(leftBound, "fg")
-map.addBlock(b1, "fg")
-map.addCompositeBlock(b2, "fg")
-
-map.spawnPoints.push({ name: "player", coords: calcStacked(leftBound, undefined, "right-start")})
-
-map.printAsciiScaled("fg")
-map.exportMap("testlevel")
+map.addCompositeBlock(leftBound)
+map.addBlock(b1)
+map.addCompositeBlock(b2)
+// map.spawnPoints.push({ name: "player", coords: calcStacked(leftBound, undefined, "right-start")})
+map.printAsciiScaled()
+// map.exportMap("testlevel")

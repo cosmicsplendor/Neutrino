@@ -25,7 +25,7 @@ const progressBar = (width, height, barId, indId) => {
 const render = (barId, indId, infoId, msgId) => {
    return `
         ${progressBar(progBarDims.width, progBarDims.height, PROG_BAR, PROG_IND, barId, indId)}
-        <div id="${infoId}" class="${styles.txt} ${styles.info}">loading</div>
+        <div id="${infoId}" class="${styles.txt} ${styles.info}"></div>
         <div id="${msgId}" class="${styles.txt} ${styles.info}"></div>
     `
 }
