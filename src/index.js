@@ -48,7 +48,6 @@ const assets = [
     soundOnImgId,
     soundOffImgId,
     rvaImgId,
-    { url: levels[curLevel - 1].id, msg: "loading level data" }, // pre-load the current level
     { url: backgroundTiles, msg: "loading background tiles" }, // pre-load the current level
     { url: arrowImgId, msg: "loading ui assets" },
     { url: soundSprite, msg: "loading audio sprite" },
@@ -56,6 +55,10 @@ const assets = [
     { url: texatlasId, msg: "loading images" },
     { url: atlasmetaId, msg: "loading texture atlas" },
 ]
+
+try {
+    assets.push({ url: levels[curLevel - 1].id, msg: "loading level data" }) // pre-load the current level
+} catch(e) { console.log(e.message)}
 
 assets.push(bgDataId)
 
