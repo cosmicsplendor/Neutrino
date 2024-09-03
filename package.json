@@ -7,10 +7,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "SET NODE_OPTIONS=--openssl-legacy-provider && webpack serve --open --watch",
-    "build": "webpack --config=webpack.config.js --mode=production",
-    "build-gpix": "webpack --config=webpack.config.gpix.js",
-    "build-gm": "webpack --config=webpack.config.gm.js",
-    "build-garter": "webpack --config=webpack.config.garter.js"
+    "build": "SET NODE_OPTIONS=--openssl-legacy-provider && webpack --config=webpack.config.js --mode=production",
+    "build-gpix": "SET NODE_OPTIONS=--openssl-legacy-provider && webpack --config=webpack.config.gpix.js",
+    "build-gm": "SET NODE_OPTIONS=--openssl-legacy-provider && webpack --config=webpack.config.gm.js",
+    "build-garter": "SET NODE_OPTIONS=--openssl-legacy-provider && webpack --config=webpack.config.garter.js"
   },
   "keywords": [],
   "author": "",
