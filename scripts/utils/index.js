@@ -226,6 +226,9 @@ class Block {
 class CompositeBlock extends Block {
     collisionRects = []
     children = []
+    create(initialBlock) {
+        return new CompositeBlock(initialBlock)
+    }
     constructor(initialBlock) {
         super(0, 0)
         this.add(initialBlock)
