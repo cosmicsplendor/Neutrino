@@ -217,6 +217,9 @@ const calcComposite = entities => { // compute a rect that contains all the enti
 class Block {
     x = 0
     y = 0
+    static new(w, h) {
+        return new this(w, h)
+    }
     constructor(w, h) {
         this.w = w
         this.h = h
@@ -241,12 +244,12 @@ class CompositeBlock extends Block {
         super(0, 0)
         this.add(initialBlock)
     }
-    add(block, stackDir, offsetX, offsetY, stackAgainst=this.last) {
+    add(block, stackDir, stackAgainst=parent => parent.last, offsetX, offsetY) {
         if (this.children.length === 0) { // initial child
             this.children.push(block)
             Object.assign(this, block)
         } else {
-            Object.assign(block, calcStacked(stackAgainst, block, stackDir, offsetX, offsetY))
+            Object.assign(block, calcStacked(stackAgainst(this), block, stackDir, offsetX, offsetY))
             this.children.push(block)
             Object.assign(this, calcComposite(this.children))
         }   
@@ -300,9 +303,11 @@ class Map extends Block {
         this.floor = calcAligned(this, new Block(this.w, config.floorHeight ?? 4), "left", "bottom")
         this.addBlock(this.floor, "fg")
         console.log(this.layers.fg.slice(-1))
+        CompositeBlock.registerMap(this)
     }
     addPlainBlock(block, layer = "og", skipCollisionTest = false) {
-        const { x, y } = block
+        const x = Math.round(block.x)
+        const y = Math.round(block.y)
         for (let i = 0; i < block.h; i++) {
             for (let j = 0; j < block.w; j++) {
                 this.layers[layer].push({ x: x + j, y: y + i, w: 1, h: 1 })
