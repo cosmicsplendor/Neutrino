@@ -244,20 +244,39 @@ class CompositeBlock extends Block {
         super(0, 0)
         this.add(initialBlock)
     }
-    add(block, stackDir, stackAgainst=parent => parent.last, offsetX, offsetY) {
-        if (this.children.length === 0) { // initial child
-            this.children.push(block)
-            Object.assign(this, block)
+    add(blockOrX, stackDirOrY, stackAgainst = parent => parent.last, offsetX, offsetY) {
+        let block, stackDir;
+    
+        // Check if the first two arguments are numbers
+        if (typeof blockOrX === 'number' && typeof stackDirOrY === 'number') {
+            // If so, create a new block using the first two arguments
+            block = new Block(blockOrX, stackDirOrY);
+            stackDir = stackAgainst; // Adjust the order of arguments
+            stackAgainst = offsetX || (parent => parent.last);
+            offsetX = offsetY || 0;
+            offsetY = 0;
         } else {
-            Object.assign(block, calcStacked(stackAgainst(this), block, stackDir, offsetX, offsetY))
-            this.children.push(block)
-            Object.assign(this, calcComposite(this.children))
-        }   
-        this.last = block
-        this.collisionRects.push({ ...block })
-        this.collisionRects = mergeRects(this.collisionRects)
-        return this
+            // Otherwise, handle as the original logic
+            block = blockOrX;
+            stackDir = stackDirOrY;
+        }
+    
+        if (this.children.length === 0) { // initial child
+            this.children.push(block);
+            Object.assign(this, block);
+        } else {
+            Object.assign(block, calcStacked(stackAgainst(this), block, stackDir, offsetX, offsetY));
+            this.children.push(block);
+            Object.assign(this, calcComposite(this.children));
+        }
+    
+        this.last = block;
+        this.collisionRects.push({ ...block });
+        this.collisionRects = mergeRects(this.collisionRects);
+        
+        return this;
     }
+    
     stackOnto(block, dir, mx, my) { // stack itself onto sth
         const { x, y } = calcStacked(block, this, dir, mx, my)
         const dx = x - this.x
