@@ -226,12 +226,16 @@ class Block {
 class CompositeBlock extends Block {
     collisionRects = []
     children = []
+    static _map = null
+    static registerMap(map) {
+        this._map = map
+    }
     static create(arg1, arg2) {
         const initialBlock = arg1 && arg2 ? new Block(arg1, arg2): arg1 
         if (!initialBlock) {
             throw new Error(`Invalid arguments: (${arg1}, ${arg2})`)
         }
-        return new this(initialBlock)
+        return new CompositeBlock(initialBlock)
     }
     constructor(initialBlock) {
         super(0, 0)
@@ -245,13 +249,13 @@ class CompositeBlock extends Block {
             Object.assign(block, calcStacked(stackAgainst, block, stackDir, offsetX, offsetY))
             this.children.push(block)
             Object.assign(this, calcComposite(this.children))
-        }
+        }   
         this.last = block
         this.collisionRects.push({ ...block })
         this.collisionRects = mergeRects(this.collisionRects)
         return this
     }
-    stack(block, dir, mx, my) { // stack itself onto sth
+    stackOnto(block, dir, mx, my) { // stack itself onto sth
         const { x, y } = calcStacked(block, this, dir, mx, my)
         const dx = x - this.x
         const dy = y - this.y
@@ -269,6 +273,9 @@ class CompositeBlock extends Block {
             rect.y += dy
         })
         return this
+    }
+    addToMap(block) {
+        this.constructor._map(block)
     }
 }
 
