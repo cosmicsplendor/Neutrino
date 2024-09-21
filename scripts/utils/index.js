@@ -226,12 +226,12 @@ class Block {
 class CompositeBlock extends Block {
     collisionRects = []
     children = []
-    create(arg1, arg2) {
+    static create(arg1, arg2) {
         const initialBlock = arg1 && arg2 ? new Block(arg1, arg2): arg1 
         if (!initialBlock) {
             throw new Error(`Invalid arguments: (${arg1}, ${arg2})`)
         }
-        return new CompositeBlock(initialBlock)
+        return new this(initialBlock)
     }
     constructor(initialBlock) {
         super(0, 0)
