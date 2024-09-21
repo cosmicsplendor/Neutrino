@@ -274,12 +274,13 @@ class CompositeBlock extends Block {
         })
         return this
     }
-    addToMap(block) {
-        this.constructor._map(block)
+    addToMap(...args) {
+        CompositeBlock._map.addBlock(this, ...args)
+        return this
     }
 }
 
-class World extends Block {
+class Map extends Block {
     tileW=48
     collisionRects = []
     spawnPoints = []
@@ -300,7 +301,7 @@ class World extends Block {
         this.addBlock(this.floor, "fg")
         console.log(this.layers.fg.slice(-1))
     }
-    addBlock(block, layer = "og", skipCollisionTest = false) {
+    addPlainBlock(block, layer = "og", skipCollisionTest = false) {
         const { x, y } = block
         for (let i = 0; i < block.h; i++) {
             for (let j = 0; j < block.w; j++) {
@@ -312,7 +313,7 @@ class World extends Block {
     addCompositeBlock(block, layer = "fg", skipCollisionTest) {
         if (!(block instanceof CompositeBlock)) return
         for (const child of block.children) {
-            this.addBlock(child, layer, true)
+            this.addPlainBlock(child, layer, true)
         }
         if (skipCollisionTest) return
         // add collision rects
@@ -322,6 +323,13 @@ class World extends Block {
         this.collisionRects = mergeRects(this.collisionRects)
 
         // later implement spawn point and checkpoint logic
+    }
+    addBlock(...args) {
+        if (args[0] instanceof CompositeBlock) {
+            this.addCompositeBlock(...args)
+            return
+        }
+        this.addPlainBlock(...args)
     }
     printAscii(layer = "fg") {
         const { w, h, layers } = this;
@@ -389,5 +397,5 @@ module.exports  = {
     calcAligned,
     Block,
     CompositeBlock,
-    World
+    Map
 }
