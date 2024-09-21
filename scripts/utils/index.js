@@ -226,7 +226,8 @@ class Block {
 class CompositeBlock extends Block {
     collisionRects = []
     children = []
-    create(initialBlock) {
+    create(arg1, arg2) {
+        const initialBlock = arg1 && arg2 ? new Block(arg1, arg2): arg1 
         return new CompositeBlock(initialBlock)
     }
     constructor(initialBlock) {
