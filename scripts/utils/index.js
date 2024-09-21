@@ -244,7 +244,7 @@ class CompositeBlock extends Block {
         super(0, 0)
         this.add(initialBlock)
     }
-    add(blockOrX, stackDirOrY, stackAgainst = parent => parent.last, offsetX, offsetY) {
+    add(blockOrX, stackDirOrY, stackAgainst = parent => parent, offsetX, offsetY) {
         let block, stackDir;
     
         // Check if the first two arguments are numbers
