@@ -1,26 +1,37 @@
-const { CompositeBlock: CB, Map, Block: B} = require("./utils/index")
+const { CompositeBlock, Map, Block } = require("./utils/index");
 
-const map = new Map(60, 20, {
-    bg: "#132b27",
-    mob_bg: "#132b27",
-    pxbg: "#0a1614",
-    tint: "0.025, -0.025, -0.0125, 0",
-    floorHeight: 2
-})
-const _ = undefined
-const leftBound = CB.create(1, 8)
-    .add(2, 3, "right-end", p => p.last)
-    .stackOnto(map.floor, "top-start")
-    .addToMap()
+// Initialize the map with a configuration object
+const map = new Map({
+  width: 60,
+  height: 20,
+  background: "#132b27",
+  mobileBackground: "#132b27",
+  pixelBackground: "#0a1614",
+  tint: { r: 0.025, g: -0.025, b: -0.0125, a: 0 },
+  floorHeight: 2
+});
 
-const b1 = CB.create(3, 3).stackOnto(leftBound, "right-end", 8).addToMap()
+// Create and add the left boundary
+const leftBound = CompositeBlock.create({ width: 1, height: 8 })
+  .addPart({ width: 2, height: 3, position: "right-end", onto: "last" })
+  .stackOn(map.floor, { anchor: "top-start" })
+  .addToMap();
 
-const b3 = CB.create(9, 2)
-    .add(4, 3, "top")
-    .add(4, 4, "bottom-end")
-    .stackOnto(b1, "right-end", 2, 0).addToMap()
+// Create and add block b1
+const b1 = CompositeBlock.create({ width: 3, height: 3 })
+  .stackOn(leftBound, { side: "right-end", offsetX: 8 })
+  .addToMap();
+
+// Create and add block b3 with additional parts
+const b3 = CompositeBlock.create({ width: 9, height: 2 })
+  .addPart({ width: 4, height: 3, position: "top" })
+  .addPart({ width: 4, height: 4, position: "bottom-end" })
+  .stackOn(b1, { side: "right-end", offsetX: 2 })
+  .addToMap();
+
+// Print the map as ASCII
+map.printAscii();
 
 // map.spawnPoints.push({ name: "player", coords: calcStacked(leftBound, undefined, "right-start")})
 // map.printAsciiScaled()
-map.printAscii()
 // map.exportMap("testlevel")

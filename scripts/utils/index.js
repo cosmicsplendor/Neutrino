@@ -233,39 +233,24 @@ class CompositeBlock extends Block {
     static registerMap(map) {
         this._map = map
     }
-    static create(arg1, arg2) {
-        const initialBlock = arg1 && arg2 ? new Block(arg1, arg2): arg1 
-        if (!initialBlock) {
-            throw new Error(`Invalid arguments: (${arg1}, ${arg2})`)
-        }
+    static create(blockOrConfig) {
+        const initialBlock = blockOrConfig instanceof Block? blockOrConfig: new Block(blockOrConfig.width, blockOrConfig.height) 
         return new CompositeBlock(initialBlock)
     }
     constructor(initialBlock) {
         super(0, 0)
         this.add(initialBlock)
     }
-    add(blockOrX, stackDirOrY, stackAgainst = parent => parent, offsetX, offsetY) {
-        let block, stackDir;
+    addPart({block: _block, x, y, anchor, onto = "parent", dx, dy}) {
+        let block = typeof x === "number" && typeof y === "number" ? new Block(x, y): _block
     
-        // Check if the first two arguments are numbers
-        if (typeof blockOrX === 'number' && typeof stackDirOrY === 'number') {
-            // If so, create a new block using the first two arguments
-            block = new Block(blockOrX, stackDirOrY);
-            stackDir = stackAgainst; // Adjust the order of arguments
-            stackAgainst = offsetX || (parent => parent.last);
-            offsetX = offsetY || 0;
-            offsetY = 0;
-        } else {
-            // Otherwise, handle as the original logic
-            block = blockOrX;
-            stackDir = stackDirOrY;
-        }
-    
+        const stackAgainst = onto === "parent" ? this: onto === "last" ? this: undefined
+        if (stackAgainst) throw new Error(`Invalid onto param: ${onto}`)
         if (this.children.length === 0) { // initial child
             this.children.push(block);
             Object.assign(this, block);
         } else {
-            Object.assign(block, calcStacked(stackAgainst(this), block, stackDir, offsetX, offsetY));
+            Object.assign(block, calcStacked(stackAgainst, block, anchor, dx, dy));
             this.children.push(block);
             Object.assign(this, calcComposite(this.children));
         }
@@ -277,8 +262,8 @@ class CompositeBlock extends Block {
         return this;
     }
     
-    stackOnto(block, dir, mx, my) { // stack itself onto sth
-        const { x, y } = calcStacked(block, this, dir, mx, my)
+    stackOn(block, {anchor, dx, dy}) { // stack itself onto sth
+        const { x, y } = calcStacked(block, this, anchor, dx, dy)
         const dx = x - this.x
         const dy = y - this.y
 
@@ -316,7 +301,7 @@ class Map extends Block {
     mob_bg = "#132b27"
     pxbg = "#0a1614"
     tint = "0.025, -0.025, -0.0125, 0"
-    constructor(w, h, config={}) {
+    constructor({w, h, ...config}={}) {
         super(w, h)
         Object.assign(this, config)
         this.floor = calcAligned(this, new Block(this.w, config.floorHeight ?? 4), "left", "bottom")
