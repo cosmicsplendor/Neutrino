@@ -1,396 +1,125 @@
-const fs = require("fs/promises")
-const atlasPath = "./src/assets/images/atlasmeta.cson"
+function detectProjectedEmptySpaces(rect, map) {
+    // Remove duplicate collision rectangles
+    // Helper function to check if two rectangles overlap
+    const overlaps = (r1, r2) =>
+        r1.x < r2.x + r2.w && r1.x + r1.w > r2.x &&
+        r1.y < r2.y + r2.h && r1.y + r1.h > r2.y;
 
-const collisionMatMap = {
-    "sc_red": "metal",
-    "sc_green": "metal",
-    "sc_blue": "metal",
-}
+    // Remove duplicate collision rectangles
+    const uniqueCollisionRects = map.collisionRects.filter(r =>
+        !overlaps(r, rect)
+    );
 
-const getAtlas = async () => {
-    const buffer = await fs.readFile(atlasPath)
-    const data = JSON.parse(buffer.toString("utf-8"))
-    const entries = Object.entries(data)
-    entries.forEach(e => {
-        if (!e[1].rotation) return
-        const { width, height } = e[1]
-        e[1].width = height
-        e[1].height = width
-    })
-    return Object.fromEntries(entries)
-}
-
-function mergeRects(rects) {
-    if (rects.length === 0) return []
-
-    rects.sort((a, b) => a.y - b.y || a.x - b.x)
-
-    const mergedHorizontally = []
-    let current = rects[0]
-
-    for (let i = 1; i < rects.length; i++) {
-        const next = rects[i]
-
-        if (current.y === next.y && current.h === next.h &&
-            current.x + current.w === next.x) {
-            current.w = current.w + next.w
-        } else {
-            mergedHorizontally.push({ ...current })
-            current = next
-        }
-    }
-
-    mergedHorizontally.push({ ...current })
-
-    const mergedVertically = []
-    mergedHorizontally.sort((a, b) => a.x - b.x || a.y - b.y)
-
-    current = mergedHorizontally[0]
-
-    for (let i = 1; i < mergedHorizontally.length; i++) {
-        const next = mergedHorizontally[i]
-
-        if (current.x === next.x && current.w === next.w &&
-            current.y + current.h >= next.y) {
-            current.h = Math.max(current.y + current.h, next.y + next.h) - current.y
-        } else {
-            mergedVertically.push({ ...current })
-            current = next
-        }
-    }
-
-    mergedVertically.push({ ...current })
-
-    return mergedVertically
-}
-
-const sc = { // stack calcs
-    il: c => { // inside-left
-        return c.x
-    },
-    ol: (c, e) => { // outside-left
-        return c.x - e.w
-    },
-    ir: (c, e) => { // inside-right
-        return c.x + (c.w - e.w)
-    },
-    or: c => { // outiside-right
-        return c.x + c.w
-    },
-    hc: (c, e) => { // horizontal center
-        return c.x + (c.w - e.w) / 2
-    },
-    it: c => { // inside-top
-        // c --> container bounds; e --> entity bounds
-        return c.y
-    },
-    ot: (c, e) => { // outside-top
-        return c.y - e.h
-    },
-    ib: (c, e) => { // inside-bottom
-        return c.y + (c.h - e.h)
-    },
-    ob: c => { // outiside-bottom
-        return c.y + c.h
-    },
-    vc: (c, e) => { // vertical center
-        return c.y + (c.h - e.h) / 2
-    }
-}
-
-function calcAligned(c, e, x, y, mX = 0, mY = 0) {
-    const pos = { x: mX, y: mY }
-    switch (x) {
-        case "left":
-            pos.x += sc.il(c, e)
-            break
-        case "center":
-            pos.x += sc.hc(c, e)
-            break
-        case "right":
-            pos.x += sc.ir(c, e)
-            break
-        default:
-            throw new Error(`Invalid x-alignment parameter: ${x}`)
-    }
-    switch (y) {
-        case "top":
-            pos.y += sc.it(c, e)
-            break
-        case "center":
-            pos.y += sc.vc(c, e)
-            break
-        case "bottom":
-            pos.y += sc.ib(c, e)
-            break
-        default:
-            throw new Error(`Invalid y-alignment parameter: ${y}`)
-    }
-    return { ...e, ...pos }
-}
-
-function calcStacked(b1, b2, dir, mX = 0, mY = 0) {
-    const pos = { x: mX, y: mY }
-    switch (dir) {
-        case "top-start":
-            pos.x += sc.il(b1, b2)
-            pos.y += sc.ot(b1, b2)
-            break
-        case "top":
-            pos.x += sc.hc(b1, b2)
-            pos.y += sc.ot(b1, b2)
-            break
-        case "top-end":
-            pos.x += sc.ir(b1, b2)
-            pos.y += sc.ot(b1, b2)
-            break
-        case "right-start":
-            pos.x += sc.or(b1, b2)
-            pos.y += sc.it(b1, b2)
-            break
-        case "right":
-            pos.x += sc.or(b1, b2)
-            pos.y += sc.vc(b1, b2)
-            break
-        case "right-end":
-            pos.x += sc.or(b1, b2)
-            pos.y += sc.ib(b1, b2)
-            break
-        case "bottom-start":
-            pos.x += sc.il(b1, b2)
-            pos.y += sc.ob(b1, b2)
-            break
-        case "bottom":
-            pos.x += sc.hc(b1, b2)
-            pos.y += sc.ob(b1, b2)
-            break
-        case "bottom-end":
-            pos.x += sc.ir(b1, b2)
-            pos.y += sc.ob(b1, b2)
-            break
-        case "left-start":
-            pos.x += sc.ol(b1, b2)
-            pos.y += sc.it(b1, b2)
-            break
-        case "left":
-            pos.x += sc.ol(b1, b2)
-            pos.y += sc.vc(b1, b2)
-            break
-        case "left-end":
-            pos.x += sc.ol(b1, b2)
-            pos.y += sc.ib(b1, b2)
-            break
-        default:
-            throw new Error(`Invalid stacking direction: ${dir}`)
-    }
-    return pos
-}
-
-const combine = (a, b, dir) => {
-    switch (dir) {
-        case "x":
-            return {
-                w: a.w + b.w,
-                h: Math.max(a.h, b.h)
+    // Function to find the nearest collision in a given direction
+    const findNearestCollision = (edge, isHorizontal) => {
+        let nearest = isHorizontal ? (edge === 'left' ? 0 : map.width) : (edge === 'top' ? 0 : map.height);
+        
+        uniqueCollisionRects.forEach(collisionRect => {
+            if (isHorizontal) {
+                if (edge === 'left' && collisionRect.x + collisionRect.w <= rect.x &&
+                    collisionRect.y < rect.y + rect.h && collisionRect.y + collisionRect.h > rect.y) {
+                    nearest = Math.max(nearest, collisionRect.x + collisionRect.w);
+                } else if (edge === 'right' && collisionRect.x >= rect.x + rect.w &&
+                    collisionRect.y < rect.y + rect.h && collisionRect.y + collisionRect.h > rect.y) {
+                    nearest = Math.min(nearest, collisionRect.x);
+                }
+            } else {
+                if (edge === 'top' && collisionRect.y + collisionRect.h <= rect.y &&
+                    collisionRect.x < rect.x + rect.w && collisionRect.x + collisionRect.w > rect.x) {
+                    nearest = Math.max(nearest, collisionRect.y + collisionRect.h);
+                } else if (edge === 'bottom' && collisionRect.y >= rect.y + rect.h &&
+                    collisionRect.x < rect.x + rect.w && collisionRect.x + collisionRect.w > rect.x) {
+                    nearest = Math.min(nearest, collisionRect.y);
+                }
             }
-        case "y":
-            return {
-                w: Math.max(a.w, b.w),
-                h: Math.max(a.h, b.h)
-            }
-        default:
-            throw new Error(`Invalid combine direction: ${dir}`)
-    }
+        });
+        
+        return nearest;
+    };
+
+    // Calculate projected rectangles
+    const left = {
+        x: findNearestCollision('left', true),
+        y: rect.y,
+        w: Math.max(0, rect.x - findNearestCollision('left', true)),
+        h: rect.h
+    };
+
+    const right = {
+        x: rect.x + rect.w,
+        y: rect.y,
+        w: Math.max(0, findNearestCollision('right', true) - (rect.x + rect.w)),
+        h: rect.h
+    };
+
+    const top = {
+        x: rect.x,
+        y: findNearestCollision('top', false),
+        w: rect.w,
+        h: Math.max(0, rect.y - findNearestCollision('top', false))
+    };
+
+    const bottom = {
+        x: rect.x,
+        y: rect.y + rect.h,
+        w: rect.w,
+        h: Math.max(0, findNearestCollision('bottom', false) - (rect.y + rect.h))
+    };
+
+    // Ensure projections stay within map boundaries
+    const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+
+    [left, right, top, bottom].forEach(r => {
+        r.x = clamp(r.x, 0, map.width);
+        r.y = clamp(r.y, 0, map.height);
+        r.w = clamp(r.w, 0, map.width - r.x);
+        r.h = clamp(r.h, 0, map.height - r.y);
+    });
+
+    return [left, right, top, bottom];
 }
 
+// Test function
+function testDetectProjectedEmptySpaces() {
+    const testCases = [
+        {
+            name: "No collision rectangles",
+            rect: { x: 10, y: 10, w: 5, h: 5 },
+            map: { width: 100, height: 100, collisionRects: [] }
+        },
+        {
+            name: "One collision rectangle",
+            rect: { x: 0, y: 10, w: 3, h: 8 },
+            map: { width: 100, height: 100, collisionRects: [ { x: 0, y: 18, w: 60, h: 2 } ] }
+        },
+        {
+            name: "Multiple collision rectangles",
+            rect: { x: 10, y: 10, w: 5, h: 5 },
+            map: {
+                width: 100,
+                height: 100,
+                collisionRects: [
+                    { x: 0, y: 0, w: 8, h: 100 },
+                    { x: 20, y: 0, w: 5, h: 100 },
+                    { x: 0, y: 0, w: 100, h: 8 },
+                    { x: 0, y: 20, w: 100, h: 5 }
+                ]
+            }
+        },
+        {
+            name: "Rectangle at map edge",
+            rect: { x: 0, y: 0, w: 5, h: 5 },
+            map: { width: 100, height: 100, collisionRects: [] }
+        }
+    ];
 
-const calcComposite = entities => { // compute a rect that contains all the entities
-    const composite = {...entities[0]}
-    for (let i = 1; i < entities.length; i++) {
-        const ent = entities[i]
-        const rEdgX = Math.max(composite.x + composite.w, ent.x + ent.w)
-        const bEdgY = Math.max(composite.y + composite.h, ent.y + ent.h)
-
-        composite.x = Math.min(composite.x, ent.x)
-        composite.y = Math.min(composite.y, ent.y)
-        composite.w = rEdgX - composite.x
-        composite.h = bEdgY - composite.y
-    }
-    return composite
+    testCases.forEach(testCase => {
+        console.log(`Test case: ${testCase.name}`);
+        const result = detectProjectedEmptySpaces(testCase.rect, testCase.map);
+        console.log(JSON.stringify(result, null, 2));
+        console.log("-----");
+    });
 }
 
-
-class Block {
-    x = 0
-    y = 0
-    constructor(w, h) {
-        this.w = w
-        this.h = h
-    }
-}
-
-class CompositeBlock extends Block {
-    collisionRects = []
-    children = []
-    constructor(initialBlock) {
-        super(0, 0)
-        this.add(initialBlock)
-    }
-    add(block, stackDir, offsetX, offsetY, stackAgainst=this.last) {
-        if (this.children.length === 0) { // initial child
-            this.children.push(block)
-            Object.assign(this, block)
-        } else {
-            Object.assign(block, calcStacked(stackAgainst, block, stackDir, offsetX, offsetY))
-            this.children.push(block)
-            Object.assign(this, calcComposite(this.children))
-        }
-        this.last = block
-        this.collisionRects.push({ ...block })
-        this.collisionRects = mergeRects(this.collisionRects)
-        return this
-    }
-    stack(block, dir, mx, my) { // stack itself onto sth
-        const { x, y } = calcStacked(block, this, dir, mx, my)
-        const dx = x - this.x
-        const dy = y - this.y
-
-        this.x = x
-        this.y = y
-
-        this.children.forEach(block => {
-            block.x += dx
-            block.y += dy
-        })
-
-        this.collisionRects.forEach(rect => {
-            rect.x += dx
-            rect.y += dy
-        })
-        return this
-    }
-}
-
-class World extends Block {
-    tileW=48
-    collisionRects = []
-    spawnPoints = []
-    checkpoints = []
-    layers = {
-        fg: [],
-        og: [],
-        mg: []
-    }
-    bg = "#132b27"
-    mob_bg = "#132b27"
-    pxbg = "#0a1614"
-    tint = "0.025, -0.025, -0.0125, 0"
-    constructor(w, h, config={}) {
-        super(w, h)
-        Object.assign(this, config)
-        this.floor = calcAligned(this, new Block(this.w, config.floorHeight ?? 4), "left", "bottom")
-        this.addBlock(this.floor, "fg")
-        console.log(this.layers.fg.slice(-1))
-    }
-    addBlock(block, layer = "og", skipCollisionTest = false) {
-        const { x, y } = block
-        for (let i = 0; i < block.h; i++) {
-            for (let j = 0; j < block.w; j++) {
-                this.layers[layer].push({ x: x + j, y: y + i, w: 1, h: 1 })
-            }
-        }
-        this.collisionRects.push({ x: block.x, y: block.y, w: block.w, h: block.h })
-    }
-    addCompositeBlock(block, layer = "fg", skipCollisionTest) {
-        if (!(block instanceof CompositeBlock)) return
-        for (const child of block.children) {
-            this.addBlock(child, layer, true)
-        }
-        if (skipCollisionTest) return
-        // add collision rects
-        for (const rect of block.collisionRects) {
-            this.collisionRects.push({...rect})
-        }
-        this.collisionRects = mergeRects(this.collisionRects)
-
-        // later implement spawn point and checkpoint logic
-    }
-    printAscii(layer = "fg") {
-        const { w, h, layers } = this;
-        const grid = Array.from({ length: h }, () => Array(w).fill(' '));
-
-        for (const cell of layers[layer]) {
-            const { x, y } = cell;
-            if (x >= 0 && x < w && y >= 0 && y < h) {
-                grid[y][x] = '$';
-            }
-        }
-
-        console.log(grid.map(row => row.join('')).join('\n'));
-    }
-    printAsciiScaled(layer = "fg") {
-        const { w, h, layers } = this;
-        // Double the width of the grid
-        const grid = Array.from({ length: h }, () => Array(w * 2).fill(' '));
-    
-        for (const cell of layers[layer]) {
-            const { x, y } = cell;
-            if (x >= 0 && x < w && y >= 0 && y < h) {
-                // Double the x-coordinate for display
-                const doubleX = x * 2;
-                grid[y][doubleX] = '$';
-                grid[y][doubleX + 1] = '$'; // Fill the adjacent cell to the right
-            }
-        }
-    
-        console.log(grid.map(row => row.join('')).join('\n'));
-    }
-    async exportMap(levelName) {
-        const { tileW, bg, mob_bg, pxbg, tint } = this
-        const [ fgTiles, tiles, mgTiles ] = Object.values(this.layers).map(layer => {
-            return layer.map(tile => {
-                const { name="wt_1", x, y } = tile
-                return { name, x: x * tileW, y: y * tileW } 
-            })
-        })
-        const collisionRects = this.collisionRects.map(rect => {
-            const { x, y, w, h, mat } = rect
-            return { x: x * tileW, y: y * tileW, width: w * tileW, height: h * tileW, mat }
-        })
-        const spawnPoints = this.spawnPoints.map(point => {
-            const { coords, ...rest } = point
-            const gameCoords = Object.entries(coords).map(([k, v]) => {
-                return [ k, v * tileW ]
-            })
-            return { ...rest, ...Object.fromEntries(gameCoords)}
-        })
-        const checkPoints = this.checkpoints.map(point => {
-            return {
-                x: point.x * tileW,
-                y: point.y * tileW
-            }
-        })
-        const exports = { collisionRects, spawnPoints, checkPoints, fgTiles, tiles, mgTiles, bg, mob_bg, pxbg, tint, width: this.w * tileW, height: this.h * tileW }
-        await fs.writeFile(`./src/assets/levels/${levelName}.cson`, JSON.stringify(exports))
-    }
-}
-
-const map = new World(60, 20, {
-    bg: "#132b27",
-    mob_bg: "#132b27",
-    pxbg: "#0a1614",
-    tint: "0.025, -0.025, -0.0125, 0",
-})
-
-const compositeBlock = initialBlock => new CompositeBlock(initialBlock)
-
-const leftBound = compositeBlock(new Block(1, 8)).add(new Block(2, 3), "right-end").stack(map.floor, "top-start")
-const b1 = compositeBlock(new Block(3, 3)).stack(leftBound, "right-end", 8)
-const b2 = compositeBlock(new Block(8, 3)).add(new Block(2, 2), "bottom-end").stack(b1, "top-start")
-
-map.addCompositeBlock(leftBound)
-map.addBlock(b1)
-map.addCompositeBlock(b2)
-// map.spawnPoints.push({ name: "player", coords: calcStacked(leftBound, undefined, "right-start")})
-map.printAsciiScaled()
-// map.exportMap("testlevel")
+// Run the test
+testDetectProjectedEmptySpaces();

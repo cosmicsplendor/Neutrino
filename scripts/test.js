@@ -1,7 +1,8 @@
+const { detectProjectedEmptySpaces } = require("./utils/detectProjectedEmptySpaces");
 const { CompositeBlock, Map, Block } = require("./utils/index");
-const {Graph} = require('graphlib'); // Use a graph library
+const { Graph } = require('graphlib'); // Use a graph library
 
-const rand = (to, from = 0) => from + Math.floor((to - from + 1)* Math.random())
+const rand = (to, from = 0) => from + Math.floor((to - from + 1) * Math.random())
 const skewedRand = (to, from = 0) => from + Math.floor((to - from + 1) * Math.random() * Math.random())
 const pickOne = arr => arr[rand(arr.length - 1)]
 const map = new Map({
@@ -24,18 +25,17 @@ const leftWall = CompositeBlock.create({ width: 1, height: 8 })
 
 graph.setNode(0, leftWall);
 
-function generateLevel(graph, iter=1) {
+function generateLevel(graph, iter = 1) {
     const lastBlock = graph.node(iter - 1)
     const newBlock = generateNewBlock(lastBlock);
-    console.log(newBlock)
     if (newBlock.x + newBlock.w > map.w) {
         return; // End recursion if out of bounds
     }
     if (isLevelTraversable(graph)) {
         newBlock.addToMap();
         graph.setNode(iter, newBlock);
-        graph.setEdge(iter-1, iter);
-        generateLevel(graph, iter+1);
+        graph.setEdge(iter - 1, iter);
+        generateLevel(graph, iter + 1);
     } else {
         generateLevel(graph, iter);
     }
@@ -50,20 +50,23 @@ function generateNewBlock(prevBlock) {
         height: skewedRand(1, 3) + 2 // Height between 2 and 4
     })
     addProtrusions(newBlock)
-    const expandDir = skewedRand(6) < 2 ? "horizontal": "vertical"
+    const expandDir = skewedRand(6) < 2 ? "horizontal" : "vertical"
     if (expandDir === "horizontal") {
-        newBlock.stackOn(prevBlock, { position: pickOne(["right", "right-start", "right-end"]), dx: skewedRand(6, 3) })
+        const params = { position: pickOne(["right", "right-start", "right-end"]), dx: skewedRand(6, 3) }
+        newBlock.stackOn(prevBlock, params)
     } else {
-        newBlock.stackOn(prevBlock, { position: pickOne(["right", "right-end", "right-start", "top", "top-start", "top-end"]), dy: -skewedRand(4, 2), dx: rand(1) })
+        const params = { position: pickOne(["right", "right-end", "right-start", "top", "top-start", "top-end"]), dy: -skewedRand(4, 2), dx: rand(1) }
+        newBlock.stackOn(prevBlock, params)
     }
 
     return newBlock;
 }
+generateNewBlock.yDir = 1
 
 function isLevelTraversable(graph) {
     return true
 }
-
+// console.log(detectProjectedEmptySpaces(leftWall, map))
 generateLevel(graph);
 
 map.printAsciiScaled();
