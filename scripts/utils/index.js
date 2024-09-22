@@ -264,20 +264,20 @@ class CompositeBlock extends Block {
     
     stackOn(block, {anchor, dx, dy}) { // stack itself onto sth
         const { x, y } = calcStacked(block, this, anchor, dx, dy)
-        const dx = x - this.x
-        const dy = y - this.y
+        const xShift = x - this.x
+        const yShift = y - this.y
 
         this.x = x
         this.y = y
 
         this.children.forEach(block => {
-            block.x += dx
-            block.y += dy
+            block.x += xShift
+            block.y += yShift
         })
 
         this.collisionRects.forEach(rect => {
-            rect.x += dx
-            rect.y += dy
+            rect.x += xShift
+            rect.y += yShift
         })
         return this
     }
