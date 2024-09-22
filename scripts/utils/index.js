@@ -120,7 +120,7 @@ function calcAligned(c, e, x, y, mX = 0, mY = 0) {
         default:
             throw new Error(`Invalid y-alignment parameter: ${y}`)
     }
-    return { ...e, ...pos }
+    return Object.assign(e, pos)
 }
 
 function calcStacked(b1, b2, dir, mX = 0, mY = 0) {
@@ -234,23 +234,22 @@ class CompositeBlock extends Block {
         this._map = map
     }
     static create(blockOrConfig) {
-        const initialBlock = blockOrConfig instanceof Block? blockOrConfig: new Block(blockOrConfig.width, blockOrConfig.height) 
+        const initialBlock = blockOrConfig instanceof Block || blockOrConfig instanceof CompositeBlock? blockOrConfig: new Block(blockOrConfig.width, blockOrConfig.height) 
         return new CompositeBlock(initialBlock)
     }
     constructor(initialBlock) {
         super(0, 0)
-        this.add(initialBlock)
+        this.addPart({ block: initialBlock})
     }
-    addPart({block: _block, x, y, anchor, onto = "parent", dx, dy}) {
-        let block = typeof x === "number" && typeof y === "number" ? new Block(x, y): _block
-    
-        const stackAgainst = onto === "parent" ? this: onto === "last" ? this: undefined
-        if (stackAgainst) throw new Error(`Invalid onto param: ${onto}`)
+    addPart({block: _block, width, height, position, onto = "parent", dx, dy}) {
+        const block = typeof width === "number" && typeof height === "number" ? new Block(width, height): _block
+        const stackAgainst = onto === "parent" ? this: (onto === "last" ? this.last: undefined)
+        if (stackAgainst === undefined) throw new Error(`Invalid onto param: ${onto}`)
         if (this.children.length === 0) { // initial child
             this.children.push(block);
             Object.assign(this, block);
         } else {
-            Object.assign(block, calcStacked(stackAgainst, block, anchor, dx, dy));
+            Object.assign(block, calcStacked(stackAgainst, block, position, dx, dy));
             this.children.push(block);
             Object.assign(this, calcComposite(this.children));
         }
@@ -262,8 +261,8 @@ class CompositeBlock extends Block {
         return this;
     }
     
-    stackOn(block, {anchor, dx, dy}) { // stack itself onto sth
-        const { x, y } = calcStacked(block, this, anchor, dx, dy)
+    stackOn(block, {position, dx, dy}) { // stack itself onto sth
+        const { x, y } = calcStacked(block, this, position, dx, dy)
         const xShift = x - this.x
         const yShift = y - this.y
 
@@ -281,8 +280,8 @@ class CompositeBlock extends Block {
         })
         return this
     }
-    addToMap(...args) {
-        CompositeBlock._map.addBlock(this, ...args)
+    addToMap({ collision, layer }={collision: false, layer: "fg"}) {
+        CompositeBlock._map.addBlock({ block: this, skipCollisionTest: collision, layer })
         return this
     }
 }
@@ -301,15 +300,14 @@ class Map extends Block {
     mob_bg = "#132b27"
     pxbg = "#0a1614"
     tint = "0.025, -0.025, -0.0125, 0"
-    constructor({w, h, ...config}={}) {
-        super(w, h)
+    constructor({width, height, ...config}={}) {
+        super(width, height)
         Object.assign(this, config)
         this.floor = calcAligned(this, new Block(this.w, config.floorHeight ?? 4), "left", "bottom")
-        this.addBlock(this.floor, "fg")
-        console.log(this.layers.fg.slice(-1))
+        this.addBlock({ block: this.floor, layer: "fg" })
         CompositeBlock.registerMap(this)
     }
-    addPlainBlock(block, layer = "og", skipCollisionTest = false) {
+    addPlainBlock({block, layer = "og", skipCollisionTest = false}) {
         const x = Math.round(block.x)
         const y = Math.round(block.y)
         for (let i = 0; i < block.h; i++) {
@@ -319,10 +317,10 @@ class Map extends Block {
         }
         this.collisionRects.push({ x: block.x, y: block.y, w: block.w, h: block.h })
     }
-    addCompositeBlock(block, layer = "fg", skipCollisionTest) {
+    addCompositeBlock({block, layer = "fg", skipCollisionTest}) {
         if (!(block instanceof CompositeBlock)) return
         for (const child of block.children) {
-            this.addPlainBlock(child, layer, true)
+            this.addPlainBlock({ block: child, layer, skipCollisionTest: true})
         }
         if (skipCollisionTest) return
         // add collision rects
@@ -333,12 +331,16 @@ class Map extends Block {
 
         // later implement spawn point and checkpoint logic
     }
-    addBlock(...args) {
-        if (args[0] instanceof CompositeBlock) {
-            this.addCompositeBlock(...args)
+    addBlock(params) {
+        if (params.block instanceof CompositeBlock) {
+            this.addCompositeBlock(params)
             return
         }
-        this.addPlainBlock(...args)
+        if (params.block instanceof Block) {
+            this.addPlainBlock(params)
+            return
+        }
+        throw new Error("Invalid block:", params)
     }
     printAscii(layer = "fg") {
         const { w, h, layers } = this;
