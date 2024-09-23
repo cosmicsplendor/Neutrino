@@ -177,6 +177,8 @@ function calcStacked(b1, b2, dir, mX = 0, mY = 0) {
         default:
             throw new Error(`Invalid stacking direction: ${dir}`)
     }
+    pos.x = Math.round(pos.x)
+    pos.y = Math.round(pos.y)
     return pos
 }
 
@@ -289,7 +291,9 @@ class CompositeBlock extends Block {
 class Map extends Block {
     tileW=48
     collisionRects = []
-    spawnPoints = []
+    spawnPoints= [
+        { name: "player", x: 0, y: 0 }
+    ]
     checkpoints = []
     layers = {
         fg: [],
@@ -385,11 +389,8 @@ class Map extends Block {
             return { x: x * tileW, y: y * tileW, width: w * tileW, height: h * tileW, mat }
         })
         const spawnPoints = this.spawnPoints.map(point => {
-            const { coords, ...rest } = point
-            const gameCoords = Object.entries(coords).map(([k, v]) => {
-                return [ k, v * tileW ]
-            })
-            return { ...rest, ...Object.fromEntries(gameCoords)}
+            const { x, y, ...rest } = point
+            return { x: x * tileW, y: y * tileW, ...rest}
         })
         const checkPoints = this.checkpoints.map(point => {
             return {

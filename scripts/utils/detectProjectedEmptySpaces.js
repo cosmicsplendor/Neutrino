@@ -76,7 +76,7 @@ function detectProjectedEmptySpaces(rect, map) {
         r.h = clamp(r.h, 0, map.h - r.y);
     });
 
-    return [left, right, top, bottom];
+    return {left, right, top, bottom};
 }
 
 module.exports = {

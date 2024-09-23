@@ -104,6 +104,7 @@ class GameScreen extends Node { // can only have cameras as children
         this.add(level)
         this.game.renderer.changeBackground(config.isMobile || this.game.renderer.api === rendApis.CNV_2D ? data.mob_bg: data.bg, moonImg)
         this.game.renderer.canvas.style.backgroundPosition = data.bgPos ?? "-50%"
+        console.log(data)
         this.game.renderer.gTint = data.tint && data.tint.split(",")
         level.parent = null // sever the child to parent link (necessary for correct collision detection when camera isn't the root node)
         if (this.bg) {
