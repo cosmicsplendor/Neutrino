@@ -271,14 +271,17 @@ class CompositeBlock extends Block {
         this.x = x
         this.y = y
 
+        return this.shift(xShift, yShift)
+    }
+    shift(dx, dy=0) {
         this.children.forEach(block => {
-            block.x += xShift
-            block.y += yShift
+            block.x += dx
+            block.y += dy
         })
 
         this.collisionRects.forEach(rect => {
-            rect.x += xShift
-            rect.y += yShift
+            rect.x += dx
+            rect.y += dy
         })
         return this
     }

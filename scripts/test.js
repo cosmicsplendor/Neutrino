@@ -57,6 +57,26 @@ const pickVerticalAlignmentParams = ({ bottom }) => {
 
     return { position: pickOne(["right", "right-end", "right-start", "top", "top-start", "top-end"]), dy: -skewedRand(5, 2), dx: rand(2, 1) + skewedRand(2, 1) }
 }
+const fixHorizontalGap = (block, { left, right }) => {
+    if (right.w === 1) {
+        console.log("shifting right")
+        return block.shift(1)
+    }
+    if (left.w === 1) {
+        console.log("shifting left")
+        return block.shift(-1)
+    }
+}
+const fixVerticalGap = (block, { top, bottom }) => {
+    if (bottom.h === 1) {
+        console.log("shifting down")
+        return block.shift(0, 1)
+    }
+    if (top.h === 1) {
+        console.log("shifting up")
+        return block.shift(0, -1)
+    }
+}
 function generateNewBlock(prevBlock) {
     const newBlock = CompositeBlock.create({
         width: rand(3, 1) + skewedRand(5, 1) + 1, // Width between 2 and 6
@@ -70,10 +90,12 @@ function generateNewBlock(prevBlock) {
 
         newBlock.stackOn(prevBlock, params)
     } else {
-        const params = pickVerticalAlignmentParams(emptySpaces)
+        const params = pickVerticalAlignmentParams(emptySpaces, map)
         newBlock.stackOn(prevBlock, params)
     }
-
+    const newEmptySpaces = detectProjectedEmptySpaces(newBlock, map)
+    fixHorizontalGap(newBlock, newEmptySpaces)
+    fixVerticalGap(newBlock, newEmptySpaces)
     return newBlock;
 }
 generateNewBlock.yDir = 1
