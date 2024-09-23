@@ -41,11 +41,13 @@ function generateLevel(graph, iter = 1) {
     // }
 }
 
-const addProtrusions = (block, { bottom }) => {
-    console.log(bottom.h)
-    console.log(block.w)
-    if (bottom.h > 4 && block.w > 2) {
-        block.addPart({ width: 2, height: 2, position: pickOne(["bottom", "bottom-start", "bottom-end"])})
+const addProtrusions = (block) => {
+    if (block.w > 2 && rand(10) > 5) {
+        rand(10) > 3 && block.addPart({ width: 2, height: 2, position: pickOne(["bottom", "bottom-start", "bottom-end"])})
+        rand(10) > 3 && block.addPart({ width: skewedRand(block.w - 1, 2), height: skewedRand(3, 2), position: pickOne(["top", "top-start", "top-end"])})
+    }
+    if (rand(10) > 8 && block.h > 2) {
+        block.addPart({ height: skewedRand(block.h - 1, 2), width: skewedRand(3, 2), position: pickOne(["left", "left-start", "left-end"])})
     }
 }
 const pickVerticalAlignmentParams = ({ bottom }) => {
@@ -62,7 +64,7 @@ function generateNewBlock(prevBlock) {
     })
     const emptySpaces = detectProjectedEmptySpaces(prevBlock, map)
     const expandDir = prevBlock.y < 11 || skewedRand(20) < 4 ? "horizontal" : "vertical"
-    addProtrusions(prevBlock, emptySpaces)
+    addProtrusions(newBlock)
     if (expandDir === "horizontal") {
         const params = { position: pickOne(["right", "right-start", "right-end"]), dx: skewedRand(8, 3), dy: 2 * skewedRand(2, 1) + rand(2, 1)}
 
