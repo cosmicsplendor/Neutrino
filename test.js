@@ -26,7 +26,7 @@ class Webgl2Renderer {
         this.matrixUtil = new MatrixUtil();
         this.setupGlSettings();
         this.initViewport(viewport);
-        Object.assign(this, createMatStackMixin()); // Must be done before calling resize
+        Object.assign(this, createMatStackMixin()); // Must be done before calling resize, this sets firstMat
         this.resize(viewport);
         this.viewport = viewport
         this.changeBackground(background);
@@ -279,3 +279,5 @@ class Webgl2Renderer {
         }
     }
 }
+
+export default Webgl2Renderer;
