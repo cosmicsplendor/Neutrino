@@ -32,10 +32,10 @@ class Title extends Node {
         }
         this.rock1.rotation = Math.PI / 6
 
-        // this.add(this.rock1)
-        // this.add(this.rock2)
+        this.add(this.rock1)
+        this.add(this.rock2)
         this.add(this.ball)
-        // this.add(this.logo)
+        this.add(this.logo)
 
         this.alpha = 0.01
         Object.assign(this, compositeDims(this))
