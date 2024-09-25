@@ -36,13 +36,9 @@ const computeViewport = () => {
             height: vpHeight
         })
     }
-    const maxWidth = portraitMode ? desktopRes.min: desktopRes.max
-    const maxHeight = portraitMode ? desktopRes.max: desktopRes.min
-    const vpWidth = Math.min(width, maxWidth)
-    const vpHeight = Math.min(height, maxHeight)
     return ({ // canvas dimensions
-        width: vpWidth,
-        height: vpHeight,
+        width: window.innerWidth,
+        height: window.innerHeight,
     })
 }
 const defaultConfig = {
