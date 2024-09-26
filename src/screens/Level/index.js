@@ -100,7 +100,7 @@ class LevelScreen extends Node {
             syncColor: level => {
                 const data = levelColors[level-1]
                 game.renderer.changeBackground(data.bg)
-                if (!config.isMobile) {
+                if (this.container) {
                     this.container.overlay = data.pxbg && hexToNorm(data.pxbg)
                 }
             }
