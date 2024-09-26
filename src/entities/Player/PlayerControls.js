@@ -44,10 +44,12 @@ class Rolling {
     }
     update(entity, dt) {
         if (this.controls.get("left")) {
-            entity.velX -= (entity.velX > 0 ? 3 : 1) * this.controls.speed * dt 
-        }
-        if (this.controls.get("right")) {
-            entity.velX += (entity.velX < 0 ? 3 : 1) * this.controls.speed * dt 
+            entity.velX -= (entity.velX > 0 ? 3 : 1) * this.controls.speed * dt;
+        } else if (this.controls.get("right")) {
+            entity.velX += (entity.velX < 0 ? 3 : 1) * this.controls.speed * dt;
+        } else {
+            // If no left or right control is held, apply additional friction
+            Math.abs(entity.velX) < 10 && (entity.velX =  0); // Adjust this factor as needed
         }
         if (this.controls.get("axn")) {
             this.controls.switchState("jumping", entity)
