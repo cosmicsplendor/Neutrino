@@ -13,6 +13,8 @@ import TexRegion from "@lib/entities/TexRegion"
 import bgDataId from "@assets/levels/background.cson"
 import initUI from "./initUI"
 import { hexToNorm } from "@lib/utils/math"
+import * as rendApis  from "@lib/renderer/apis"
+
 const levelColors = [
     { "bg":"#121228","mob_bg":"#121228", "pxbg":"0.058, 0.058, 0.133" },
     { "bg":"#121228","mob_bg":"#000000", "pxbg":"0.058, 0.058, 0.133" },
@@ -48,24 +50,26 @@ class LevelScreen extends Node {
             if (config.isMobile) {
                 return
             }
-            const bgData = assetsCache.get(bgDataId)
-            this.container = new Node()
-            bgData.forEach(tile => {
-                this.container.add(new TexRegion({ frame: tile.name, pos: { x: tile.x, y: tile.y }}))
-            })
-            this.container.pos.y = -1016
-            const atlasMeta = assetsCache.get(atlasmetaId)
-            const height = bgData.reduce((max, tile) => Math.max(max, tile.y + atlasMeta[tile.name].height), 0) + this.container.pos.y
-            this.container.overlay = [0.03529411764705882, 0.03529411764705882, 0.03529411764705882]
-            this.add(this.container)
-
-            const realignBg = viewport => {
-                const aligned = calcAligned(viewport, { width: config.viewport.width, height: height },"center", "bottom")
-                this.container.pos.y = aligned.y - 1016
+            if (game.renderer.api === rendApis.WEBGL) {
+                const bgData = assetsCache.get(bgDataId)
+                this.container = new Node()
+                bgData.forEach(tile => {
+                    this.container.add(new TexRegion({ frame: tile.name, pos: { x: tile.x, y: tile.y }}))
+                })
+                this.container.pos.y = -1016
+                const atlasMeta = assetsCache.get(atlasmetaId)
+                const height = bgData.reduce((max, tile) => Math.max(max, tile.y + atlasMeta[tile.name].height), 0) + this.container.pos.y
+                this.container.overlay = [0.03529411764705882, 0.03529411764705882, 0.03529411764705882]
+                this.add(this.container)
+                const realignBg = viewport => {
+                    const aligned = calcAligned(viewport, { width: config.viewport.width, height: height },"center", "bottom")
+                    if (this.container) this.container.pos.y = aligned.y - 1016
+                }
+    
+                realignBg(config.viewport)
+                config.viewport.on("change", () => realignBg(config.viewport))
             }
 
-            realignBg(config.viewport)
-            config.viewport.on("change", () => realignBg(config.viewport))
         })
     }
     onEnter(fromMenu, advance) { // second level tells whether to advance to the next level (relative to the current one)
