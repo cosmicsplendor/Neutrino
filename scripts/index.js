@@ -148,7 +148,7 @@ const interactiveGenerateLevel = async () => {
         }
         
         reconstructMap(map, [...blocks, newBlock])
-        map.printAsciiScaled();
+        map.printAscii();
 
         await map.exportMap("testlevel")
 
@@ -164,7 +164,7 @@ const interactiveGenerateLevel = async () => {
             terminal.red("Retrying current iteration...\n");
             reconstructMap(map, blocks)
         }
-    }
+    }K
 
     terminal("\nFinal Level:\n");
     map.printAscii();

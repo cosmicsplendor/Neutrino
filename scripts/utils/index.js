@@ -356,7 +356,7 @@ class Map extends Block {
         }
         throw new Error("Invalid block:", params)
     }
-    printAscii(layer = "fg") {
+    getGrid(layer) {
         const { w, h, layers } = this;
         const grid = Array.from({ length: h }, () => Array(w).fill(' '));
 
@@ -366,7 +366,10 @@ class Map extends Block {
                 grid[y][x] = '$';
             }
         }
-
+        return grid
+    }
+    printAscii(layer = "fg") {
+        const grid = getGrid(layer)
         console.log(grid.map(row => row.join('')).join('\n'));
     }
     printAsciiScaled(layer = "fg") {
