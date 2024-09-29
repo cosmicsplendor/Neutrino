@@ -122,7 +122,7 @@ class GameScreen extends Node { // can only have cameras as children
     }
     onEnter(l) {
         const levelIdx = Math.min(l - 1, levels.length - 1)
-        const levelData = config.testMode ? levels[levelIdx]: { id: testlevel }
+        const levelData = config.testMode ? { id: testlevel }: levels[levelIdx]
         const levelDataId = levelData.id
         const music = levelData.music
 

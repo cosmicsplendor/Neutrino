@@ -1,6 +1,7 @@
 import { Node } from "@lib"
 import initUI from "./initUI"
-import { MAIN_MENU } from "@screens/names"
+import { MAIN_MENU, GAME } from "@screens/names"
+import config from "@config"
 
 class LoadingScreen extends Node {
     background = "#000000"
@@ -20,8 +21,11 @@ class LoadingScreen extends Node {
         this.teardown = teardown
         this.onProg = onProg
         assetsCache.once("load", () => {
-            onLoad()
             const switchToMainMenu = () => {
+                if (config.testMode) {
+                    this.game.switchScreen(GAME, 0)
+                    return
+                }
                 this.game.switchScreen(MAIN_MENU)
             }
             this.sdk.signalLoad()
