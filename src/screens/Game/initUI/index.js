@@ -31,7 +31,7 @@ const RVA_TXT = "rva"
 
 const render = (images, orbAv) => {
     return `
-        <div id="${BLUR_OVERLAY}" class="${styles.blurOverlay}"></div>
+        <div id="${BLUR_OVERLAY}" class="${styles.blurOverlay}">PAUSED</div>
         ${imgBtn(ORB_IND, images.orb, styles.hidden, "orb count")}
         <div id="${TIMER}" class="${styles.timer} ${styles.hidden}"> 0000:0 </div>
         <div id="${ORB_AV}" class="${styles.txt} ${styles.hidden}"> ${orbAv} </div>
@@ -343,7 +343,7 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
     })();
     const onBlur = () => {
         if (gameState.is("paused") || gameState.is("completed")) return
-        blurOverlay.domNode.style.display = "block"
+        blurOverlay.domNode.style.display = "flex"
         game.pause()
     }
     const onFocus = () => {

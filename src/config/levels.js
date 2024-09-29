@@ -54,9 +54,9 @@ export default [
         music: "",
         bgPos: "40% 80%"
     },
-    // {
-    //     id: level11,
-    //     music: "",
-    //     bgPos: "0% 0%"
-    // }
+    {
+        id: level11,
+        music: "",
+        bgPos: "0% 0%"
+    }
 ]
