@@ -1,16 +1,12 @@
-// interactiveLevelDesigner.js
-
 const terminal = require('terminal-kit').terminal;
 const { detectProjectedEmptySpaces } = require("./utils/detectProjectedEmptySpaces");
 const { CompositeBlock, Map, Block } = require("./utils/index");
 const { Graph } = require('graphlib'); // Use a graph library
 
-// Utility Functions
 const rand = (to, from = 0) => from + Math.floor((to - from + 1) * Math.random());
 const skewedRand = (to, from = 0) => from + Math.floor((to - from + 1) * Math.random() * Math.random());
 const pickOne = arr => arr[rand(arr.length - 1)];
 
-// Initialize Map
 const initializeMap = () => new Map({
     width: 60,
     height: 30,
@@ -21,10 +17,8 @@ const initializeMap = () => new Map({
     floorHeight: 2,
 });
 
-// Initialize Graph
 const initializeGraph = () => new Graph({ directed: true });
 
-// Add Initial Block
 const addInitialBlock = (map, graph) => {
     const leftWall = CompositeBlock.create({ width:2, height: 8 })
         .addPart({ width: 2, height: 3, position: "right-end", onto: "last" })
@@ -35,7 +29,6 @@ const addInitialBlock = (map, graph) => {
     return leftWall;
 };
 
-// Add Protrusions to a Block
 const addProtrusions = (block) => {
     if (block.w > 2 && rand(10) > 5) {
         if (rand(10) > 3) {
@@ -58,7 +51,6 @@ const addProtrusions = (block) => {
     }
 };
 
-// Pick Vertical Alignment Parameters
 const pickVerticalAlignmentParams = (emptySpaces) => {
     const { bottom } = emptySpaces;
     if (bottom.h > 7) {
@@ -71,7 +63,6 @@ const pickVerticalAlignmentParams = (emptySpaces) => {
     };
 };
 
-// Fix Horizontal Gap
 const fixHorizontalGap = (block, emptySpaces) => {
     const { left, right } = emptySpaces;
     if (right.w === 1) {
@@ -82,7 +73,6 @@ const fixHorizontalGap = (block, emptySpaces) => {
     }
 };
 
-// Fix Vertical Gap
 const fixVerticalGap = (block, emptySpaces) => {
     const { top, bottom } = emptySpaces;
     if (bottom.h === 1) {
@@ -93,7 +83,6 @@ const fixVerticalGap = (block, emptySpaces) => {
     }
 };
 
-// Generate a New Block
 const generateNewBlock = (prevBlock, map) => {
     const newBlock = CompositeBlock.create({
         width: rand(3, 1) + skewedRand(5, 1) + 1, // Width between 2 and 6
@@ -123,13 +112,11 @@ const generateNewBlock = (prevBlock, map) => {
     return newBlock;
 };
 
-// Reconstruct Map from Blocks
 const reconstructMap = (map, blocks) => {
     map.clear(); // Clear the existing map
     blocks.forEach(block => block.addToMap());
 };
 
-// Prompt User for Input
 const promptUser = (message) => {
     return new Promise((resolve) => {
         terminal.singleColumnMenu(['Yes', 'No'], (error, response) => {
@@ -143,13 +130,11 @@ const promptUser = (message) => {
     });
 };
 
-// Main Interactive Level Generation Function
 const interactiveGenerateLevel = async () => {
     let map = initializeMap();
     let graph = initializeGraph();
     let blocks = [];
 
-    // Add Initial Block
     const initialBlock = addInitialBlock(map, graph);
     blocks.push(initialBlock);
     let iter = 1;
@@ -158,46 +143,38 @@ const interactiveGenerateLevel = async () => {
         const lastBlock = graph.node(iter - 1);
         let newBlock = generateNewBlock(lastBlock, map);
 
-        // Check for out of bounds
         if (newBlock.x + newBlock.w > map.width) {
             terminal.green("\nLevel generation complete.\n");
             break;
         }
 
-        // Temporarily add the new block
-        // Note: Do not modify the original blocks array yet
         const tempBlocks = [...blocks, newBlock];
         const tempMap = initializeMap();
-        tempMap.clear(); // Clear the temp map
+        tempMap.clear();
         tempBlocks.forEach(block => block.addToMap());
         tempMap.printAsciiScaled();
 
-        // Prompt user
+        await tempMap.exportMap("testlevel")
+
         terminal("\nDo you like this block? (Yes/No)\n");
         const userAccepted = await promptUser("Accept block?");
-
+        
         if (userAccepted) {
             graph.setNode(iter, newBlock);
             graph.setEdge(iter - 1, iter);
             blocks.push(newBlock);
             iter++;
-            // Update the main map
-            reconstructMap(map, blocks);
-            map.exportMap("")
+            reconstructMap(map, tempBlocks);
         } else {
             terminal.red("Retrying current iteration...\n");
-            // No need to modify the blocks array
-            // The loop will generate a new block in the next iteration
         }
     }
 
-    // Final Map Display
     terminal("\nFinal Level:\n");
-    map.printAsciiScaled();
+    map.printAscii();
     terminal("\nLevel design complete. Press any key to exit.\n");
     terminal.grabInput(true);
     terminal.on('key', () => process.exit());
 };
 
-// Execute the Interactive Level Designer
 interactiveGenerateLevel();

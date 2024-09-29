@@ -342,6 +342,7 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         ]
     })();
     const onBlur = () => {
+        if (config.testMode) return
         if (gameState.is("paused") || gameState.is("completed")) return
         blurOverlay.domNode.style.display = "flex"
         game.pause()
