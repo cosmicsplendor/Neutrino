@@ -73,7 +73,7 @@
     display: none;
 }
 .blurOverlay {
-    opacity: 0.8;
+    opacity: 0.9;
     background: black;
     font-size: 2em;
     color: white;
