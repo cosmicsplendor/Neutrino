@@ -7,12 +7,10 @@ const rand = (to, from = 0) => from + Math.floor((to - from + 1) * Math.random()
 const skewedRand = (to, from = 0) => from + Math.floor((to - from + 1) * Math.random() * Math.random());
 const pickOne = arr => arr[rand(arr.length - 1)];
 
-const addInitialBlock = (map, graph) => {
+const getInitialBlock = (map, graph) => {
     const leftWall = CompositeBlock.create({ width: 2, height: 8 })
         .addPart({ width: 2, height: 3, position: "right-end", onto: "last" })
         .stackOn(map.floor, { position: "top-start" })
-        .addToMap();
-
     graph.setNode(0, leftWall);
     return leftWall;
 };
@@ -26,7 +24,6 @@ const initializeMap = (graph) => {
         tint: "0.025, -0.025, -0.0125, 0",
         floorHeight: 2,
     });
-    addInitialBlock(map, graph)
     return map
 }
 const initializeGraph = () => new Graph({ directed: true });
@@ -135,9 +132,9 @@ const promptUser = () => {
 const interactiveGenerateLevel = async () => {
     let graph = initializeGraph();
     let map = initializeMap(graph);
-    let blocks = [];
+    const initialBlock = getInitialBlock(map, graph)
+    let blocks = [initialBlock];
 
-    blocks.push();
     let iter = 1;
 
     while (true) {

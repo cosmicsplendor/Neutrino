@@ -310,16 +310,15 @@ class Map extends Block {
     constructor({width, height, ...config}={}) {
         super(width, height)
         Object.assign(this, config)
-        this.floor = calcAligned(this, new Block(this.w, config.floorHeight ?? 4), "left", "bottom")
+        this.clear()
         CompositeBlock.registerMap(this)
     }
     clear() {
-        this.layers = {
-            fg: [],
-            og: [],
-            mg: []
-        }
-        this.collisionRects = []
+        this.layers.fg.length= 0
+        this.layers.og.length= 0
+        this.layers.mg.length= 0
+        this.collisionRects.length = 0
+        this.floor = calcAligned(this, new Block(this.w, this.floorHeight ?? 4), "left", "bottom")
         this.addBlock({ block: this.floor, layer: "fg" })
     }
     addPlainBlock({block, layer = "og", skipCollisionTest = false}) {
