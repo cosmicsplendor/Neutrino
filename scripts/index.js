@@ -143,15 +143,6 @@ const promptUser = (message) => {
     });
 };
 
-// Implementing map.clear()
-// Assuming the Map class does not have a clear method, we'll add it here.
-// Modify this if the Map class already has a clear method.
-
-// Map.prototype.clear = function() {
-//     this.blocks = []; // Reset the blocks array
-//     // If there are other properties to reset, do so here
-// };
-
 // Main Interactive Level Generation Function
 const interactiveGenerateLevel = async () => {
     let map = initializeMap();
@@ -192,6 +183,7 @@ const interactiveGenerateLevel = async () => {
             iter++;
             // Update the main map
             reconstructMap(map, blocks);
+            map.exportMap("")
         } else {
             terminal.red("Retrying current iteration...\n");
             // No need to modify the blocks array
