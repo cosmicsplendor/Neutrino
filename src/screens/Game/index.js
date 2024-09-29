@@ -18,6 +18,7 @@ import soundSpriteId from "@assets/audio/sprite.mp3"
 import soundMetaId from "@assets/audio/sprite.cson"
 import particlesUrl from "@assets/particles/all.cson"
 import bgDataId from "@assets/levels/background.cson"
+import testlevel from "@assets/levels/testlevel.cson"
 
 import resumeImgId from "@assets/images/ui/resume.png"
 import pauseImgId from "@assets/images/ui/pause.png"
@@ -121,10 +122,11 @@ class GameScreen extends Node { // can only have cameras as children
     }
     onEnter(l) {
         const levelIdx = Math.min(l - 1, levels.length - 1)
-        const levelDataId = levels[levelIdx].id
-        const music = levels[levelIdx].music
+        const levelData = config.testMode ? levels[levelIdx]: { id: testlevel }
+        const levelDataId = levelData.id
+        const music = levelData.music
 
-        const data = Object.assign(this.game.assetsCache.get(levelDataId), levels[levelIdx])
+        const data = Object.assign(this.game.assetsCache.get(levelDataId), levelData)
         const level = this.setLevel(data, music && this.music[music])
         const onClose = advance => this.game.switchScreen(LEVEL, false, advance)
         const checkpoint = new Checkpoint(data.checkpoints)

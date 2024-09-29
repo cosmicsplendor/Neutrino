@@ -6,6 +6,7 @@ import AssetsCache from "@utils/AssetsCache"
 import TexRegion from "@lib/entities/TexRegion"
 import Storage from "./helpers/Storage"
 import SDK from "./helpers/SDK"
+import testLevelData from "./assets/levels/testlevel.cson"
 
 import config from "@config"
 import levels from "@config/levels"
@@ -55,6 +56,10 @@ const assets = [
     { url: texatlasId, msg: "loading images" },
     { url: atlasmetaId, msg: "loading texture atlas" },
 ]
+
+if (config.testMode) {
+    assets.push(testLevelData)
+}
 
 try {
     assets.push({ url: levels[curLevel - 1].id, msg: "loading level data" }) // pre-load the current level
