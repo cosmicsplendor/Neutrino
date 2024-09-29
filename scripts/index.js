@@ -150,9 +150,7 @@ const interactiveGenerateLevel = async () => {
             break;
         }
         
-        map.clear()
-        const tempBlocks = [...blocks, newBlock];
-        tempBlocks.forEach(block => block.addToMap());
+        reconstructMap(map, [...blocks, newBlock])
         map.printAsciiScaled();
 
         await map.exportMap("testlevel")
@@ -167,8 +165,7 @@ const interactiveGenerateLevel = async () => {
             iter++;
         } else {
             terminal.red("Retrying current iteration...\n");
-            map.clear()
-            blocks.forEach(block => block.addToMap())
+            reconstructMap(map, blocks)
         }
     }
 
