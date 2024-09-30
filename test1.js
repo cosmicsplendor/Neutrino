@@ -79,7 +79,7 @@ const computeEdges = rects => {
     while (!grid.get(x, ybottom)) {
       ybottom--
     }
-    bottomPointer.record(x, ybottom)
+    bottomPointer.record(x, ybottom + 1)
   }
 
   for (let y = 0; y < grid.h; y++) {
@@ -91,7 +91,7 @@ const computeEdges = rects => {
     while (!grid.get(xright, y)) {
       xright--
     }
-    rightPointer.record(xright, y)
+    rightPointer.record(xright + 1, y)
   }
   return [rightPointer, leftPointer, topPointer, bottomPointer].flatMap(p => p.edges)
 }
