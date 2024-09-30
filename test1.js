@@ -17,7 +17,7 @@ class XPointer {
   edges=[]
   record(x, y) {
     const lastEdge = this.edges[this.edges.length - 1]
-    const extendExisting = y === lastEdge?.y
+    const extendExisting = y === lastEdge?.y2
 
     if (extendExisting) {
       lastEdge.x2 = x + 1
@@ -31,7 +31,7 @@ class YPointer {
   edges=[]
   record(x, y) {
     const lastEdge = this.edges[this.edges.length - 1]
-    const extendExisting = x === lastEdge?.x
+    const extendExisting = x === lastEdge?.x2
 
     if (extendExisting) {
       lastEdge.y2 = y + 1
@@ -45,20 +45,21 @@ class YPointer {
 
 const generateGrid = (rects) => {
   const compositeRect = calcComposite(rects)
-  const _grid = Array(compositeRect.w * compositeRect.h).fill(0)
+  const grid = Array(compositeRect.w * compositeRect.h).fill(0)
   rects.forEach(rect => {
     const x = rect.x - compositeRect.x
     const y = rect.y - compositeRect.y
     for (let i = x; i < x + rect.w; i++) {
       for (let j = y; j < y + rect.h; j++) {
         const index = compositeRect.w * j + i
-        _grid[index] = 1
+        grid[index] = 1
       }
     }
   })
   return Object.assign({
+    grid,
     get(i, j) {
-      return _grid[compositeRect.w * j + i]
+      return grid[compositeRect.w * j + i]
     }
   }, compositeRect)
 }
@@ -82,7 +83,7 @@ const computeEdges = rects => {
   }
 
   for (let y = 0; y < grid.h; y++) {
-    let xleft = 0, xright = grid.h - 1
+    let xleft = 0, xright = grid.w - 1
     while (!grid.get(xleft, y)) {
       xleft++
     }
@@ -101,4 +102,4 @@ const rectangles = [
   { x: 1, y: 2, w: 2, h: 2 }
 ]
 
-computeEdges(rectangles)
+console.log(computeEdges(rectangles))
