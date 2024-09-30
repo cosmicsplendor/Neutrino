@@ -117,23 +117,25 @@ const promptFields = async () => {
 };
 
 const handleAddMore = async () => {
-    const addAnother = await terminal.singleColumnMenu(['Yes', 'No'], {
+    const addAnother = await terminal.singleColumnMenu(['No', 'Yes'], {
         title: 'Would you like to add another object?'
     }).promise;
     return addAnother.selectedText === 'Yes';
 };
 
-const placeObject = async projection => {
+const placeObject = async (index, total) => {
     let first = true
+    const indexInd = `[${index + 1} of ${total}] `
     while (true) {
         terminal.clear()
-        terminal.bold.green(first ? "Let's place some objects. .\n": "Let's place one more object. .\n");
+        terminal.bold.green(indexInd + (first ? "Let's place some objects. .\n": "Let's place one more object. .\n"));
         first = false
         while (true) {
             const { name, alignment } = await promptFields();
             // Store the object details as required
             const proceed = (await terminal.singleColumnMenu(['Proceed', 'Retry']).promise).selectedText === "Proceed";
             if (proceed) {
+                terminal.clear()
                 terminal.bold.blue(`\n${name} successfully placed\n`)
                 break
             }
@@ -154,10 +156,11 @@ const placeObject = async projection => {
 
 const placeObjects = async (newBlock, map) => {
     const projections = projectCompositeRects(newBlock, map.collisionRects, map)
-    for (const index of projections) {
+    for (const index in projections) {
+        const projection = projections[index]
         map.projections.push(projection);
         await map.exportMap();
-        await placeObject()
+        await placeObject(Number(index), projections.length)
         // map.projections.length = 0
     }
     map.projections.length = 0
