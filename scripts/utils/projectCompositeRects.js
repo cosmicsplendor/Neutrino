@@ -1,19 +1,5 @@
-import { findNearestCollision } from "./detectProjectedEmptySpaces"
-
-const calcComposite = entities => { // compute a rect that contains all the entities
-    const composite = { ...entities[0] }
-    for (let i = 1; i < entities.length; i++) {
-        const ent = entities[i]
-        const rEdgX = Math.max(composite.x + composite.w, ent.x + ent.w)
-        const bEdgY = Math.max(composite.y + composite.h, ent.y + ent.h)
-
-        composite.x = Math.min(composite.x, ent.x)
-        composite.y = Math.min(composite.y, ent.y)
-        composite.w = rEdgX - composite.x
-        composite.h = bEdgY - composite.y
-    }
-    return composite
-}
+const {findNearestCollision} = require("./detectProjectedEmptySpaces")
+const {generateGrid} = require("./index")
 
 class XPointer {
     edges = []
@@ -62,28 +48,6 @@ class YPointer {
     }
 }
 
-
-const generateGrid = (rects) => {
-    const compositeRect = calcComposite(rects)
-    const grid = Array(compositeRect.w * compositeRect.h).fill(0)
-    rects.forEach(rect => {
-        const x = rect.x - compositeRect.x
-        const y = rect.y - compositeRect.y
-        for (let i = x; i < x + rect.w; i++) {
-            for (let j = y; j < y + rect.h; j++) {
-                const index = compositeRect.w * j + i
-                grid[index] = 1
-            }
-        }
-    })
-    return Object.assign({
-        grid,
-        get(i, j) {
-            return grid[compositeRect.w * j + i]
-        }
-    }, compositeRect)
-}
-
 const computeEdges = rects => {
     const grid = generateGrid(rects)
     const topPointer = new XPointer("top")
@@ -118,8 +82,13 @@ const computeEdges = rects => {
     })
 }
 
-const projectCompositeRects = (compositeRects, map) => {
+const projectCompositeRects = (compositeRects, collisionRects, map) => {
     const edges = computeEdges(compositeRects)
+
+    return edges.map(edge => {
+        const isHorizontal = edge.normal === "left" || edge.normal === "right"
+        return findNearestCollision(edge.normal, isHorizontal, collisionRects, edge, map)
+    })
 }
 
 export default projectCompositeRects

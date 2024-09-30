@@ -415,6 +415,26 @@ class Map extends Block {
         await fs.writeFile(`./src/assets/levels/${levelName}.cson`, JSON.stringify(exports))
     }
 }
+const generateGrid = (rects) => {
+    const compositeRect = calcComposite(rects)
+    const grid = Array(compositeRect.w * compositeRect.h).fill(0)
+    rects.forEach(rect => {
+        const x = rect.x - compositeRect.x
+        const y = rect.y - compositeRect.y
+        for (let i = x; i < x + rect.w; i++) {
+            for (let j = y; j < y + rect.h; j++) {
+                const index = compositeRect.w * j + i
+                grid[index] = 1
+            }
+        }
+    })
+    return Object.assign({
+        grid,
+        get(i, j) {
+            return grid[compositeRect.w * j + i]
+        }
+    }, compositeRect)
+}
 
 module.exports  = {
     combine,
@@ -422,5 +442,6 @@ module.exports  = {
     calcAligned,
     Block,
     CompositeBlock,
-    Map
+    Map,
+    generateGrid
 }
