@@ -3,6 +3,7 @@ const { addProtrusions, getInitialBlock } = require('./helpers');
 const { detectProjectedEmptySpaces } = require("./utils/detectProjectedEmptySpaces");
 const { CompositeBlock, Map, rand, skewedRand, pickOne } = require("./utils/index");
 const { Graph } = require('graphlib'); // Use a graph library
+const projectCompositeRects = require('./utils/projectCompositeRects');
 
 const initializeMap = () => {
     const map = new Map({
@@ -142,13 +143,13 @@ const placeObject = async projection => {
     }
 };
 
-const placeObjects = async () => {
-    const projections = projectCompositeRects(leftWall, map.collisionRects, map)
+const placeObjects = async newBlock => {
+    const projections = projectCompositeRects(newBlock, map.collisionRects, map)
     for (const projection of projections) {
         map.projections.push(projection);
         await map.exportMap();
-        await placeObject()
-        map.projections.length = 0
+        // await placeObject()
+        // map.projections.length = 0
     }
     map.projections.length = 0
 }
@@ -184,7 +185,7 @@ const interactiveGenerateLevel = async () => {
             graph.setEdge(iter - 1, iter);
             blocks.push(newBlock);
             iter++;
-            await placeObjects()
+            await placeObjects(newBlock)
         } else {
             terminal.red("Retrying current iteration...\n");
             reconstructMap(map, blocks)
