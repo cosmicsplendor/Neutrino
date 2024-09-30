@@ -101,5 +101,3 @@ const rectangles = [
   { x: 2, y: 0, w: 2, h: 2 },
   { x: 1, y: 2, w: 2, h: 2 }
 ]
-
-console.log(computeEdges(rectangles))
