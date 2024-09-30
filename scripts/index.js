@@ -85,7 +85,7 @@ const reconstructMap = (map, blocks) => {
     blocks.forEach(block => block.addToMap());
 };
 
-const promptUser = () => {
+const promptAccept = () => {
     return new Promise((resolve) => {
         terminal.singleColumnMenu(['Yes', 'No'], (error, response) => {
             if (error) {
@@ -117,15 +117,7 @@ const placeObject = async projection => {
         return { name, alignment };
     };
 
-    const handleUserChoice = async () => {
-        const choice = await terminal.singleColumnMenu(['Proceed', 'Retry']).promise;
-        if (choice.selectedText === 'Retry') {
-            cleanup(); // Assume cleanup is defined elsewhere
-            return await promptFields();
-        }
-
-        await map.exportMap();
-
+    const handleAddMore = async () => {
         const addAnother = await terminal.singleColumnMenu(['Yes', 'No'], {
             title: 'Would you like to add another object?'
         }).promise;
@@ -138,11 +130,16 @@ const placeObject = async projection => {
     };
 
     while (true) {
-        const { name, alignment } = await promptFields();
-        // Store the object details as required
+        while (true) {
+            const { name, alignment } = await promptFields();
+            // Store the object details as required
+            const proceed = (await terminal.singleColumnMenu(['Proceed', 'Retry']).promise).selectedText === "Proceed"
+            if (proceed) break
+            // undo the current action and continue with the retry
+        }
 
-        const proceed = await handleUserChoice();
-        if (!proceed) {
+        const addMore = await handleAddMore();
+        if (!addMore) {
             break; // Exit if the user does not want to add another object
         }
     }
@@ -180,7 +177,7 @@ const interactiveGenerateLevel = async () => {
         await map.exportMap("testlevel")
 
         terminal("\nDo you like this block? (Yes/No)\n");
-        const userAccepted = await promptUser("Accept block?");
+        const userAccepted = await promptAccept("Accept block?");
 
         if (userAccepted) {
             graph.setNode(iter, newBlock);
