@@ -373,7 +373,7 @@ class Map extends Block {
         return grid
     }
     printAscii(layer = "fg") {
-        const grid = getGrid(layer)
+        const grid = this.getGrid(layer)
         console.log(grid.map(row => row.join('')).join('\n'));
     }
     printAsciiScaled(layer = "fg") {

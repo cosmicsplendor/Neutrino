@@ -1,3 +1,5 @@
+const { CompositeBlock, rand, skewedRand, pickOne } = require("../utils");
+
 const addProtrusions = (block) => {
     if (block.w > 2 && rand(10) > 5) {
         if (rand(10) > 3) {
@@ -19,13 +21,16 @@ const addProtrusions = (block) => {
         });
     }
 };
+
 const getInitialBlock = (map, graph) => {
     const leftWall = CompositeBlock.create({ width: 2, height: 8 })
         .addPart({ width: 2, height: 3, position: "right-end", onto: "last" })
-        .stackOn(map.floor, { position: "top-start" })
+    leftWall.stackOn(map.floor, { position: "top-start" })
+    console.log(leftWall.collisionRects)
     graph.setNode(0, leftWall);
     return leftWall;
 };
+
 module.exports = {
     addProtrusions,
     getInitialBlock
