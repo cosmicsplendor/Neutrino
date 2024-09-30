@@ -143,7 +143,7 @@ const placeObject = async projection => {
     }
 };
 
-const placeObjects = async newBlock => {
+const placeObjects = async (newBlock, map) => {
     const projections = projectCompositeRects(newBlock, map.collisionRects, map)
     for (const projection of projections) {
         map.projections.push(projection);
@@ -185,7 +185,7 @@ const interactiveGenerateLevel = async () => {
             graph.setEdge(iter - 1, iter);
             blocks.push(newBlock);
             iter++;
-            await placeObjects(newBlock)
+            await placeObjects(newBlock, map)
         } else {
             terminal.red("Retrying current iteration...\n");
             reconstructMap(map, blocks)
