@@ -101,63 +101,60 @@ const promptAccept = () => {
 
 const promptFields = async () => {
     terminal.grabInput(true);
-    console.log('Prompting for name...');
+    terminal.bold.cyan('Name: ');
     const name = await terminal.inputField({
         echo: true, 
         prompt: 'name: '
     }).promise;
-    console.log('Got name:', name);
-
-    console.log('Prompting for alignment...');
+    console.log()
+    terminal.bold.cyan('Alignment: ');
     const alignment = await terminal.inputField({
         echo: true,
         prompt: 'alignment (left|center|right)-(top|center|bottom): '
     }).promise;
-    console.log('Got alignment:', alignment);
     terminal.grabInput(false);
     return { name, alignment };
 };
 
 const handleAddMore = async () => {
-    console.log('Prompting to add another object...');
     const addAnother = await terminal.singleColumnMenu(['Yes', 'No'], {
         title: 'Would you like to add another object?'
     }).promise;
-    console.log('Got add another response:', addAnother.selectedText);
-
     return addAnother.selectedText === 'Yes';
 };
+
 const placeObject = async projection => {
+    let first = true
     while (true) {
+        terminal.clear()
+        terminal.bold.green(first ? "Let's place some objects. .\n": "Let's place one more object. .\n");
+        first = false
         while (true) {
-            console.log('Prompting for object details...');
             const { name, alignment } = await promptFields();
-
             // Store the object details as required
-            console.log('Prompting to proceed or retry...');
             const proceed = (await terminal.singleColumnMenu(['Proceed', 'Retry']).promise).selectedText === "Proceed";
-            console.log('Proceed response:', proceed);
-
-            if (proceed) break;
-
-            // If not proceeding, retry
-            console.log('Retrying...');
+            if (proceed) {
+                terminal.bold.blue(`\n${name} successfully placed\n`)
+                break
+            }
+            terminal.clear()
+            terminal.bold.green("Let's try again. .\n");
         }
 
+        terminal.bold.green("\nAdd another object?\n")
         const addMore = await handleAddMore();
-        console.log('Add more response:', addMore);
-
         if (!addMore) {
-            console.log('Exiting loop...');
-            break; 
+            break
         }
+        terminal.clear()
     }
+    terminal.clear()
 };
 
 
 const placeObjects = async (newBlock, map) => {
     const projections = projectCompositeRects(newBlock, map.collisionRects, map)
-    for (const projection of projections) {
+    for (const index of projections) {
         map.projections.push(projection);
         await map.exportMap();
         await placeObject()
@@ -211,10 +208,10 @@ const interactiveGenerateLevel = async () => {
     terminal.on('key', () => process.exit());
 };
 
-term.on('key', (name, matches, data) => {
+terminal.on('key', (name, matches, data) => {
     if (name === 'CTRL_C' || name === 'ESCAPE') {
-        console.log('Exiting application...');
-        term.grabInput(false); // Disable input grabbing
+        console.log('\nExiting application...');
+        terminal.grabInput(false); // Disable input grabbing
         process.exit(); // Terminate the app
     }
 })
