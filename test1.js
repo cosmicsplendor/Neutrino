@@ -13,25 +13,35 @@ const calcComposite = entities => { // compute a rect that contains all the enti
   return composite
 }
 
-class TopPointer {
-  record() {
-  }
-}
-class BottomPointer {
-  record() {
+class XPointer extends Pointer {
+  edges=[]
+  record(x, y) {
+    const lastEdge = this.edges[this.edges.length - 1]
+    const extendExisting = y === lastEdge?.y
 
-  }
-}
-class LeftPointer {
-  record() {
+    if (extendExisting) {
+      lastEdge.x2 = x + 1
+      return 
+    }
 
+    this.edges.push({ x1: x, y1: y, x2: x + 1, y2: y })
   }
 }
-class BottomPointer {
-  record() {
-    
+class YPointer extends Pointer {
+  edges=[]
+  record(x, y) {
+    const lastEdge = this.edges[this.edges.length - 1]
+    const extendExisting = x === lastEdge?.x
+
+    if (extendExisting) {
+      lastEdge.y2 = y + 1
+      return 
+    }
+
+    this.edges.push({ x1: x, y1: y, x2: x, y2: y + 1 })
   }
 }
+
 
 const generateGrid = (rects) => {
   const compositeRect = calcComposite(rects)
@@ -55,16 +65,32 @@ const generateGrid = (rects) => {
 
 const computeEdges = rects => {
   const grid = generateGrid(rects)
-  for (let x = 0; x < grid.w; i++) {
+  const topPointer = new XPointer()
+  const bottomPointer = new XPointer()
+  const leftPointer = new YPointer()
+  const rightPointer = new YPointer()
+  for (let x = 0; x < grid.w; x++) {
     let ytop = 0, ybottom = grid.h - 1
     while (!grid.get(x, ytop)) {
       ytop++
     }
+    topPointer.record(x, ytop)
     while (!grid.get(x, ybottom)) {
       ybottom--
     }
-    Pointer.recordTop(x, ytop)
-    Pointer.recordBottom(x, ybottom)
+    bottomPointer.record(x, ybottom)
+  }
+
+  for (let y = 0; y < grid.h; y++) {
+    let xleft = 0, xright = grid.h - 1
+    while (!grid.get(xleft, y)) {
+      xleft++
+    }
+    leftPointer.record(xleft, y)
+    while (!grid.get(xright, y)) {
+      xright--
+    }
+    rightPointer.record(xright, y)
   }
 }
 
