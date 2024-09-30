@@ -99,11 +99,9 @@ const promptAccept = () => {
 };
 
 const placeObject = async projection => {
-    map.projections.push(projection);
-    await map.exportMap();
+
 
     const promptFields = async () => {
-        // Use terminal kit to prompt for the required fields
         const name = await terminal.inputField({ 
             echo: true, 
             prompt: 'name: ' 
@@ -123,10 +121,10 @@ const placeObject = async projection => {
         }).promise;
 
         if (addAnother.selectedText === 'Yes') {
-            return true; // Continue adding objects
+            return true;
         }
 
-        return false; // Exit
+        return false;
     };
 
     while (true) {
@@ -140,7 +138,7 @@ const placeObject = async projection => {
 
         const addMore = await handleAddMore();
         if (!addMore) {
-            break; // Exit if the user does not want to add another object
+            break; 
         }
     }
 };
@@ -148,7 +146,10 @@ const placeObject = async projection => {
 const placeObjects = async () => {
     const projections = projectCompositeRects(leftWall, map.collisionRects, map)
     for (const projection of projections) {
+        map.projections.push(projection);
+        await map.exportMap();
         await placeObject()
+        map.projections.length = 0
     }
     map.projections.length = 0
 }
