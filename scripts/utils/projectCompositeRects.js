@@ -48,8 +48,8 @@ class YPointer {
     }
 }
 
-const computeEdges = rects => {
-    const grid = generateGrid(rects)
+const computeEdges = block => {
+    const grid = generateGrid(block)
     const topPointer = new XPointer("top")
     const bottomPointer = new XPointer("bottom")
     const leftPointer = new YPointer("left")
@@ -77,19 +77,25 @@ const computeEdges = rects => {
         }
         rightPointer.record(xright + 1, y)
     }
-    return [rightPointer, leftPointer, topPointer, bottomPointer].flatMap(p => {
-        return p.eneumerate()
-    })
+    return [rightPointer, leftPointer, topPointer, bottomPointer]
+        .flatMap(p => {
+            return p.eneumerate()
+        })
+        .map(e => {
+            e.x += grid.x
+            e.y += grid.y
+            return e
+        })
 }
 
-const projectCompositeRects = (compositeRects, collisionRects, map) => {
-    const edges = computeEdges(compositeRects); // Assume this computes the edges of the composite rects
+const projectCompositeRects = (compositeBlock, collisionRects, map) => {
+    const edges = computeEdges(compositeBlock); // Assume this computes the edges of the composite rects
 
+    console.log(edges)
     return edges.map(edge => {
         const isHorizontal = edge.normal === "left" || edge.normal === "right";
         
         const nearestCollision = findNearestCollision(edge.normal, isHorizontal, collisionRects, edge, map);
-
         // Now, based on the edge's normal, calculate the projected empty space
         if (edge.normal === "left") {
             // Project leftwards
@@ -124,7 +130,7 @@ const projectCompositeRects = (compositeRects, collisionRects, map) => {
                 h: Math.max(0, nearestCollision - (edge.y + edge.h))
             };
         }
-    }).map(p => p.w & p.h)
+    }).filter(p => p.h !==0 && p.w !== 0)
 };
 
 

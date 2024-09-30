@@ -419,8 +419,10 @@ class Map extends Block {
         await fs.writeFile(`./src/assets/levels/${levelName}.cson`, JSON.stringify(exports))
     }
 }
-const generateGrid = (rects) => {
-    const compositeRect = calcComposite(rects)
+const generateGrid = (block) => {
+    const rects = block.collisionRects
+    const compositeRect = { x: block.x, y: block.y, w: block.w, h: block.h }
+    console.log(compositeRect)
     const grid = Array(compositeRect.w * compositeRect.h).fill(0)
     rects.forEach(rect => {
         const x = rect.x - compositeRect.x

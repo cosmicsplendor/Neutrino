@@ -27,7 +27,7 @@ const getInitialBlock = (map, graph) => {
     const leftWall = CompositeBlock.create({ width: 2, height: 8 })
         .addPart({ width: 2, height: 3, position: "right-end", onto: "last" })
     leftWall.stackOn(map.floor, { position: "top-start" })
-    const projections = projectCompositeRects(leftWall.collisionRects, map.collisionRects, map)
+    const projections = projectCompositeRects(leftWall, map.collisionRects, map)
     console.log(projections)
     graph.setNode(0, leftWall);
     return leftWall;
