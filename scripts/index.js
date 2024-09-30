@@ -99,34 +99,36 @@ const promptAccept = () => {
     });
 };
 
+const promptFields = async () => {
+    const name = await terminal.inputField({ 
+        echo: true, 
+        prompt: 'name: ' 
+    }).promise;
+
+    const alignment = await terminal.inputField({
+        echo: true, 
+        prompt: 'alignment (left|center|right)-(top|center|bottom): ' 
+    }).promise;
+
+    return { name, alignment };
+};
+
+const handleAddMore = async () => {
+    const addAnother = await terminal.singleColumnMenu(['Yes', 'No'], {
+        title: 'Would you like to add another object?'
+    }).promise;
+
+    if (addAnother.selectedText === 'Yes') {
+        return true;
+    }
+
+    return false;
+};
+
 const placeObject = async projection => {
 
 
-    const promptFields = async () => {
-        const name = await terminal.inputField({ 
-            echo: true, 
-            prompt: 'name: ' 
-        }).promise;
 
-        const alignment = await terminal.inputField({
-            echo: true, 
-            prompt: 'alignment (left|center|right)-(top|center|bottom): ' 
-        }).promise;
-
-        return { name, alignment };
-    };
-
-    const handleAddMore = async () => {
-        const addAnother = await terminal.singleColumnMenu(['Yes', 'No'], {
-            title: 'Would you like to add another object?'
-        }).promise;
-
-        if (addAnother.selectedText === 'Yes') {
-            return true;
-        }
-
-        return false;
-    };
 
     while (true) {
         while (true) {
@@ -148,7 +150,7 @@ const placeObjects = async (newBlock, map) => {
     for (const projection of projections) {
         map.projections.push(projection);
         await map.exportMap();
-        // await placeObject()
+        await placeObject()
         // map.projections.length = 0
     }
     map.projections.length = 0
@@ -184,8 +186,8 @@ const interactiveGenerateLevel = async () => {
             graph.setNode(iter, newBlock);
             graph.setEdge(iter - 1, iter);
             blocks.push(newBlock);
-            iter++;
             await placeObjects(newBlock, map)
+            iter++;
         } else {
             terminal.red("Retrying current iteration...\n");
             reconstructMap(map, blocks)

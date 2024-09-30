@@ -416,14 +416,13 @@ class Map extends Block {
                 y: point.y * tileW
             }
         })
-        const exports = { collisionRects, spawnPoints, checkPoints, fgTiles, tiles, mgTiles, bg, mob_bg, pxbg, tint, width: this.w * tileW, height: this.h * tileW }
+        const exports = { collisionRects, spawnPoints, checkPoints, fgTiles, tiles, mgTiles, bg, mob_bg, pxbg, tint, width: this.w * tileW, height: this.h * tileW, projections }
         await fs.writeFile(`./src/assets/levels/${levelName}.cson`, JSON.stringify(exports))
     }
 }
 const generateGrid = (block) => {
     const rects = block.collisionRects
     const compositeRect = { x: block.x, y: block.y, w: block.w, h: block.h }
-    console.log(compositeRect)
     const grid = Array(compositeRect.w * compositeRect.h).fill(0)
     rects.forEach(rect => {
         const x = rect.x - compositeRect.x
