@@ -124,7 +124,7 @@ const projectCompositeRects = (compositeRects, collisionRects, map) => {
                 h: Math.max(0, nearestCollision - (edge.y + edge.h))
             };
         }
-    });
+    }).map(p => p.w & p.h)
 };
 
 
