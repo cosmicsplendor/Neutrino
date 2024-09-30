@@ -99,14 +99,59 @@ const promptUser = () => {
 };
 
 const placeObject = async projection => {
-    map.projections.push(projection)
-    await map.exportMap()
-}
+    map.projections.push(projection);
+    await map.exportMap();
+
+    const promptFields = async () => {
+        // Use terminal kit to prompt for the required fields
+        const name = await terminal.inputField({ 
+            echo: true, 
+            prompt: 'name: ' 
+        }).promise;
+
+        const alignment = await terminal.inputField({
+            echo: true, 
+            prompt: 'alignment (left|center|right)-(top|center|bottom): ' 
+        }).promise;
+
+        return { name, alignment };
+    };
+
+    const handleUserChoice = async () => {
+        const choice = await terminal.singleColumnMenu(['Proceed', 'Retry']).promise;
+        if (choice.selectedText === 'Retry') {
+            cleanup(); // Assume cleanup is defined elsewhere
+            return await promptFields();
+        }
+
+        await map.exportMap();
+
+        const addAnother = await terminal.singleColumnMenu(['Yes', 'No'], {
+            title: 'Would you like to add another object?'
+        }).promise;
+
+        if (addAnother.selectedText === 'Yes') {
+            return true; // Continue adding objects
+        }
+
+        return false; // Exit
+    };
+
+    while (true) {
+        const { name, alignment } = await promptFields();
+        // Store the object details as required
+
+        const proceed = await handleUserChoice();
+        if (!proceed) {
+            break; // Exit if the user does not want to add another object
+        }
+    }
+};
 
 const placeObjects = async () => {
     const projections = projectCompositeRects(leftWall, map.collisionRects, map)
     for (const projection of projections) {
-        await placeObject(projection)
+        await placeObject()
     }
     map.projections.length = 0
 }
