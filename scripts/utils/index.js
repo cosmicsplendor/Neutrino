@@ -1,6 +1,10 @@
 const fs = require("fs/promises")
 const atlasPath = "../../src/assets/images/atlasmeta.cson"
 
+const rand = (to, from = 0) => from + Math.floor((to - from + 1) * Math.random());
+const skewedRand = (to, from = 0) => from + Math.floor((to - from + 1) * Math.random() * Math.random());
+const pickOne = arr => arr[rand(arr.length - 1)];
+
 const getAtlas = async () => {
     const buffer = await fs.readFile(atlasPath)
     const data = JSON.parse(buffer.toString("utf-8"))
@@ -443,5 +447,8 @@ module.exports  = {
     Block,
     CompositeBlock,
     Map,
-    generateGrid
+    generateGrid,
+    rand,
+    skewedRand,
+    pickOne
 }
