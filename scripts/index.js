@@ -99,64 +99,61 @@ const promptAccept = () => {
     });
 };
 
-const promptFields = () => {
-    return new Promise((resolve, reject) => {
-        terminal.inputField({ 
-            echo: true, 
-            prompt: 'name: ' 
-        }, (error, name) => {
-            if (error) {
-                return reject(error);
-            }
+const promptFields = async () => {
+    terminal.grabInput(true);
+    console.log('Prompting for name...');
+    const name = await terminal.inputField({
+        echo: true, 
+        prompt: 'name: '
+    }).promise;
+    console.log('Got name:', name);
 
-            terminal.inputField({
-                echo: true, 
-                prompt: 'alignment (left|center|right)-(top|center|bottom): ' 
-            }, (err, alignment) => {
-                if (err) {
-                    return reject(err);
-                }
-
-                resolve({ name, alignment });
-            });
-        });
-    });
+    console.log('Prompting for alignment...');
+    const alignment = await terminal.inputField({
+        echo: true,
+        prompt: 'alignment (left|center|right)-(top|center|bottom): '
+    }).promise;
+    console.log('Got alignment:', alignment);
+    terminal.grabInput(false);
+    return { name, alignment };
 };
 
-const handleAddMore = () => {
-    return new Promise((resolve, reject) => {
-        terminal.singleColumnMenu(['Yes', 'No'], {
-            title: 'Would you like to add another object?'
-        }, (error, addAnother) => {
-            if (error) {
-                return reject(error);
-            }
+const handleAddMore = async () => {
+    console.log('Prompting to add another object...');
+    const addAnother = await terminal.singleColumnMenu(['Yes', 'No'], {
+        title: 'Would you like to add another object?'
+    }).promise;
+    console.log('Got add another response:', addAnother.selectedText);
 
-            if (addAnother.selectedText === 'Yes') {
-                resolve(true);
-            } else {
-                resolve(false);
-            }
-        });
-    });
+    return addAnother.selectedText === 'Yes';
 };
-
 const placeObject = async projection => {
-
     while (true) {
         while (true) {
+            console.log('Prompting for object details...');
             const { name, alignment } = await promptFields();
+
             // Store the object details as required
-            const proceed = (await terminal.singleColumnMenu(['Proceed', 'Retry']).promise).selectedText === "Proceed"
-            if (proceed) break
-            // undo the current action and continue with the retry
+            console.log('Prompting to proceed or retry...');
+            const proceed = (await terminal.singleColumnMenu(['Proceed', 'Retry']).promise).selectedText === "Proceed";
+            console.log('Proceed response:', proceed);
+
+            if (proceed) break;
+
+            // If not proceeding, retry
+            console.log('Retrying...');
         }
+
         const addMore = await handleAddMore();
+        console.log('Add more response:', addMore);
+
         if (!addMore) {
+            console.log('Exiting loop...');
             break; 
         }
     }
 };
+
 
 const placeObjects = async (newBlock, map) => {
     const projections = projectCompositeRects(newBlock, map.collisionRects, map)
@@ -213,5 +210,13 @@ const interactiveGenerateLevel = async () => {
     terminal.grabInput(true);
     terminal.on('key', () => process.exit());
 };
+
+term.on('key', (name, matches, data) => {
+    if (name === 'CTRL_C' || name === 'ESCAPE') {
+        console.log('Exiting application...');
+        term.grabInput(false); // Disable input grabbing
+        process.exit(); // Terminate the app
+    }
+})
 
 interactiveGenerateLevel();
