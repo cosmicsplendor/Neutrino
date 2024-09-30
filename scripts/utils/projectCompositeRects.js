@@ -83,12 +83,49 @@ const computeEdges = rects => {
 }
 
 const projectCompositeRects = (compositeRects, collisionRects, map) => {
-    const edges = computeEdges(compositeRects)
+    const edges = computeEdges(compositeRects); // Assume this computes the edges of the composite rects
 
     return edges.map(edge => {
-        const isHorizontal = edge.normal === "left" || edge.normal === "right"
-        return findNearestCollision(edge.normal, isHorizontal, collisionRects, edge, map)
-    })
-}
+        const isHorizontal = edge.normal === "left" || edge.normal === "right";
+        
+        const nearestCollision = findNearestCollision(edge.normal, isHorizontal, collisionRects, edge, map);
 
-export default projectCompositeRects
+        // Now, based on the edge's normal, calculate the projected empty space
+        if (edge.normal === "left") {
+            // Project leftwards
+            return {
+                x: nearestCollision,
+                y: edge.y,
+                w: Math.max(0, edge.x - nearestCollision),
+                h: edge.h
+            };
+        } else if (edge.normal === "right") {
+            // Project rightwards
+            return {
+                x: edge.x + edge.w,
+                y: edge.y,
+                w: Math.max(0, nearestCollision - (edge.x + edge.w)),
+                h: edge.h
+            };
+        } else if (edge.normal === "top") {
+            // Project upwards
+            return {
+                x: edge.x,
+                y: nearestCollision,
+                w: edge.w,
+                h: Math.max(0, edge.y - nearestCollision)
+            };
+        } else if (edge.normal === "bottom") {
+            // Project downwards
+            return {
+                x: edge.x,
+                y: edge.y + edge.h,
+                w: edge.w,
+                h: Math.max(0, nearestCollision - (edge.y + edge.h))
+            };
+        }
+    });
+};
+
+
+module.exports = projectCompositeRects

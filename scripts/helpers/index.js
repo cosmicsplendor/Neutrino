@@ -1,3 +1,4 @@
+const projectCompositeRects = require("../utils/projectCompositeRects");
 const { CompositeBlock, rand, skewedRand, pickOne } = require("../utils");
 
 const addProtrusions = (block) => {
@@ -26,7 +27,8 @@ const getInitialBlock = (map, graph) => {
     const leftWall = CompositeBlock.create({ width: 2, height: 8 })
         .addPart({ width: 2, height: 3, position: "right-end", onto: "last" })
     leftWall.stackOn(map.floor, { position: "top-start" })
-    console.log(leftWall.collisionRects)
+    const projections = projectCompositeRects(leftWall.collisionRects, map.collisionRects, map)
+    console.log(projections)
     graph.setNode(0, leftWall);
     return leftWall;
 };
