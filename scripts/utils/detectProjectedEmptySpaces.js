@@ -81,5 +81,6 @@ function detectProjectedEmptySpaces(rect, map) {
 
 module.exports = {
     overlaps,
+    findNearestCollision,
     detectProjectedEmptySpaces,
 }

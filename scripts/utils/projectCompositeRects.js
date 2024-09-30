@@ -1,3 +1,5 @@
+import { findNearestCollision } from "./detectProjectedEmptySpaces"
+
 const calcComposite = entities => { // compute a rect that contains all the entities
     const composite = { ...entities[0] }
     for (let i = 1; i < entities.length; i++) {
@@ -15,6 +17,15 @@ const calcComposite = entities => { // compute a rect that contains all the enti
 
 class XPointer {
     edges = []
+    constructor(normalDir) {
+        this.normal = normalDir
+    }
+    eneumerate() {
+        return this.edges.map(e => {
+            const { x1, y1, x2 } = e
+            return { x: x1, y: y1, w: x2 - x1, h: 0, normal: this.normal }
+        })
+    }
     record(x, y) {
         const lastEdge = this.edges[this.edges.length - 1]
         const extendExisting = y === lastEdge?.y2
@@ -29,6 +40,15 @@ class XPointer {
 }
 class YPointer {
     edges = []
+    constructor(normalDir) {
+        this.normal = normalDir
+    }
+    eneumerate() {
+        return this.edges.map(e => {
+            const { x1, y1, y2 } = e
+            return { x: x1, y: y1, w: 0, h: y2 - y1, normal: this.normal }
+        })
+    }
     record(x, y) {
         const lastEdge = this.edges[this.edges.length - 1]
         const extendExisting = x === lastEdge?.x2
@@ -64,12 +84,12 @@ const generateGrid = (rects) => {
     }, compositeRect)
 }
 
-const getEdges = rects => {
+const computeEdges = rects => {
     const grid = generateGrid(rects)
-    const topPointer = new XPointer()
-    const bottomPointer = new XPointer()
-    const leftPointer = new YPointer()
-    const rightPointer = new YPointer()
+    const topPointer = new XPointer("top")
+    const bottomPointer = new XPointer("bottom")
+    const leftPointer = new YPointer("left")
+    const rightPointer = new YPointer("right")
     for (let x = 0; x < grid.w; x++) {
         let ytop = 0, ybottom = grid.h - 1
         while (!grid.get(x, ytop)) {
@@ -93,6 +113,13 @@ const getEdges = rects => {
         }
         rightPointer.record(xright + 1, y)
     }
-    return [rightPointer, leftPointer, topPointer, bottomPointer].flatMap(p => p.edges)
+    return [rightPointer, leftPointer, topPointer, bottomPointer].flatMap(p => {
+        return p.eneumerate()
+    })
 }
-export default getEdges
+
+const projectCompositeRects = (compositeRects, map) => {
+    const edges = computeEdges(compositeRects)
+}
+
+export default projectCompositeRects
