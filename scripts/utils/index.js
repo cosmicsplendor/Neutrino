@@ -301,6 +301,7 @@ class Map extends Block {
     spawnPoints= [
         { name: "player", x: 0, y: 0 }
     ]
+    projections = []
     checkpoints = []
     layers = {
         fg: [],
@@ -393,8 +394,8 @@ class Map extends Block {
     
         console.log(grid.map(row => row.join('')).join('\n'));
     }
-    async exportMap(levelName) {
-        const { tileW, bg, mob_bg, pxbg, tint } = this
+    async exportMap(levelName="testlevel") {
+        const { tileW, bg, mob_bg, pxbg, tint, projections } = this
         const [ fgTiles, tiles, mgTiles ] = Object.values(this.layers).map(layer => {
             return layer.map(tile => {
                 const { name="wt_1", x, y } = tile

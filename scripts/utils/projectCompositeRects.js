@@ -91,7 +91,6 @@ const computeEdges = block => {
 const projectCompositeRects = (compositeBlock, collisionRects, map) => {
     const edges = computeEdges(compositeBlock); // Assume this computes the edges of the composite rects
 
-    console.log(edges)
     return edges.map(edge => {
         const isHorizontal = edge.normal === "left" || edge.normal === "right";
         

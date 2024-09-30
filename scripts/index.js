@@ -98,6 +98,19 @@ const promptUser = () => {
     });
 };
 
+const placeObject = async projection => {
+    map.projections.push(projection)
+    await map.exportMap()
+}
+
+const placeObjects = async () => {
+    const projections = projectCompositeRects(leftWall, map.collisionRects, map)
+    for (const projection of projections) {
+        await placeObject(projection)
+    }
+    map.projections.length = 0
+}
+
 const interactiveGenerateLevel = async () => {
     let graph = initializeGraph();
     let map = initializeMap(graph);
@@ -129,11 +142,12 @@ const interactiveGenerateLevel = async () => {
             graph.setEdge(iter - 1, iter);
             blocks.push(newBlock);
             iter++;
+            await placeObjects()
         } else {
             terminal.red("Retrying current iteration...\n");
             reconstructMap(map, blocks)
         }
-    }K
+    }
 
     terminal("\nFinal Level:\n");
     map.printAscii();
