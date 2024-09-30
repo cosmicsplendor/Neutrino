@@ -99,36 +99,49 @@ const promptAccept = () => {
     });
 };
 
-const promptFields = async () => {
-    const name = await terminal.inputField({ 
-        echo: true, 
-        prompt: 'name: ' 
-    }).promise;
+const promptFields = () => {
+    return new Promise((resolve, reject) => {
+        terminal.inputField({ 
+            echo: true, 
+            prompt: 'name: ' 
+        }, (error, name) => {
+            if (error) {
+                return reject(error);
+            }
 
-    const alignment = await terminal.inputField({
-        echo: true, 
-        prompt: 'alignment (left|center|right)-(top|center|bottom): ' 
-    }).promise;
+            terminal.inputField({
+                echo: true, 
+                prompt: 'alignment (left|center|right)-(top|center|bottom): ' 
+            }, (err, alignment) => {
+                if (err) {
+                    return reject(err);
+                }
 
-    return { name, alignment };
+                resolve({ name, alignment });
+            });
+        });
+    });
 };
 
-const handleAddMore = async () => {
-    const addAnother = await terminal.singleColumnMenu(['Yes', 'No'], {
-        title: 'Would you like to add another object?'
-    }).promise;
+const handleAddMore = () => {
+    return new Promise((resolve, reject) => {
+        terminal.singleColumnMenu(['Yes', 'No'], {
+            title: 'Would you like to add another object?'
+        }, (error, addAnother) => {
+            if (error) {
+                return reject(error);
+            }
 
-    if (addAnother.selectedText === 'Yes') {
-        return true;
-    }
-
-    return false;
+            if (addAnother.selectedText === 'Yes') {
+                resolve(true);
+            } else {
+                resolve(false);
+            }
+        });
+    });
 };
 
 const placeObject = async projection => {
-
-
-
 
     while (true) {
         while (true) {
