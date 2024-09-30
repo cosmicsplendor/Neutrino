@@ -135,7 +135,6 @@ const placeObject = async projection => {
             if (proceed) break
             // undo the current action and continue with the retry
         }
-
         const addMore = await handleAddMore();
         if (!addMore) {
             break; 
