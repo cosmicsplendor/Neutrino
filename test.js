@@ -1,37 +1,63 @@
-const instanceMat = {
-  "0": 2,
-  "1": 0,
-  "2": 0,
-  "3": 0,
-  "4": 2,
-  "5": 0,
-  "6": -1,
-  "7": -1,
-  "8": 1
-}
+const computeEdges = rects => {
+    const grid = generateGrid(rects);
+    const compositeRect = calcComposite(rects);
+    const width = compositeRect.w;
+    const height = compositeRect.h;
+    const edges = [];
+    let x = 0;
+    let y = -1;
+    let dx = 1;
+    let dy = 0;
   
-  const vertices = [
-    0, 0,
-    1, 0,
-    0, 1,
-    1, 0,
-    1, 1,
-    0, 1
-  ];
+    let currentEdge = [];
+    let visited = new Set();
   
-  function multiplyMatrixVector(mat, vec) {
-    return [
-      mat[0] * vec[0] + mat[3] * vec[1] + mat[6],
-      mat[1] * vec[0] + mat[4] * vec[1] + mat[7],
-    ];
-  }
+    while (true) {
+      const index = y * width + x;
   
-  const transformedVertices = [];
+      // Check for visited cell
+      if (visited.has(index)) {
+        if (currentEdge.length > 0) {
+          edges.push(currentEdge);
+        }
+        break; // Exit if we've looped back around
+      }
+      visited.add(index);
   
-  for (let i = 0; i < vertices.length; i += 2) {
-    const vertex = [vertices[i], vertices[i + 1]];
-    const transformedVertex = multiplyMatrixVector(instanceMat, vertex);
-    transformedVertices.push(...transformedVertex);
-  }
+      if (index < 0 || index >= grid.length || grid[index] === 0) {
+        if (currentEdge.length > 0) {
+          edges.push(currentEdge);
+        }
+        currentEdge = [];
   
-  console.log(transformedVertices);
+        // Crucial Change:  Detect when we're completely surrounded
+        if (dx === 1 && x >= width-1 || dx === -1 && x <= 0 || dy === 1 && y >= height-1 || dy === -1 && y <=0) {
+            break;
+        }
+        
+        // Change direction only if we are not stuck
+        if (dx === 1) {
+          dx = 0;
+          dy = 1;
+        } else if (dx === 0 && dy === 1) {
+          dx = -1;
+          dy = 0;
+        } else if (dx === -1 && dy === 0) {
+          dx = 0;
+          dy = -1;
+        } else if (dx === 0 && dy === -1) {
+          dx = 1;
+          dy = 0;
+        }
+  
+        x += dx;
+        y += dy;
+      } else {
+        currentEdge.push({ x: x + compositeRect.x, y: y + compositeRect.y });
+        x += dx;
+        y += dy;
+      }
+    }
+  
+    return edges;
+  };
