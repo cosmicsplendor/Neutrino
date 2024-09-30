@@ -13,7 +13,7 @@ const calcComposite = entities => { // compute a rect that contains all the enti
   return composite
 }
 
-class XPointer extends Pointer {
+class XPointer {
   edges=[]
   record(x, y) {
     const lastEdge = this.edges[this.edges.length - 1]
@@ -27,7 +27,7 @@ class XPointer extends Pointer {
     this.edges.push({ x1: x, y1: y, x2: x + 1, y2: y })
   }
 }
-class YPointer extends Pointer {
+class YPointer {
   edges=[]
   record(x, y) {
     const lastEdge = this.edges[this.edges.length - 1]
@@ -92,6 +92,7 @@ const computeEdges = rects => {
     }
     rightPointer.record(xright, y)
   }
+  return [rightPointer, leftPointer, topPointer, bottomPointer].flatMap(p => p.edges)
 }
 
 const rectangles = [
@@ -100,4 +101,4 @@ const rectangles = [
   { x: 1, y: 2, w: 2, h: 2 }
 ]
 
-generateGrid(rectangles)
+computeEdges(rectangles)
