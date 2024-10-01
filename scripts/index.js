@@ -1,5 +1,6 @@
 const terminal = require('terminal-kit').terminal;
 const { addProtrusions, getInitialBlock } = require('./helpers');
+const { getChoice, promptAccept, message, promptFields } = require("./helpers/term")
 const { detectProjectedEmptySpaces } = require("./utils/detectProjectedEmptySpaces");
 const { CompositeBlock, Map, rand, skewedRand, pickOne } = require("./utils/index");
 const { Graph } = require('graphlib'); // Use a graph library
@@ -87,40 +88,7 @@ const reconstructMap = (map, blocks) => {
 };
 
 
-const promptFields = async () => {
-    terminal.grabInput(true);
-    terminal.bold.cyan('Name: ');
-    const name = await terminal.inputField({
-        echo: true, 
-        prompt: 'name: '
-    }).promise;
-    console.log()
-    terminal.bold.cyan('Alignment: ');
-    const alignment = await terminal.inputField({
-        echo: true,
-        prompt: 'alignment (left|center|right)-(top|center|bottom): '
-    }).promise;
-    terminal.grabInput(false);
-    return { name, alignment };
-};
 
-const message = async (msg, color, clear=true) => {
-    if (clear) terminal.clear()
-    const fn = color ? terminal[color]: terminal 
-    fn(`\n${msg}\n`)
-}
-const promptAccept = async (message, noFirst) => {
-    terminal.bold.green(`\n${message}\n`)
-    const options = ['Yes', 'No']
-    const addAnother = await terminal.singleColumnMenu(noFirst ? options.reverse(): options).promise;
-    return addAnother.selectedText === 'Yes';
-};
-const getChoice = async (choices, message) => {
-    if (message) message(`\n${message}\n`, "cyan")
-    else console.log()
-
-    return (await terminal.singleColumnMenu(choices).promise).selectedText;
-}
 
 const placeObject = async (index, total) => {
     const indexInd = `[${index + 1} of ${total}] `
