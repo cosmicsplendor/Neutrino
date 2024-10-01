@@ -37,7 +37,7 @@ const placeObject = async (index, total) => {
     while (true) {
         while (true) {
             // prompt fields based on dynamic field generator for the perticular name
-            const { name, alignment } = await promptFields();
+            const { Name: name, Alignment: alignment } = await promptFields();
 
             // pass the field values to the name's spawn point factory and get a new spawn point
             // store the spawn point temporarily, map.addTempSpawnPoint
