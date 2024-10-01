@@ -104,6 +104,11 @@ const promptFields = async () => {
     return { name, alignment };
 };
 
+const message = async (msg, color, clear=true) => {
+    if (clear) terminal.clear()
+    const fn = color ? terminal[color]: terminal 
+    fn(`\n${msg}\n`)
+}
 const promptAccept = async (message, noFirst) => {
     terminal.bold.green(`\n${message}\n`)
     const options = ['Yes', 'No']
@@ -111,17 +116,15 @@ const promptAccept = async (message, noFirst) => {
     return addAnother.selectedText === 'Yes';
 };
 const getChoice = async (choices, message) => {
-    if (message) terminal.bold.cyan(`\n${message}\n`)
+    if (message) message(`\n${message}\n`, "cyan")
+    else console.log()
+
     return (await terminal.singleColumnMenu(choices).promise).selectedText;
-}
-const message = async (msg, color, clear=true) => {
-    if (clear) terminal.clear()
-    const fn = color ? terminal[color]: terminal 
-    fn(`\n${msg}\n`)
 }
 
 const placeObject = async (index, total) => {
     const indexInd = `[${index + 1} of ${total}] `
+
     const skipResponse = await getChoice(["Proceed", "Pass"], `Projection ${indexInd}`)
     if (skipResponse === "Pass") return
 
@@ -129,18 +132,23 @@ const placeObject = async (index, total) => {
 
     while (true) {
         while (true) {
+            // prompt fields based on dynamic field generator for the perticular name
             const { name, alignment } = await promptFields();
-            // Store the object details as required
+
+            // pass the field values to the name's spawn point factory and get a new spawn point
+            // store the spawn point temporarily, map.addTempSpawnPoint
 
             const nextMove = await getChoice(['Proceed', 'Retry', 'Discard']);
             if (nextMove === "Proceed") {
+                // map.commitTempSpawnPoint
                 mesage(`${name} successfully placed`, "blue")
                 break
             }
 
             // undo the object details stored above
+            // map.clearTempSpawnPoint
             if (nextMove === "Discard") break
-            
+
             message("Let's try again. .", "green")
         }
 
@@ -149,7 +157,6 @@ const placeObject = async (index, total) => {
 
         message(indexInd + "Let's place one more object. .");
     }
-    terminal.clear()
 };
 
 
