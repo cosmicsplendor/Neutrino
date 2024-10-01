@@ -53,13 +53,13 @@ const placeObject = async (index, total) => {
 
             const nextMove = await getChoice(['Proceed', 'Retry', 'Discard']);
             if (nextMove === "Proceed") {
-                // map.commitTempSpawnPoint
+                map.commitTempSpawnPoint(spawnPoint)
                 message(`${name} successfully placed`, "blue")
                 break
             }
 
             // undo the object details stored above
-            // map.clearTempSpawnPoint
+            map.clearTempSpawnPoint()
             if (nextMove === "Discard") break
 
             message("Let's try again. .", "green")
