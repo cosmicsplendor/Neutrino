@@ -41,8 +41,15 @@ const placeObject = async (index, total) => {
             const moreFields = factories[name].fields
             const props = (Array.isArray(moreFields)) ? await promptFields(moreFields): {}
 
+            // compute coordinates based on alignment
+
             // pass the field values to the name's spawn point factory and get a new spawn point
+            const spawnPoint = factories[name].create(props)
+
+            // post-processing: compute and add collision rects if necessary
+
             // store the spawn point temporarily, map.addTempSpawnPoint
+            map.addTempSpawnPoint(spawnPoint)
 
             const nextMove = await getChoice(['Proceed', 'Retry', 'Discard']);
             if (nextMove === "Proceed") {

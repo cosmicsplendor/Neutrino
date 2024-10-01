@@ -298,11 +298,10 @@ const convertToWorld = (block, tileW) => {
     return { x: block.x * tileW, y: block.y * tileW, h: block.h * tileW, w: block.w * tileW}
 }
 class Map extends Block {
-    tileW=48
+    tileW = 48
     collisionRects = []
-    spawnPoints= [
-        
-    ]
+    spawnPoints = []
+    tempSpawnPoints = []
     projections = []
     checkpoints = []
     layers = {
@@ -310,9 +309,9 @@ class Map extends Block {
         og: [],
         mg: []
     }
-    player={ name: "player", x: 0, y: 0 } // temporary player for level design
+    player = { name: "player", x: 0, y: 0 } // temporary player for level design (helps in focusing camera)
     setPlayer(block) {
-        this.player ={ name: "player", ...calcStacked(convertToWorld(block, this.tileW), {w: 64, h: 64}, "top") }
+        this.player ={ name: "player", ...calcStacked(convertToWorld(block, this.tileW), { w: 64, h: 64 }, "top") }
     }
     bg = "#132b27"
     mob_bg = "#132b27"
@@ -341,6 +340,9 @@ class Map extends Block {
             }
         }
         this.collisionRects.push({ x: block.x, y: block.y, w: block.w, h: block.h })
+    }
+    addTempSpawnPoint(point) {
+        this.tempSpawnPoints.push(point)
     }
     addCompositeBlock({block, layer = "fg", skipCollisionTest}) {
         this.setPlayer(block)
