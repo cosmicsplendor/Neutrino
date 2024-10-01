@@ -5,21 +5,20 @@ const message = async (msg, color, clear=true) => {
     const fn = color ? terminal[color]: terminal 
     fn(`\n${msg}\n`)
 }
-const promptFields = async () => {
+const promptFields = async (fields=["Name", "Alignment"]) => {
     terminal.grabInput(true);
-    terminal.bold.cyan('Name: ');
-    const name = await terminal.inputField({
-        echo: true, 
-        prompt: 'name: '
-    }).promise;
-    console.log()
-    terminal.bold.cyan('Alignment: ');
-    const alignment = await terminal.inputField({
-        echo: true,
-        prompt: 'alignment (left|center|right)-(top|center|bottom): '
-    }).promise;
+    const response = {}
+    for (const field of fields) {
+        terminal.bold.cyan(`${field}: `);
+        const val = await terminal.inputField({
+            echo: true,
+        }).promise
+        console.log()
+
+        response[field] = val
+    }
     terminal.grabInput(false);
-    return { name, alignment };
+    return response;
 };
 
 const promptAccept = async (msg, noFirst) => {
