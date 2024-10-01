@@ -348,7 +348,13 @@ class Map extends Block {
         this.tempSpawnPoints.length = 0
     }
     commitTempSpawnPoint(point) {
-        this.spawnPoints.push(...this.tempSpawnPoints)
+        this.tempSpawnPoints.forEach(p => {
+            if (p.name === "checkpoint") {
+                this.checkpoints.push(p)
+                return
+            }
+            this.spawnPoints.push(p)
+        })
         this.clearTempSpawnPoint()
     }
     addCompositeBlock({block, layer = "fg", skipCollisionTest}) {
