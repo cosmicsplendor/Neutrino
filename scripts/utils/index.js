@@ -299,7 +299,7 @@ class Map extends Block {
     tileW=48
     collisionRects = []
     spawnPoints= [
-        { name: "player", x: 0, y: 0 }
+        
     ]
     projections = []
     checkpoints = []
@@ -307,6 +307,10 @@ class Map extends Block {
         fg: [],
         og: [],
         mg: []
+    }
+    player={ name: "player", x: 0, y: 0 } // temporary player for level design
+    setPlayer(block) {
+        this.player ={ name: "player", ...calcStacked(block, {w: 2, h: 2}, "top") }
     }
     bg = "#132b27"
     mob_bg = "#132b27"
@@ -337,6 +341,7 @@ class Map extends Block {
         this.collisionRects.push({ x: block.x, y: block.y, w: block.w, h: block.h })
     }
     addCompositeBlock({block, layer = "fg", skipCollisionTest}) {
+        this.setPlayer(block)
         if (!(block instanceof CompositeBlock)) return
         for (const child of block.children) {
             this.addPlainBlock({ block: child, layer, skipCollisionTest: true})
@@ -406,7 +411,7 @@ class Map extends Block {
             const { x, y, w, h, mat } = rect
             return { x: x * tileW, y: y * tileW, width: w * tileW, height: h * tileW, mat }
         })
-        const spawnPoints = this.spawnPoints.map(point => {
+        const spawnPoints = this.spawnPoints.concat(this.player).map(point => {
             const { x, y, ...rest } = point
             return { x: x * tileW, y: y * tileW, ...rest}
         })
