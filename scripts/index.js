@@ -126,22 +126,27 @@ const placeObject = async (index, total) => {
     if (skipResponse === "Pass") return
 
     message(indexInd + "Let's place some objects. .", "cyan");
+
     while (true) {
         while (true) {
             const { name, alignment } = await promptFields();
             // Store the object details as required
-            const retry = (await getChoice(['Proceed', 'Retry'])) === "Retry";
-            if (!retry) {
+
+            const nextMove = await getChoice(['Proceed', 'Retry', 'Discard']);
+            if (nextMove === "Proceed") {
                 mesage(`${name} successfully placed`, "blue")
                 break
             }
+
+            // undo the object details stored above
+            if (nextMove === "Discard") break
+            
             message("Let's try again. .", "green")
         }
 
         const addMore = await promptAccept("Add another object?");
-        if (!addMore) {
-            break
-        }
+        if (!addMore) break
+
         message(indexInd + "Let's place one more object. .");
     }
     terminal.clear()
