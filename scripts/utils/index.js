@@ -435,13 +435,13 @@ class Map extends Block {
             // return { x: x * tileW, y: y * tileW, ...rest}
             return point
         })
-        const checkPoints = this.checkpoints.map(point => {
+        const checkpoints = this.checkpoints.map(point => {
             return {
                 x: point.x * tileW,
                 y: point.y * tileW
             }
         })
-        const exports = { collisionRects, spawnPoints, checkPoints, tempSpawnPoints, fgTiles, tiles, mgTiles, bg, mob_bg, pxbg, tint, width: this.w * tileW, height: this.h * tileW, projections }
+        const exports = { collisionRects, spawnPoints, checkpoints, tempSpawnPoints, fgTiles, tiles, mgTiles, bg, mob_bg, pxbg, tint, width: this.w * tileW, height: this.h * tileW, projections }
         await fs.writeFile(`./src/assets/levels/${levelName}.cson`, JSON.stringify(exports))
     }
 }
