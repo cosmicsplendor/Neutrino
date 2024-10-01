@@ -349,7 +349,7 @@ class Map extends Block {
         this.tempSpawnPoints.length = 0
         await this.exportMap()
     }
-    async commitTempSpawnPoint(point) {
+    async commitTempSpawnPoint() {
         this.tempSpawnPoints.forEach(p => {
             if (p.name === "checkpoint") {
                 this.checkpoints.push(p)
@@ -430,17 +430,8 @@ class Map extends Block {
             const { x, y, w, h, mat } = rect
             return { x: x * tileW, y: y * tileW, width: w * tileW, height: h * tileW, mat }
         })
-        const spawnPoints = this.spawnPoints.concat(this.player).map(point => {
-            // const { x, y, ...rest } = point
-            // return { x: x * tileW, y: y * tileW, ...rest}
-            return point
-        })
-        const checkpoints = this.checkpoints.map(point => {
-            return {
-                x: point.x * tileW,
-                y: point.y * tileW
-            }
-        })
+        const spawnPoints = this.spawnPoints.concat(this.player)
+        const checkpoints = this.checkpoints
         const exports = { collisionRects, spawnPoints, checkpoints, tempSpawnPoints, fgTiles, tiles, mgTiles, bg, mob_bg, pxbg, tint, width: this.w * tileW, height: this.h * tileW, projections }
         await fs.writeFile(`./src/assets/levels/${levelName}.cson`, JSON.stringify(exports))
     }
