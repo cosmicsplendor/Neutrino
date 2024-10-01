@@ -14,7 +14,7 @@ const initializeMap = () => {
         mobileBackground: "#132b27",
         pixelBackground: "#0a1614",
         tint: "0.025, -0.025, -0.0125, 0",
-        floorHeight: 2,
+        floorHeight: 3,
     });
     return map
 }

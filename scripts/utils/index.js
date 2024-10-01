@@ -294,7 +294,9 @@ class CompositeBlock extends Block {
         return this
     }
 }
-
+const convertToWorld = (block, tileW) => {
+    return { x: block.x * tileW, y: block.y * tileW, h: block.h * tileW, w: block.w * tileW}
+}
 class Map extends Block {
     tileW=48
     collisionRects = []
@@ -310,7 +312,7 @@ class Map extends Block {
     }
     player={ name: "player", x: 0, y: 0 } // temporary player for level design
     setPlayer(block) {
-        this.player ={ name: "player", ...calcStacked(block, {w: 2, h: 2}, "top") }
+        this.player ={ name: "player", ...calcStacked(convertToWorld(block, this.tileW), {w: 48, h: 48}, "top") }
     }
     bg = "#132b27"
     mob_bg = "#132b27"
@@ -415,12 +417,7 @@ class Map extends Block {
             const { x, y, ...rest } = point
             return { x: x * tileW, y: y * tileW, ...rest}
         })
-        const checkPoints = this.checkpoints.map(point => {
-            return {
-                x: point.x * tileW,
-                y: point.y * tileW
-            }
-        })
+        const checkPoints = this.checkpoints
         const exports = { collisionRects, spawnPoints, checkPoints, fgTiles, tiles, mgTiles, bg, mob_bg, pxbg, tint, width: this.w * tileW, height: this.h * tileW, projections }
         await fs.writeFile(`./src/assets/levels/${levelName}.cson`, JSON.stringify(exports))
     }
