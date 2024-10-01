@@ -30,8 +30,28 @@ const getInitialBlock = (map, graph) => {
     graph.setNode(0, leftWall);
     return leftWall;
 };
+const fixHorizontalGap = (block, emptySpaces) => {
+    const { left, right } = emptySpaces;
+    if (right.w === 1) {
+        return block.shift(1);
+    }
+    if (left.w === 1) {
+        return block.shift(-1);
+    }
+};
 
+const fixVerticalGap = (block, emptySpaces) => {
+    const { top, bottom } = emptySpaces;
+    if (bottom.h === 1) {
+        return block.shift(0, 1);
+    }
+    if (top.h === 1) {
+        return block.shift(0, -1);
+    }
+};
 module.exports = {
     addProtrusions,
-    getInitialBlock
+    getInitialBlock,
+    fixHorizontalGap,
+    fixVerticalGap
 }

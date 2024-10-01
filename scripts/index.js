@@ -1,5 +1,5 @@
 const terminal = require('terminal-kit').terminal;
-const { addProtrusions, getInitialBlock } = require('./helpers');
+const { addProtrusions, getInitialBlock, fixHorizontalGap, fixVerticalGap } = require('./helpers');
 const { getChoice, promptAccept, message, promptFields } = require("./helpers/term")
 const { detectProjectedEmptySpaces } = require("./utils/detectProjectedEmptySpaces");
 const { CompositeBlock, Map, rand, skewedRand, pickOne } = require("./utils/index");
@@ -33,25 +33,7 @@ const pickVerticalAlignmentParams = (emptySpaces) => {
     };
 };
 
-const fixHorizontalGap = (block, emptySpaces) => {
-    const { left, right } = emptySpaces;
-    if (right.w === 1) {
-        return block.shift(1);
-    }
-    if (left.w === 1) {
-        return block.shift(-1);
-    }
-};
 
-const fixVerticalGap = (block, emptySpaces) => {
-    const { top, bottom } = emptySpaces;
-    if (bottom.h === 1) {
-        return block.shift(0, 1);
-    }
-    if (top.h === 1) {
-        return block.shift(0, -1);
-    }
-};
 
 const generateNewBlock = (prevBlock, map) => {
     const newBlock = CompositeBlock.create({
@@ -87,9 +69,6 @@ const reconstructMap = (map, blocks) => {
     blocks.forEach(block => block.addToMap());
 };
 
-
-
-
 const placeObject = async (index, total) => {
     const indexInd = `[${index + 1} of ${total}] `
 
@@ -109,7 +88,7 @@ const placeObject = async (index, total) => {
             const nextMove = await getChoice(['Proceed', 'Retry', 'Discard']);
             if (nextMove === "Proceed") {
                 // map.commitTempSpawnPoint
-                mesage(`${name} successfully placed`, "blue")
+                message(`${name} successfully placed`, "blue")
                 break
             }
 

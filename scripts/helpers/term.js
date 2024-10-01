@@ -1,3 +1,5 @@
+const terminal = require('terminal-kit').terminal;
+
 const message = async (msg, color, clear=true) => {
     if (clear) terminal.clear()
     const fn = color ? terminal[color]: terminal 
