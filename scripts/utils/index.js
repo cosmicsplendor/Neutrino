@@ -1,5 +1,5 @@
 const fs = require("fs/promises")
-const atlasPath = "../../src/assets/images/atlasmeta.cson"
+const atlasPath = "./src/assets/images/atlasmeta.cson"
 
 const rand = (to, from = 0) => from + Math.floor((to - from + 1) * Math.random());
 const skewedRand = (to, from = 0) => from + Math.floor((to - from + 1) * Math.random() * Math.random());
@@ -475,5 +475,6 @@ module.exports  = {
     generateGrid,
     rand,
     skewedRand,
-    pickOne
+    pickOne,
+    getAtlas
 }

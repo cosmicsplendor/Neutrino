@@ -58,7 +58,7 @@ const placeObject = async (index, total) => {
                 break
             }
 
-            // undo the object details stored above
+            // undo the last temp spawn point addition in case of retry/discard
             map.clearTempSpawnPoint()
             if (nextMove === "Discard") break
 
