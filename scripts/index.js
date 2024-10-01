@@ -5,7 +5,8 @@ const generateNewBlock = require("./helpers/generateNewBlock")
 const { Map } = require("./utils/index");
 const { Graph } = require('graphlib'); // Use a graph library
 const projectCompositeRects = require('./utils/projectCompositeRects');
-const factories = require("./helpers/factories")
+const factories = require("./helpers/factories");
+const { align } = require('./helpers/alignment');
 
 const initializeMap = () => {
     const map = new Map({
@@ -27,7 +28,8 @@ const reconstructMap = (map, blocks) => {
     blocks.forEach(block => block.addToMap());
 };
 
-const placeObject = async (index, total) => {
+const placeObject = async (index, projections) => {
+    const total = projections.length
     const indexInd = `[${index + 1} of ${total}] `
 
     const skipResponse = await getChoice(["Proceed", "Pass"], `Projection ${indexInd}`)
@@ -42,9 +44,10 @@ const placeObject = async (index, total) => {
             const props = (Array.isArray(moreFields)) ? await promptFields(moreFields): {}
 
             // compute coordinates based on alignment
+            const coords = align(name, projections[index], alignment)
 
             // pass the field values to the name's spawn point factory and get a new spawn point
-            const spawnPoint = factories[name].create(props)
+            const spawnPoint = factories[name].create({ ...coords, ...props })
 
             // post-processing: compute and add collision rects if necessary
 
@@ -79,7 +82,7 @@ const placeObjects = async (newBlock, map) => {
         const projection = projections[index]
         map.projections.push(projection);
         await map.exportMap();
-        await placeObject(Number(index), projections.length)
+        await placeObject(Number(index), projections)
         map.projections.length = 0
     }
     map.projections.length = 0

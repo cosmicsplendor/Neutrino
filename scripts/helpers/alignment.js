@@ -1,4 +1,4 @@
-const { getAtlas } = require("../utils");
+const { getAtlas, calcAligned, convertToWorld } = require("../utils");
 
 const atlasCache = {
     atlas: null,
@@ -15,6 +15,13 @@ const getDims = async key => {
     return atlas[key]
 }
 
+const align = async (name, projection, alignment, dx, dy) => {
+    const [ alignX, alignY ] = alignment.split("-")
+    const dims = getDims(name)
+    return calcAligned(convertToWorld(projection), dims, alignX, alignY, dx, dy)
+}
+
 module.exports = {
-    getDims
+    getDims,
+    align
 }

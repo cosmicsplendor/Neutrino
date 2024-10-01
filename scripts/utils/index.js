@@ -294,7 +294,7 @@ class CompositeBlock extends Block {
         return this
     }
 }
-const convertToWorld = (block, tileW) => {
+const convertToWorld = (block, tileW=48) => {
     return { x: block.x * tileW, y: block.y * tileW, h: block.h * tileW, w: block.w * tileW}
 }
 class Map extends Block {
@@ -476,5 +476,6 @@ module.exports  = {
     rand,
     skewedRand,
     pickOne,
-    getAtlas
+    getAtlas,
+    convertToWorld
 }
