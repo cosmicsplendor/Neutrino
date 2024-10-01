@@ -86,18 +86,6 @@ const reconstructMap = (map, blocks) => {
     blocks.forEach(block => block.addToMap());
 };
 
-const promptAccept = () => {
-    return new Promise((resolve) => {
-        terminal.singleColumnMenu(['Yes', 'No'], (error, response) => {
-            if (error) {
-                terminal.red(`Error: ${error}\n`);
-                process.exit(1);
-            }
-            if (response.selectedIndex === 0) resolve(true); // Yes
-            else resolve(false); // No
-        });
-    });
-};
 
 const promptFields = async () => {
     terminal.grabInput(true);
@@ -116,10 +104,10 @@ const promptFields = async () => {
     return { name, alignment };
 };
 
-const handleAddMore = async () => {
-    const addAnother = await terminal.singleColumnMenu(['No', 'Yes'], {
-        title: 'Would you like to add another object?'
-    }).promise;
+const promptAccept = async (message, noFirst) => {
+    terminal.bold.green(`\n${message}n`)
+    const options = ['Yes', 'No']
+    const addAnother = await terminal.singleColumnMenu(noFirst ? options.reverse(): options).promise;
     return addAnother.selectedText === 'Yes';
 };
 
@@ -133,8 +121,8 @@ const placeObject = async (index, total) => {
         while (true) {
             const { name, alignment } = await promptFields();
             // Store the object details as required
-            const proceed = (await terminal.singleColumnMenu(['Proceed', 'Retry']).promise).selectedText === "Proceed";
-            if (proceed) {
+            const retry = (await terminal.singleColumnMenu(['Proceed', 'Retry']).promise).selectedText === "Retry";
+            if (!retry) {
                 terminal.clear()
                 terminal.bold.blue(`\n${name} successfully placed\n`)
                 break
@@ -143,12 +131,10 @@ const placeObject = async (index, total) => {
             terminal.bold.green("Let's try again. .\n");
         }
 
-        terminal.bold.green("\nAdd another object?\n")
-        const addMore = await handleAddMore();
+        const addMore = await promptAccept("Add another object?");
         if (!addMore) {
             break
         }
-        terminal.clear()
     }
     terminal.clear()
 };
@@ -189,8 +175,7 @@ const interactiveGenerateLevel = async () => {
 
         await map.exportMap("testlevel")
 
-        terminal("\nDo you like this block? (Yes/No)\n");
-        const userAccepted = await promptAccept("Accept block?");
+        const userAccepted = await promptAccept("Do you like this block? (Yes/No)");
 
         if (userAccepted) {
             graph.setNode(iter, newBlock);
