@@ -105,15 +105,22 @@ const promptFields = async () => {
 };
 
 const promptAccept = async (message, noFirst) => {
-    terminal.bold.green(`\n${message}n`)
+    terminal.bold.green(`\n${message}\n`)
     const options = ['Yes', 'No']
     const addAnother = await terminal.singleColumnMenu(noFirst ? options.reverse(): options).promise;
     return addAnother.selectedText === 'Yes';
 };
+const getChoice = async (choices, message) => {
+    if (message) terminal.bold.cyan(`\n${message}\n`)
+    return (await terminal.singleColumnMenu(choices).promise).selectedText;
+}
 
 const placeObject = async (index, total) => {
-    let first = true
     const indexInd = `[${index + 1} of ${total}] `
+    const skipResponse = await getChoice(["Proceed", "Pass"], `Projection ${indexInd}`)
+    if (skipResponse === "Pass") return
+
+    let first = true
     while (true) {
         terminal.clear()
         terminal.bold.green(indexInd + (first ? "Let's place some objects. .\n": "Let's place one more object. .\n"));
@@ -121,7 +128,7 @@ const placeObject = async (index, total) => {
         while (true) {
             const { name, alignment } = await promptFields();
             // Store the object details as required
-            const retry = (await terminal.singleColumnMenu(['Proceed', 'Retry']).promise).selectedText === "Retry";
+            const retry = (await getChoice(['Proceed', 'Retry'])) === "Retry";
             if (!retry) {
                 terminal.clear()
                 terminal.bold.blue(`\n${name} successfully placed\n`)
