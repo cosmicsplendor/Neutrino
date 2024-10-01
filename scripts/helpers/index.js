@@ -1,4 +1,3 @@
-const projectCompositeRects = require("../utils/projectCompositeRects");
 const { CompositeBlock, rand, skewedRand, pickOne } = require("../utils");
 
 const addProtrusions = (block) => {
