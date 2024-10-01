@@ -5,6 +5,7 @@ const generateNewBlock = require("./helpers/generateNewBlock")
 const { Map } = require("./utils/index");
 const { Graph } = require('graphlib'); // Use a graph library
 const projectCompositeRects = require('./utils/projectCompositeRects');
+const factories = require("./helpers/factories")
 
 const initializeMap = () => {
     const map = new Map({
@@ -36,8 +37,9 @@ const placeObject = async (index, total) => {
 
     while (true) {
         while (true) {
-            // prompt fields based on dynamic field generator for the perticular name
             const { Name: name, Alignment: alignment } = await promptFields();
+            const moreFields = factories[name].fields
+            const props = (Array.isArray(moreFields)) ? await promptFields(moreFields): {}
 
             // pass the field values to the name's spawn point factory and get a new spawn point
             // store the spawn point temporarily, map.addTempSpawnPoint
@@ -124,7 +126,7 @@ const interactiveGenerateLevel = async () => {
     terminal.on('key', () => process.exit());
 };
 
-terminal.on('key', (name, matches, data) => {
+terminal.on('key', (name) => {
     if (name === 'CTRL_C' || name === 'ESCAPE') {
         console.log('\nExiting application...');
         terminal.grabInput(false); // Disable input grabbing

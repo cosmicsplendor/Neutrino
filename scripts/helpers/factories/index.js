@@ -7,7 +7,6 @@ const factories = Object.freeze({
         }
     },
     gate: {
-        fields: ['colSound', 'uSound', 'dSound', 'player'], // Inferred from the Gate constructor
         create: (params) => {
             // Perform transformation
             return params
@@ -15,21 +14,19 @@ const factories = Object.freeze({
     },
     checkpoint: {
         create: (params) => {
-            // Perform transformation
-            return params
+            const { x, y } = params
+            return { x, y }
         }
     },
     orb: {
         fields: [], // No specific props required
         create: (params) => {
-            // Perform transformation
             return params
         }
     },
     wind: {
         fields: [], // No specific props required
         create: (params) => {
-            // Perform transformation
             return params
         }
     },
