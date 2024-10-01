@@ -82,6 +82,10 @@ const interactiveGenerateLevel = async () => {
     const initialBlock = getInitialBlock(map, graph)
     let blocks = [initialBlock];
 
+    reconstructMap(map, blocks)
+    await map.exportMap("testlevel")
+    await placeObjects(initialBlock, map)
+
     let iter = 1;
 
     while (true) {
