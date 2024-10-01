@@ -17,8 +17,9 @@ const getDims = async key => {
 
 const align = async (name, projection, alignment, dx, dy) => {
     const [ alignX, alignY ] = alignment.split("-")
-    const dims = getDims(name)
-    return calcAligned(convertToWorld(projection), dims, alignX, alignY, dx, dy)
+    const dims = name === "checkpoint" ? { width: 0, height: 0}: await getDims(name)
+    const aligned = calcAligned(convertToWorld(projection), { w: dims.width, h: dims.height }, alignX, alignY, dx, dy)
+    return aligned
 }
 
 module.exports = {

@@ -28,7 +28,7 @@ const reconstructMap = (map, blocks) => {
     blocks.forEach(block => block.addToMap());
 };
 
-const placeObject = async (index, projections) => {
+const placeObject = async (index, projections, map) => {
     const total = projections.length
     const indexInd = `[${index + 1} of ${total}] `
 
@@ -44,25 +44,26 @@ const placeObject = async (index, projections) => {
             const props = (Array.isArray(moreFields)) ? await promptFields(moreFields): {}
 
             // compute coordinates based on alignment
-            const coords = align(name, projections[index], alignment)
+            const coords = await align(name, projections[index], alignment)
 
             // pass the field values to the name's spawn point factory and get a new spawn point
-            const spawnPoint = factories[name].create({ ...coords, ...props })
-
+            const spawnPoint = factories[name].create({ name, alignment, ...coords, ...props })
+            console.log(spawnPoint)
+            console.log(coords)
             // post-processing: compute and add collision rects if necessary
 
             // store the spawn point temporarily, map.addTempSpawnPoint
-            map.addTempSpawnPoint(spawnPoint)
+            await map.addTempSpawnPoint(spawnPoint)
 
             const nextMove = await getChoice(['Proceed', 'Retry', 'Discard']);
             if (nextMove === "Proceed") {
-                map.commitTempSpawnPoint(spawnPoint)
+                await map.commitTempSpawnPoint(spawnPoint)
                 message(`${name} successfully placed`, "blue")
                 break
             }
 
             // undo the last temp spawn point addition in case of retry/discard
-            map.clearTempSpawnPoint()
+            await map.clearTempSpawnPoint()
             if (nextMove === "Discard") break
 
             message("Let's try again. .", "green")
@@ -82,7 +83,7 @@ const placeObjects = async (newBlock, map) => {
         const projection = projections[index]
         map.projections.push(projection);
         await map.exportMap();
-        await placeObject(Number(index), projections)
+        await placeObject(Number(index), projections, map)
         map.projections.length = 0
     }
     map.projections.length = 0

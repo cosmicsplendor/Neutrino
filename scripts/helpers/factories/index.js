@@ -14,8 +14,7 @@ const factories = Object.freeze({
     },
     checkpoint: {
         create: (params) => {
-            const { x, y } = params
-            return { x, y }
+            return params
         }
     },
     orb: {

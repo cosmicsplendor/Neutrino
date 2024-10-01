@@ -341,13 +341,15 @@ class Map extends Block {
         }
         this.collisionRects.push({ x: block.x, y: block.y, w: block.w, h: block.h })
     }
-    addTempSpawnPoint(point) {
+    async addTempSpawnPoint(point) {
         this.tempSpawnPoints.push(point)
+        await this.exportMap()
     }
-    clearTempSpawnPoint() {
+    async clearTempSpawnPoint() {
         this.tempSpawnPoints.length = 0
+        await this.exportMap()
     }
-    commitTempSpawnPoint(point) {
+    async commitTempSpawnPoint(point) {
         this.tempSpawnPoints.forEach(p => {
             if (p.name === "checkpoint") {
                 this.checkpoints.push(p)
@@ -355,7 +357,7 @@ class Map extends Block {
             }
             this.spawnPoints.push(p)
         })
-        this.clearTempSpawnPoint()
+        await this.clearTempSpawnPoint()
     }
     addCompositeBlock({block, layer = "fg", skipCollisionTest}) {
         this.setPlayer(block)
@@ -417,7 +419,7 @@ class Map extends Block {
         console.log(grid.map(row => row.join('')).join('\n'));
     }
     async exportMap(levelName="testlevel") {
-        const { tileW, bg, mob_bg, pxbg, tint, projections } = this
+        const { tileW, bg, mob_bg, pxbg, tint, projections, tempSpawnPoints } = this
         const [ fgTiles, tiles, mgTiles ] = Object.values(this.layers).map(layer => {
             return layer.map(tile => {
                 const { name="wt_1", x, y } = tile
@@ -439,7 +441,7 @@ class Map extends Block {
                 y: point.y * tileW
             }
         })
-        const exports = { collisionRects, spawnPoints, checkPoints, fgTiles, tiles, mgTiles, bg, mob_bg, pxbg, tint, width: this.w * tileW, height: this.h * tileW, projections }
+        const exports = { collisionRects, spawnPoints, checkPoints, tempSpawnPoints, fgTiles, tiles, mgTiles, bg, mob_bg, pxbg, tint, width: this.w * tileW, height: this.h * tileW, projections }
         await fs.writeFile(`./src/assets/levels/${levelName}.cson`, JSON.stringify(exports))
     }
 }
