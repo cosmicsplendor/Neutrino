@@ -1,14 +1,5 @@
-const { getAtlas, calcAligned, convertToWorld } = require("../utils");
-
-const atlasCache = {
-    atlas: null,
-    async get() {
-        if (this.atlas === null) {
-            this.atlas = await getAtlas()
-        }
-        return this.atlas
-    }
-}
+const { calcAligned, convertToWorld } = require("../utils");
+const atlasCache = require("./atlasCache");
 
 const getDims = async key => {
     const atlas = await atlasCache.get()
