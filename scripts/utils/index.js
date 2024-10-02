@@ -357,7 +357,7 @@ class Map extends Block {
             }
             this.spawnPoints.push(p)
         })
-        await this.clearTempSpawnPoint()
+        this.tempSpawnPoints.length = 0
     }
     addCompositeBlock({block, layer = "fg", skipCollisionTest}) {
         this.setPlayer(block)
