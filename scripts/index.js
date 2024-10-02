@@ -7,6 +7,7 @@ const { Graph } = require('graphlib'); // Use a graph library
 const projectCompositeRects = require('./utils/projectCompositeRects');
 const factories = require("./helpers/factories");
 const { align } = require('./helpers/alignment');
+const atlasCache = require('./helpers/atlasCache');
 
 const initializeMap = () => {
     const map = new Map({
@@ -39,7 +40,17 @@ const placeObject = async (index, projections, map) => {
 
     while (true) {
         while (true) {
-            const { Name: name, Alignment: alignment } = await promptFields();
+            const { Name: name } = await promptFields(["Name"]);
+            const validName = await atlasCache.contains(name) || name === "checkpoint" || name === "player"
+
+            if (!validName) {
+                message(`Invalid name '${name}'`, "red")
+                terminal.bold.green("Let's try again. .\n")
+                continue
+            }
+
+            const { Alignment: alignment } = await promptFields(["Alignment"])
+
             const moreFields = factories[name].fields
             const props = (Array.isArray(moreFields)) ? await promptFields(moreFields): {}
 
