@@ -6,7 +6,7 @@ const { Map } = require("./utils/index");
 const { Graph } = require('graphlib'); // Use a graph library
 const projectCompositeRects = require('./utils/projectCompositeRects');
 const factories = require("./helpers/factories");
-const { align } = require('./helpers/alignment');
+const { align, validAlignments } = require('./helpers/alignment');
 const atlasCache = require('./helpers/atlasCache');
 
 const initializeMap = () => {
@@ -29,6 +29,16 @@ const reconstructMap = (map, blocks) => {
     blocks.forEach(block => block.addToMap());
 };
 
+const queryAlignment = async () => {
+    const { Alignment } = await promptFields(["Alignment"])
+    const valid = validAlignments.includes(Alignment)
+    if (!valid) {
+        terminal.bold.red(`o oh, '${Alignment}' doesn't make sense. Let's try again. .\n`)
+        return queryAlignment()
+    }
+    return Alignment
+}
+
 const placeObject = async (index, projections, map) => {
     const total = projections.length
     const indexInd = `[${index + 1} of ${total}] `
@@ -49,7 +59,7 @@ const placeObject = async (index, projections, map) => {
                 continue
             }
 
-            const { Alignment: alignment } = await promptFields(["Alignment"])
+            const alignment = await queryAlignment()
 
             const moreFields = factories[name].fields
             const props = (Array.isArray(moreFields)) ? await promptFields(moreFields): {}
