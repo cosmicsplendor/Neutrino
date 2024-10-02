@@ -46,6 +46,8 @@ const placeObject = async (index, projections, map) => {
     const skipResponse = await getChoice(["Proceed", "Pass"], `Projection ${indexInd}`)
     if (skipResponse === "Pass") return
 
+    const projection = projections[index]
+
     message(indexInd + "Let's place some objects. .", "cyan");
 
     while (true) {
@@ -61,14 +63,17 @@ const placeObject = async (index, projections, map) => {
 
             const alignment = await queryAlignment()
 
-            const moreFields = factories[name].fields
+            const factory = name in factories ? factories[name]: factories.default
+            console.log(factory)
+            const moreFields = factory.fields
             const props = (Array.isArray(moreFields)) ? await promptFields(moreFields): {}
 
             // compute coordinates based on alignment
-            const coords = await align(name, projections[index], alignment)
+            const coords = await align(name, projection, alignment)
 
             // pass the field values to the name's spawn point factory and get a new spawn point
-            const spawnPoint = factories[name].create({ name, alignment, projection, ...coords, ...props })
+            const spawnPoint = factory.create({ name, alignment, projection, ...coords, ...props })
+
             // post-processing: compute and add collision rects if necessary
 
             // store the spawn point temporarily, map.addTempSpawnPoint

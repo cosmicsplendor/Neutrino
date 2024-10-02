@@ -119,6 +119,10 @@ const factories = Object.freeze({
             // Perform transformation
             return params
         }
+    },
+    default: {
+        fields: [],
+        create: params => params
     }
 }
 )
