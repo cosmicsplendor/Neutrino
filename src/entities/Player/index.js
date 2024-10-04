@@ -180,10 +180,10 @@ class Player extends TexRegion {
         this.controls.update(this, dt)
         Boolean(this.offEdge) ? Movement.updateOffEdge(this, dt): Movement.update(this, dt)
         this.wallCollision.update()
+        this.crateCollision.update()
         if (config.testMode) return
         this.magnetCollision.update()
         this.spikeCollision.update()
-        this.crateCollision.update()
     }
     onRemove() {
         this.parent = null // free-up the reference for garbage collector
