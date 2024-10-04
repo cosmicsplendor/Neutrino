@@ -3,12 +3,13 @@ const atlasCache = require("./atlasCache");
 
 const getDims = async key => {
     const atlas = await atlasCache.get()
-    return atlas[key]
+    const dims = atlas[key]
+    return dims.rotation === 90 ? { width: dims.height, height: dims.width } : dims
 }
 
 const alignmentMap = {
-    "top-left": [ "left", "top" ],
-    "bottom-left": [ "left", "bottom" ],
+    "top-left": ["left", "top"],
+    "bottom-left": ["left", "bottom"],
     "top": ["center", "top"],
     "bottom": ["center", "bottom"],
     "top-right": ["right", "top"],
@@ -19,8 +20,8 @@ const alignmentMap = {
 }
 
 const align = async (name, projection, alignment, dx, dy) => {
-    const [ alignX, alignY ] = alignmentMap[alignment]
-    const dims = name === "checkpoint" ? { width: 0, height: 0}: await getDims(name)
+    const [alignX, alignY] = alignmentMap[alignment]
+    const dims = name === "checkpoint" ? { width: 0, height: 0 } : await getDims(name)
     const aligned = calcAligned(convertToWorld(projection), { w: dims.width, h: dims.height }, alignX, alignY, dx, dy)
     return aligned
 }
