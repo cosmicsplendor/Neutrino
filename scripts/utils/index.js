@@ -342,7 +342,11 @@ class Map extends Block {
         this.collisionRects.push({ x: block.x, y: block.y, w: block.w, h: block.h })
     }
     async addTempSpawnPoint(point) {
-        this.tempSpawnPoints.push(point)
+        if (Array.isArray(point)) {
+            point.forEach(p => this.tempSpawnPoints.push(point))
+        } else {
+            this.tempSpawnPoints.push(point)
+        }
         await this.exportMap()
     }
     async clearTempSpawnPoint() {

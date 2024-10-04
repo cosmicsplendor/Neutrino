@@ -64,7 +64,6 @@ const placeObject = async (index, projections, map) => {
             const alignment = await queryAlignment()
 
             const factory = name in factories ? factories[name]: factories.default
-            console.log(factory)
             const moreFields = factory.fields
             const props = (Array.isArray(moreFields)) ? await promptFields(moreFields): {}
 
@@ -81,7 +80,7 @@ const placeObject = async (index, projections, map) => {
 
             const nextMove = await getChoice(['Proceed', 'Retry', 'Discard']);
             if (nextMove === "Proceed") {
-                await map.commitTempSpawnPoint(spawnPoint)
+                await map.commitTempSpawnPoint()
                 message(`${name} successfully placed`, "blue")
                 break
             }
