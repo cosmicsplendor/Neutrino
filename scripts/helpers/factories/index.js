@@ -1,3 +1,4 @@
+const groupMap = require("../../utils/groupMap.json")
 const factories = Object.freeze({
     player: {
         fields: [], // No specific props inferred from the original code
@@ -96,7 +97,7 @@ const factories = Object.freeze({
         fields: ['luck', 'dmg', 'temp', 'player'], // Based on Crate constructor
         create: (params) => {
             // Perform transformation
-            return params
+            return { ...params, groupId: "crates" }
         }
     },
     vlhd: {
@@ -122,7 +123,11 @@ const factories = Object.freeze({
     },
     default: {
         fields: [],
-        create: params => params
+        create: params => {
+            const groupId = groupMap[params.name]
+            if (groupId) params.groupId = groupId
+            return params
+        }
     }
 }
 )
