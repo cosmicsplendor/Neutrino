@@ -123,14 +123,14 @@ const factories = Object.freeze({
     },
     magnet: {
         dims: (atlas) => {
-            const stud = atlas.stud
-            const magnet = atlas.magnet
+            const studWidth = atlas.stud.rotation === 90 ? atlas.stud.height: atlas.stud.width
+            const { width, height, rotation } = atlas.magnet
             return {
-                w: magnet.width + stud.width * 2,
-                height: magnet.height
+                width: (rotation ? height: width) + studWidth * 2,
+                height: rotation ? width: height
             }
         },
-        create: () => {
+        create: (params) => {
             return params
         }
     },
