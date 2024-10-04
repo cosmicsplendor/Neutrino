@@ -1,3 +1,4 @@
-const { getDims } = require("./scripts/helpers/alignment")
-
-getDims("lcr1").then(console.log)
+/**
+ * saw1, saw2, saw3, saw4, spike -spikes
+ * magnet - magnets
+ */
