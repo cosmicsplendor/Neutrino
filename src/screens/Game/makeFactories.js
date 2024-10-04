@@ -13,6 +13,7 @@ import Bus from "@entities/Bus"
 import levels from "@config/levels"
 
 import particlesId from "@assets/particles/all.cson"
+import { TexRegion } from "@lib/index"
 
 export default ({ soundSprite, assetsCache, storage, player, state }) => { // using sound sprite to create and pass objects and (cached) pools so that objects can just consume sound in ready-to-use form rather than by creating them on their own. This helps me make sound creation parameters changes at one place, making code more scalable.
     const gateUSound = soundSprite.create("gate_u") // collision with ceiling
@@ -174,6 +175,9 @@ export default ({ soundSprite, assetsCache, storage, player, state }) => { // us
         },
         bus: (x, y, props) => {
             return new Bus(x, y, props.toX, props.toY, props.period)
+        },
+        default: (x, y, props) => {
+            return new TexRegion({ pos: { x, y }, frame: props.name })
         }
     })
 }
