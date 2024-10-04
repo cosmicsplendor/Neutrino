@@ -181,8 +181,8 @@ class Player extends TexRegion {
         Boolean(this.offEdge) ? Movement.updateOffEdge(this, dt): Movement.update(this, dt)
         this.wallCollision.update()
         this.crateCollision.update()
-        if (config.testMode) return
         this.magnetCollision.update()
+        if (config.testMode) return
         this.spikeCollision.update()
     }
     onRemove() {

@@ -72,7 +72,6 @@ const placeObject = async (index, projections, map) => {
 
             // pass the field values to the name's spawn point factory and get a new spawn point
             const spawnPoint = factory.create({ name, alignment, projection, ...coords, ...props })
-
             // post-processing: compute and add collision rects if necessary
 
             // store the spawn point temporarily, map.addTempSpawnPoint

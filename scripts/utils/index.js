@@ -343,7 +343,7 @@ class Map extends Block {
     }
     async addTempSpawnPoint(point) {
         if (Array.isArray(point)) {
-            point.forEach(p => this.tempSpawnPoints.push(point))
+            point.forEach(p => this.tempSpawnPoints.push(p))
         } else {
             this.tempSpawnPoints.push(point)
         }

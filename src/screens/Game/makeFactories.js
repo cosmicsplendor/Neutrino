@@ -177,6 +177,7 @@ export default ({ soundSprite, assetsCache, storage, player, state }) => { // us
             return new Bus(x, y, props.toX, props.toY, props.period)
         },
         default: (x, y, props) => {
+            console.log(props)
             return new TexRegion({ pos: { x, y }, frame: props.name })
         }
     })
