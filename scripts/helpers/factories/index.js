@@ -121,6 +121,19 @@ const factories = Object.freeze({
             return params
         }
     },
+    magnet: {
+        dims: (atlas) => {
+            const stud = atlas.stud
+            const magnet = atlas.magnet
+            return {
+                w: magnet.width + stud.width * 2,
+                height: magnet.height
+            }
+        },
+        create: () => {
+            return params
+        }
+    },
     default: {
         fields: [],
         create: params => {
