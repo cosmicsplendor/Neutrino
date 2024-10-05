@@ -5,8 +5,8 @@ import soundImgBtn from "./soundImgBtn"
 import styles from "./style.css"
 import { wait } from "@lib/utils"
 
-const margin = 25
-const hMargin = margin * 0.75 // hMargin
+const margin = 20
+const hMargin = margin * 0.5 // hMargin
 const orbExpAmt = 2
 const instFocThres = 1400
 
@@ -97,7 +97,7 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
     const alginCtrlBtns = (viewport) => {
         if (!config.isMobile) { return }
         ctrlBtns.left.pos = calcAligned(viewport, ctrlBtns.left, "left", "bottom", margin, -margin * 1.5)
-        ctrlBtns.right.pos = calcStacked(ctrlBtns.left, ctrlBtns.right, "right", margin)
+        ctrlBtns.right.pos = calcStacked(ctrlBtns.left, ctrlBtns.right, "right", margin * 1.125)
         ctrlBtns.axn.pos = calcAligned(viewport, ctrlBtns.right, "right", "bottom", - margin, - margin * 1.75)
     }
     const realign = viewport => {
@@ -159,6 +159,7 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
 
         hideCtrlBtns()
         resumeBtn.domNode.style.background = `url(${images.resume.src})`
+        resumeBtn.domNode.style.backgroundSize = "cover"
     }
     const execOver = () => {
         const checkpoint = getCheckpoint(player.pos.x)
