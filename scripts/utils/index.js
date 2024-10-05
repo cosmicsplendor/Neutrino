@@ -347,14 +347,15 @@ class Map extends Block {
         if (!mat) return
         const dims = await getDims(name)
         if (dims.hitBox) {
-            this.collisionRects.push({ x: x + dims.hitBox.x, y: y + dims.hitBox.y, w: dims.hitBox.width, h: dims.hitBox.height, mat })
+            this.tempCollisionRects.push({ x: x + dims.hitBox.x, y: y + dims.hitBox.y, w: dims.hitBox.width, h: dims.hitBox.height, mat })
             return
         }
         if (dims.rotation) {
-            this.collisionRects.push({ x: x, y: y, w: dims.height, h: dims.width, mat })
+            this.tempCollisionRects.push({ x: x, y: y, w: dims.height, h: dims.width, mat })
             return
         }
-        this.collisionRects.push({ x, y, w: dims.width, h: dims.height, mat })
+        this.tempCollisionRects.push({ x, y, w: dims.width, h: dims.height, mat })
+        console.log(this.tempCollisionRects)
     }
     async addTempSpawnPoint(point) {
         if (Array.isArray(point)) {
