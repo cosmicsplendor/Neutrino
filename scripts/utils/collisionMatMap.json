@@ -1,5 +1,12 @@
 {
     "sc_red": "metal",
     "sc_green": "metal",
-    "sc_blue": "metal"
+    "sc_blue": "metal",
+    "crate": "wood",
+    "bus": "metal",
+    "bridge": "wood",
+    "tyre": "wood",
+    "em1": "concrete",
+    "stude": "stud",
+    "pillar": "metal"
 }
