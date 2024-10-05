@@ -59,7 +59,38 @@ function mergeRects(rects) {
 
     return mergedVertically
 }
+function groupAndMergeRectsByMat(rects) {
+    if (rects.length === 0) return []
 
+    // Step 1: Group rectangles by their `mat` property
+    const groupedByMat = rects.reduce((groups, rect) => {
+        const mat = rect.mat
+        if (!groups[mat]) {
+            groups[mat] = []
+        }
+        groups[mat].push(rect)
+        return groups
+    }, {})
+
+    // Step 2: Merge each group of rectangles and collect the results
+    const mergedRects = []
+
+    for (const mat in groupedByMat) {
+        const group = groupedByMat[mat]
+
+        // Call the mergeRects function on each group and add the mat property back to the merged rectangles
+        const mergedGroup = mergeRects(group).map(rect => ({
+            ...rect, // Keep merged rectangle properties (x, y, w, h)
+            mat // Add the original mat property
+        }))
+
+        // Add the merged group to the final result array
+        mergedRects.push(...mergedGroup)
+    }
+
+    // Step 3: Return the array of merged rectangles
+    return mergedRects
+}
 const sc = { // stack calcs
     il: c => { // inside-left
         return c.x
@@ -455,7 +486,7 @@ class Map extends Block {
             const { x, y, w, h, mat } = rect
             return { x: x * tileW, y: y * tileW, width: w * tileW, height: h * tileW, mat }
         })
-        this.objCollisionRects.concat(this.tempCollisionRects).forEach(r => {
+        groupAndMergeRectsByMat(this.objCollisionRects.concat(this.tempCollisionRects)).forEach(r => {
             collisionRects.push({ x: r.x, y: r.y, width: r.w, height: r.h, mat: r.mat })
         })
         const spawnPoints = this.spawnPoints.concat(this.player)
