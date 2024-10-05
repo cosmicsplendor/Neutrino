@@ -3,12 +3,15 @@ const sawBlades = () => {
     return {
         fields: ['toX', 'toY', 'speed' ], // Based on SawBlade constructor
         create: (params) => {
-            const { x, y, toX, toY } = params
+            const { x, y, toX, toY, speed, name } = params
+            console.log({x, y, toX, toY, speed, name})
             return {
-                ...params,
                 // these should come in relative grid space
+                x, y,
                 toX: x + Number.parseFloat(toX) * 48,
-                toY: y + Number.parseFloat(toY) * 48
+                toY: y + Number.parseFloat(toY) * 48,
+                name: name,
+                speed: Number.parseInt(speed)
             }
         }
     }

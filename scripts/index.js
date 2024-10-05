@@ -70,9 +70,9 @@ const placeObject = async (index, projections, map) => {
 
             // compute coordinates based on alignment
             const coords = await align(name, projection, alignment)
-
+            const offsetCoords = await applyOffsets(coords.x, coords.y, name, alignment)
             // pass the field values to the name's spawn point factory and get a new spawn point
-            const spawnPoint = factory.create({ name, alignment, projection, ...applyOffsets(coords, name, alignment), ...props })
+            const spawnPoint = factory.create({ name, alignment, projection, ...offsetCoords, ...props })
             // post-processing: compute and add collision rects if necessary
 
             // store the spawn point temporarily, map.addTempSpawnPoint
