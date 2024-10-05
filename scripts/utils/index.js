@@ -386,13 +386,15 @@ class Map extends Block {
         }
         this.tempCollisionRects.push({ x, y, w: dims.width, h: dims.height, mat })
     }
-    async addTempSpawnPoint(point) {
+    async addTempSpawnPoint(point, layer) {
         if (Array.isArray(point)) {
             for (const p of point) {
+                if (layer) p.layer = layer
                 this.tempSpawnPoints.push(p)
                 await this.addTempColRect(p)
             }
         } else {
+            if (layer) p.layer = layer
             this.tempSpawnPoints.push(point)
             this.addTempColRect(point)
         }

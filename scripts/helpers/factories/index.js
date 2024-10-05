@@ -4,7 +4,6 @@ const sawBlades = () => {
         fields: ['toX', 'toY', 'speed' ], // Based on SawBlade constructor
         create: (params) => {
             const { x, y, toX, toY, speed, name } = params
-            console.log({x, y, toX, toY, speed, name})
             return {
                 // these should come in relative grid space
                 x, y,

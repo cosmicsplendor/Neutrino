@@ -9,6 +9,7 @@ const factories = require("./helpers/factories");
 const { align, validAlignments } = require('./helpers/alignment');
 const atlasCache = require('./helpers/atlasCache');
 const applyOffsets = require('./helpers/applyOffsets');
+const layerMap = require("./utils/layerMap.json")
 
 const initializeMap = () => {
     const map = new Map({
@@ -61,9 +62,9 @@ const placeObject = async (index, projections, map) => {
                 terminal.bold.green("Let's try again. .\n")
                 continue
             }
+            const layer = layerMap[name]
 
             const alignment = await queryAlignment()
-
             const factory = name in factories ? factories[name]: factories.default
             const moreFields = factory.fields
             const props = (Array.isArray(moreFields)) ? await promptFields(moreFields): {}
@@ -76,7 +77,7 @@ const placeObject = async (index, projections, map) => {
             // post-processing: compute and add collision rects if necessary
 
             // store the spawn point temporarily, map.addTempSpawnPoint
-            await map.addTempSpawnPoint(spawnPoint)
+            await map.addTempSpawnPoint(spawnPoint, layer)
 
             const nextMove = await getChoice(['Proceed', 'Retry', 'Discard']);
             if (nextMove === "Proceed") {
