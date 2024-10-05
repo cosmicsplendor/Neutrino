@@ -1,10 +1,22 @@
 const fs = require("fs/promises")
 const collisionMatMap = require("./collisionMatMap.json");
-const { getDims } = require("../helpers/alignment");
+const atlasCache = require("../helpers/atlasCache");
+const factories = require("../helpers/factories")
 
 const rand = (to, from = 0) => from + Math.floor((to - from + 1) * Math.random());
 const skewedRand = (to, from = 0) => from + Math.floor((to - from + 1) * Math.random() * Math.random());
 const pickOne = arr => arr[rand(arr.length - 1)];
+const getDims = async key => {
+    if (key === "checkpoint") return { width: 0, height: 0 }
+    const atlas = await atlasCache.get()
+    if (factories[key] && typeof factories[key].dims === "function") {
+        console.log(factories[key].dims(atlas))
+        console.log(atlas[key])
+        return factories[key].dims(atlas)
+    }
+    const dims = atlas[key]
+    return dims.rotation === 90 ? { width: dims.height, height: dims.width } : dims
+}
 
 function mergeRects(rects) {
     if (rects.length === 0) return []
@@ -483,5 +495,6 @@ module.exports  = {
     rand,
     skewedRand,
     pickOne,
-    convertToWorld
+    convertToWorld,
+    getDims
 }

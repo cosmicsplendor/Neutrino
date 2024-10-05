@@ -1,17 +1,6 @@
-const { calcAligned, convertToWorld } = require("../utils/index.js");
+const { calcAligned, convertToWorld, getDims } = require("../utils/index.js");
 const atlasCache = require("./atlasCache");
 const factories = require("./factories");
-const getDims = async key => {
-    if (key === "checkpoint") return { width: 0, height: 0 }
-    const atlas = await atlasCache.get()
-    if (factories[key] && typeof factories[key].dims === "function") {
-        console.log(factories[key].dims(atlas))
-        console.log(atlas[key])
-        return factories[key].dims(atlas)
-    }
-    const dims = atlas[key]
-    return dims.rotation === 90 ? { width: dims.height, height: dims.width } : dims
-}
 
 const alignmentMap = {
     "top-left": ["left", "top"],
