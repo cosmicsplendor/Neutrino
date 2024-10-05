@@ -55,7 +55,7 @@ const placeObject = async (index, projections, map) => {
     while (true) {
         while (true) {
             const { Name: name } = await promptFields(["Name"]);
-            const validName = await atlasCache.contains(name) || name === "checkpoint" || name === "player"
+            const validName = await atlasCache.contains(name) || name === "checkpoint" || name === "player" || Object.keys(factories).contains(name)
 
             if (!validName) {
                 message(`Invalid name '${name}'`, "red")

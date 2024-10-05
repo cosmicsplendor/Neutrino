@@ -88,10 +88,10 @@ const factories = Object.freeze({
     sb5: sawBlades(),
     sb6: sawBlades(),
     lcr1: {
-        fields: ['luck', 'dmg', 'temp', ], // Based on Crate constructor
+        fields: ['luck', 'dmg' ], // Based on Crate constructor
         create: (params) => {
-            // Perform transformation
-            return { ...params, groupId: "crates" }
+            const { luck, dmg, name, x, y } = params
+            return { luck: +luck, dmg: +dmg, name, x, y, groupId: "crates" }
         }
     },
     vlhd: lasers(),
