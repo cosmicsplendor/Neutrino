@@ -1,4 +1,4 @@
-const { getDims } = require("scripts/utils")
+const { getDims } = require("../utils")
 const { alignmentMap } = require("./alignment")
 
 const blades = [

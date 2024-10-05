@@ -1,4 +1,18 @@
 const groupMap = require("../../utils/groupMap.json")
+const sawBlades = () => {
+    return {
+        fields: ['toX', 'toY', 'speed' ], // Based on SawBlade constructor
+        create: (params) => {
+            const { x, y, toX, toY } = params
+            return {
+                ...params,
+                // these should come in relative grid space
+                toX: x + Number.parseFloat(toX) * 48,
+                toY: y + Number.parseFloat(toY) * 48
+            }
+        }
+    }
+}
 const factories = Object.freeze({
     player: {
         fields: [], // No specific props inferred from the original code
@@ -31,7 +45,7 @@ const factories = Object.freeze({
         }
     },
     fire: {
-        fields: ['player'], // Based on player usage
+        fields: [], // Based on player usage
         create: (params) => {
             // Perform transformation
             return params
@@ -45,70 +59,34 @@ const factories = Object.freeze({
         }
     },
     ball: {
-        fields: ['seq', 'player'], // Inferred from Ball constructor and props.seq
+        fields: ['seq', ], // Inferred from Ball constructor and props.seq
         create: (params) => {
             // Perform transformation
             return params
         }
     },
-    sb1: {
-        fields: ['toX', 'toY', 'speed', 'player'], // Based on SawBlade constructor
-        create: (params) => {
-            // Perform transformation
-            return params
-        }
-    },
-    sb2: {
-        fields: ['toX', 'toY', 'speed', 'player'], // Same as sb1
-        create: (params) => {
-            // Perform transformation
-            return params
-        }
-    },
-    sb3: {
-        fields: ['toX', 'toY', 'speed', 'player'], // Same as sb1
-        create: (params) => {
-            // Perform transformation
-            return params
-        }
-    },
-    sb4: {
-        fields: ['toX', 'toY', 'speed', 'player'], // Same as sb1
-        create: (params) => {
-            // Perform transformation
-            return params
-        }
-    },
-    sb5: {
-        fields: ['toX', 'toY', 'speed', 'player'], // Same as sb1
-        create: (params) => {
-            // Perform transformation
-            return params
-        }
-    },
-    sb6: {
-        fields: ['toX', 'toY', 'speed', 'player'], // Same as sb1
-        create: (params) => {
-            // Perform transformation
-            return params
-        }
-    },
+    sb1: sawBlades(),
+    sb2: sawBlades(),
+    sb3: sawBlades(),
+    sb4: sawBlades(),
+    sb5: sawBlades(),
+    sb6: sawBlades(),
     lcr1: {
-        fields: ['luck', 'dmg', 'temp', 'player'], // Based on Crate constructor
+        fields: ['luck', 'dmg', 'temp', ], // Based on Crate constructor
         create: (params) => {
             // Perform transformation
             return { ...params, groupId: "crates" }
         }
     },
     vlhd: {
-        fields: ['toX', 'toY', 'speed', 'num', 'period', 'delay', 'on', 'player'], // Inferred from Laser constructor
+        fields: ['toX', 'toY', 'speed', 'num', 'period', 'delay', 'on', ], // Inferred from Laser constructor
         create: (params) => {
             // Perform transformation
             return params
         }
     },
     hlhd: {
-        fields: ['toX', 'toY', 'speed', 'num', 'period', 'delay', 'on', 'player'], // Same as vlhd but different type
+        fields: ['toX', 'toY', 'speed', 'num', 'period', 'delay', 'on', ], // Same as vlhd but different type
         create: (params) => {
             // Perform transformation
             return params
