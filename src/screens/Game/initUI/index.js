@@ -135,6 +135,7 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         orbExp.hide()
 
         soundBtn.show()
+        
         pauseBtn.show()
         orbInd.show()
         orbCount.show()

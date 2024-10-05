@@ -9,6 +9,7 @@ export default (storage, getterKey, setterKey, gameState, onImg, offImg, sound, 
         const musicOn = !storage[getterKey]()
         storage[setterKey](musicOn)
         el.domNode.style.background = `url(${musicOn ? onImg.src: offImg.src})`
+        el.domNode.style.backgroundSize = "contain"
         sound.play()
     })
     return el
