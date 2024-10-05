@@ -1,4 +1,5 @@
 const groupMap = require("../../utils/groupMap.json")
+const TILE_SIZE = 48
 const sawBlades = () => {
     return {
         fields: ['toX', 'toY', 'speed' ], // Based on SawBlade constructor
@@ -7,8 +8,8 @@ const sawBlades = () => {
             return {
                 // these should come in relative grid space
                 x, y,
-                toX: x + Number(toX) * 48,
-                toY: y + Number(toY) * 48,
+                toX: x + Number(toX) * TILE_SIZE,
+                toY: y + Number(toY) * TILE_SIZE,
                 name: name,
                 speed: +speed
             }
@@ -22,7 +23,7 @@ const lasers = () => {
             const { x, y, toX, toY, speed, num, period, delay, on, name } = params
             return {
                 x, y,
-                toX: x + Number(toX), toY: y + Number(toY),
+                toX: x + Number(toX) * TILE_SIZE, toY: y + Number(toY) * TILE_SIZE,
                 name: name, on: Boolean(on),
                 delay: +delay, period: +period, speed: +speed, num: +num
             }
@@ -100,7 +101,7 @@ const factories = Object.freeze({
         fields: ['toX', 'toY', 'period'], // Based on Bus constructor
         create: (params) => {
             const { toX, toY, x, y, name } = params
-            return { x, y, name, toX: x + Number(toX), y: y + Number(toY), period: +period }
+            return { x, y, name, toX: x + Number(toX) * TILE_SIZE, y: y + Number(toY) * TILE_SIZE, period: +period }
         }
     },
     magnet: {
