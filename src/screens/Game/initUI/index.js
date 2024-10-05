@@ -178,6 +178,7 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         const showRva = checkpointExists && !canAfford && rvaSupported
         const showCost = checkpointExists && !showRva
         resumeBtn.domNode.style.background = `url(${ showRva ? images.rva.src: images.resume.src})`
+        resumeBtn.domNode.style.backgroundSize = "contain"
 
         if (showRva) {
             // if the player can't afford, prompt them to watch ad (which makes me some money :)) in exchange of checkpoint
