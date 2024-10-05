@@ -90,8 +90,8 @@ const factories = Object.freeze({
     lcr1: {
         fields: ['luck', 'dmg' ], // Based on Crate constructor
         create: (params) => {
-            const { luck, dmg, name, x, y } = params
-            return { luck: +luck, dmg: +dmg, name, x, y, groupId: "crates" }
+            const { luck, dmg, name, x, y, alignment } = params
+            return { luck: +luck, dmg: +dmg, name, x: x, y: y + (alignment === "top-left" ? 32: 0), groupId: "crates" }
         }
     },
     vlhd: lasers(),
