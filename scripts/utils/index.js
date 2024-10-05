@@ -1,4 +1,6 @@
 const fs = require("fs/promises")
+const collisionMatMap = require("./collisionMatMap.json");
+const { getDims } = require("scripts/helpers/alignment");
 const atlasPath = "./src/assets/images/atlasmeta.cson"
 
 const rand = (to, from = 0) => from + Math.floor((to - from + 1) * Math.random());
@@ -300,6 +302,7 @@ const convertToWorld = (block, tileW=48) => {
 class Map extends Block {
     tileW = 48
     collisionRects = []
+    tempCollisionRects = []
     spawnPoints = []
     tempSpawnPoints = []
     projections = []
@@ -341,11 +344,29 @@ class Map extends Block {
         }
         this.collisionRects.push({ x: block.x, y: block.y, w: block.w, h: block.h })
     }
+    async addTempColRect({ x, y, name }) {
+        const mat = collisionMatMap[name]
+        if (!mat) return
+        const dims = await getDims(name)
+        if (dims.hitBox) {
+            this.collisionRects.push({ x: x + dims.hitBox.x, y: y + dims.hitBox.y, w: dims.hitBox.width, h: dims.hitBox.height, mat })
+            return
+        }
+        if (dims.rotation) {
+            this.collisionRects.push({ x: x, y: y, w: dims.height, h: dims.width, mat })
+            return
+        }
+        this.collisionRects.push({ x, y, w: dims.width, h: dims.height, mat })
+    }
     async addTempSpawnPoint(point) {
         if (Array.isArray(point)) {
-            point.forEach(p => this.tempSpawnPoints.push(p))
+            for (const p of point) {
+                this.tempSpawnPoints.push(p)
+                await this.addTempColRect(p)
+            }
         } else {
             this.tempSpawnPoints.push(point)
+            this.addTempColRect(point)
         }
         await this.exportMap()
     }
@@ -362,6 +383,7 @@ class Map extends Block {
             this.spawnPoints.push(p)
         })
         this.tempSpawnPoints.length = 0
+        await this.exportMap()
     }
     addCompositeBlock({block, layer = "fg", skipCollisionTest}) {
         this.setPlayer(block)
