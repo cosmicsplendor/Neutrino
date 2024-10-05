@@ -7,10 +7,24 @@ const sawBlades = () => {
             return {
                 // these should come in relative grid space
                 x, y,
-                toX: x + Number.parseFloat(toX) * 48,
-                toY: y + Number.parseFloat(toY) * 48,
+                toX: x + Number(toX) * 48,
+                toY: y + Number(toY) * 48,
                 name: name,
-                speed: Number.parseInt(speed)
+                speed: +speed
+            }
+        }
+    }
+}
+const lasers = () => {
+    return {
+        fields: ['toX', 'toY', 'speed', 'num', 'period', 'delay', 'on'], // Inferred from Laser constructor
+        create: (params) => {
+            const { x, y, toX, toY, speed, num, period, delay, on, name } = params
+            return {
+                x, y,
+                toX: x + Number(toX), toY: y + Number(toY),
+                name: name, on: Boolean(on),
+                delay: +delay, period: +period, speed: +speed, num: +num
             }
         }
     }
@@ -80,20 +94,8 @@ const factories = Object.freeze({
             return { ...params, groupId: "crates" }
         }
     },
-    vlhd: {
-        fields: ['toX', 'toY', 'speed', 'num', 'period', 'delay', 'on', ], // Inferred from Laser constructor
-        create: (params) => {
-            // Perform transformation
-            return params
-        }
-    },
-    hlhd: {
-        fields: ['toX', 'toY', 'speed', 'num', 'period', 'delay', 'on', ], // Same as vlhd but different type
-        create: (params) => {
-            // Perform transformation
-            return params
-        }
-    },
+    vlhd: lasers(),
+    hlhd: lasers(),
     bus: {
         fields: ['toX', 'toY', 'period'], // Based on Bus constructor
         create: (params) => {
