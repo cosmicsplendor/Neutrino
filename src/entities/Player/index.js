@@ -13,9 +13,9 @@ import styles from "./style.css"
 
 const getTouchMappings = () => {
     const data = [
-        { name: "left", style: `background: url(${arrowImgId}); transform: scale(-1, 1);`, width: 54, height:46 },
-        { name: "right", style: `background: url(${arrowImgId});`, width: 54, height: 46 },
-        { name: "axn", style: `background: url(${resumeImgId}); transform: rotate(270deg);`, width: 50, height: 50 },
+        { name: "left", style: `background: url(${arrowImgId}); transform: scale(-1, 1);`, width: 64, height:55 },
+        { name: "right", style: `background: url(${arrowImgId});`, width: 64, height: 55 },
+        { name: "axn", style: `background: url(${resumeImgId}); transform: rotate(270deg);`, width: 55, height: 55 },
     ]
     return Object.freeze(
         data.reduce((acc, x) => {
@@ -23,6 +23,8 @@ const getTouchMappings = () => {
             el.classList.add(styles.ctrlBtn)
             el.domNode.style = x.style
             el.domNode.style.width = `${x.width}px`
+            el.baseOpacity = 0.75
+            el.domNode.style.opacity = 0.75
             el.domNode.style.height = `${x.height}px`
             el.domNode.style.backgroundSize = "contain"
             el.domNode.style.backgroundRepeat = "no-repeat"

@@ -5,8 +5,8 @@ import soundImgBtn from "./soundImgBtn"
 import styles from "./style.css"
 import { wait } from "@lib/utils"
 
-const margin = 20
-const hMargin = margin / 2 // hMargin
+const margin = 25
+const hMargin = margin * 0.75 // hMargin
 const orbExpAmt = 2
 const instFocThres = 1400
 
