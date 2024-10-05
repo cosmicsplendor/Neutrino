@@ -8,6 +8,7 @@ const projectCompositeRects = require('./utils/projectCompositeRects');
 const factories = require("./helpers/factories");
 const { align, validAlignments } = require('./helpers/alignment');
 const atlasCache = require('./helpers/atlasCache');
+const applyOffsets = require('./helpers/applyOffsets');
 
 const initializeMap = () => {
     const map = new Map({
@@ -71,7 +72,7 @@ const placeObject = async (index, projections, map) => {
             const coords = await align(name, projection, alignment)
 
             // pass the field values to the name's spawn point factory and get a new spawn point
-            const spawnPoint = factory.create({ name, alignment, projection, ...coords, ...props })
+            const spawnPoint = factory.create({ name, alignment, projection, ...applyOffsets(coords, name, alignment), ...props })
             // post-processing: compute and add collision rects if necessary
 
             // store the spawn point temporarily, map.addTempSpawnPoint

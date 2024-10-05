@@ -23,7 +23,6 @@ const align = async (name, projection, alignment, dx, dy) => {
 }
 
 module.exports = {
-    getDims,
     align,
     alignmentMap,
     validAlignments: Object.keys(alignmentMap)
