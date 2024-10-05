@@ -394,9 +394,9 @@ class Map extends Block {
                 await this.addTempColRect(p)
             }
         } else {
-            if (layer) p.layer = layer
+            if (layer) point.layer = layer
             this.tempSpawnPoints.push(point)
-            this.addTempColRect(point)
+            await this.addTempColRect(point)
         }
         await this.exportMap()
     }
