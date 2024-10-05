@@ -1,7 +1,6 @@
-const { calcAligned, convertToWorld } = require("../utils");
+const { calcAligned, convertToWorld } = require("../utils/index.js");
 const atlasCache = require("./atlasCache");
 const factories = require("./factories");
-
 const getDims = async key => {
     if (key === "checkpoint") return { width: 0, height: 0 }
     const atlas = await atlasCache.get()

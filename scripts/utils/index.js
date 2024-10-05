@@ -1,24 +1,10 @@
 const fs = require("fs/promises")
 const collisionMatMap = require("./collisionMatMap.json");
-const { getDims } = require("scripts/helpers/alignment");
-const atlasPath = "./src/assets/images/atlasmeta.cson"
+const { getDims } = require("../helpers/alignment");
 
 const rand = (to, from = 0) => from + Math.floor((to - from + 1) * Math.random());
 const skewedRand = (to, from = 0) => from + Math.floor((to - from + 1) * Math.random() * Math.random());
 const pickOne = arr => arr[rand(arr.length - 1)];
-
-const getAtlas = async () => {
-    const buffer = await fs.readFile(atlasPath)
-    const data = JSON.parse(buffer.toString("utf-8"))
-    const entries = Object.entries(data)
-    entries.forEach(e => {
-        if (!e[1].rotation) return
-        const { width, height } = e[1]
-        e[1].width = height
-        e[1].height = width
-    })
-    return Object.fromEntries(entries)
-}
 
 function mergeRects(rects) {
     if (rects.length === 0) return []
@@ -372,6 +358,7 @@ class Map extends Block {
     }
     async clearTempSpawnPoint() {
         this.tempSpawnPoints.length = 0
+        this.tempCollisionRects.length = 0
         await this.exportMap()
     }
     async commitTempSpawnPoint() {
@@ -382,6 +369,7 @@ class Map extends Block {
             }
             this.spawnPoints.push(p)
         })
+        this.tempCollisionRects.forEach(r => this.collisionRects.push(r))
         this.tempSpawnPoints.length = 0
         await this.exportMap()
     }
@@ -452,7 +440,7 @@ class Map extends Block {
                 return { name, x: x * tileW, y: y * tileW } 
             })
         })
-        const collisionRects = this.collisionRects.map(rect => {
+        const collisionRects = this.collisionRects.concat(this.tempCollisionRects).map(rect => {
             const { x, y, w, h, mat } = rect
             return { x: x * tileW, y: y * tileW, width: w * tileW, height: h * tileW, mat }
         })
@@ -495,6 +483,5 @@ module.exports  = {
     rand,
     skewedRand,
     pickOne,
-    getAtlas,
     convertToWorld
 }
