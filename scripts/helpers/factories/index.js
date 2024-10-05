@@ -99,8 +99,8 @@ const factories = Object.freeze({
     bus: {
         fields: ['toX', 'toY', 'period'], // Based on Bus constructor
         create: (params) => {
-            // Perform transformation
-            return params
+            const { toX, toY, x, y, name } = params
+            return { x, y, name, toX: x + Number(toX), y: y + Number(toY), period: +period }
         }
     },
     magnet: {
