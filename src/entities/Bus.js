@@ -8,7 +8,7 @@ class Bus extends TexRegion {
         width: 86,
         height: 88
     }
-    constructor(x, y, toX, toY, period) {
+    constructor(x, y, toX, toY, period) { // spawn points for movable collidable entities have to be on midground layer (on tiled layer should be set to mg)
         super({ pos: { x, y }, frame: "crane" })
         this.prevPosY = this.pos.y
         this.prevPosX = this.pos.x
@@ -16,28 +16,13 @@ class Bus extends TexRegion {
         this.movable = true
 
         this.dispY = toY - y
-        this.dispX = toX - x
-        this.meanX = x
         this.meanY = y
         this.period = period
         this.t = 0
 
-        this.xMovement = x !== toX
-        this.yMovement = y !== toY
     }
-    updateX(dt) {
-        if (!this.xMovement) return
-        this.pos.x = this.meanX + easingFns.smoothStep(this.t / this.period) * this.dispX
-        if (this.t > this.period) {
-            this.meanX = this.meanX + this.dispX
-            this.pos.x = this.meanX
-            this.dispX *= -1
-        }
-        this.prevPosY = this.pos.y
-        this.velX = (this.pos.x - this.prevPosX) / dt
-    }
-    updateY(dt) {
-        if (!this.yMovement) return
+    update(dt) {
+        this.t += dt
         this.pos.y = this.meanY + easingFns.smoothStep(this.t / this.period) * this.dispY
         if (this.t > this.period) {
             this.meanY = this.meanY + this.dispY
@@ -46,14 +31,7 @@ class Bus extends TexRegion {
             this.t = 0
         }
         this.velY = (this.pos.y - this.prevPosY) / dt
-        this.prevPosX = this.pos.x
-    }
-    update(dt) {
-        this.t += dt
-        this.updateX(dt)
-        this.updateY(dt)
     }
 }
-
 
 export default Bus

@@ -97,12 +97,11 @@ const factories = Object.freeze({
         }
     },
     bus: {
-        fields: ['toX', 'toY', 'period'], // Based on Bus constructor
+        fields: ['toY', 'period'], // Based on Bus constructor
         dims: () => ({ width: 88, height: 88 }),
         create: (params) => {
-            const { toX, toY, x, y, name, period, alignment } = params
-            console.log({ groupId: "col-rects", x, y: y + (alignment.startsWith("top") ? 32: 0), name, toX: x + Number(toX) * TILE_SIZE, y: y + Number(toY) * TILE_SIZE, period: +period })
-            return { groupId: "col-rects", x, y: y + (alignment.startsWith("top") ? 32: 0), name, toX: x + Number(toX) * TILE_SIZE, toY: y + Number(toY) * TILE_SIZE, period: +period }
+            const { toY, x, y, name, period, alignment } = params
+            return { groupId: "col-rects", x, y: y + (alignment.startsWith("top") ? 32: 0), name, toY: y + Number(toY) * TILE_SIZE, period: +period }
         }
     },
     magnet: {

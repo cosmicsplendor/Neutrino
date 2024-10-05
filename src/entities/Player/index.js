@@ -10,6 +10,7 @@ import { colRectsId, objLayerId } from "@lib/constants"
 import arrowImgId from "@assets/images/ui/arrow.png"
 import resumeImgId from "@assets/images/ui/resume.png"
 import styles from "./style.css"
+import Bus from "@entities/Bus"
 
 const getTouchMappings = () => {
     const data = [
