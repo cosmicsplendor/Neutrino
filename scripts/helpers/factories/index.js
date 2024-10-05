@@ -68,13 +68,6 @@ const factories = Object.freeze({
             return params
         }
     },
-    magnet: {
-        fields: ['frame'], // Based on Magnet constructor
-        create: (params) => {
-            // Perform transformation
-            return params
-        }
-    },
     ball: {
         fields: ['seq', ], // Inferred from Ball constructor and props.seq
         create: (params) => {
@@ -99,6 +92,7 @@ const factories = Object.freeze({
     hlhd: lasers(),
     bus: {
         fields: ['toX', 'toY', 'period'], // Based on Bus constructor
+        dims: () => ({ width: 88, height: 88 }),
         create: (params) => {
             const { toX, toY, x, y, name } = params
             return { x, y, name, toX: x + Number(toX) * TILE_SIZE, y: y + Number(toY) * TILE_SIZE, period: +period }
