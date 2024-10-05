@@ -8,5 +8,6 @@
     "tyre": "wood",
     "em1": "concrete",
     "stud": "metal",
-    "pillar": "metal"
+    "pillar": "metal",
+    "br1": "bridge"
 }

@@ -10,8 +10,6 @@ const getDims = async key => {
     if (key === "checkpoint") return { width: 0, height: 0 }
     const atlas = await atlasCache.get()
     if (factories[key] && typeof factories[key].dims === "function") {
-        console.log(factories[key].dims(atlas))
-        console.log(atlas[key])
         return factories[key].dims(atlas)
     }
     const dims = atlas[key]
@@ -300,6 +298,7 @@ const convertToWorld = (block, tileW=48) => {
 class Map extends Block {
     tileW = 48
     collisionRects = []
+    objCollisionRects = []
     tempCollisionRects = []
     spawnPoints = []
     tempSpawnPoints = []
@@ -355,7 +354,6 @@ class Map extends Block {
             return
         }
         this.tempCollisionRects.push({ x, y, w: dims.width, h: dims.height, mat })
-        console.log(this.tempCollisionRects)
     }
     async addTempSpawnPoint(point) {
         if (Array.isArray(point)) {
@@ -382,7 +380,7 @@ class Map extends Block {
             }
             this.spawnPoints.push(p)
         })
-        this.tempCollisionRects.forEach(r => this.collisionRects.push(r))
+        this.tempCollisionRects.forEach(r => this.objCollisionRects.push(r))
         this.tempSpawnPoints.length = 0
         await this.exportMap()
     }
@@ -453,9 +451,12 @@ class Map extends Block {
                 return { name, x: x * tileW, y: y * tileW } 
             })
         })
-        const collisionRects = this.collisionRects.concat(this.tempCollisionRects).map(rect => {
+        const collisionRects = this.collisionRects.map(rect => {
             const { x, y, w, h, mat } = rect
             return { x: x * tileW, y: y * tileW, width: w * tileW, height: h * tileW, mat }
+        })
+        this.objCollisionRects.concat(this.tempCollisionRects).forEach(r => {
+            collisionRects.push({ x: r.x, y: r.y, width: r.w, height: r.h, mat: r.mat })
         })
         const spawnPoints = this.spawnPoints.concat(this.player)
         const checkpoints = this.checkpoints
