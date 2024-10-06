@@ -105,13 +105,10 @@ const factories = Object.freeze({
         }
     },
     magnet: {
-        dims: (atlas) => {
-            this.studWidth = atlas.stud.rotation === 90 ? atlas.stud.height: atlas.stud.width
-            const { width, height, rotation } = atlas.magnet
-            this.width =(rotation ? height: width)
+        dims: () => {
             return {
-                width:  this.width + this.studWidth * 2,
-                height: rotation ? width: height
+                width: 128 + 16 * 2, // magnet width + twice stud width
+                height: 32
             }
         },
         create: (params) => {
@@ -130,6 +127,23 @@ const factories = Object.freeze({
             if (groupId) params.groupId = groupId
             return params
         }
+    },
+    wind: {
+        dims: () => {
+            return { width: 80, height: 32 }
+        },
+        possible(projection, alignment) {
+            if (alignment !== "top" || alignment !== "bottom") return false // only possible alignments
+            if (projection.w % 2 === 0 || projection.w === 1) return false // only possible for odd tile count greater than 1
+            return true
+        },
+        create: params => {
+            const { x, y } = params
+            return [
+                { x, y, name: "em1" },
+                { x: x + 40, y, name: "wind" }
+            ]
+        }        
     }
 }
 )
