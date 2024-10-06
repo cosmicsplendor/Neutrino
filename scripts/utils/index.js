@@ -340,6 +340,10 @@ class Map extends Block {
         og: [],
         mg: []
     }
+    collapseTiles = []
+    collapseTile(x, y) {
+        this.collapseTiles.push({ x, y })
+    }
     player = { name: "player", x: 0, y: 0 } // temporary player for level design (helps in focusing camera)
     setPlayer(block) {
         this.player ={ name: "player", ...calcStacked(convertToWorld(block, this.tileW), { w: 64, h: 64 }, "top") }

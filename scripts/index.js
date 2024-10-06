@@ -66,6 +66,11 @@ const placeObject = async (index, projections, map) => {
 
             const alignment = await queryAlignment()
             const factory = name in factories ? factories[name]: factories.default
+            if (factory.possible(projection, alignment)) {
+                message(`Impossible configuration right there. .`, "red")
+                terminal.bold.green("Let's try again. . \n")
+                continue
+            }
             const moreFields = factory.fields
             const props = (Array.isArray(moreFields)) ? await promptFields(moreFields): {}
 
