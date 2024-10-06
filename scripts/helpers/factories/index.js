@@ -152,7 +152,6 @@ const factories = {
     gate: {
         block: null,
         reset() {
-            console.log(CompositeBlock)
             this.block = new CompositeBlock(new Block(5, 3))
         },
         extendLeft() {
@@ -166,6 +165,7 @@ const factories = {
         extendRight() {
             const skip = rand(1, 0)
             if (skip) return
+            const num = rand(3, 2)
             const block = new Block(1, num)
             const position = "right-end"
             this.block.addPart({ block, position })
