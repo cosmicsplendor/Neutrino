@@ -234,7 +234,7 @@ const combine = (a, b, dir) => {
 
 
 const calcComposite = entities => { // compute a rect that contains all the entities
-    const composite = {...entities[0]}
+    const composite = { ...entities[0] }
     for (let i = 1; i < entities.length; i++) {
         const ent = entities[i]
         const rEdgX = Math.max(composite.x + composite.w, ent.x + ent.w)
@@ -269,16 +269,16 @@ class CompositeBlock extends Block {
         this._map = map
     }
     static create(blockOrConfig) {
-        const initialBlock = blockOrConfig instanceof Block || blockOrConfig instanceof CompositeBlock? blockOrConfig: new Block(blockOrConfig.width, blockOrConfig.height) 
+        const initialBlock = blockOrConfig instanceof Block || blockOrConfig instanceof CompositeBlock ? blockOrConfig : new Block(blockOrConfig.width, blockOrConfig.height)
         return new CompositeBlock(initialBlock)
     }
     constructor(initialBlock) {
         super(0, 0)
-        this.addPart({ block: initialBlock})
+        this.addPart({ block: initialBlock })
     }
-    addPart({block: _block, width, height, position, onto = "parent", dx, dy}) {
-        const block = typeof width === "number" && typeof height === "number" ? new Block(width, height): _block
-        const stackAgainst = onto === "parent" ? this: (onto === "last" ? this.last: undefined)
+    addPart({ block: _block, width, height, position, onto = "parent", dx, dy }) {
+        const block = typeof width === "number" && typeof height === "number" ? new Block(width, height) : _block
+        const stackAgainst = onto === "parent" ? this : (onto === "last" ? this.last : undefined)
         if (stackAgainst === undefined) throw new Error(`Invalid onto param: ${onto}`)
         if (this.children.length === 0) { // initial child
             this.children.push(block);
@@ -288,15 +288,15 @@ class CompositeBlock extends Block {
             this.children.push(block);
             Object.assign(this, calcComposite(this.children));
         }
-    
+
         this.last = block;
         this.collisionRects.push({ ...block });
         this.collisionRects = mergeRects(this.collisionRects);
-        
+
         return this;
     }
-    
-    stackOn(block, {position, dx, dy}) { // stack itself onto sth
+
+    stackOn(block, { position, dx, dy }) { // stack itself onto sth
         const { x, y } = calcStacked(block, this, position, dx, dy)
         const xShift = x - this.x
         const yShift = y - this.y
@@ -306,7 +306,7 @@ class CompositeBlock extends Block {
 
         return this.shift(xShift, yShift)
     }
-    shift(dx, dy=0) {
+    shift(dx, dy = 0) {
         this.children.forEach(block => {
             block.x += dx
             block.y += dy
@@ -318,13 +318,13 @@ class CompositeBlock extends Block {
         })
         return this
     }
-    addToMap({ collision, layer }={collision: false, layer: "fg"}) {
+    addToMap({ collision, layer } = { collision: false, layer: "fg" }) {
         CompositeBlock._map.addBlock({ block: this, skipCollisionTest: collision, layer })
         return this
     }
 }
-const convertToWorld = (block, tileW=48) => {
-    return { x: block.x * tileW, y: block.y * tileW, h: block.h * tileW, w: block.w * tileW}
+const convertToWorld = (block, tileW = 48) => {
+    return { x: block.x * tileW, y: block.y * tileW, h: block.h * tileW, w: block.w * tileW }
 }
 class Map extends Block {
     tileW = 48
@@ -346,27 +346,27 @@ class Map extends Block {
     }
     player = { name: "player", x: 0, y: 0 } // temporary player for level design (helps in focusing camera)
     setPlayer(block) {
-        this.player ={ name: "player", ...calcStacked(convertToWorld(block, this.tileW), { w: 64, h: 64 }, "top") }
+        this.player = { name: "player", ...calcStacked(convertToWorld(block, this.tileW), { w: 64, h: 64 }, "top") }
     }
     bg = "#132b27"
     mob_bg = "#132b27"
     pxbg = "#0a1614"
     tint = "0.025, -0.025, -0.0125, 0"
-    constructor({width, height, ...config}={}) {
+    constructor({ width, height, ...config } = {}) {
         super(width, height)
         Object.assign(this, config)
         this.clear()
         CompositeBlock.registerMap(this)
     }
     clear() {
-        this.layers.fg.length= 0
-        this.layers.og.length= 0
-        this.layers.mg.length= 0
+        this.layers.fg.length = 0
+        this.layers.og.length = 0
+        this.layers.mg.length = 0
         this.collisionRects.length = 0
         this.floor = calcAligned(this, new Block(this.w, this.floorHeight ?? 4), "left", "bottom")
         this.addBlock({ block: this.floor, layer: "fg" })
     }
-    addPlainBlock({block, layer = "og", skipCollisionTest = false}) {
+    addPlainBlock({ block, layer = "og", skipCollisionTest = false }) {
         const x = Math.round(block.x)
         const y = Math.round(block.y)
         for (let i = 0; i < block.h; i++) {
@@ -424,16 +424,16 @@ class Map extends Block {
         this.tempSpawnPoints.length = 0
         await this.exportMap()
     }
-    addCompositeBlock({block, layer = "fg", skipCollisionTest}) {
+    addCompositeBlock({ block, layer = "fg", skipCollisionTest }) {
         this.setPlayer(block)
         if (!(block instanceof CompositeBlock)) return
         for (const child of block.children) {
-            this.addPlainBlock({ block: child, layer, skipCollisionTest: true})
+            this.addPlainBlock({ block: child, layer, skipCollisionTest: true })
         }
         if (skipCollisionTest) return
         // add collision rects
         for (const rect of block.collisionRects) {
-            this.collisionRects.push({...rect})
+            this.collisionRects.push({ ...rect })
         }
         this.collisionRects = mergeRects(this.collisionRects)
 
@@ -470,7 +470,7 @@ class Map extends Block {
         const { w, h, layers } = this;
         // Double the width of the grid
         const grid = Array.from({ length: h }, () => Array(w * 2).fill(' '));
-    
+
         for (const cell of layers[layer]) {
             const { x, y } = cell;
             if (x >= 0 && x < w && y >= 0 && y < h) {
@@ -480,15 +480,15 @@ class Map extends Block {
                 grid[y][doubleX + 1] = '$'; // Fill the adjacent cell to the right
             }
         }
-    
+
         console.log(grid.map(row => row.join('')).join('\n'));
     }
-    async exportMap(levelName="testlevel") {
+    async exportMap(levelName = "testlevel") {
         const { tileW, bg, mob_bg, pxbg, tint, projections, tempSpawnPoints } = this
-        const [ fgTiles, tiles, mgTiles ] = Object.values(this.layers).map(layer => {
+        const [fgTiles, tiles, mgTiles] = Object.values(this.layers).map(layer => {
             return layer.map(tile => {
-                const { name="wt_1", x, y } = tile
-                return { name, x: x * tileW, y: y * tileW } 
+                const { name = "wt_1", x, y } = tile
+                return { name, x: x * tileW, y: y * tileW }
             })
         })
         const collisionRects = this.collisionRects.map(rect => {
@@ -526,8 +526,18 @@ const generateGrid = (block) => {
     }, compositeRect)
 }
 
-
-module.exports  = {
+const decomposeBlocks = block => {
+    const x = Math.round(block.x)
+    const y = Math.round(block.y)
+    const blocks = []
+    for (let i = 0; i < block.h; i++) {
+        for (let j = 0; j < block.w; j++) {
+            blocks.push({ x: x + j, y: y + i, w: 1, h: 1 })
+        }
+    }
+    return blocks
+}
+module.exports = {
     combine,
     calcComposite,
     calcAligned,
@@ -539,5 +549,6 @@ module.exports  = {
     skewedRand,
     pickOne,
     convertToWorld,
-    getDims
+    getDims,
+    decomposeBlocks
 }
