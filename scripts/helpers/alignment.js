@@ -15,7 +15,6 @@ const alignmentMap = {
 }
 
 const align = async (name, projection, alignment, dx, dy) => {
-    const factory = factories[name]
     const [alignX, alignY] = alignmentMap[alignment]
     const dims = await getDims(name)
     const aligned = calcAligned(convertToWorld(projection), { w: dims.width, h: dims.height }, alignX, alignY, dx, dy)

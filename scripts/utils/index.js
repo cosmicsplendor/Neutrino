@@ -526,6 +526,7 @@ const generateGrid = (block) => {
     }, compositeRect)
 }
 
+
 module.exports  = {
     combine,
     calcComposite,
