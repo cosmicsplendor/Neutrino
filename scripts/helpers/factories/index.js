@@ -114,9 +114,9 @@ const factories = Object.freeze({
         create: (params) => {
             const { x, y } = params
             return [
-                { name: "magnet", x: x + this.studWidth, y, groupId: "magnets" },
+                { name: "magnet", x: x + 16, y, groupId: "magnets" },
                 { name: "stud", x, y },
-                { name: "stud", x: x + this.width + this.studWidth, y }
+                { name: "stud", x: x + 128 + 16, y }
             ]
         }
     },
