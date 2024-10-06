@@ -1,10 +1,9 @@
-const { pickOne } = require("@lib/utils/math")
 const { skewedRand, pickOne, rand, CompositeBlock, Block, decomposeBlocks } = require("../../utils")
 const groupMap = require("../../utils/groupMap.json")
 const TILE_SIZE = 48
-const STACK_TOP = [ "top-start", "top-end", "top"]
-const STACK_LEFT = [ "left-start", "left-end", "left"]
-const STACK_RIGHT = [ "right-start", "right-end", "right"]
+const STACK_TOP = ["top-start", "top-end", "top"]
+const STACK_LEFT = ["left-start", "left-end", "left"]
+const STACK_RIGHT = ["right-start", "right-end", "right"]
 const sawBlades = () => {
     return {
         fields: ['toX', 'toY', 'speed'], // Based on SawBlade constructor
@@ -35,7 +34,7 @@ const lasers = () => {
         }
     }
 }
-const factories = Object.freeze({
+const factories = {
     player: {
         fields: [], // No specific props inferred from the original code
         create: (params) => {
@@ -152,7 +151,8 @@ const factories = Object.freeze({
     },
     gate: {
         block: null,
-        clear() {
+        reset() {
+            console.log(CompositeBlock)
             this.block = new CompositeBlock(new Block(5, 3))
         },
         extendLeft() {
@@ -175,7 +175,7 @@ const factories = Object.freeze({
             if (skip) return
             const num = rand(5, 2)
             const block = new Block(num, 1)
-            const position = pickOne(num % 2 === 0 ? STACK_TOP.slice(-1): STACK_TOP)
+            const position = pickOne(num % 2 === 0 ? STACK_TOP.slice(-1) : STACK_TOP)
             this.block.addPart({ block, position })
         },
         extend() {
@@ -184,12 +184,12 @@ const factories = Object.freeze({
             this.extendTop()
         },
         dims() {
-            this.clear()
+            this.reset()
             this.extend()
             const { block } = this
             return { width: block.w * TILE_SIZE, height: block.h * TILE_SIZE }
         },
-        create: params => {
+        create(params) {
             const { x: originX, y: originY } = params
             const blocks = this.block.children.map(decomposeBlocks).flatMap(b => {
                 return { x: originX + b.x * TILE_SIZE, y: originY + b.y * TILE_SIZE, name: "wt_1" }
@@ -197,6 +197,5 @@ const factories = Object.freeze({
             return blocks
         }
     }
-})
-
+}
 module.exports = factories

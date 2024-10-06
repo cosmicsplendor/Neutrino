@@ -1,20 +1,19 @@
 const fs = require("fs/promises")
 const collisionMatMap = require("./collisionMatMap.json");
+
 const atlasCache = require("../helpers/atlasCache");
-const factories = require("../helpers/factories")
+const getDimsFromAtlas = async key => {
+    if (key === "checkpoint") return { width: 0, height: 0 }
+    const atlas = await atlasCache.get()
+    const dims = atlas[key]
+    return dims.rotation === 90 ? { width: dims.height, height: dims.width } : dims
+}
 
 const rand = (to, from = 0) => from + Math.floor((to - from + 1) * Math.random());
 const skewedRand = (to, from = 0) => from + Math.floor((to - from + 1) * Math.random() * Math.random());
 const pickOne = arr => arr[rand(arr.length - 1)];
-const getDims = async key => {
-    if (key === "checkpoint") return { width: 0, height: 0 }
-    const atlas = await atlasCache.get()
-    if (factories[key] && typeof factories[key].dims === "function") {
-        return factories[key].dims(atlas)
-    }
-    const dims = atlas[key]
-    return dims.rotation === 90 ? { width: dims.height, height: dims.width } : dims
-}
+
+
 
 function mergeRects(rects) {
     if (rects.length === 0) return []
@@ -379,7 +378,7 @@ class Map extends Block {
     async addTempColRect({ x, y, name }) {
         const mat = collisionMatMap[name]
         if (!mat) return
-        const dims = await getDims(name)
+        const dims = await getDimsFromAtlas(name)
         if (dims.hitBox) {
             this.tempCollisionRects.push({ x: x + dims.hitBox.x, y: y + dims.hitBox.y, w: dims.hitBox.width, h: dims.hitBox.height, mat })
             return
@@ -550,6 +549,5 @@ module.exports = {
     skewedRand,
     pickOne,
     convertToWorld,
-    getDims,
     decomposeBlocks
 }

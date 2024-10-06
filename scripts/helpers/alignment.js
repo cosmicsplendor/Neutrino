@@ -1,6 +1,5 @@
-const { calcAligned, convertToWorld, getDims } = require("../utils/index.js");
-const atlasCache = require("./atlasCache");
-const factories = require("./factories");
+const { calcAligned, convertToWorld } = require("../utils/index.js");
+const getDims = require("../utils/getDims.js")
 
 const alignmentMap = {
     "top-left": ["left", "top"],
