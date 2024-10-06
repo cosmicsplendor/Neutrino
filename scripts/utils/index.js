@@ -537,6 +537,7 @@ const decomposeBlocks = block => {
     }
     return blocks
 }
+
 module.exports = {
     combine,
     calcComposite,
