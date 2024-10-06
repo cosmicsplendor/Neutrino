@@ -50,7 +50,7 @@ const defaultConfig = {
     isMobile,
     scale,
     get devicePixelRatio() {
-        return 1.5
+        // return 1.5
         return Math.min(isMobile ? maxMobileDpr: maxDpr, window.devicePixelRatio)
     },
     orientation: "portrait",

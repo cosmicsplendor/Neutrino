@@ -152,17 +152,15 @@ const factories = {
     gate: {
         block: null,
         extendedLeft: false,
-        extendedRight: false,
         reset() {
             this.extendedLeft = false
-            this.extendedRight = false
-            this.block = new CompositeBlock(new Block(5, 3))
+            this.block = new CompositeBlock(new Block(5, 4))
         },
         extendLeft() {
             const skip = rand(1, 0)
             if (skip) return
             this.extendedLeft = true
-            const num = rand(3, 2)
+            const num = rand(4, 2)
             const block = new Block(1, num)
             const position = "left-end"
             this.block.addPart({ block, position })
@@ -170,8 +168,7 @@ const factories = {
         extendRight() {
             const skip = rand(1, 0)
             if (skip) return
-            this.extendedRight = true
-            const num = rand(3, 2)
+            const num = rand(4, 2)
             const block = new Block(1, num)
             const position = "right-end"
             this.block.addPart({ block, position })
@@ -195,16 +192,23 @@ const factories = {
             const { block } = this
             return { width: block.w * TILE_SIZE, height: (block.h + 3) * TILE_SIZE }
         },
+
         create(params) {
             const { x: originX, y: originY } = params
             const { block } = this
             const dx = this.extendedLeft ? 1: 0
-            const dy = block.h - 3
+            const dy = block.h - 4
+            const gateY = originY + (TILE_SIZE * block.h) - 56
+            const gate = { y: gateY, x: originX + (dx + 2.5) * TILE_SIZE - 56, name: "gate", endY: gateY - 128  }
+
             const blocks = block.children.flatMap(decomposeBlocks)
                 .map(b => {
                     return { x: originX + (b.x + dx) * TILE_SIZE, y: originY + (b.y + dy) * TILE_SIZE, name: "wt_1" }
                 })
-            return blocks
+            return [
+                gate,
+                ...blocks
+            ]
         }
     }
 }
