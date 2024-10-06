@@ -151,12 +151,15 @@ const factories = {
     },
     gate: {
         block: null,
+        extendedLeft: false,
         reset() {
+            this.extendedLeft = false
             this.block = new CompositeBlock(new Block(5, 3))
         },
         extendLeft() {
             const skip = rand(1, 0)
             if (skip) return
+            this.extendedLeft = true
             const num = rand(3, 2)
             const block = new Block(1, num)
             const position = "left-end"
@@ -191,8 +194,13 @@ const factories = {
         },
         create(params) {
             const { x: originX, y: originY } = params
-            const blocks = this.block.children.map(decomposeBlocks).flatMap(b => {
-                return { x: originX + b.x * TILE_SIZE, y: originY + b.y * TILE_SIZE, name: "wt_1" }
+            const { block } = this
+            const dx = this.extendedLeft ? 1: 0
+            const dy = block.h - 3
+            console.log({ dx, dy })
+            const blocks = block.children.flatMap(decomposeBlocks)
+            .map(b => {
+                return { x: originX + (b.x + dx) * TILE_SIZE, y: originY + (b.y + dy) * TILE_SIZE, name: "wt_1" }
             })
             return blocks
         }
