@@ -340,9 +340,9 @@ class Map extends Block {
         og: [],
         mg: []
     }
-    collapseTiles = []
+    collapsedTiles = []
     collapseTile(x, y) {
-        this.collapseTiles.push({ x, y })
+        this.collapsedTiles.push({ x, y })
     }
     player = { name: "player", x: 0, y: 0 } // temporary player for level design (helps in focusing camera)
     setPlayer(block) {
@@ -416,6 +416,9 @@ class Map extends Block {
                 return
             }
             this.spawnPoints.push(p)
+            if (Array.isArray(p.collapsed)) { // collapse wave function (superposition state)
+                p.collapsed.forEach(t => this.collapseTile(t))
+            }
         })
         this.tempCollisionRects.forEach(r => this.objCollisionRects.push(r))
         this.tempSpawnPoints.length = 0

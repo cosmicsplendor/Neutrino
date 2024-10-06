@@ -141,7 +141,7 @@ const factories = Object.freeze({
             const { x, y } = params
             return [
                 { x, y, name: "em1" },
-                { x: x + 40, y, name: "wind" }
+                { x: x + 40, y, name: "wind", collapsed: [{ y: y + 32, x: x + 16 }] }
             ]
         }        
     }
