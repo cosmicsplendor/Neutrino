@@ -133,7 +133,7 @@ const factories = Object.freeze({
             return { width: 80, height: 32 }
         },
         possible(projection, alignment) {
-            if (alignment !== "top" || alignment !== "bottom") return false // only possible alignments
+            if (alignment !== "top" && alignment !== "bottom") return false // only possible alignments
             if (projection.w % 2 === 0 || projection.w === 1) return false // only possible for odd tile count greater than 1
             return true
         },
