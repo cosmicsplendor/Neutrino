@@ -4,6 +4,7 @@ const TILE_SIZE = 48
 const STACK_TOP = ["top-start", "top-end", "top"]
 const STACK_LEFT = ["left-start", "left-end", "left"]
 const STACK_RIGHT = ["right-start", "right-end", "right"]
+
 const sawBlades = (nameMap) => {
     return {
         fields: ['toX', 'toY', 'speed', "size" ], // Based on SawBlade constructor
@@ -24,6 +25,7 @@ const sawBlades = (nameMap) => {
         }
     }
 }
+
 const lasers = () => {
     return {
         fields: ['toX', 'toY', 'speed', 'num', 'period', 'delay', 'on'], // Inferred from Laser constructor
@@ -176,6 +178,52 @@ const factories = {
             ]
         }
     },
+    pillar: {
+        fields: ["height"],
+        dims({ height }) {
+            return {
+                width: 40, height: 128 * height
+            }
+        },
+        create(params) {
+            const { x, y, height } = params
+            return Array(+height).fill(0).map((_, i) => {
+                return { x: x, y: y + (i * 128), name: "pillar" }
+            })
+        }
+    },
+    topSaw: saws({ name: "saw1", field: "width" }),
+    bottomSaw: saws({ name: "saw2", field: "width" }),
+    spike: saws({ name: "spike", field: "width", dims: { width: 80, height: 40 }, xOffset: 8 }),
+    leftSaw: saws({ name: "saw4", field: "height" }),
+    rightSaw: saws({ name: "saw3", field: "height" }),
+    bridge: {
+        fields: ["width"],
+        dims({ width=1 }) {
+            return {
+                width: (240 + 16) * width + 16, height: 104
+            }
+        },
+        create(params) {
+            const { x, y, width } = params
+            const results = Array(+width).fill(width).map((_, i) => {
+                const iX = x + i * 240
+                return [
+                    { name: "br1", x: iX + (i + 1) * 16, y: y + 16 },
+                    { name: "br2", x: iX + i * 16, y: y }
+                ]
+            }).flat()
+            results.push({
+                x: x + (240 + 16) * width,
+                y: y,
+                name: "br2"
+            })
+            results.colRect = {
+                x: x, y: y + 16, h: 24, mat: "wood", w: 256 * width + 16
+            }
+            return results
+        }
+    },
     gate: {
         block: null,
         extendedLeft: false,
@@ -236,51 +284,39 @@ const factories = {
                 ...blocks
             ]
         }
-    },
-    pillar: {
-        fields: ["height"],
-        dims({ height }) {
+    }
+}
+
+const stackables = ({ name, dims }) => {
+    return {
+        fields: [ "width", "height", "density"],
+        dims: ({ width, height }) => {
             return {
-                width: 40, height: 128 * height
+                width: width * dims.width,
+                height: height * dims.height
             }
         },
-        create(params) {
-            const { x, y, height } = params
-            return Array(+height).fill(0).map((_, i) => {
-                return { x: x, y: y + (i * 128), name: "pillar" }
-            })
-        }
-    },
-    topSaw: saws({ name: "saw1", field: "width" }),
-    bottomSaw: saws({ name: "saw2", field: "width" }),
-    spike: saws({ name: "spike", field: "width", dims: { width: 80, height: 40 }, xOffset: 8 }),
-    leftSaw: saws({ name: "saw4", field: "height" }),
-    rightSaw: saws({ name: "saw3", field: "height" }),
-    bridge: {
-        fields: ["width"],
-        dims({ width=1 }) {
-            return {
-                width: (240 + 16) * width + 16, height: 104
+        createHorizontal(width, height, density) {
+            const parent = new CompositeBlock(new Block(width, 1))
+            let prevWidth = width
+            for (let i = 1; i < height; i++) {
+                const newWidth = rand(prevWidth, 1)
+                prevWidth = newWidth
             }
         },
-        create(params) {
-            const { x, y, width } = params
-            const results = Array(+width).fill(width).map((_, i) => {
-                const iX = x + i * 240
-                return [
-                    { name: "br1", x: iX + (i + 1) * 16, y: y + 16 },
-                    { name: "br2", x: iX + i * 16, y: y }
-                ]
-            }).flat()
-            results.push({
-                x: x + (240 + 16) * width,
-                y: y,
-                name: "br2"
-            })
-            results.colRect = {
-                x: x, y: y + 16, h: 24, mat: "wood", w: 256 * width + 16
+        createVertical(width, height, density) {
+
+        },
+        createBlocks(width, height, density) {
+            const vertical = rand(1, 0)
+            if (vertical) {
+                return this.createVertical(width, height, density)
             }
-            return results
+            return this.createHorizontal(width, height, density)
+        },
+        create(params) {
+            const { x, y, width, height, density } = params
+            const blocks = this.createBlocks(width, height, density)
         }
     }
 }
