@@ -260,18 +260,24 @@ const factories = {
         fields: ["width"],
         dims({ width=1 }) {
             return {
-                width: 240 * width, height: 104
+                width: (240 + 16) * width + 16, height: 104
             }
         },
         create(params) {
             const { x, y, width } = params
-            return Array(width).fill((_, i) => {
+            const results = Array(+width).fill(width).map((_, i) => {
                 const iX = x + i * 240
                 return [
-                    { name: "br1", x: iX, y: y + 8 },
-                    { name: "br2", x: iX, y: y }
+                    { name: "br1", x: iX + (i + 1) * 16, y: y + 16 },
+                    { name: "br2", x: iX + i * 16, y: y }
                 ]
+            }).flat()
+            results.push({
+                x: x + (240 + 16) * width,
+                y: y,
+                name: "br2"
             })
+            return results
         }
     }
 }
