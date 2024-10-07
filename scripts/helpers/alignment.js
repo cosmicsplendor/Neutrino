@@ -13,10 +13,10 @@ const alignmentMap = {
     "right": ["right", "center"]
 }
 
-const align = async (name, projection, alignment, dx, dy) => {
+const align = async (name, projection, alignment, props) => {
     const [alignX, alignY] = alignmentMap[alignment]
-    const dims = await getDims(name)
-    const aligned = calcAligned(convertToWorld(projection), { w: dims.width, h: dims.height }, alignX, alignY, dx, dy)
+    const dims = await getDims(name, props)
+    const aligned = calcAligned(convertToWorld(projection), { w: dims.width, h: dims.height }, alignX, alignY)
     return aligned
 }
 

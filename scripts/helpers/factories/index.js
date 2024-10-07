@@ -192,7 +192,6 @@ const factories = {
             const { block } = this
             return { width: block.w * TILE_SIZE, height: (block.h + 3) * TILE_SIZE }
         },
-
         create(params) {
             const { x: originX, y: originY } = params
             const { block } = this
@@ -209,6 +208,21 @@ const factories = {
                 gate,
                 ...blocks
             ]
+        }
+    },
+    pillar: {
+        fields: [ "height" ],
+        dims(props) {
+            console.log(props)
+            return {
+                width: 40, height: 128 * props.height
+            } 
+        },
+        create(params) {
+            const { x, y, height } = params
+            return Array(height).fill(0).map((_, i) => {
+                return { x: x, y: y + i * height, name: "pillar" }
+            })
         }
     }
 }

@@ -75,7 +75,7 @@ const placeObject = async (index, projections, map) => {
             const props = (Array.isArray(moreFields)) ? await promptFields(moreFields): {}
 
             // compute coordinates based on alignment
-            const coords = await align(name, projection, alignment)
+            const coords = await align(name, projection, alignment, props)
             const offsetCoords = await applyOffsets(coords.x, coords.y, name, alignment)
             // pass the field values to the name's spawn point factory and get a new spawn point
             const spawnPoint = factory.create({ name, alignment, projection, ...offsetCoords, ...props })
