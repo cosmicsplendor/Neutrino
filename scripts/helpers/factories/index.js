@@ -34,6 +34,33 @@ const lasers = () => {
         }
     }
 }
+
+const saws = (data = { name: "saw2", field: "width" }) => {
+    const dims = data.field === "width" ? { width: 72, height: 24 } : { width: 24, height: 72 }
+    return {
+        fields: [data.field],
+        dims: ({ width: w = 1, height: h = 1 }) => {
+            return {
+                width: w * dims.width,
+                height: h * dims.height
+            }
+        },
+        create() {
+            const { x, y, width, height } = params
+            /**
+             */
+
+            if (data.field === "height") {
+                return Array(+height).fill(0).map((_, i) => {
+                    return { x: x, y: y + (i * dims.height), name: data.name }
+                })
+            }
+            return Array(+width).fill(0).map((_, i) => {
+                return { x: x + i * dims.width, y:  y }
+            })
+        }
+    }
+}
 const factories = {
     player: {
         fields: [], // No specific props inferred from the original code
@@ -195,10 +222,10 @@ const factories = {
         create(params) {
             const { x: originX, y: originY } = params
             const { block } = this
-            const dx = this.extendedLeft ? 1: 0
+            const dx = this.extendedLeft ? 1 : 0
             const dy = block.h - 4
             const gateY = originY + (TILE_SIZE * block.h) - 56
-            const gate = { y: gateY, x: originX + (dx + 2.5) * TILE_SIZE - 56, name: "gate", endY: gateY - 128  }
+            const gate = { y: gateY, x: originX + (dx + 2.5) * TILE_SIZE - 56, name: "gate", endY: gateY - 128 }
 
             const blocks = block.children.flatMap(decomposeBlocks)
                 .map(b => {
@@ -211,11 +238,11 @@ const factories = {
         }
     },
     pillar: {
-        fields: [ "height" ],
+        fields: ["height"],
         dims({ height }) {
             return {
-                width: 40, height: 128 * params.height
-            } 
+                width: 40, height: 128 * height
+            }
         },
         create(params) {
             const { x, y, height } = params
@@ -223,6 +250,11 @@ const factories = {
                 return { x: x, y: y + (i * 128), name: "pillar" }
             })
         }
-    }
+    },
+    topSaw: saws({ name: "saw1", field: "width" }),
+    bottomSaw: saws({ name: "saw2", field: "width" }),
+    spike: saws({ name: "spike", field: "width" }),
+    leftSaw: saws({ name: "saw4", field: "height" }),
+    rightSaw: saws({ name: "saw3", field: "height" })
 }
 module.exports = factories
