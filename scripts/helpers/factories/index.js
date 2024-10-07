@@ -39,8 +39,9 @@ const lasers = () => {
     }
 }
 
-const saws = (data = { name: "saw2", field: "width" }) => {
-    const dims = data.field === "width" ? { width: 72, height: 24 } : { width: 24, height: 72 }
+const saws = (data = { name: "saw2", field: "width", dims: {width: 0, height: 0}, xOffset: 0 }) => {
+    const dims = data.dims ?? (data.field === "width" ? { width: 72, height: 24 } : { width: 24, height: 72 })
+    const xOffset = data.xOffset ?? 0
     return {
         fields: [data.field],
         dims: ({ width: w = 1, height: h = 1 }) => {
@@ -57,7 +58,7 @@ const saws = (data = { name: "saw2", field: "width" }) => {
                 })
             }
             return Array(+width).fill(0).map((_, i) => {
-                return { x: x + i * dims.width, y:  y, name: data.name }
+                return { x: x + (i + 1) * xOffset + i * dims.width, y:  y, name: data.name }
             })
         }
     }
@@ -252,8 +253,26 @@ const factories = {
     },
     topSaw: saws({ name: "saw1", field: "width" }),
     bottomSaw: saws({ name: "saw2", field: "width" }),
-    spike: saws({ name: "spike", field: "width" }),
+    spike: saws({ name: "spike", field: "width", dims: { width: 80, height: 40 }, xOffset: 8 }),
     leftSaw: saws({ name: "saw4", field: "height" }),
-    rightSaw: saws({ name: "saw3", field: "height" })
+    rightSaw: saws({ name: "saw3", field: "height" }),
+    bridge: {
+        fields: ["width"],
+        dims({ width=1 }) {
+            return {
+                width: 240 * width, height: 104
+            }
+        },
+        create(params) {
+            const { x, y, width } = params
+            return Array(width).fill((_, i) => {
+                const iX = x + i * 240
+                return [
+                    { name: "br1", x: iX, y: y + 8 },
+                    { name: "br2", x: iX, y: y }
+                ]
+            })
+        }
+    }
 }
 module.exports = factories
