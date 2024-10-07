@@ -1,5 +1,6 @@
 const fs = require("fs/promises")
 const collisionMatMap = require("./collisionMatMap.json");
+const layerMap = require("./layerMap.json")
 
 const rand = (to, from = 0) => from + Math.floor((to - from + 1) * Math.random());
 const skewedRand = (to, from = 0) => from + Math.floor((to - from + 1) * Math.random() * Math.random());
@@ -382,17 +383,19 @@ class Map extends Block {
         }
         this.tempCollisionRects.push({ x, y, w: dims.width, h: dims.height, mat })
     }
-    async addTempSpawnPoint(point, layer) {
+    async addTempSpawnPoint(point) {
         if (Array.isArray(point)) {
             if (point.colRect) {
                 this.tempCollisionRects.push(point.colRect)
             }
             for (const p of point) {
+                const layer = layerMap[p.name]
                 if (layer) p.layer = layer
                 this.tempSpawnPoints.push(p)
                 await this.addTempColRect(p)
             }
         } else {
+            const layer = layerMap[point.name]
             if (layer) point.layer = layer
             this.tempSpawnPoints.push(point)
             await this.addTempColRect(point)
