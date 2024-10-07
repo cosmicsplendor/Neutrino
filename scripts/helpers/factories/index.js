@@ -301,8 +301,11 @@ const stackables = ({ name, dims }) => {
             let prevWidth = width
             for (let i = 1; i < height; i++) {
                 const weight = density / 100
-                const newWidth = prevWidth * weight + 1 * (1 - weight)
+                const newWidth = weightedRand(0, prevWidth, weight)
                 prevWidth = newWidth
+                parent.addPart({ 
+                    width: newWidth, height: 1, position: pickOne(STACK_TOP), onto: "last"
+                })
             }
         },
         createVertical(width, height, density) {

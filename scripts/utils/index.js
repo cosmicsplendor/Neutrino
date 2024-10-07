@@ -5,13 +5,17 @@ const layerMap = require("./layerMap.json")
 const rand = (to, from = 0) => from + Math.floor((to - from + 1) * Math.random());
 const skewedRand = (to, from = 0) => from + Math.floor((to - from + 1) * Math.random() * Math.random());
 const pickOne = arr => arr[rand(arr.length - 1)];
+const clamp = (min, max, value) => Math.max(min, Math.min(max, value));
 
 function weightedRand(from, to, density) {
     if (density === 0) return from;
+
     const weight = density / 100;
     const random = Array(5).fill(0).map(() => Math.random()).reduce((acc, x) => x + acc, 0) / 5; // Adds more variability
-    const value = from + (to - from) * weight;
-    return Math.round(value * random * 2);
+    const mean = from + (to - from) * weight;
+    const value = Math.round(mean * random * 2);
+
+    return clamp(Math.min(from, to), Math.max(from, to), value);
 }
 
 function mergeRects(rects) {
