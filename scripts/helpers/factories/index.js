@@ -4,17 +4,21 @@ const TILE_SIZE = 48
 const STACK_TOP = ["top-start", "top-end", "top"]
 const STACK_LEFT = ["left-start", "left-end", "left"]
 const STACK_RIGHT = ["right-start", "right-end", "right"]
-const sawBlades = () => {
+const sawBlades = (nameMap) => {
     return {
-        fields: ['toX', 'toY', 'speed'], // Based on SawBlade constructor
+        fields: ['toX', 'toY', 'speed', "size" ], // Based on SawBlade constructor
+        dims: (params, atlas) => {
+            const { width, height } = atlas[nameMap[params.size]]
+            return { width, height }
+        },
         create: (params) => {
-            const { x, y, toX, toY, speed, name } = params
+            const { x, y, toX, toY, speed, size } = params
             return {
                 // these should come in relative grid space
                 x, y,
                 toX: x + Number(toX) * TILE_SIZE,
                 toY: y + Number(toY) * TILE_SIZE,
-                name: name,
+                name: nameMap[size],
                 speed: +speed
             }
         }
@@ -45,22 +49,20 @@ const saws = (data = { name: "saw2", field: "width" }) => {
                 height: h * dims.height
             }
         },
-        create() {
+        create(params) {
             const { x, y, width, height } = params
-            /**
-             */
-
             if (data.field === "height") {
                 return Array(+height).fill(0).map((_, i) => {
                     return { x: x, y: y + (i * dims.height), name: data.name }
                 })
             }
             return Array(+width).fill(0).map((_, i) => {
-                return { x: x + i * dims.width, y:  y }
+                return { x: x + i * dims.width, y:  y, name: data.name }
             })
         }
     }
 }
+
 const factories = {
     player: {
         fields: [], // No specific props inferred from the original code
@@ -106,12 +108,9 @@ const factories = {
             return params
         }
     },
-    sb1: sawBlades(),
-    sb2: sawBlades(),
-    sb3: sawBlades(),
-    sb4: sawBlades(),
-    sb5: sawBlades(),
-    sb6: sawBlades(),
+    gearBlade: sawBlades({ small: "sb2", large: "sb6"}),
+    spikeBlade: sawBlades({ small: "sb3", large: "sb5"}),
+    buttonBlade: sawBlades({ small: "sb1", large: "sb4"}),
     lcr1: {
         fields: ['luck', 'dmg'], // Based on Crate constructor
         create: (params) => {
