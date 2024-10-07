@@ -11,7 +11,8 @@ function weightedRand(from, to, density) {
     if (density === 0) return from;
 
     const weight = density / 100;
-    const random = Array(5).fill(0).map(() => Math.random()).reduce((acc, x) => x + acc, 0) / 5; // Adds more variability
+    // const random = Array(5).fill(0).map(() => Math.random()).reduce((acc, x) => x + acc, 0) / 5; // Adds more variability
+    const random = Math.random()
     const mean = from + (to - from) * weight;
     const value = Math.round(mean * random * 2);
 

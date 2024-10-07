@@ -1,4 +1,4 @@
-const { skewedRand, pickOne, rand, CompositeBlock, Block, decomposeBlocks } = require("../../utils")
+const { skewedRand, pickOne, rand, CompositeBlock, Block, decomposeBlocks, weightedRand } = require("../../utils")
 const groupMap = require("../../utils/groupMap.json")
 const TILE_SIZE = 48
 const STACK_TOP = ["top-start", "top-end", "top"]
@@ -7,7 +7,7 @@ const STACK_RIGHT = ["right-start", "right-end", "right"]
 
 const sawBlades = (nameMap) => {
     return {
-        fields: ['toX', 'toY', 'speed', "size" ], // Based on SawBlade constructor
+        fields: ['toX', 'toY', 'speed', "size"], // Based on SawBlade constructor
         dims: (params, atlas) => {
             const { width, height } = atlas[nameMap[params.size]]
             return { width, height }
@@ -41,7 +41,7 @@ const lasers = () => {
     }
 }
 
-const saws = (data = { name: "saw2", field: "width", dims: {width: 0, height: 0}, xOffset: 0 }) => {
+const saws = (data = { name: "saw2", field: "width", dims: { width: 0, height: 0 }, xOffset: 0 }) => {
     const dims = data.dims ?? (data.field === "width" ? { width: 72, height: 24 } : { width: 24, height: 72 })
     const xOffset = data.xOffset ?? 0
     return {
@@ -60,7 +60,48 @@ const saws = (data = { name: "saw2", field: "width", dims: {width: 0, height: 0}
                 })
             }
             return Array(+width).fill(0).map((_, i) => {
-                return { x: x + (i + 1) * xOffset + i * dims.width, y:  y, name: data.name }
+                return { x: x + (i + 1) * xOffset + i * dims.width, y: y, name: data.name }
+            })
+        }
+    }
+}
+
+const stackables = ({ name, dims }) => {
+    return {
+        fields: ["width", "height", "density"],
+        dims: ({ width, height }) => {
+            return {
+                width: width * dims.width,
+                height: height * dims.height
+            }
+        },
+        createHorizontal(width, height, density) {
+            const parent = new CompositeBlock(new Block(width, 1))
+            let prevWidth = width
+            for (let i = 1; i < height; i++) {
+                const newWidth = weightedRand(0, prevWidth, density)
+                prevWidth = newWidth
+                parent.addPart({
+                    width: newWidth, height: 1, position: pickOne(STACK_TOP), onto: "last"
+                })
+            }
+            return parent
+        },
+        createVertical(width, height, density) {
+
+        },
+        createBlocks(width, height, density) {
+            const vertical = rand(1, 0)
+            if (vertical) {
+                return this.createVertical(width, height, density)
+            }
+            return this.createHorizontal(width, height, density)
+        },
+        create(params) {
+            const { x, y, width, height, density } = params
+            const block = this.createHorizontal(width, height, density)
+            return block.children.flatMap(decomposeBlocks).map(b => {
+                return { x: x + b.x * dims.width, y: y + (b.y + +height - 1) * dims.height, name: name }
             })
         }
     }
@@ -111,9 +152,9 @@ const factories = {
             return params
         }
     },
-    gearBlade: sawBlades({ small: "sb2", large: "sb6"}),
-    spikeBlade: sawBlades({ small: "sb3", large: "sb5"}),
-    buttonBlade: sawBlades({ small: "sb1", large: "sb4"}),
+    gearBlade: sawBlades({ small: "sb2", large: "sb6" }),
+    spikeBlade: sawBlades({ small: "sb3", large: "sb5" }),
+    buttonBlade: sawBlades({ small: "sb1", large: "sb4" }),
     lcr1: {
         fields: ['luck', 'dmg'], // Based on Crate constructor
         create: (params) => {
@@ -199,7 +240,7 @@ const factories = {
     rightSaw: saws({ name: "saw3", field: "height" }),
     bridge: {
         fields: ["width"],
-        dims({ width=1 }) {
+        dims({ width = 1 }) {
             return {
                 width: (240 + 16) * width + 16, height: 104
             }
@@ -275,53 +316,16 @@ const factories = {
             const gateY = originY + (TILE_SIZE * block.h) - 56
             const gate = { y: gateY, x: originX + (dx + 2.5) * TILE_SIZE - 56, name: "gate", endY: gateY - 128 }
 
-            const blocks = block.children.flatMap(decomposeBlocks)
-                .map(b => {
-                    return { x: originX + (b.x + dx) * TILE_SIZE, y: originY + (b.y + dy) * TILE_SIZE, name: "wt_1" }
-                })
+            const blocks = block.children.flatMap(decomposeBlocks).map(b => {
+                return { x: originX + (b.x + dx) * TILE_SIZE, y: originY + (b.y + dy) * TILE_SIZE, name: "wt_1" }
+            })
             return [
                 gate,
                 ...blocks
             ]
         }
-    }
+    },
+    crate: stackables({ name: "crate", dims: { width: 88, height: 88 }})
 }
 
-const stackables = ({ name, dims }) => {
-    return {
-        fields: [ "width", "height", "density"],
-        dims: ({ width, height }) => {
-            return {
-                width: width * dims.width,
-                height: height * dims.height
-            }
-        },
-        createHorizontal(width, height, density) {
-            const parent = new CompositeBlock(new Block(width, 1))
-            let prevWidth = width
-            for (let i = 1; i < height; i++) {
-                const weight = density / 100
-                const newWidth = weightedRand(0, prevWidth, weight)
-                prevWidth = newWidth
-                parent.addPart({ 
-                    width: newWidth, height: 1, position: pickOne(STACK_TOP), onto: "last"
-                })
-            }
-        },
-        createVertical(width, height, density) {
-
-        },
-        createBlocks(width, height, density) {
-            const vertical = rand(1, 0)
-            if (vertical) {
-                return this.createVertical(width, height, density)
-            }
-            return this.createHorizontal(width, height, density)
-        },
-        create(params) {
-            const { x, y, width, height, density } = params
-            const blocks = this.createBlocks(width, height, density)
-        }
-    }
-}
 module.exports = factories
