@@ -79,7 +79,7 @@ const placeObject = async (index, projections, map) => {
             const offsetCoords = await applyOffsets(coords.x, coords.y, name, alignment)
             // pass the field values to the name's spawn point factory and get a new spawn point
             const spawnPoint = factory.create({ name, alignment, projection, ...offsetCoords, ...props })
-
+            
             // store the spawn point temporarily, map.addTempSpawnPoint
             await map.addTempSpawnPoint(spawnPoint, layer)
 

@@ -212,16 +212,15 @@ const factories = {
     },
     pillar: {
         fields: [ "height" ],
-        dims(props) {
-            console.log(props)
+        dims({ height }) {
             return {
-                width: 40, height: 128 * props.height
+                width: 40, height: 128 * params.height
             } 
         },
         create(params) {
             const { x, y, height } = params
-            return Array(height).fill(0).map((_, i) => {
-                return { x: x, y: y + i * height, name: "pillar" }
+            return Array(+height).fill(0).map((_, i) => {
+                return { x: x, y: y + (i * 128), name: "pillar" }
             })
         }
     }

@@ -1,9 +1,10 @@
 const atlasCache = require("../helpers/atlasCache");
 const factories = require("../helpers/factories")
 const getDims = async (key, props) => {
-    if (key === "checkpoint") return { width: 0, height: 0 }
+    if (key === "checkpoint") return { width: 64, height: 64 }
     const atlas = await atlasCache.get()
-    if (factories[key] && typeof factories[key].dims === "function") {
+    if (factories[key] && typeof factories[key].dims === "function" && props) {
+        // if there is no prop, understand that it's getting called for a single sprite
         return factories[key].dims(props, atlas)
     }
     const dims = atlas[key]
