@@ -1,18 +1,9 @@
-const term = require('terminal-kit').terminal;
-
-async function testMenu() {
-    term.grabInput(true); // Enable raw mode for terminal input
-
-    console.log('Prompting for selection...');
-    const menu = await term.singleColumnMenu(['Yes', 'No'], {
-        title: 'Would you like to add another object?'
-    }).promise;
-
-    console.log('Got selected menu option:', menu.selectedText);
-
-    // Reset terminal and exit
-    term.grabInput(false);
-    process.exit();
+function weightedRand(from, to, density) {
+    if (density === 0) return from;
+    const weight = density / 100;
+    const random = Array(5).fill(0).map(() => Math.random()).reduce((acc, x) => x + acc, 0) / 5; // Adds more variability
+    const value = from + (to - from) * weight;
+    return Math.round(value * random * 2);
 }
 
-testMenu();
+console.log(weightedRand(0, 100, 25))
