@@ -277,6 +277,9 @@ const factories = {
                 y: y,
                 name: "br2"
             })
+            results.colRect = {
+                x: x, y: y + 16, h: 24, mat: "wood", w: 256 * width + 16
+            }
             return results
         }
     }
