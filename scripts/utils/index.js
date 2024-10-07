@@ -6,7 +6,12 @@ const rand = (to, from = 0) => from + Math.floor((to - from + 1) * Math.random()
 const skewedRand = (to, from = 0) => from + Math.floor((to - from + 1) * Math.random() * Math.random());
 const pickOne = arr => arr[rand(arr.length - 1)];
 
-
+function weightedRand(from, to, density) {
+    const weight = density / 100;
+    const random = Math.random();
+    const value = from + (to - from) * weight + (to - from) * random * (1 - weight);
+    return Math.round(value);
+}
 
 function mergeRects(rects) {
     if (rects.length === 0) return []
@@ -545,6 +550,7 @@ module.exports = {
     Map,
     generateGrid,
     rand,
+    weightedRand,
     skewedRand,
     pickOne,
     convertToWorld,

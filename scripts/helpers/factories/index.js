@@ -300,7 +300,8 @@ const stackables = ({ name, dims }) => {
             const parent = new CompositeBlock(new Block(width, 1))
             let prevWidth = width
             for (let i = 1; i < height; i++) {
-                const newWidth = rand(prevWidth, 1)
+                const weight = density / 100
+                const newWidth = prevWidth * weight + 1 * (1 - weight)
                 prevWidth = newWidth
             }
         },
