@@ -347,8 +347,8 @@ class Map extends Block {
         this.collapsedTiles.push({ x, y })
     }
     player = { name: "player", x: 0, y: 0 } // temporary player for level design (helps in focusing camera)
-    setPlayer(block) {
-        this.player = { name: "player", ...calcStacked(convertToWorld(block, this.tileW), { w: 64, h: 64 }, "top") }
+    centerCamera(block) {
+        this.player = { name: "player", temp: true, ...calcStacked(convertToWorld(block, this.tileW), { w: 64, h: 64 }, "top") }
     }
     bg = "#132b27"
     mob_bg = "#132b27"
@@ -434,7 +434,7 @@ class Map extends Block {
         await this.exportMap()
     }
     addCompositeBlock({ block, layer = "fg", skipCollisionTest }) {
-        this.setPlayer(block)
+        this.centerCamera(block)
         if (!(block instanceof CompositeBlock)) return
         for (const child of block.children) {
             this.addPlainBlock({ block: child, layer, skipCollisionTest: true })
