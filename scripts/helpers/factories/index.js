@@ -94,17 +94,18 @@ const stackables = ({ name, dims }) => {
             for (let i = 1; i < width; i++) {
                 const newHeight = weightedRand(0, prevHeight, density)
                 parent.addPart({
-                    width: 1, height: newHeight, position: "bottom-start"
+                    width: 1, height: newHeight, position: "right-end", onto: "last"
                 })
             }
             return parent
         },
         createBlocks(x, y, width, height, density) {
             const vertical = rand(1, 0)
+            console.log(vertical ? "Vertical": "Horizontal")
             const block = vertical ? this.createVertical(width, height, density): this.createHorizontal(width, height, density)
             return block.children.flatMap(decomposeBlocks).map(b => {
-                const dy = vertical ? 1: +height
-                return { x: x + b.x * dims.width, y: y + (b.y + dy - 1) * dims.height, name: typeof name === "function" ? name(): name }
+                const dy = vertical ? 0: +height - 1
+                return { x: x + b.x * dims.width, y: y + (b.y + dy) * dims.height, name: typeof name === "function" ? name(): name }
             })
         },
         create(params) {
