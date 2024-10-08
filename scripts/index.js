@@ -72,9 +72,7 @@ const placeObject = async (index, projections, map) => {
             const moreFields = factory.fields
             const props = (Array.isArray(moreFields)) ? await promptFields(moreFields): {}
 
-            // compute coordinates based on alignment
-            const coords = await align(name, projection, alignment, props)
-            const offsetCoords = await applyOffsets(coords.x, coords.y, name, alignment)
+
 
             const choices = ['Proceed', 'Retry', 'Discard']
             if (factory?.randomize) choices.unshift("Randomize")
@@ -82,6 +80,9 @@ const placeObject = async (index, projections, map) => {
             let nextMove = "Randomize" // start off with randomize to get the first iteration running
             while (nextMove === "Randomize") {
                 await map.clearTempSpawnPoint()
+                // compute coordinates based on alignment
+                const coords = await align(name, projection, alignment, props)
+                const offsetCoords = await applyOffsets(coords.x, coords.y, name, alignment)
                 const spawnPoint = factory.create({ name, alignment, projection, ...offsetCoords, ...props })
                 await map.addTempSpawnPoint(spawnPoint)
 
