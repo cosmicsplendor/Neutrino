@@ -67,7 +67,7 @@ function groupAndMergeRectsByMat(rects) {
 
     // Step 1: Group rectangles by their `mat` property
     const groupedByMat = rects.reduce((groups, rect) => {
-        const mat = rect.mat
+        const mat = rect.mat ?? "concrete"
         if (!groups[mat]) {
             groups[mat] = []
         }
@@ -429,7 +429,8 @@ class Map extends Block {
                 p.collapsed.forEach(t => this.collapseTile(t))
             }
         })
-        this.tempCollisionRects.forEach(r => this.objCollisionRects.push(r))
+        groupAndMergeRectsByMat(this.tempCollisionRects).forEach(r => this.objCollisionRects.push(r))
+        this.tempCollisionRects.length = 0
         this.tempSpawnPoints.length = 0
         await this.exportMap()
     }
@@ -504,9 +505,10 @@ class Map extends Block {
             const { x, y, w, h, mat } = rect
             return { x: x * tileW, y: y * tileW, width: w * tileW, height: h * tileW, mat }
         })
-        groupAndMergeRectsByMat(this.objCollisionRects.concat(this.tempCollisionRects)).forEach(r => {
+        this.objCollisionRects.concat(this.tempCollisionRects).forEach(r => {
             collisionRects.push({ x: r.x, y: r.y, width: r.w, height: r.h, mat: r.mat })
         })
+        await fs.writeFile("./test.json", JSON.stringify(collisionRects))
         const spawnPoints = this.spawnPoints.concat(this.player)
         const checkpoints = this.checkpoints
         const exports = { collisionRects, spawnPoints, checkpoints, tempSpawnPoints, fgTiles, tiles, mgTiles, bg, mob_bg, pxbg, tint, width: this.w * tileW, height: this.h * tileW, projections }
