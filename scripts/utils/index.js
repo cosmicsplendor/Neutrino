@@ -507,7 +507,6 @@ class Map extends Block {
         this.objCollisionRects.concat(this.tempCollisionRects).forEach(r => {
             collisionRects.push({ x: r.x, y: r.y, width: r.w, height: r.h, mat: r.mat })
         })
-        await fs.writeFile("./test.json", JSON.stringify(collisionRects))
         const spawnPoints = this.spawnPoints.concat(this.player)
         const checkpoints = this.checkpoints
         const exports = { collisionRects, spawnPoints, checkpoints, tempSpawnPoints, fgTiles, tiles, mgTiles, bg, mob_bg, pxbg, tint, width: this.w * tileW, height: this.h * tileW, projections }
