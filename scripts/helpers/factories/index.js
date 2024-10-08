@@ -104,7 +104,7 @@ const stackables = ({ name, dims }) => {
             const block = vertical ? this.createVertical(width, height, density): this.createHorizontal(width, height, density)
             return block.children.flatMap(decomposeBlocks).map(b => {
                 const dy = vertical ? 1: +height
-                return { x: x + b.x * dims.width, y: y + (b.y + dy - 1) * dims.height, name: name }
+                return { x: x + b.x * dims.width, y: y + (b.y + dy - 1) * dims.height, name: typeof name === "function" ? name(): name }
             })
         },
         create(params) {
@@ -327,7 +327,9 @@ const factories = {
             ]
         }
     },
-    crate: stackables({ name: "crate", dims: { width: 88, height: 88 }})
+    crate: stackables({ name: "crate", dims: { width: 88, height: 88 }}),
+    tyre: stackables({ name: "tyre", dims: { width: 104, height: 32 } }),
+    sc: stackables({ name: () => pickOne([ "sc_blue", "sc_red", "sc_green" ]), dims: { width: 120, height: 120 }})
 }
 
 module.exports = factories
