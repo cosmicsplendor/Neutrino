@@ -412,10 +412,10 @@ class Map extends Block {
         }
         await this.exportMap()
     }
-    async clearTempSpawnPoint() {
+    async clearTempSpawnPoint(exportData=true) {
         this.tempSpawnPoints.length = 0
         this.tempCollisionRects.length = 0
-        await this.exportMap()
+       if (exportData) await this.exportMap()
     }
     async commitTempSpawnPoint() {
         this.tempSpawnPoints.forEach(p => {

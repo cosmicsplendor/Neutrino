@@ -75,13 +75,19 @@ const placeObject = async (index, projections, map) => {
             // compute coordinates based on alignment
             const coords = await align(name, projection, alignment, props)
             const offsetCoords = await applyOffsets(coords.x, coords.y, name, alignment)
-            // pass the field values to the name's spawn point factory and get a new spawn point
-            const spawnPoint = factory.create({ name, alignment, projection, ...offsetCoords, ...props })
-            
-            // store the spawn point temporarily, map.addTempSpawnPoint
-            await map.addTempSpawnPoint(spawnPoint)
 
-            const nextMove = await getChoice(['Proceed', 'Retry', 'Discard']);
+            const choices = ['Proceed', 'Retry', 'Discard']
+            if (factory?.randomize) choices.unshift("Randomize")
+
+            let nextMove = "Randomize" // start off with randomize to get the first iteration running
+            while (nextMove === "Randomize") {
+                await map.clearTempSpawnPoint()
+                const spawnPoint = factory.create({ name, alignment, projection, ...offsetCoords, ...props })
+                await map.addTempSpawnPoint(spawnPoint)
+
+                nextMove = await getChoice(choices);
+            }
+
             if (nextMove === "Proceed") {
                 await map.commitTempSpawnPoint()
                 message(`${name} successfully placed`, "blue")

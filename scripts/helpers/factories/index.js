@@ -68,7 +68,7 @@ const saws = (data = { name: "saw2", field: "width", dims: { width: 0, height: 0
 
 const stackables = ({ name, dims }) => {
     return {
-        randomized: true,
+        randomize: true,
         fields: ["width", "height", "density"],
         dims: ({ width, height }) => {
             return {
@@ -97,6 +97,7 @@ const stackables = ({ name, dims }) => {
                     width: 1, height: newHeight, position: "bottom-start"
                 })
             }
+            return parent
         },
         createBlocks(x, y, width, height, density) {
             const vertical = rand(1, 0)
@@ -116,12 +117,6 @@ const stackables = ({ name, dims }) => {
 const factories = {
     player: {
         fields: [], // No specific props inferred from the original code
-        create: (params) => {
-            // Perform transformation
-            return params
-        }
-    },
-    gate: {
         create: (params) => {
             // Perform transformation
             return params
@@ -274,6 +269,7 @@ const factories = {
     gate: {
         block: null,
         extendedLeft: false,
+        randomize: true,
         reset() {
             this.extendedLeft = false
             this.block = new CompositeBlock(new Block(5, 4))
