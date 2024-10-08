@@ -68,6 +68,7 @@ const saws = (data = { name: "saw2", field: "width", dims: { width: 0, height: 0
 
 const stackables = ({ name, dims }) => {
     return {
+        randomized: true,
         fields: ["width", "height", "density"],
         dims: ({ width, height }) => {
             return {
@@ -88,21 +89,26 @@ const stackables = ({ name, dims }) => {
             return parent
         },
         createVertical(width, height, density) {
-
-        },
-        createBlocks(width, height, density) {
-            const vertical = rand(1, 0)
-            if (vertical) {
-                return this.createVertical(width, height, density)
+            const parent = new CompositeBlock(new Block(1, height))
+            let prevHeight = height
+            for (let i = 1; i < width; i++) {
+                const newHeight = weightedRand(0, prevHeight, density)
+                parent.addPart({
+                    width: 1, height: newHeight, position: "bottom-start"
+                })
             }
-            return this.createHorizontal(width, height, density)
+        },
+        createBlocks(x, y, width, height, density) {
+            const vertical = rand(1, 0)
+            const block = vertical ? this.createVertical(width, height, density): this.createHorizontal(width, height, density)
+            return block.children.flatMap(decomposeBlocks).map(b => {
+                const dy = vertical ? 1: +height
+                return { x: x + b.x * dims.width, y: y + (b.y + dy - 1) * dims.height, name: name }
+            })
         },
         create(params) {
             const { x, y, width, height, density } = params
-            const block = this.createHorizontal(width, height, density)
-            return block.children.flatMap(decomposeBlocks).map(b => {
-                return { x: x + b.x * dims.width, y: y + (b.y + +height - 1) * dims.height, name: name }
-            })
+            return this.createBlocks(x, y, width, height, density)
         }
     }
 }
