@@ -137,15 +137,18 @@ const interactiveGenerateLevel = async () => {
     while (true) {
         const lastBlock = graph.node(iter - 1);
         let newBlock = generateNewBlock(lastBlock, map);
-
         
-        if (newBlock.x + newBlock.w > map.width) {
+        if (newBlock.y + newBlock.h > map.h - (map.floorHeight ?? 4)) {
+            // out of bounds or partly occluded by floor so return
+            continue;
+        }
+
+        if (newBlock.x + newBlock.w > map.w) {
             terminal.green("\nLevel generation complete.\n");
             break;
         }
         
         reconstructMap(map, [...blocks, newBlock])
-        map.printAscii();
 
         await map.exportMap("testlevel")
 
@@ -155,6 +158,7 @@ const interactiveGenerateLevel = async () => {
             graph.setNode(iter, newBlock);
             graph.setEdge(iter - 1, iter);
             blocks.push(newBlock);
+            console.log(newBlock)
             await placeObjects(newBlock, map)
             iter++;
         } else {
@@ -164,7 +168,6 @@ const interactiveGenerateLevel = async () => {
     }
 
     terminal("\nFinal Level:\n");
-    map.printAscii();
     terminal("\nLevel design complete. Press any key to exit.\n");
     terminal.grabInput(true);
     terminal.on('key', () => process.exit());

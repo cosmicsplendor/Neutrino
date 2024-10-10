@@ -343,7 +343,7 @@ class Map extends Block {
         mg: [[]]
     }
     collapsedTiles = []
-    
+
     collapseTile(x, y) {
         this.collapsedTiles.push({ x, y })
     }
@@ -367,7 +367,7 @@ class Map extends Block {
         this.layers.fg = Array.from({ length: height }, () => Array(width).fill(null))
         this.layers.og = Array.from({ length: height }, () => Array(width).fill(null))
         this.layers.mg = Array.from({ length: height }, () => Array(width).fill(null))
-        
+
         this.clear()
         CompositeBlock.registerMap(this)
     }
@@ -386,16 +386,24 @@ class Map extends Block {
         const y = Math.floor(block.y)
         const w = Math.ceil(block.w)
         const h = Math.ceil(block.h)
-        
+
         for (let i = 0; i < h; i++) {
             for (let j = 0; j < w; j++) {
                 // Update the grid for the specified layer
-                this.layers[layer][y + i][x + j] = { x: x + j, y: y + i, w: 1, h: 1 }
+                try {
+                    this.layers[layer][y + i][x + j] = { x: x + j, y: y + i, w: 1, h: 1 }
+
+                } catch(e) {
+                    console.log(block)
+                    console.log(layer)
+                    console.log([this.w, this.h])
+                    throw new Error(e)
+                }
             }
         }
         this.collisionRects.push({ x: block.x, y: block.y, w: block.w, h: block.h })
     }
-    setTile(x, y, name, layer="fg") {
+    setTile(x, y, name, layer = "fg") {
 
     }
     async addTempColRect({ x, y, name }) {
@@ -406,7 +414,7 @@ class Map extends Block {
         // Temp spawn point logic as before...
     }
 
-    async clearTempSpawnPoint(exportData=true) {
+    async clearTempSpawnPoint(exportData = true) {
         this.tempSpawnPoints.length = 0
         this.tempCollisionRects.length = 0
         if (exportData) await this.exportMap()
@@ -469,21 +477,21 @@ class Map extends Block {
         const spawnPoints = this.spawnPoints.concat(this.player)
         const checkpoints = this.checkpoints
 
-        const exports = { 
-            collisionRects, 
-            spawnPoints, 
-            checkpoints, 
-            tempSpawnPoints, 
-            fgTiles, 
-            tiles: ogTiles, 
-            mgTiles, 
-            bg, 
-            mob_bg, 
-            pxbg, 
-            tint, 
-            width: this.w * tileW, 
-            height: this.h * tileW, 
-            projections 
+        const exports = {
+            collisionRects,
+            spawnPoints,
+            checkpoints,
+            tempSpawnPoints,
+            fgTiles,
+            tiles: ogTiles,
+            mgTiles,
+            bg,
+            mob_bg,
+            pxbg,
+            tint,
+            width: this.w * tileW,
+            height: this.h * tileW,
+            projections
         }
 
         await fs.writeFile(`./src/assets/levels/${levelName}.cson`, JSON.stringify(exports))
