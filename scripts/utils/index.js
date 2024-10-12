@@ -391,7 +391,7 @@ class Map extends Block {
             for (let j = 0; j < w; j++) {
                 // Update the grid for the specified layer
                 try {
-                    this.layers[layer][y + i][x + j] = { x: x + j, y: y + i, w: 1, h: 1 }
+                    this.layers[layer][y + i][x + j] = "wt_1"
 
                 } catch(e) {
                     console.log(block)
@@ -404,7 +404,7 @@ class Map extends Block {
         this.collisionRects.push({ x: block.x, y: block.y, w: block.w, h: block.h })
     }
     setTile(x, y, name, layer = "fg") {
-
+        this.layers[layer][y][x] = name
     }
     async addTempColRect({ x, y, name }) {
         const mat = collisionMatMap[name]
@@ -492,11 +492,11 @@ class Map extends Block {
         const { tileW, bg, mob_bg, pxbg, tint, projections, tempSpawnPoints } = this
 
         const flattenLayer = (layerGrid) => {
-            return layerGrid.reduce((flat, row) => {
-                return flat.concat(row.filter(cell => cell !== null).map(cell => {
-                    return { name: "wt_1", x: cell.x * tileW, y: cell.y * tileW }
-                }))
-            }, [])
+            return layerGrid.map((row, j) => {
+                return row.map((cell, i) => {
+                    return { name: cell, x: i * tileW, y: j * tileW }
+                }).filter(cell => cell.name && cell.name !== "empty")
+            }).reduce((flattened, row) => flattened.concat(row), [])
         }
 
         const fgTiles = flattenLayer(this.layers.fg)

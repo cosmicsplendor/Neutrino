@@ -5,6 +5,7 @@ const generateNewBlock = require("./helpers/generateNewBlock")
 const { Map } = require("./utils/index");
 const { Graph } = require('graphlib'); // Use a graph library
 const placeObjects = require('./helpers/placeObjects');
+const generateTiles = require('./helpers/generateTiles');
 
 const initializeMap = () => {
     const map = new Map({
@@ -57,6 +58,7 @@ const interactiveGenerateLevel = async () => {
         const userAccepted = await promptAccept("Do you like this block? (Yes/No)");
 
         if (userAccepted) {
+            generateTiles(map, newBlock)
             graph.setNode(iter, newBlock);
             graph.setEdge(iter - 1, iter);
             blocks.push(newBlock);
