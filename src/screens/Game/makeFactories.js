@@ -122,6 +122,7 @@ export default ({ soundSprite, assetsCache, storage, player, state }) => { // us
     return ({
         player: playerFac,
         gate: (x, y, props, player) => {
+            console.log("HERE")
             return new Gate({
                 pos: { x, y },
                 colSound: null,
