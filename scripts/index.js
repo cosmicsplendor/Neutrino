@@ -1,10 +1,10 @@
 const terminal = require('terminal-kit').terminal;
 const { getInitialBlock } = require('./helpers');
-const { promptAccept,promptFields } = require("./helpers/term")
+const { promptAccept } = require("./helpers/term")
 const generateNewBlock = require("./helpers/generateNewBlock")
 const { Map } = require("./utils/index");
 const { Graph } = require('graphlib'); // Use a graph library
-const { validAlignments } = require('./helpers/alignment');
+const placeObjects = require('./helpers/placeObjects');
 
 const initializeMap = () => {
     const map = new Map({
@@ -20,21 +20,10 @@ const initializeMap = () => {
 }
 const initializeGraph = () => new Graph({ directed: true });
 
-
 const reconstructMap = (map, blocks) => {
     map.clear(); // Clear the existing map
     blocks.forEach(block => block.addToMap());
 };
-
-const queryAlignment = async () => {
-    const { Alignment } = await promptFields(["Alignment"])
-    const valid = validAlignments.includes(Alignment)
-    if (!valid) {
-        terminal.bold.red(`o oh, '${Alignment}' doesn't make sense. Let's try again. .\n`)
-        return queryAlignment()
-    }
-    return Alignment
-}
 
 const interactiveGenerateLevel = async () => {
     let graph = initializeGraph();
@@ -51,7 +40,7 @@ const interactiveGenerateLevel = async () => {
     while (true) {
         const lastBlock = graph.node(iter - 1);
         let newBlock = generateNewBlock(lastBlock, map);
-        if (newBlock.y + newBlock.h > map.h - (map.floorHeight ?? 4)) {
+        if (newBlock.x < 0 || newBlock.y + newBlock.h > map.h - (map.floorHeight ?? 4)) {
             // out of bounds or partly occluded by floor so return
             continue;
         }

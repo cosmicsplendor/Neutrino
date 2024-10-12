@@ -2,9 +2,19 @@ const terminal = require('terminal-kit').terminal;
 const { getChoice, promptAccept, message, promptFields } = require("./term")
 const projectCompositeRects = require('../utils/projectCompositeRects');
 const factories = require("./factories");
-const { align } = require('./alignment');
+const { align, validAlignments } = require('./alignment');
 const atlasCache = require('./atlasCache');
 const applyOffsets = require('./applyOffsets');
+
+const queryAlignment = async () => {
+    const { Alignment } = await promptFields(["Alignment"])
+    const valid = validAlignments.includes(Alignment)
+    if (!valid) {
+        terminal.bold.red(`o oh, '${Alignment}' doesn't make sense. Let's try again. .\n`)
+        return queryAlignment()
+    }
+    return Alignment
+}
 
 const placeObject = async (index, projections, map) => {
     const total = projections.length
@@ -87,3 +97,5 @@ const placeObjects = async (newBlock, map) => {
     }
     map.projections.length = 0
 }
+
+module.exports = placeObjects

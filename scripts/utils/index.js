@@ -407,21 +407,59 @@ class Map extends Block {
 
     }
     async addTempColRect({ x, y, name }) {
-        // Collision logic as before...
+        const mat = collisionMatMap[name]
+        if (!mat) return
+        const getDims = require("./getDims") // dynamic import to avoid circular dependency 
+        const dims = await getDims(name)
+        if (dims.hitBox) {
+            this.tempCollisionRects.push({ x: x + dims.hitBox.x, y: y + dims.hitBox.y, w: dims.hitBox.width, h: dims.hitBox.height, mat })
+            return
+        }
+        if (dims.rotation) {
+            this.tempCollisionRects.push({ x: x, y: y, w: dims.height, h: dims.width, mat })
+            return
+        }
+        this.tempCollisionRects.push({ x, y, w: dims.width, h: dims.height, mat })
     }
-
     async addTempSpawnPoint(point) {
-        // Temp spawn point logic as before...
+        if (Array.isArray(point)) {
+            if (point.colRect) {
+                this.tempCollisionRects.push(point.colRect)
+            }
+            for (const p of point) {
+                const layer = layerMap[p.name]
+                if (layer) p.layer = layer
+                this.tempSpawnPoints.push(p)
+                await this.addTempColRect(p)
+            }
+        } else {
+            const layer = layerMap[point.name]
+            if (layer) point.layer = layer
+            this.tempSpawnPoints.push(point)
+            await this.addTempColRect(point)
+        }
+        await this.exportMap()
     }
-
-    async clearTempSpawnPoint(exportData = true) {
+    async clearTempSpawnPoint(exportData=true) {
         this.tempSpawnPoints.length = 0
         this.tempCollisionRects.length = 0
-        if (exportData) await this.exportMap()
+       if (exportData) await this.exportMap()
     }
-
     async commitTempSpawnPoint() {
-        // Commit temp spawn point logic...
+        this.tempSpawnPoints.forEach(p => {
+            if (p.name === "checkpoint") {
+                this.checkpoints.push(p)
+                return
+            }
+            this.spawnPoints.push(p)
+            if (Array.isArray(p.collapsed)) { // collapse wave function (superposition state)
+                p.collapsed.forEach(t => this.collapseTile(t))
+            }
+        })
+        groupAndMergeRectsByMat(this.tempCollisionRects).forEach(r => this.objCollisionRects.push(r))
+        this.tempCollisionRects.length = 0
+        this.tempSpawnPoints.length = 0
+        await this.exportMap()
     }
 
     addCompositeBlock({ block, layer = "fg", skipCollisionTest }) {
