@@ -5,7 +5,7 @@ const generateNewBlock = require("./helpers/generateNewBlock")
 const { Map } = require("./utils/index");
 const { Graph } = require('graphlib'); // Use a graph library
 const placeObjects = require('./helpers/placeObjects');
-const generateTiles = require('./helpers/generateTiles');
+const {generateTiles, placeTiles} = require('./helpers/generateTiles');
 
 const initializeMap = () => {
     const map = new Map({
@@ -23,7 +23,10 @@ const initializeGraph = () => new Graph({ directed: true });
 
 const reconstructMap = (map, blocks) => {
     map.clear(); // Clear the existing map
-    blocks.forEach(block => block.addToMap());
+    blocks.forEach(block => {
+        block.addToMap()
+        if (block.tilesGrid) placeTiles(map, block, block.tilesGrid)
+    });
 };
 
 const interactiveGenerateLevel = async () => {
@@ -59,11 +62,14 @@ const interactiveGenerateLevel = async () => {
 
         if (userAccepted) {
             while (true) {
-                const undoTiles = generateTiles(map, newBlock)
+                const tilesGrid = generateTiles(newBlock)
+                const undoTiles = placeTiles(map, newBlock, tilesGrid)
                 await map.exportMap()
                 const accepted = await promptAccept("Like this pattern?")
-                console.log({ accepted })
-                if (accepted) break
+                if (accepted) {
+                    newBlock.tilesGrid = tilesGrid
+                    break
+                }
                 undoTiles()
             }
 

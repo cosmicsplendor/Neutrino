@@ -3,9 +3,7 @@ const table = require("./adjacencyTable.js");
 const createGrid = require("./helpers/createGrid");
 const sanitizeGrid = require("./helpers/sanitizeGrid");
 
-const generateTiles = (map, block) => {
-  const grid = createGrid(block, Object.keys(table))
-  execWFC(table, grid)
+const placeTiles = (map, block, grid) => {
   const doneTiles = []
   sanitizeGrid(grid).forEach((row, j) => {
     row.forEach((cell, i) => {
@@ -24,4 +22,10 @@ const generateTiles = (map, block) => {
   }
 }
 
-module.exports = generateTiles
+const generateTiles = (block) => { // takes in composite block
+  const grid = createGrid(block, Object.keys(table))
+  execWFC(table, grid)
+  return grid
+}
+
+module.exports = { placeTiles, generateTiles }
