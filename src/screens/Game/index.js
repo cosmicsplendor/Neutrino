@@ -149,7 +149,6 @@ class GameScreen extends Node { // can only have cameras as children
         this.state.level = levelIdx + 1
         this.teardownUI = teardownUI
         this.updateTimer = updateTimer
-        this.state.play()
     }
     onExit() {
         this.unsetLevel()
@@ -164,7 +163,7 @@ class GameScreen extends Node { // can only have cameras as children
         this.children.forEach(child => {
             Node.updateRecursively(child, dt, t, child) // out-of-view culling on a per-camera basis
         })
-        this.updateTimer(this.state.elapsed)
+        if (!config.testMode) this.updateTimer(this.state.elapsed)
     }
 }
 

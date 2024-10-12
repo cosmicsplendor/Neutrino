@@ -3,7 +3,6 @@ import config from "@config"
 import imgBtn from "@screens/ui/imgBtn"
 import soundImgBtn from "./soundImgBtn"
 import styles from "./style.css"
-import { wait } from "@lib/utils"
 
 const margin = 20
 const hMargin = margin * 0.5 // hMargin
@@ -57,6 +56,7 @@ const renderResult = (resumeImg, curTime, bestTime) => {
 }
 
 export default (uiRoot, player, images, storage, gameState, onClose, resetLevel, focusInst, getCheckpoint, btnSound, errSound, contSound, webAudioSupported, game, sdkInst) => {
+    if (config.testMode) return { updateTiler: () => {}}
     uiRoot.content = render(images, storage.getOrbCount(), webAudioSupported)
     const ctrlBtns = config.isMobile && player.getCtrlBtns()
     const orbInd = uiRoot.get(`#${ORB_IND}`)
