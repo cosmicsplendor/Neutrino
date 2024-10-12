@@ -1,12 +1,12 @@
-const { getDims } = require("../utils")
+const getDims = require("../utils/getDims")
 const { alignmentMap } = require("./alignment")
 
 const blades = [
-    "sb1", "sb2", "sb3", "sb4", "sb5", "sb6"
+    "gearBlade", "spikeBlade", "buttonBlade"
 ]
-const applyOffsets = async (x, y, name, alignment) => {
+const applyOffsets = async (x, y, name, alignment, props) => {
     if (blades.includes(name)) {
-        const dims = await getDims(name)
+        const dims = await getDims(name, props)
         const [ xAlignment, yAlignment ] = alignmentMap[alignment]
         const halfWidth = dims.width * 0.5
         const halfHeight = dims.height * 0.5

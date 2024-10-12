@@ -58,7 +58,7 @@ const placeObject = async (index, projections, map) => {
                 await map.clearTempSpawnPoint()
                 // compute coordinates based on alignment
                 const coords = await align(name, projection, alignment, props)
-                const offsetCoords = await applyOffsets(coords.x, coords.y, name, alignment)
+                const offsetCoords = await applyOffsets(coords.x, coords.y, name, alignment, props)
                 const spawnPoint = factory.create({ name, alignment, projection, ...offsetCoords, ...props })
                 await map.addTempSpawnPoint(spawnPoint)
 

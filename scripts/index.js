@@ -58,7 +58,15 @@ const interactiveGenerateLevel = async () => {
         const userAccepted = await promptAccept("Do you like this block? (Yes/No)");
 
         if (userAccepted) {
-            generateTiles(map, newBlock)
+            while (true) {
+                const undoTiles = generateTiles(map, newBlock)
+                await map.exportMap()
+                const accepted = await promptAccept("Like this pattern?")
+                console.log({ accepted })
+                if (accepted) break
+                undoTiles()
+            }
+
             graph.setNode(iter, newBlock);
             graph.setEdge(iter - 1, iter);
             blocks.push(newBlock);
