@@ -149,6 +149,7 @@ class GameScreen extends Node { // can only have cameras as children
         this.state.level = levelIdx + 1
         this.teardownUI = teardownUI
         this.updateTimer = updateTimer
+        this.state.play()
     }
     onExit() {
         this.unsetLevel()
