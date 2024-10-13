@@ -394,9 +394,6 @@ class Map extends Block {
                     this.layers[layer][y + i][x + j] = "wt_1"
 
                 } catch(e) {
-                    console.log(block)
-                    console.log(layer)
-                    console.log([this.w, this.h])
                     throw new Error(e)
                 }
             }

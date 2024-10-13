@@ -253,18 +253,18 @@ const factories = {
             const results = Array(+width).fill(width).map((_, i) => {
                 const iX = x + i * 240
                 return [
-                    { name: "br1", x: iX + (i + 1) * 16, y: y + 16 },
-                    { name: "br2", x: iX + i * 16, y: y }
+                    { name: "br1", x: iX + (i + 1) * 10, y: y + 10 },
+                    { name: "br2", x: iX + i * 10, y: y }
                 ]
             }).flat()
             results.push({
-                x: x + (240 + 16) * width,
+                x: x + (240 + 10) * width,
                 y: y,
                 name: "br2"
             })
-            results.colRect = {
-                x: x, y: y + 16, h: 24, mat: "wood", w: 256 * width + 16
-            }
+            results.colRects = [{
+                x: x, y: y + 10, h: 24, mat: "wood", w: 256 * width + 10
+            }]
             return results
         }
     },
@@ -316,13 +316,15 @@ const factories = {
             const { x: originX, y: originY } = params
             const { block } = this
             const dx = this.extendedLeft ? 1 : 0
+            const dy = block.h - 4
             const gateY = originY + (TILE_SIZE * block.h) - 56
             const gate = { y: gateY, x: originX + (dx + 2.5) * TILE_SIZE - 56, name: "gate", endY: gateY - 128 }
             const tiles = generateTileSpawnPoints(block, TILE_SIZE, TILE_SIZE, originX, originY)
-            return [
-                gate,
-                ...tiles
-            ]
+            const results = [ gate, ...tiles ]
+            results.colRects = block.collisionRects.map(({ x, y, w, h }) => {
+                return { x: (x + dx) * TILE_SIZE + originX, y: (y + dy) * TILE_SIZE + originY, w: w * TILE_SIZE, h: h * TILE_SIZE}
+            })
+            return results
         }
     },
     crate: stackables({ name: "crate", dims: { width: 88, height: 88 }}),
