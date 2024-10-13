@@ -3,6 +3,7 @@ const table = require("./adjacencyTable.js");
 const createGrid = require("./helpers/createGrid");
 const sanitizeGrid = require("./helpers/sanitizeGrid");
 
+
 const placeTiles = (map, block, grid) => {
   const doneTiles = []
   sanitizeGrid(grid).forEach((row, j) => {
@@ -28,4 +29,17 @@ const generateTiles = (block) => { // takes in composite block
   return grid
 }
 
-module.exports = { placeTiles, generateTiles }
+const generateTileSpawnPoints = (block, tileW, tileH=tileW, x=block.x, y=block.y,) => {
+    const grid = generateTiles(block)
+    return sanitizeGrid(grid)
+    .map((row, j) => {
+      return row.map((cell, i) => {
+        return { x: x + i * tileW, y: y + j * tileH, name: cell }
+      })
+    })
+    .flat()
+    .filter(sp => sp.name !== "empty")
+}
+
+
+module.exports = { placeTiles, generateTiles, generateTileSpawnPoints }
