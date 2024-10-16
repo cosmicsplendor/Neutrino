@@ -7,7 +7,7 @@ import styles from "./style.css"
 const margin = 20
 const hMargin = margin * 0.5 // hMargin
 const orbExpAmt = 2
-const instFocThres = 1400
+const instFocThres = config.isMobile ? 960: 1500
 
 const PAUSE = "pause-btn"
 const RESUME  = "resume-btn"
@@ -269,8 +269,8 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
             player.pos.y = point.y
         }
         const restart = () => {
-            resetLevel()
             const posXAtReset = player.pos.x
+            resetLevel()
             posXAtReset > instFocThres && focusInst() // if the player is not near enough to it's reset spawn point, focus the camera to player position instantly to avoid jarring focus
             gameState.elapsed = 0
             gameState.play()
