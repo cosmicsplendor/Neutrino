@@ -6,3 +6,4 @@ dist-gpix/*.zip
 dist-gm/*.zip
 dist-gm/assets
 dist-gm/*.js
+testlevel.cson
