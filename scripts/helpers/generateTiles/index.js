@@ -8,8 +8,7 @@ const placeTiles = (map, block, grid) => {
     row.forEach((cell, i) => {
       const x = block.x + i
       const y = block.y + j
-      if (cell === "empty") return
-      map.setTile(x, y, cell, "fg")
+      map.setTile(x, y, cell === "empty" ? null: cell, "fg")
       doneTiles.push({ x, y, cell })
     })
   })

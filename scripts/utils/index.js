@@ -403,6 +403,9 @@ class Map extends Block {
     setTile(x, y, name, layer = "fg") {
         this.layers[layer][y][x] = name
     }
+    getTile(x, y, layer = "fg") {
+        return this.layers[layer][y][x]
+    }
     async addTempColRect({ x, y, name }) {
         const mat = collisionMatMap[name]
         if (!mat) return
