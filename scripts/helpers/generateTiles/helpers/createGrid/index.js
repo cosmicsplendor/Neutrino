@@ -1,4 +1,5 @@
 const getTileNumber = require("./getTileNumber")
+const hollowOutGrid = require("./hollowOutGrid")
 
 function createPrereqGrid(data) {
     // Define the grid dimensions
@@ -24,7 +25,6 @@ function createPrereqGrid(data) {
 
     // Create a new grid for the expanded area
     const expandedGrid = Array.from({ length: gridHeight }, () => Array(gridWidth).fill(1)); // Start with all cells set to 1
-
     // Expand the marked areas by 1 unit on all sides
     for (let i = 0; i < gridHeight; i++) {
         for (let j = 0; j < gridWidth; j++) {
@@ -51,8 +51,7 @@ function createPrereqGrid(data) {
             }
         }
     });
-
-    return expandedGrid;
+    return hollowOutGrid(expandedGrid);
 }
 
 const getUndifferentiatedTiles = tiles => {

@@ -37,6 +37,8 @@
 .hidden {
     opacity: 0;
     transition: opacity 0.25s linear;
+    user-select: none;
+    cursor: inherit;
 }
 .overlay {
     border-radius: 5px;

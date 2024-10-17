@@ -1,4 +1,5 @@
 const collapseCell = require("./collapseCell");
+const postprocessGrid = require("./createGrid/postprocessGrid");
 const findLowestEntropyCell = require("./findLowestEntropyCell");
 const propagateConstraints = require("./propagateConstraints");
 const sanitizeGrid = require("./sanitizeGrid")
@@ -14,7 +15,7 @@ function execWFC(table, grid) {
         collapseCell(grid, row, col);
         propagateConstraints(table, grid, row, col);
     }
-    return sanitizeGrid(grid)
+    return postprocessGrid(sanitizeGrid(grid))
 }
 
 module.exports = execWFC
