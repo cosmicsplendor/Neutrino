@@ -23,7 +23,7 @@ function postprocessGrid(grid) {
 
             // Rule 2: Replace wt_5 with wt_17 and the right cell with "empty"
             if (cell === "wt_5" && chance(0.1)) {
-                if (col + 1 < grid[row].length &&  !edgeTiles.includes(grid[row][col + 1])) {
+                if (col + 1 < grid[row].length && !edgeTiles.includes(grid[row][col + 1])) {
                     grid[row][col] = "wt_17";
                     grid[row][col + 1] = "empty";
                 }
@@ -31,7 +31,7 @@ function postprocessGrid(grid) {
 
             // Rule 3: Replace wt_2 with wt_14 and the right cell with "empty"
             if (cell === "wt_2" && chance(0.1)) {
-                if (col + 1 < grid[row].length && grid[row][col + 1] !== "empty") {
+                if (col + 1 < grid[row].length && grid[row][col + 1] !== "empty" && !edgeTiles.includes(grid[row][col + 1])) {
                     grid[row][col] = "wt_14";
                     grid[row][col + 1] = "empty";
                 }
@@ -39,7 +39,7 @@ function postprocessGrid(grid) {
 
             // Rule 4: Replace the left cell of wt_3 with wt_15 and itself with "empty"
             if (cell === "wt_3" && chance(0.1)) {
-                if (col - 1 >= 0 && grid[row][col - 1] !== "empty") {
+                if (col - 1 >= 0 && grid[row][col - 1] !== "empty" && !edgeTiles.includes(grid[row][col - 1])) {
                     grid[row][col - 1] = "wt_15";
                     grid[row][col] = "empty";
                 }
@@ -82,9 +82,14 @@ function postprocessGrid(grid) {
             return cell === "empty" ? 0: 1
         })
     })
-    findEnclosed0Cols(sanitizedGrid).forEach(({ row, col, height: h}) => {
+    findEnclosed0Cols(sanitizedGrid).forEach(({ row, col, height: h}, _, cols) => {
+
+        if (cols.length === 0 && h == 1) { // unit cells must be empty
+            return
+        }
+
         const rand = Math.random()
-        const height = Math.ceil((1 - rand * rand) * h)
+        const height = h === 1 ? Math.floor(2 * Math.random()): Math.ceil((1 - rand * rand) * h)
         for (let i = 0; i < height; i++) {
             const tile = getEnclosedTile(i, height, h)
             grid[row+i][col] = tile
