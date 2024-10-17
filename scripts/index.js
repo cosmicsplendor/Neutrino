@@ -1,6 +1,6 @@
 const terminal = require('terminal-kit').terminal;
 const { getInitialBlock } = require('./helpers');
-const { promptAccept } = require("./helpers/term")
+const { promptAccept, getChoice } = require("./helpers/term")
 const generateNewBlock = require("./helpers/generateNewBlock")
 const { Map } = require("./utils/index");
 const { Graph } = require('graphlib'); // Use a graph library
@@ -58,14 +58,14 @@ const interactiveGenerateLevel = async () => {
 
         await map.exportMap("testlevel")
 
-        const userAccepted = await promptAccept("Do you like this block? (Yes/No)");
+        const userAccepted = await promptAccept("Do you like this block? (Yes/No)", noFirst=true);
 
         if (userAccepted) {
             while (true) {
                 const tilesGrid = generateTiles(newBlock)
                 const undoTiles = placeTiles(map, newBlock, tilesGrid)
                 await map.exportMap()
-                const accepted = await promptAccept("Like this pattern?")
+                const accepted = (await getChoice(["Randomize", "Proceed"], "Like this pattern?")) === "Proceed"
                 if (accepted) {
                     newBlock.tilesGrid = tilesGrid
                     break
