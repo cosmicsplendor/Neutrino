@@ -28,8 +28,8 @@ const generateNewBlock = (prevBlock, map) => {
     if (expandDir === "horizontal") {
         const params = {
             position: pickOne(["right", "right-start", "right-end"]),
-            dx: skewedRand(8, 3),
-            dy: 2 * skewedRand(2, 1) + rand(2, 1)
+            dx: skewedRand(10, 3),
+            dy: 2 * skewedRand(2, 1) + rand(rand(4, 1), 1)
         };
         newBlock.stackOn(prevBlock, params);
     } else {
