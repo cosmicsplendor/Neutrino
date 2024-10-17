@@ -8,14 +8,15 @@ const placeTiles = (map, block, grid) => {
     row.forEach((cell, i) => {
       const x = block.x + i
       const y = block.y + j
+      const prevCell = map.getTile(x, y, "fg")
       map.setTile(x, y, cell === "empty" ? null: cell, "fg")
-      doneTiles.push({ x, y, cell })
+      doneTiles.push({ x, y, cell: prevCell })
     })
   })
 
   return function undo() {
     doneTiles.forEach(tile => {
-      map.setTile(tile.x, tile.y, null)
+      map.setTile(tile.x, tile.y, tile.cell)
     })
   }
 }
