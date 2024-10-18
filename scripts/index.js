@@ -115,7 +115,7 @@ const scan = async (map, block) => {
                     if (tileNumber === 5) return
                     map.setTile(block.x + i, block.y - 1 + j, "wt_1")
                 }
-                map.setTile(block.x - 1 + i, block.y - 1 + j, `wt_${tileNumber}`)
+                map.collapseTile(block.x - 1 + i, block.y - 1 + j, `wt_${tileNumber}`)
             }
         })
     })

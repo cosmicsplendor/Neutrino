@@ -350,7 +350,6 @@ class Map extends Block {
     collapseTile({x, y, tile, layer="fg"}) {
         const gridX = x / 48
         const gridY = y / 48
-        console.log({ gridX, gridY })
         this.setTile(gridX, gridY, tile)
         this.collapsedTiles[layer][`${y}-${x}`] = tile
     }
