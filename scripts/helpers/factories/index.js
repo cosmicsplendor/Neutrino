@@ -6,21 +6,22 @@ const STACK_TOP = ["top-start", "top-end", "top"]
 const STACK_LEFT = ["left-start", "left-end", "left"]
 const STACK_RIGHT = ["right-start", "right-end", "right"]
 
-const sawBlades = (nameMap) => {
+const sawBlades = (config) => {
     return {
-        fields: ['toX', 'toY', 'speed', "size"], // Based on SawBlade constructor
+        fields: config.static ? ["size"]: ['toX', 'toY', 'speed', "size"], // Based on SawBlade constructor
         dims: (params, atlas) => {
-            const { width, height } = atlas[nameMap[params.size]]
+            const { width, height } = atlas[config[params.size]]
             return { width, height }
         },
         create: (params) => {
             const { x, y, toX, toY, speed, size } = params
+            if (config.static) return { name: config[size] }
             return {
                 // these should come in relative grid space
                 x, y,
                 toX: x + Number(toX) * TILE_SIZE,
                 toY: y + Number(toY) * TILE_SIZE,
-                name: nameMap[size],
+                name: config[size],
                 speed: +speed
             }
         }
@@ -41,6 +42,7 @@ const lasers = ({static=false, horizontal=true}) => {
         fields: fields,
         create: (params) => {
             const { x, y, toX, toY, speed, num, period, delay, name } = params
+            if (static) return { name, delay: +delay, period: +period }
             return {
                 x, y,
                 toX: x + Number(toX) * TILE_SIZE, toY: y + Number(toY) * TILE_SIZE,
@@ -158,8 +160,11 @@ const factories = {
         }
     },
     gearBlade: sawBlades({ small: "sb2", large: "sb6" }),
+    gearBladeStatic: sawBlades({ small: "sb2", large: "sb6", static: true }),
     spikeBlade: sawBlades({ small: "sb3", large: "sb5" }),
+    spikeBladeStatic: sawBlades({ small: "sb3", large: "sb5", static: true }),
     buttonBlade: sawBlades({ small: "sb1", large: "sb4" }),
+    buttonBladeStatic: sawBlades({ small: "sb1", large: "sb4", static: true }),
     lcr1: {
         fields: ['luck', 'dmg'], // Based on Crate constructor
         create: (params) => {
