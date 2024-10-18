@@ -5,7 +5,7 @@ const generateNewBlock = require("./helpers/generateNewBlock")
 const { Map } = require("./utils/index");
 const { Graph } = require('graphlib'); // Use a graph library
 const placeObjects = require('./helpers/placeObjects');
-const {generateTiles, placeTiles} = require('./helpers/generateTiles');
+const { generateTiles, placeTiles } = require('./helpers/generateTiles');
 const generateFloor = require('./helpers/generateFloor');
 const getTileNumber = require('./helpers/generateTiles/helpers/createGrid/getTileNumber');
 
@@ -47,14 +47,9 @@ const decorateBlock = async (map, block) => {
 
 const scan = async (map, block) => {
     const topEmptiers = ["win2"]
-    const leftEmptiers = ["wt_14", "wt_17"]
-    const rightEmptiers = ["wt_15", "wt_16"]
-    const getAdjacentTile = (row, col, dir={x:0,y:0}) => {
-        try {
-            return map.getTile(col+dir.x, row + dir.y)
-        } catch {
-            return null
-        }
+    const leftEmptiers = ["wt_14", "wt_17", "wt_15", "wt_16"]
+    const getAdjacentTile = (row, col, dir = { x: 0, y: 0 }) => {
+        return map.getTile(col + dir.x, row + dir.y)
     }
     const boundingBlock = Array.from({ length: block.h + 4 }, (_, row) => {
         return Array.from({ length: block.w + 4 }, (_, col) => {
@@ -67,7 +62,6 @@ const scan = async (map, block) => {
             const tile = map.getTile(x, y)
             if (!tile) {
                 if (leftEmptiers.includes(leftTile)) return 1
-                if (rightEmptiers.includes(rightTile)) return 1
                 if (topEmptiers.includes(topTile)) return 1
                 return 0
             }
@@ -83,18 +77,46 @@ const scan = async (map, block) => {
         })
     })
     const normalizedGrid = boundingBlock.map(row => {
-        return row.map(cell => !!cell ? 1: 0)
+        return row.map(cell => !!cell ? 1 : 0)
     })
     normalizedGrid.forEach(row => console.log(row.join("")))
 
-    boundingBlock.forEach((row, j) => {
-        row.forEach((cell, i) => {
-            if (i === 0 || j === 0) return
-            if (i > block.w + 2 || j > block.h + 2) return
+    const boundaryInfo = boundingBlock.map((row, j) => {
+        return row.map((cell, i) => {
+            console.log({ i, j })
             const tileNumber = getTileNumber(normalizedGrid, j, i)
-            const num = cell
-            if (num === 0 || num === tileNumber) return
-            map.setTile(block.x - 2 + i, block.y - 2 + j, `wt_${tileNumber}`)
+            return { tileNumber, cell }
+        }).slice(1, row.length - 1)
+    }).slice(1, boundingBlock.length - 1)
+
+    const validIs = [0, 1, block.w, block.w + 1]
+    const validJs = [0, 1, block.h, block.h + 1]
+    /**
+     * got to deal with these following cases:
+     * 1. right edge demolished - scan the grid and make sure tiles right to it is non existent
+     * 2. all the engravings cells should be considered equivalent to wt_9
+     * 3. left edge demolished - equvalent to left edge
+     */
+    const wt9Equiv = ["en11", "en12", "en13", "en14", "en15", "en16"]
+    boundaryInfo.forEach((row, j) => {
+        row.forEach(({ tileNumber, cell }, i) => {
+            if (validIs.includes(i) || validJs.includes(j)) {
+                if (cell === 0) return
+                const tile = map.getTile(block.x+i-1, block.y+j-1)
+                if (wt9Equiv.includes(tile) && tileNumber === 9) return
+                if (tile === "wt_14") {
+                    if (tileNumber === 2) return
+                    if (tileNumber === 5) {
+                        map.setTile(block.x - 1 + i, block.y - 1 + j, "wt_17")
+                        return
+                    }
+                }
+                if (tile === "wt_17") {
+                    if (tileNumber === 5) return
+                    map.setTile(block.x + i, block.y - 1 + j, "wt_1")
+                }
+                map.setTile(block.x - 1 + i, block.y - 1 + j, `wt_${tileNumber}`)
+            }
         })
     })
     await map.exportMap("testlevel")
@@ -107,7 +129,7 @@ const interactiveGenerateLevel = async () => {
     const floor = generateFloor(map)
     // map.addBlock({ block: floor, layer: "fg" })
     let blocks = [floor];
-    
+
     const initialBlock = getInitialBlock(floor, graph)
     blocks.push(initialBlock)
     reconstructMap(map, blocks)
@@ -155,7 +177,7 @@ const interactiveGenerateLevel = async () => {
             if (terminate) break
         }
     }
-    
+
     for (const block of blocks) {
         map.centerCamera(block)
         await placeObjects(block, map)
