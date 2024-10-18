@@ -48,17 +48,17 @@ const interactiveGenerateLevel = async () => {
             // out of bounds or partly occluded by floor so return
             continue;
         }
-
-        if (newBlock.x + newBlock.w > map.w) {
-            terminal.green("\nLevel generation complete.\n");
-            break;
-        }
         
         reconstructMap(map, [...blocks, newBlock])
 
         await map.exportMap("testlevel")
 
-        const userAccepted = await promptAccept("Do you like this block? (Yes/No)", noFirst=true);
+        const choices = ["Retry", "Proceed", "Proceed & Terminate", "Discard & Terminate"]
+        const response = await getChoice(choices, "Like this block?");
+        const proceedAndTerminate = response === choices[2]
+        const discardAndTerminate = response === choices[3]
+        const terminate = proceedAndTerminate || discardAndTerminate
+        const userAccepted = response === choices[1] || proceedAndTerminate
 
         if (userAccepted) {
             while (true) {
@@ -78,9 +78,11 @@ const interactiveGenerateLevel = async () => {
             blocks.push(newBlock);
 
             iter++;
+            if (terminate) break
         } else {
             terminal.red("Retrying current iteration...\n");
             reconstructMap(map, blocks)
+            if (terminate) break
         }
     }
     
