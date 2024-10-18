@@ -5,10 +5,12 @@ const message = async (msg, color, clear=true) => {
     const fn = color ? terminal[color]: terminal 
     fn(`\n${msg}\n`)
 }
-const promptFields = async (fields=["Name", "Alignment"]) => {
+const defaultFieldsFileter = () => true
+const promptFields = async (fields=["Name", "Alignment"], fieldsFilter=defaultFieldsFileter) => {
     terminal.grabInput(true);
     const response = {}
     for (const field of fields) {
+        if (!fieldsFilter(field, response)) continue
         terminal.bold.cyan(`${field}: `);
         const val = await terminal.inputField({
             echo: true,

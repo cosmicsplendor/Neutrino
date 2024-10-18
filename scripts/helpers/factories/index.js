@@ -6,47 +6,50 @@ const STACK_TOP = ["top-start", "top-end", "top"]
 const STACK_LEFT = ["left-start", "left-end", "left"]
 const STACK_RIGHT = ["right-start", "right-end", "right"]
 
-const sawBlades = (config) => {
+const sawBlades = (nameMap) => {
     return {
-        fields: config.static ? ["size"]: ['toX', 'toY', 'speed', "size"], // Based on SawBlade constructor
+        fields: ['toX', 'toY', 'speed', "size"], // Based on SawBlade constructor
         dims: (params, atlas) => {
-            const { width, height } = atlas[config[params.size]]
+            const { width, height } = atlas[nameMap[params.size]]
             return { width, height }
         },
         create: (params) => {
             const { x, y, toX, toY, speed, size } = params
-            if (config.static) return { name: config[size] }
             return {
                 // these should come in relative grid space
                 x, y,
                 toX: x + Number(toX) * TILE_SIZE,
                 toY: y + Number(toY) * TILE_SIZE,
-                name: config[size],
+                name: nameMap[size],
                 speed: +speed
             }
         }
     }
 }
 
-const lasers = ({static=false, horizontal=true}) => {
-    const basicFields = ["num", "period", "delay"]
-    if (!static) {
-        basicFields.push('speed')
+const lasers = (orientation) => {
+    const fields = ['speed', 'num', 'period', 'on']
+    if (orientation === "vertical") {
+        fields.unshift("toX")
     }
-    if (horizontal) {
-        basicFields.push("toY")
-    } else {
-        basicFields.push("toX")
+    if (orientation === "horizontal") {
+        fields.unshift("toY")
     }
     return {
-        fields: fields,
+        fields: fields, // Inferred from Laser constructor
+        fieldsFilter: (name, prevParams) => {
+            if (name === "speed" && (+prevParams.toX === 0 || +prevParams.toY === 0)) {
+                return false
+            }
+            return true
+        },
         create: (params) => {
-            const { x, y, toX, toY, speed, num, period, delay, name } = params
-            if (static) return { name, delay: +delay, period: +period }
+            const { x, y, toX, toY, speed, num, period, on, name } = params
             return {
                 x, y,
                 toX: x + Number(toX) * TILE_SIZE, toY: y + Number(toY) * TILE_SIZE,
-                name: name, delay: +delay, period: +period, speed: +speed, num: +num
+                name: name, on: Boolean(on),
+                period: +period, speed: +speed, num: +num
             }
         }
     }
@@ -145,6 +148,12 @@ const factories = {
             return params
         }
     },
+    wind: {
+        fields: [], // No specific props required
+        create: (params) => {
+            return params
+        }
+    },
     fire: {
         fields: [], // Based on player usage
         create: (params) => {
@@ -160,11 +169,8 @@ const factories = {
         }
     },
     gearBlade: sawBlades({ small: "sb2", large: "sb6" }),
-    gearBladeStatic: sawBlades({ small: "sb2", large: "sb6", static: true }),
     spikeBlade: sawBlades({ small: "sb3", large: "sb5" }),
-    spikeBladeStatic: sawBlades({ small: "sb3", large: "sb5", static: true }),
     buttonBlade: sawBlades({ small: "sb1", large: "sb4" }),
-    buttonBladeStatic: sawBlades({ small: "sb1", large: "sb4", static: true }),
     lcr1: {
         fields: ['luck', 'dmg'], // Based on Crate constructor
         create: (params) => {
@@ -172,10 +178,8 @@ const factories = {
             return { luck: +luck, dmg: +dmg, name, x: x, y: y + (alignment === "top-left" ? 32 : 0), groupId: "crates" }
         }
     },
-    vlhd: lasers({ static: false, horizontal: false}),
-    vlhdStatic: lasers({ static: true }),
-    hlhd: lasers({ static: false, horizontal: true}),
-    hlhdStatic: lasers({ static: true }),
+    vlhd: lasers("vertical"),
+    hlhd: lasers("horizontal"),
     crane: {
         create: params => {
             const { alignment, x, y, name } = params

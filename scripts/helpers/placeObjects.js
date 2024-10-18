@@ -46,7 +46,7 @@ const placeObject = async (index, projections, map) => {
                 continue
             }
             const moreFields = factory.fields
-            const props = (Array.isArray(moreFields)) ? await promptFields(moreFields): {}
+            const props = (Array.isArray(moreFields)) ? await promptFields(moreFields, factory.fieldsFilter): {}
 
 
 
