@@ -57,7 +57,6 @@ const scan = async (map, block) => {
             const y = block.y - 2 + row
             if (x < 0 || x > map.w - 1 || y < 0 || y > map.h - 1) return 1
             const leftTile = getAdjacentTile(y, x, { x: -1, y: 0 })
-            const rightTile = getAdjacentTile(y, x, { x: 1, y: 0 })
             const topTile = getAdjacentTile(y, x, { x: 0, y: 1 })
             const tile = map.getTile(x, y)
             if (!tile) {
@@ -79,11 +78,9 @@ const scan = async (map, block) => {
     const normalizedGrid = boundingBlock.map(row => {
         return row.map(cell => !!cell ? 1 : 0)
     })
-    normalizedGrid.forEach(row => console.log(row.join("")))
 
     const boundaryInfo = boundingBlock.map((row, j) => {
         return row.map((cell, i) => {
-            console.log({ i, j })
             const tileNumber = getTileNumber(normalizedGrid, j, i)
             return { tileNumber, cell }
         }).slice(1, row.length - 1)
@@ -131,7 +128,6 @@ const scan = async (map, block) => {
         })
     })
     await map.exportMap("testlevel")
-    process.exit(0)
 }
 
 const interactiveGenerateLevel = async () => {
@@ -174,7 +170,7 @@ const interactiveGenerateLevel = async () => {
         const userAccepted = response === choices[1] || proceedAndTerminate
 
         if (userAccepted) {
-            await decorateBlock()
+            await decorateBlock(map, newBlock)
             await map.exportMap("testlevel")
 
             graph.setNode(iter, newBlock);

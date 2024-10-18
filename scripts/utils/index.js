@@ -351,8 +351,8 @@ class Map extends Block {
         if (x < 0 || y < 0 || x > this.w - 1 || y > this.h - 1) return null
         const gridX = worldSpace ? x / 48: x
         const gridY = worldSpace ? y / 48: y
-        this.setTile(gridX, gridY, tile)
-        this.collapsedTiles[layer][`${y}-${x}`] = tile
+        this.setTile(gridX, gridY, tile, "fg", true)
+        this.collapsedTiles[layer][`${gridX}-${gridY}`] = tile
     }
 
     player = { name: "player", x: 0, y: 0 } // temporary player for level design (helps in focusing camera)
@@ -384,6 +384,10 @@ class Map extends Block {
         this.layers.og.forEach(row => row.fill(null))
         this.layers.mg.forEach(row => row.fill(null))
         this.collisionRects.length = 0
+        Object.entries(this.collapsedTiles.fg).forEach(([ key, value ]) => {
+            const [ x, y ] = key.split("-").map(i => Number(i))
+            this.collapseTile({ x, y, tile: value, worldSpace: false })
+        })
     }
 
     addPlainBlock({ block, layer = "og", skipCollisionTest = false }) {
@@ -392,21 +396,10 @@ class Map extends Block {
         const w = Math.ceil(block.w)
         const h = Math.ceil(block.h)
 
-        for (let i = 0; i < h; i++) {
-            for (let j = 0; j < w; j++) {
-                // Update the grid for the specified layer
-                try {
-                    this.layers[layer][y + i][x + j] = "wt_1"
-
-                } catch(e) {
-                    throw new Error(e)
-                }
-            }
-        }
         this.collisionRects.push({ x: block.x, y: block.y, w: block.w, h: block.h })
     }
-    setTile(x, y, name, layer = "fg") {
-        if (this.collapsedTiles[layer][`${y}-${x}`]) return
+    setTile(x, y, name, layer = "fg", force=false) {
+        if (this.collapsedTiles[layer][`${x}-${y}`] && !force) return
         if (x < 0 || y < 0 || x > this.w - 1 || y > this.h - 1) return
         this.layers[layer][y][x] = name
     }
@@ -461,7 +454,6 @@ class Map extends Block {
             }
             this.spawnPoints.push(p)
             if (Array.isArray(p.collapsed)) { // collapse wave function (superposition state)
-                console.log("HERE")
                 p.collapsed.forEach(t => this.collapseTile(t))
             }
         })
