@@ -34,12 +34,15 @@ const reconstructMap = (map, blocks) => {
 const interactiveGenerateLevel = async () => {
     let graph = initializeGraph();
     let map = initializeMap(graph);
-    map.addBlock({ block: floor, layer: "fg" })
     const floor = generateFloor(map)
+    // map.addBlock({ block: floor, layer: "fg" })
     let blocks = [floor];
-    // const initialBlock = getInitialBlock(map, graph)
+    
+    const initialBlock = getInitialBlock(floor, graph)
+    blocks.push(initialBlock)
 
     reconstructMap(map, blocks)
+
     await map.exportMap("testlevel")
 
     let iter = 1;
