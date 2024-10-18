@@ -30,6 +30,19 @@ const reconstructMap = (map, blocks) => {
     });
 };
 
+const decorateBlock = async (map, block) => {
+    while (true) {
+        const tilesGrid = generateTiles(block)
+        const undoTiles = placeTiles(map, block, tilesGrid)
+        await map.exportMap()
+        const accepted = (await getChoice(["Randomize", "Proceed"], "Like this pattern?")) === "Proceed"
+        if (accepted) {
+            block.tilesGrid = tilesGrid
+            break
+        }
+        undoTiles()
+    }
+}
 
 const interactiveGenerateLevel = async () => {
     let graph = initializeGraph();
@@ -67,17 +80,7 @@ const interactiveGenerateLevel = async () => {
         const userAccepted = response === choices[1] || proceedAndTerminate
 
         if (userAccepted) {
-            while (true) {
-                const tilesGrid = generateTiles(newBlock)
-                const undoTiles = placeTiles(map, newBlock, tilesGrid)
-                await map.exportMap()
-                const accepted = (await getChoice(["Randomize", "Proceed"], "Like this pattern?")) === "Proceed"
-                if (accepted) {
-                    newBlock.tilesGrid = tilesGrid
-                    break
-                }
-                undoTiles()
-            }
+            await decorateBlock()
 
             graph.setNode(iter, newBlock);
             graph.setEdge(iter - 1, iter);
