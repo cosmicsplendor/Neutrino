@@ -103,19 +103,30 @@ const scan = async (map, block) => {
             if (validIs.includes(i) || validJs.includes(j)) {
                 if (cell === 0) return
                 const tile = map.getTile(block.x+i-1, block.y+j-1)
+                const leftTile = map.getTile(block.x+i-2, block.y+j-1)
                 if (wt9Equiv.includes(tile) && tileNumber === 9) return
+                if (tileNumber === 3 && leftTile === "wt_15") {
+                    return
+                }
+                if (tileNumber !== 3 && leftTile === "wt_15" || tileNumber !== 4 && leftTile === "wt_16") {
+                    map.collapseTile({ x: block.x+i-2, y: block.y+j-1, tile: "wt_1"})
+                    return
+                }
+                if (tileNumber === 5 && leftTile === "wt_16") {
+                    return
+                }
                 if (tile === "wt_14") {
                     if (tileNumber === 2) return
                     if (tileNumber === 5) {
-                        map.setTile(block.x - 1 + i, block.y - 1 + j, "wt_17")
+                        map.collapseTile({ x: block.x - 1 + i, y: block.y - 1 + j, tile: "wt_17", worldSpace: false })
                         return
                     }
                 }
                 if (tile === "wt_17") {
                     if (tileNumber === 5) return
-                    map.setTile(block.x + i, block.y - 1 + j, "wt_1")
+                    map.collapseTile({x: block.x + i, y: block.y - 1 + j, tile: "wt_1", worldSpace: false })
                 }
-                map.collapseTile(block.x - 1 + i, block.y - 1 + j, `wt_${tileNumber}`)
+                map.collapseTile({ x: block.x - 1 + i, y: block.y - 1 + j, tile: `wt_${tileNumber}`, worldSpace: false})
             }
         })
     })

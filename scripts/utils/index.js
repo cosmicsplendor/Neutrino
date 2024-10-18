@@ -347,10 +347,10 @@ class Map extends Block {
         og: {},
         mg: {}
     }
-    collapseTile({x, y, tile, layer="fg"}) {
+    collapseTile({x, y, tile, layer="fg", worldSpace=true}) {
         if (x < 0 || y < 0 || x > this.w - 1 || y > this.h - 1) return null
-        const gridX = x / 48
-        const gridY = y / 48
+        const gridX = worldSpace ? x / 48: x
+        const gridY = worldSpace ? y / 48: y
         this.setTile(gridX, gridY, tile)
         this.collapsedTiles[layer][`${y}-${x}`] = tile
     }
