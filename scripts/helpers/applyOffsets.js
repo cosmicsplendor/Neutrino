@@ -2,7 +2,8 @@ const getDims = require("../utils/getDims")
 const { alignmentMap } = require("./alignment")
 
 const blades = [
-    "gearBlade", "spikeBlade", "buttonBlade"
+    "gearBlade", "spikeBlade", "buttonBlade",
+    "gearBladeS", "spikeBladeS", "buttonBladeS",
 ]
 const applyOffsets = async (x, y, name, alignment, props) => {
     if (blades.includes(name)) {

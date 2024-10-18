@@ -6,15 +6,16 @@ const STACK_TOP = ["top-start", "top-end", "top"]
 const STACK_LEFT = ["left-start", "left-end", "left"]
 const STACK_RIGHT = ["right-start", "right-end", "right"]
 
-const sawBlades = (nameMap) => {
+const sawBlades = (nameMap, static=false) => {
     return {
-        fields: ['toX', 'toY', 'speed', "size"], // Based on SawBlade constructor
+        fields: static ? ["size"]: ['toX', 'toY', 'speed', "size"], // Based on SawBlade constructor
         dims: (params, atlas) => {
             const { width, height } = atlas[nameMap[params.size]]
             return { width, height }
         },
         create: (params) => {
             const { x, y, toX, toY, speed, size } = params
+            if (static) return { x, y, name: nameMap[size] }
             return {
                 // these should come in relative grid space
                 x, y,
@@ -169,8 +170,11 @@ const factories = {
         }
     },
     gearBlade: sawBlades({ small: "sb2", large: "sb6" }),
+    gearBladeS: sawBlades({ small: "sb2", large: "sb6" }, true),
     spikeBlade: sawBlades({ small: "sb3", large: "sb5" }),
+    spikeBladeS: sawBlades({ small: "sb3", large: "sb5" }, true),
     buttonBlade: sawBlades({ small: "sb1", large: "sb4" }),
+    buttonBladeS: sawBlades({ small: "sb1", large: "sb4" }, true),
     lcr1: {
         fields: ['luck', 'dmg'], // Based on Crate constructor
         create: (params) => {
