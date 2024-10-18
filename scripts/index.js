@@ -53,8 +53,9 @@ const interactiveGenerateLevel = async () => {
     
     const initialBlock = getInitialBlock(floor, graph)
     blocks.push(initialBlock)
-
     reconstructMap(map, blocks)
+
+    await decorateBlock(map, initialBlock)
 
     await map.exportMap("testlevel")
 
