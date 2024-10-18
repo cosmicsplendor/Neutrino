@@ -407,9 +407,11 @@ class Map extends Block {
     }
     setTile(x, y, name, layer = "fg") {
         if (this.collapsedTiles[layer][`${y}-${x}`]) return
+        if (x < 0 || y < 0 || x > this.w - 1 || y > this.h - 1) return
         this.layers[layer][y][x] = name
     }
     getTile(x, y, layer = "fg") {
+        if (x < 0 || y < 0 || x > this.w - 1 || y > this.h - 1) return null
         return this.layers[layer][y][x]
     }
     async addTempColRect({ x, y, name }) {

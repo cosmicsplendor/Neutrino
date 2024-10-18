@@ -7,6 +7,7 @@ const { Graph } = require('graphlib'); // Use a graph library
 const placeObjects = require('./helpers/placeObjects');
 const {generateTiles, placeTiles} = require('./helpers/generateTiles');
 const generateFloor = require('./helpers/generateFloor');
+const getTileNumber = require('./helpers/generateTiles/helpers/createGrid/getTileNumber');
 
 const initializeMap = () => {
     const map = new Map({
@@ -44,7 +45,7 @@ const decorateBlock = async (map, block) => {
     }
 }
 
-const scan = (map, block) => {
+const scan = async (map, block) => {
     const topEmptiers = ["win2"]
     const leftEmptiers = ["wt_14", "wt_17"]
     const rightEmptiers = ["wt_15", "wt_16"]
@@ -55,10 +56,10 @@ const scan = (map, block) => {
             return null
         }
     }
-    const boundingBlock = Array.from({ length: block.h + 2 }, (_, row) => {
-        return Array.from({ length: block.w + 2 }, (_, col) => {
-            const x = block.x - 1 + col
-            const y = block.y - 1 + row
+    const boundingBlock = Array.from({ length: block.h + 4 }, (_, row) => {
+        return Array.from({ length: block.w + 4 }, (_, col) => {
+            const x = block.x - 2 + col
+            const y = block.y - 2 + row
             if (x < 0 || x > map.w - 1 || y < 0 || y > map.h - 1) return 1
             const leftTile = getAdjacentTile(y, x, { x: -1, y: 0 })
             const rightTile = getAdjacentTile(y, x, { x: 1, y: 0 })
@@ -71,17 +72,32 @@ const scan = (map, block) => {
                 return 0
             }
             if (tile.startsWith("wt_")) {
-                return Number(tile.slice(3))
+                const num = Number(tile.slice(3))
+                if (num === 14) return 2
+                if (num === 15) return 3
+                if (num === 16) return 4
+                if (num === 17) return 5
+                return num
             }
             return 1
         })
     })
-    // const normalizedGrid = boundingBlock.map(row => {
-    //     return row.map(cell => !!cell ? 1: 0)
-    // })
-    boundingBlock.forEach(r => {
-        console.log(r.join(""))
+    const normalizedGrid = boundingBlock.map(row => {
+        return row.map(cell => !!cell ? 1: 0)
     })
+    normalizedGrid.forEach(row => console.log(row.join("")))
+
+    boundingBlock.forEach((row, j) => {
+        row.forEach((cell, i) => {
+            if (i === 0 || j === 0) return
+            if (i > block.w + 2 || j > block.h + 2) return
+            const tileNumber = getTileNumber(normalizedGrid, j, i)
+            const num = cell
+            if (num === 0 || num === tileNumber) return
+            map.setTile(block.x - 2 + i, block.y - 2 + j, `wt_${tileNumber}`)
+        })
+    })
+    await map.exportMap("testlevel")
     process.exit(0)
 }
 
@@ -100,7 +116,7 @@ const interactiveGenerateLevel = async () => {
     /**
      * take the map, scan every block within +-1 for edge tiles that are out of alignment
      */
-    scan(map, initialBlock)
+    await scan(map, initialBlock)
     await map.exportMap("testlevel")
 
     let iter = 1;
