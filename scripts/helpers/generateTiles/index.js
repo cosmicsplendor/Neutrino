@@ -26,12 +26,12 @@ const generateTiles = (block) => { // takes in composite block
   return execWFC(table, grid)
 }
 
-const generateTileSpawnPoints = (block, tileW, tileH=tileW, x=block.x, y=block.y,) => {
+const generateTileSpawnPoints = (block, tileW, tileH=tileW, x=block.x, y=block.y, replacer) => {
     const grid = generateTiles(block)
-    return sanitizeGrid(grid)
+    return grid
     .map((row, j) => {
       return row.map((cell, i) => {
-        return { x: x + i * tileW, y: y + j * tileH, name: cell }
+        return { x: x + i * tileW, y: y + j * tileH, name: typeof replacer === "function" ? replacer(j, i, cell): cell }
       })
     })
     .flat()

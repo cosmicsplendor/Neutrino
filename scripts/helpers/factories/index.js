@@ -319,7 +319,21 @@ const factories = {
             const dy = block.h - 4
             const gateY = originY + (TILE_SIZE * block.h) - 56
             const gate = { y: gateY, x: originX + (dx + 2.5) * TILE_SIZE - 56, name: "gate", endY: gateY - 128 }
-            const tiles = generateTileSpawnPoints(block, TILE_SIZE, TILE_SIZE, originX, originY)
+            const tileReplacer = (row, col, cell) => {
+                const archY = dy + 2
+                const archX = dx + 1
+                if (row == archY && col == archX) {
+                    return "garch"
+                }
+                if (row == archY && (col == archX + 1 || col == archX + 2)) {
+                    return "empty"
+                }
+                if (row === archY + 1 && col >= archX && col < archX + 3) {
+                    return "empty"
+                }
+                return cell
+            }
+            const tiles = generateTileSpawnPoints(block, TILE_SIZE, TILE_SIZE, originX, originY, tileReplacer)
             const results = [ gate, ...tiles ]
             results.colRects = block.collisionRects.map(({ x, y, w, h }) => {
                 return { x: (x + dx) * TILE_SIZE + originX, y: (y + dy) * TILE_SIZE + originY, w: w * TILE_SIZE, h: h * TILE_SIZE}
