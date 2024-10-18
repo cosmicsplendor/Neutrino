@@ -384,8 +384,6 @@ class Map extends Block {
         this.layers.og.forEach(row => row.fill(null))
         this.layers.mg.forEach(row => row.fill(null))
         this.collisionRects.length = 0
-        this.floor = calcAligned(this, new Block(this.w, this.floorHeight ?? 4), "left", "bottom")
-        this.addBlock({ block: this.floor, layer: "fg" })
     }
 
     addPlainBlock({ block, layer = "og", skipCollisionTest = false }) {

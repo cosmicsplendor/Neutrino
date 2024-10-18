@@ -1,11 +1,12 @@
 const terminal = require('terminal-kit').terminal;
 const { getInitialBlock } = require('./helpers');
-const { promptAccept, getChoice } = require("./helpers/term")
+const { getChoice } = require("./helpers/term")
 const generateNewBlock = require("./helpers/generateNewBlock")
 const { Map } = require("./utils/index");
 const { Graph } = require('graphlib'); // Use a graph library
 const placeObjects = require('./helpers/placeObjects');
 const {generateTiles, placeTiles} = require('./helpers/generateTiles');
+const generateFloor = require('./helpers/generateFloor');
 
 const initializeMap = () => {
     const map = new Map({
@@ -29,15 +30,17 @@ const reconstructMap = (map, blocks) => {
     });
 };
 
+
 const interactiveGenerateLevel = async () => {
     let graph = initializeGraph();
     let map = initializeMap(graph);
-    const initialBlock = getInitialBlock(map, graph)
-    let blocks = [initialBlock];
+    map.addBlock({ block: floor, layer: "fg" })
+    const floor = generateFloor(map)
+    let blocks = [floor];
+    // const initialBlock = getInitialBlock(map, graph)
 
     reconstructMap(map, blocks)
     await map.exportMap("testlevel")
-    // await placeObjects(initialBlock, map)
 
     let iter = 1;
 

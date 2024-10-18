@@ -1,4 +1,4 @@
-const { pickOne, rand, CompositeBlock, Block, decomposeBlocks, weightedRand } = require("../../utils")
+const { pickOne, rand, CompositeBlock, Block } = require("../../utils")
 const lasers = require("./lasers")
 const groupMap = require("../../utils/groupMap.json")
 const { generateTileSpawnPoints } = require("../generateTiles")
