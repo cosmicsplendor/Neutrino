@@ -1,10 +1,37 @@
-const { skewedRand, pickOne, rand, CompositeBlock, Block, decomposeBlocks, weightedRand } = require("../../utils")
+const { pickOne, rand, CompositeBlock, Block, decomposeBlocks, weightedRand } = require("../../utils")
 const groupMap = require("../../utils/groupMap.json")
-const { generateTiles, generateTileSpawnPoints } = require("../generateTiles")
+const { generateTileSpawnPoints } = require("../generateTiles")
 const TILE_SIZE = 48
 const STACK_TOP = ["top-start", "top-end", "top"]
-const STACK_LEFT = ["left-start", "left-end", "left"]
-const STACK_RIGHT = ["right-start", "right-end", "right"]
+
+const endTiles = Object.freeze({
+    width: 4,
+    height: 9,
+    fg: {
+        x: 0, y: 0,
+        tiles: [
+            ["wt_7", "en11", "empty", "empty"],
+            ["wt_5", "dml7", "empty", "empty"],
+            ["wt_5", "win1", "dml7", "empty"],
+            ["wt_14", "empty", "wt_8", "wt_3"],
+            ["em3", "empty", "em3", "empty"],
+        ]
+    },
+    mg: {
+        x: 0, y: 4,
+        tiles: [
+            ["bw7", "bw1", "bw5", "bw8"],
+            ["bw1", "bw1", "bw1", "empty"],
+            ["bw10", "bw1", "bw1", "bw1"],
+            ["empty", "bw1", "bw10", "bw6"],
+            ["bw3", "bw3", "bw3", "bw10"],
+        ]
+    },
+    colRects: [
+        { x: 0, y: 0, width: 1, height: 3},
+        { x: 0, y: 3, width: 4, height: 1}
+    ]
+})
 
 const sawBlades = (nameMap, static=false) => {
     return {
@@ -149,13 +176,6 @@ const factories = {
             return params
         }
     },
-    fire: {
-        fields: [], // Based on player usage
-        create: (params) => {
-            // Perform transformation
-            return params
-        }
-    },
     ball: {
         fields: ['seq',], // Inferred from Ball constructor and props.seq
         create: (params) => {
@@ -230,8 +250,41 @@ const factories = {
             const { x, y } = params
             const roundedX = x % 48 === 0 ? x: x + 24 * (Math.random() < 0.5 ? 1: -1)
             return [
-                { x: roundedX - 16, y, name: "em1" },
-                { x: roundedX + 24, y, name: "wind", collapsed: [{ y: y + 32, x: roundedX, tile: "wt_1" }] }
+                { x: roundedX - 16, y, name: "em1", collapsed: [{ y: y + 32, x: roundedX, tile: "wt_1" }]  },
+                { x: roundedX + 24, y, name: "wind" }
+            ]
+        }
+    },
+    fire: {
+        fields: [],
+        dims: () => {
+            return { width: 48, height: 32 }
+        },
+        possible(projection, alignment) {
+            if (alignment !== "bottom") return false // only possible alignments
+            if (projection.w < 3) return false // only possible for odd tile count greater than 1
+            return true
+        },
+        create: (params) => {
+            const { x, y } = params
+            const roundedX = x % 48 === 0 ? x: x + 24 * (Math.random() < 0.5 ? 1: -1)
+            const tilesX = (roundedX + 24) - endTiles.width * 48 / 2
+            const tilesY = (y + 32) - endTiles.height * 48
+            const wallTiles = endTiles.fg.tiles.map((row, i) => {
+                return row.map((cell, j) => {
+                    return { name: cell, x: tilesX + j * 48, y: tilesY + i * 48 }
+                }).filter(cell => cell.name !== "empty")
+            }).flat()
+            const backwallTiles = endTiles.mg.tiles.map((row, i) => {
+                return row.map((cell, j) => {
+                    return { name: cell, x: tilesX + j * 48, y: tilesY + (i + endTiles.mg.y ) * 48, layer: "mg" }
+                }).filter(cell => cell.name !== "empty")
+            }).flat()
+            return [
+                { x: roundedX - 16, y, name: "em1", collapsed: [{ y: y + 32, x: roundedX, tile: "wt_1" }] },
+                { x: roundedX + 24, y, name: "fire" },
+                ...wallTiles,
+                ...backwallTiles
             ]
         }
     },
