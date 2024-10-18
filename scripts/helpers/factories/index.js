@@ -149,12 +149,6 @@ const factories = {
             return params
         }
     },
-    wind: {
-        fields: [], // No specific props required
-        create: (params) => {
-            return params
-        }
-    },
     fire: {
         fields: [], // Based on player usage
         create: (params) => {
@@ -223,19 +217,21 @@ const factories = {
         }
     },
     wind: {
+        randomize: true,
         dims: () => {
-            return { width: 80, height: 32 }
+            return { width: 48, height: 32 }
         },
         possible(projection, alignment) {
-            if (alignment !== "top" && alignment !== "bottom") return false // only possible alignments
-            if (projection.w % 2 === 0 || projection.w === 1) return false // only possible for odd tile count greater than 1
+            if (alignment !== "bottom") return false // only possible alignments
+            if (projection.w < 3) return false // only possible for odd tile count greater than 1
             return true
         },
         create: params => {
             const { x, y } = params
+            const roundedX = x % 48 === 0 ? x: x + 24 * (Math.random() < 0.5 ? 1: -1)
             return [
-                { x, y, name: "em1" },
-                { x: x + 40, y, name: "wind", collapsed: [{ y: y + 32, x: x + 16 }] }
+                { x: roundedX - 16, y, name: "em1" },
+                { x: roundedX + 24, y, name: "wind", collapsed: [{ y: y + 32, x: roundedX }] }
             ]
         }
     },
