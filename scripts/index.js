@@ -51,7 +51,7 @@ const interactiveGenerateLevel = async () => {
         const lastBlock = graph.node(iter - 1);
         let newBlock = generateNewBlock(lastBlock, map);
         if (newBlock.x < 0 || newBlock.y + newBlock.h > map.h - (map.floorHeight ?? 4)) {
-            // out of bounds or partly occluded by floor so return
+            // out of bounds or partly occluded by floor so retry
             continue;
         }
         

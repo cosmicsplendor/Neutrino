@@ -10,7 +10,6 @@ const generateFloor = (map) => {
     })
     floor.tilesGrid = tilesGrid
     floor.shift(floor.x, floor.y)
-    console.log(floor)
     return floor
 }
 
