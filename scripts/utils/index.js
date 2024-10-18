@@ -342,10 +342,17 @@ class Map extends Block {
         og: [[]],
         mg: [[]]
     }
-    collapsedTiles = []
-
-    collapseTile(x, y) {
-        this.collapsedTiles.push({ x, y })
+    collapsedTiles = {
+        fg: {},
+        og: {},
+        mg: {}
+    }
+    collapseTile({x, y, tile, layer="fg"}) {
+        const gridX = x / 48
+        const gridY = y / 48
+        console.log({ gridX, gridY })
+        this.setTile(gridX, gridY, tile)
+        this.collapsedTiles[layer][`${y}-${x}`] = tile
     }
 
     player = { name: "player", x: 0, y: 0 } // temporary player for level design (helps in focusing camera)
@@ -401,6 +408,7 @@ class Map extends Block {
         this.collisionRects.push({ x: block.x, y: block.y, w: block.w, h: block.h })
     }
     setTile(x, y, name, layer = "fg") {
+        if (this.collapsedTiles[layer][`${y}-${x}`]) return
         this.layers[layer][y][x] = name
     }
     getTile(x, y, layer = "fg") {
@@ -453,6 +461,7 @@ class Map extends Block {
             }
             this.spawnPoints.push(p)
             if (Array.isArray(p.collapsed)) { // collapse wave function (superposition state)
+                console.log("HERE")
                 p.collapsed.forEach(t => this.collapseTile(t))
             }
         })

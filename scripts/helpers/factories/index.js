@@ -231,7 +231,7 @@ const factories = {
             const roundedX = x % 48 === 0 ? x: x + 24 * (Math.random() < 0.5 ? 1: -1)
             return [
                 { x: roundedX - 16, y, name: "em1" },
-                { x: roundedX + 24, y, name: "wind", collapsed: [{ y: y + 32, x: roundedX }] }
+                { x: roundedX + 24, y, name: "wind", collapsed: [{ y: y + 32, x: roundedX, tile: "wt_1" }] }
             ]
         }
     },
