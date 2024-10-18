@@ -9,7 +9,7 @@ const bWidth = 12 // laser body width
 class Laser extends MovableEnt {
     startX
     startY
-    constructor(x, y, toX = x, toY = y, speed = 100, num = 2, vert, period, delay=0, on = true, player, sounds) {
+    constructor(x, y, toX = x, toY = y, speed = 100, num = 2, vert, period, player, sounds) {
         const frame = vert ? "vlhd" : "hlhd"
         const bFrame = vert ? "vlbod" : "hlbod" // body frame
         const xOffset = vert ? offset : hheight
@@ -24,7 +24,7 @@ class Laser extends MovableEnt {
             const body = new TexRegion({ frame: bFrame })
             body.pos.x += xOffset + xStep * i
             body.pos.y += yOffset + yStep * i
-            body.alpha = on ? 1 : 0
+            // body.alpha = on ? 1 : 0
             this.add(body)
         }
         this.hitbox = {
@@ -34,13 +34,12 @@ class Laser extends MovableEnt {
             height: vert ? hheight + bLen * num : hheight
         }
         this.testCol = getTestFn(this, this.player)
-        this.on = on
+        this.on = true
         if (!!period) {
             this.period = period
             this.t = 0
             this.sounds = sounds
         }
-        this.delay = delay
     }
     update(dt) {
         super.update(dt)

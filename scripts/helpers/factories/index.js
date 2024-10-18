@@ -27,16 +27,24 @@ const sawBlades = (nameMap) => {
     }
 }
 
-const lasers = () => {
+const lasers = (static=false, horizontal=true) => {
+    const basicFields = ["num", "period", "delay"]
+    if (!static) {
+        basicFields.push('speed')
+    }
+    if (horizontal) {
+        basicFields.push("toY")
+    } else {
+        basicFields.push("toX")
+    }
     return {
-        fields: ['toX', 'toY', 'speed', 'num', 'period', 'delay', 'on'], // Inferred from Laser constructor
+        fields: fields,
         create: (params) => {
-            const { x, y, toX, toY, speed, num, period, delay, on, name } = params
+            const { x, y, toX, toY, speed, num, period, delay, name } = params
             return {
                 x, y,
                 toX: x + Number(toX) * TILE_SIZE, toY: y + Number(toY) * TILE_SIZE,
-                name: name, on: Boolean(on),
-                delay: +delay, period: +period, speed: +speed, num: +num
+                name: name, delay: +delay, period: +period, speed: +speed, num: +num
             }
         }
     }
@@ -135,12 +143,6 @@ const factories = {
             return params
         }
     },
-    wind: {
-        fields: [], // No specific props required
-        create: (params) => {
-            return params
-        }
-    },
     fire: {
         fields: [], // Based on player usage
         create: (params) => {
@@ -166,6 +168,7 @@ const factories = {
         }
     },
     vlhd: lasers(),
+    vlhdStatic: lasers(true),
     hlhd: lasers(),
     crane: {
         create: params => {
