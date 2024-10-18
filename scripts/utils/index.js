@@ -348,6 +348,7 @@ class Map extends Block {
         mg: {}
     }
     collapseTile({x, y, tile, layer="fg"}) {
+        if (x < 0 || y < 0 || x > this.w - 1 || y > this.h - 1) return null
         const gridX = x / 48
         const gridY = y / 48
         this.setTile(gridX, gridY, tile)
