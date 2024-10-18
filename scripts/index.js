@@ -37,7 +37,7 @@ const interactiveGenerateLevel = async () => {
 
     reconstructMap(map, blocks)
     await map.exportMap("testlevel")
-    await placeObjects(initialBlock, map)
+    // await placeObjects(initialBlock, map)
 
     let iter = 1;
 
@@ -77,14 +77,17 @@ const interactiveGenerateLevel = async () => {
             graph.setEdge(iter - 1, iter);
             blocks.push(newBlock);
 
-            await placeObjects(newBlock, map)
             iter++;
         } else {
             terminal.red("Retrying current iteration...\n");
             reconstructMap(map, blocks)
         }
     }
-
+    
+    for (const block of blocks) {
+        map.centerCamera(block)
+        await placeObjects(block, map)
+    }
     terminal("\nFinal Level:\n");
     terminal("\nLevel design complete. Press any key to exit.\n");
     terminal.grabInput(true);
