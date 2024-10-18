@@ -27,7 +27,7 @@ const sawBlades = (nameMap) => {
     }
 }
 
-const lasers = (static=false, horizontal=true) => {
+const lasers = ({static=false, horizontal=true}) => {
     const basicFields = ["num", "period", "delay"]
     if (!static) {
         basicFields.push('speed')
@@ -167,10 +167,10 @@ const factories = {
             return { luck: +luck, dmg: +dmg, name, x: x, y: y + (alignment === "top-left" ? 32 : 0), groupId: "crates" }
         }
     },
-    vlhd: lasers(false, false),
-    vlhdStatic: lasers(true),
-    hlhd: lasers(false, true),
-    hlhdStatic: lasers(true),
+    vlhd: lasers({ static: false, horizontal: false}),
+    vlhdStatic: lasers({ static: true }),
+    hlhd: lasers({ static: false, horizontal: true}),
+    hlhdStatic: lasers({ static: true }),
     crane: {
         create: params => {
             const { alignment, x, y, name } = params
