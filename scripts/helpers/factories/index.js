@@ -280,12 +280,16 @@ const factories = {
                     return { name: cell, x: tilesX + j * 48, y: tilesY + (i + endTiles.mg.y ) * 48, layer: "mg" }
                 }).filter(cell => cell.name !== "empty")
             }).flat()
-            return [
+            const results = [
                 { x: roundedX - 16, y, name: "em1", collapsed: [{ y: y + 32, x: roundedX, tile: "wt_1" }] },
                 { x: roundedX + 24, y, name: "fire" },
                 ...wallTiles,
                 ...backwallTiles
             ]
+            results.colRects = endTiles.colRects.map(({ x, y, width, height }) => {
+                return { x: tilesX + x * 48, y: tilesY + y * 48, w: width * 48, h: height * 48 }
+            })
+            return results
         }
     },
     pillar: {
