@@ -44,6 +44,47 @@ const decorateBlock = async (map, block) => {
     }
 }
 
+const scan = (map, block) => {
+    const topEmptiers = ["win2"]
+    const leftEmptiers = ["wt_14", "wt_17"]
+    const rightEmptiers = ["wt_15", "wt_16"]
+    const getAdjacentTile = (row, col, dir={x:0,y:0}) => {
+        try {
+            return map.getTile(col+dir.x, row + dir.y)
+        } catch {
+            return null
+        }
+    }
+    const boundingBlock = Array.from({ length: block.h + 2 }, (_, row) => {
+        return Array.from({ length: block.w + 2 }, (_, col) => {
+            const x = block.x - 1 + col
+            const y = block.y - 1 + row
+            if (x < 0 || x > map.w - 1 || y < 0 || y > map.h - 1) return 1
+            const leftTile = getAdjacentTile(y, x, { x: -1, y: 0 })
+            const rightTile = getAdjacentTile(y, x, { x: 1, y: 0 })
+            const topTile = getAdjacentTile(y, x, { x: 0, y: 1 })
+            const tile = map.getTile(x, y)
+            if (!tile) {
+                if (leftEmptiers.includes(leftTile)) return 1
+                if (rightEmptiers.includes(rightTile)) return 1
+                if (topEmptiers.includes(topTile)) return 1
+                return 0
+            }
+            if (tile.startsWith("wt_")) {
+                return Number(tile.slice(3))
+            }
+            return 1
+        })
+    })
+    // const normalizedGrid = boundingBlock.map(row => {
+    //     return row.map(cell => !!cell ? 1: 0)
+    // })
+    boundingBlock.forEach(r => {
+        console.log(r.join(""))
+    })
+    process.exit(0)
+}
+
 const interactiveGenerateLevel = async () => {
     let graph = initializeGraph();
     let map = initializeMap(graph);
@@ -56,7 +97,10 @@ const interactiveGenerateLevel = async () => {
     reconstructMap(map, blocks)
 
     await decorateBlock(map, initialBlock)
-
+    /**
+     * take the map, scan every block within +-1 for edge tiles that are out of alignment
+     */
+    scan(map, initialBlock)
     await map.exportMap("testlevel")
 
     let iter = 1;
@@ -68,7 +112,7 @@ const interactiveGenerateLevel = async () => {
             // out of bounds or partly occluded by floor so retry
             continue;
         }
-        
+
         reconstructMap(map, [...blocks, newBlock])
 
         await map.exportMap("testlevel")
@@ -82,11 +126,11 @@ const interactiveGenerateLevel = async () => {
 
         if (userAccepted) {
             await decorateBlock()
+            await map.exportMap("testlevel")
 
             graph.setNode(iter, newBlock);
             graph.setEdge(iter - 1, iter);
             blocks.push(newBlock);
-
             iter++;
             if (terminate) break
         } else {
