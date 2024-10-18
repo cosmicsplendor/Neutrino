@@ -1,161 +1,12 @@
 const { pickOne, rand, CompositeBlock, Block, decomposeBlocks, weightedRand } = require("../../utils")
+const lasers = require("./lasers")
 const groupMap = require("../../utils/groupMap.json")
 const { generateTileSpawnPoints } = require("../generateTiles")
+const saws = require("./saws")
+const endTiles = require("./endTiles.json")
+const sawBlades = require("./sawBlades")
 const TILE_SIZE = 48
 const STACK_TOP = ["top-start", "top-end", "top"]
-
-const endTiles = Object.freeze({
-    width: 4,
-    height: 9,
-    fg: {
-        x: 0, y: 0,
-        tiles: [
-            ["wt_7", "en11", "empty", "empty"],
-            ["wt_5", "dml7", "empty", "empty"],
-            ["wt_5", "win1", "dml7", "empty"],
-            ["wt_14", "empty", "wt_8", "wt_3"],
-            ["em3", "empty", "em3", "empty"],
-        ]
-    },
-    mg: {
-        x: 0, y: 4,
-        tiles: [
-            ["bw7", "bw1", "bw5", "bw8"],
-            ["bw1", "bw1", "bw1", "empty"],
-            ["bw10", "bw1", "bw1", "bw1"],
-            ["empty", "bw1", "bw10", "bw6"],
-            ["bw3", "bw3", "bw3", "bw10"],
-        ]
-    },
-    colRects: [
-        { x: 0, y: 0, width: 1, height: 3},
-        { x: 0, y: 3, width: 4, height: 1}
-    ]
-})
-
-const sawBlades = (nameMap, static=false) => {
-    return {
-        fields: static ? ["size"]: ['toX', 'toY', 'speed', "size"], // Based on SawBlade constructor
-        dims: (params, atlas) => {
-            const { width, height } = atlas[nameMap[params.size]]
-            return { width, height }
-        },
-        create: (params) => {
-            const { x, y, toX, toY, speed, size } = params
-            if (static) return { x, y, name: nameMap[size] }
-            return {
-                // these should come in relative grid space
-                x, y,
-                toX: x + Number(toX) * TILE_SIZE,
-                toY: y + Number(toY) * TILE_SIZE,
-                name: nameMap[size],
-                speed: +speed
-            }
-        }
-    }
-}
-
-const lasers = (orientation) => {
-    const fields = ['speed', 'num', 'period', 'on']
-    if (orientation === "vertical") {
-        fields.unshift("toX")
-    }
-    if (orientation === "horizontal") {
-        fields.unshift("toY")
-    }
-    return {
-        fields: fields, // Inferred from Laser constructor
-        fieldsFilter: (name, prevParams) => {
-            if (name === "speed" && (+prevParams.toX === 0 || +prevParams.toY === 0)) {
-                return false
-            }
-            return true
-        },
-        create: (params) => {
-            const { x, y, toX, toY, speed, num, period, on, name } = params
-            return {
-                x, y,
-                toX: x + Number(toX) * TILE_SIZE, toY: y + Number(toY) * TILE_SIZE,
-                name: name, on: Boolean(on),
-                period: +period, speed: +speed, num: +num
-            }
-        }
-    }
-}
-
-const saws = (data = { name: "saw2", field: "width", dims: { width: 0, height: 0 }, xOffset: 0 }) => {
-    const dims = data.dims ?? (data.field === "width" ? { width: 72, height: 24 } : { width: 24, height: 72 })
-    const xOffset = data.xOffset ?? 0
-    return {
-        fields: [data.field],
-        dims: ({ width: w = 1, height: h = 1 }) => {
-            return {
-                width: w * dims.width,
-                height: h * dims.height
-            }
-        },
-        create(params) {
-            const { x, y, width, height } = params
-            if (data.field === "height") {
-                return Array(+height).fill(0).map((_, i) => {
-                    return { x: x, y: y + (i * dims.height), name: data.name }
-                })
-            }
-            return Array(+width).fill(0).map((_, i) => {
-                return { x: x + (i + 1) * xOffset + i * dims.width, y: y, name: data.name }
-            })
-        }
-    }
-}
-
-const stackables = ({ name, dims }) => {
-    return {
-        randomize: true,
-        fields: ["width", "height", "density"],
-        dims: ({ width, height }) => {
-            return {
-                width: width * dims.width,
-                height: height * dims.height
-            }
-        },
-        createHorizontal(width, height, density) {
-            const parent = new CompositeBlock(new Block(width, 1))
-            let prevWidth = width
-            for (let i = 1; i < height; i++) {
-                const newWidth = weightedRand(0, prevWidth, density)
-                prevWidth = newWidth
-                parent.addPart({
-                    width: newWidth, height: 1, position: pickOne(STACK_TOP), onto: "last"
-                })
-            }
-            return parent
-        },
-        createVertical(width, height, density) {
-            const parent = new CompositeBlock(new Block(1, height))
-            let prevHeight = height
-            for (let i = 1; i < width; i++) {
-                const newHeight = weightedRand(0, prevHeight, density)
-                parent.addPart({
-                    width: 1, height: newHeight, position: "right-end", onto: "last"
-                })
-            }
-            return parent
-        },
-        createBlocks(x, y, width, height, density) {
-            const vertical = rand(1, 0)
-            console.log(vertical ? "Vertical": "Horizontal")
-            const block = vertical ? this.createVertical(width, height, density): this.createHorizontal(width, height, density)
-            return block.children.flatMap(decomposeBlocks).map(b => {
-                const dy = vertical ? 0: +height - 1
-                return { x: x + b.x * dims.width, y: y + (b.y + dy) * dims.height, name: typeof name === "function" ? name(): name }
-            })
-        },
-        create(params) {
-            const { x, y, width, height, density } = params
-            return this.createBlocks(x, y, width, height, density)
-        }
-    }
-}
 
 const factories = {
     player: {
@@ -411,9 +262,6 @@ const factories = {
             return results
         }
     },
-    crate: stackables({ name: "crate", dims: { width: 88, height: 88 }}),
-    tyre: stackables({ name: "tyre", dims: { width: 104, height: 32 } }),
-    sc: stackables({ name: () => pickOne([ "sc_blue", "sc_red", "sc_green" ]), dims: { width: 120, height: 120 }})
 }
 
 module.exports = factories
