@@ -1,5 +1,9 @@
 import { scoreNumOfBlocks, scoreSupportingWidth, scoreWidth } from "./scoreFns";
 const projectCompositeRects = require("scripts/utils/projectCompositeRects");
+
+const findBestProjecions = (map, projectionsByNormal) => {
+
+}
 const projectBackwalls = (map, block) => {
     /**
      * 1. project the edges of the block and group by normal direction
@@ -9,6 +13,13 @@ const projectBackwalls = (map, block) => {
      * 5. consider each scores as a component of an unit vector and compute absolute score by taking the square root of their sums squared
      * 6. return the group with the highest score, and let the user decide whether to construct back wall based on the min score threshold and the max scoring group
      */
+    const projectionsByNormal = projectCompositeRects(block, block.collisionRects, map).reduce((group, projection) => {
+        const projections = group[projection.normal] ?? []
+        projections.push(projection)
+        return group
+    }, {})
+    const bestProjections = findBestProjecions(map, projectionsByNormal)
+
 }
 
 export default projectBackwalls
