@@ -1,5 +1,17 @@
 const scoreArea = n => 1 / n
-const scoreSupportingWidth = (width, supportingWidth) => supportingWidth / width
+const scoreSupportingWidth = (width, supportingWidth, height, decayRate = 0.5) => {
+    // Non-linear decay based on height
+    const heightFactor = Math.exp(-decayRate * (height - 1)); // Starts at 1 for h = 1 and decays as h increases
+    
+    // Compute base score using width and supporting width ratio
+    const widthRatio = supportingWidth / width;
+  
+    // Adjust score based on non-linear height factor
+    const finalScore = widthRatio * heightFactor;
+  
+    // Ensure score stays in 0-1 range
+    return Math.max(0, Math.min(finalScore, 1));
+  };
 function scoreWidth(x) {
     if (x < 1) return 0
     const clampedX = Math.min(Math.max(x, 1), 9);

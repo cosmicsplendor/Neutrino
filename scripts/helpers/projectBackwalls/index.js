@@ -1,5 +1,5 @@
-import { scoreArea, scoreSupportingWidth, scoreWidth } from "./scoreFns";
-const projectCompositeRects = require("scripts/utils/projectCompositeRects");
+const { scoreArea, scoreSupportingWidth, scoreWidth } = require("./scoreFns");
+const projectCompositeRects = require("../../utils/projectCompositeRects");
 
 const getSupportingWidth = (map, p) => {
     if (p.edge === "left") {
@@ -20,14 +20,23 @@ const getSupportingWidth = (map, p) => {
 const computeScore = (map, projections) => {
     const area = projections.reduce((area, p) => area + p.w * p.h, 0)
     const width = projections.reduce((width, p) => {
-        const w = p.normal == "left" || p.normal === "right" ? p.w: p.h
+        const w = p.normal == "left" || p.normal === "right" ? p.h: p.w
         return width + w
     }, 0)
+    const height = projections.reduce((height, p) => {
+        const h = p.normal == "left" || p.normal === "right" ? p.w: p.h
+        return height + h
+    }, 0) / projections.length
     const supportingWidth = projections.reduce((sum, p) => {
         const sw = getSupportingWidth(map, p).filter(b => b).length
         return sum + sw
     }, 0)
-    return Math.sqrt(area * area + width * width + supportingWidth * supportingWidth)
+    const areaScore = scoreArea(area)
+    const widthScore = scoreWidth(width)
+    const supportingWidthScore = scoreSupportingWidth(width, supportingWidth, height)
+
+    // return Math.sqrt(area * area + width * width + supportingWidth * supportingWidth)
+    return (areaScore + widthScore + supportingWidthScore) / 3
 }
 
 const findBestProjections = (map, projectionsByNormal) => {
@@ -40,7 +49,7 @@ const findBestProjections = (map, projectionsByNormal) => {
     return best
 }
 
-const projectBackwalls = (map, block) => {
+const projectBackwalls = async (map, block) => {
     /**
      * 1. project the edges of the block and group by normal direction
      * 2. for each normal direction compute supporting width and use it to compute supportingWidth score 
@@ -54,8 +63,9 @@ const projectBackwalls = (map, block) => {
         projections.push(projection)
         return group
     }, {})
-    const bestProjections = findBestProjecions(map, projectionsByNormal)
-
+    const bestProjections = findBestProjections(map, projectionsByNormal)
+    console.log(bestProjections)
+    process.exit()
 }
 
-export default projectBackwalls
+module.exports = projectBackwalls

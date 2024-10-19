@@ -8,6 +8,7 @@ const placeObjects = require('./helpers/placeObjects');
 const { generateTiles, placeTiles } = require('./helpers/generateTiles');
 const generateFloor = require('./helpers/generateFloor');
 const fixBoundaries = require('./helpers/fixBoundaries');
+const projectBackwalls = require('./helpers/projectBackwalls');
 
 const initializeMap = () => {
     const map = new Map({
@@ -88,6 +89,7 @@ const interactiveGenerateLevel = async () => {
         if (userAccepted) {
             await decorateBlock(map, newBlock)
             await fixBoundaries(map, newBlock)
+            await projectBackwalls(map, newBlock)
             await map.exportMap("testlevel")
 
             graph.setNode(iter, newBlock);
