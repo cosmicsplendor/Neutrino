@@ -2,10 +2,8 @@ const scoreNumOfBlocks = n => 1 / n
 const scoreSupportingWidth = (width, supportingWidth) => supportingWidth / width
 function scoreWidth(x) {
     if (x < 1) return 0
-    // Clamp x between 1 and 10
     const clampedX = Math.min(Math.max(x, 1), 9);
     
-    // Normalize x to range [0, 1]
     let normalized = (clampedX) / 9;
 
     // Apply a non-linear transformation to the second half to speed up decay
