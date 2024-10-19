@@ -102,7 +102,8 @@ const projectCompositeRects = (compositeBlock, collisionRects, map) => {
                 x: nearestCollision,
                 y: edge.y,
                 w: Math.max(0, edge.x - nearestCollision),
-                h: edge.h
+                h: edge.h,
+                normal: edge.normal
             };
         } else if (edge.normal === "right") {
             // Project rightwards
@@ -110,7 +111,8 @@ const projectCompositeRects = (compositeBlock, collisionRects, map) => {
                 x: edge.x + edge.w,
                 y: edge.y,
                 w: Math.max(0, nearestCollision - (edge.x + edge.w)),
-                h: edge.h
+                h: edge.h,
+                normal: edge.normal
             };
         } else if (edge.normal === "top") {
             // Project upwards
@@ -118,7 +120,8 @@ const projectCompositeRects = (compositeBlock, collisionRects, map) => {
                 x: edge.x,
                 y: nearestCollision,
                 w: edge.w,
-                h: Math.max(0, edge.y - nearestCollision)
+                h: Math.max(0, edge.y - nearestCollision),
+                normal: edge.normal
             };
         } else if (edge.normal === "bottom") {
             // Project downwards
@@ -126,7 +129,8 @@ const projectCompositeRects = (compositeBlock, collisionRects, map) => {
                 x: edge.x,
                 y: edge.y + edge.h,
                 w: edge.w,
-                h: Math.max(0, nearestCollision - (edge.y + edge.h))
+                h: Math.max(0, nearestCollision - (edge.y + edge.h)),
+                normal: edge.normal
             };
         }
     }).filter(p => p.h !==0 && p.w !== 0)
