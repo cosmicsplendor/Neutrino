@@ -1,4 +1,4 @@
-const scoreNumOfBlocks = n => 1 / n
+const scoreArea = n => 1 / n
 const scoreSupportingWidth = (width, supportingWidth) => supportingWidth / width
 function scoreWidth(x) {
     if (x < 1) return 0
@@ -21,7 +21,7 @@ function scoreWidth(x) {
 }
 
 module.exports = {
-    scoreNumOfBlocks,
+    scoreArea,
     scoreSupportingWidth,
     scoreWidth
 }
