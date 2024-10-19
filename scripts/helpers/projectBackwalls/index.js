@@ -3,16 +3,16 @@ const projectCompositeRects = require("scripts/utils/projectCompositeRects");
 
 const getSupportingWidth = (map, p) => {
     if (p.edge === "left") {
-
+        return Array(p.h).fill(p.y).map((py, i) => map.getTile(p.x - 1, py + i) ? 1: 0)
     }
     if (p.edge === "right") {
-
+        return Array(p.h).fill(p.y).map((py, i) => map.getTile(p.x + p.w, py + i) ? 1: 0)
     }
     if (p.edge === "top") {
-
+        return Array(p.w).fill(p.x).map((px, i) => map.getTile(px + i, p.y - 1) ? 1: 0)
     }
     if (p.edge === "bottom") {
-
+        return Array(p.w).fill(p.x).map((px, i) => map.getTile(px + i, p.y + p.h) ? 1: 0)
     }
     return 0
 }
@@ -24,16 +24,20 @@ const computeScore = (map, projections) => {
         return width + w
     }, 0)
     const supportingWidth = projections.reduce((sum, p) => {
-        const sw = getSupportingWidth(map, p)
+        const sw = getSupportingWidth(map, p).filter(b => b).length
         return sum + sw
     }, 0)
     return Math.sqrt(area * area + width * width + supportingWidth * supportingWidth)
 }
 
-const findBestProjecions = (map, projectionsByNormal) => {
-    for (const projections of Object.values(projectionsByNormal)) {
-        const score = computeScore(map, projections)
-    }
+const findBestProjections = (map, projectionsByNormal) => {
+    const best = Object.values(projectionsByNormal)
+        .map(projections => {
+            const score = computeScore(map, projections)
+            return { score, projections }
+        })
+        .reduce((best, projections) => projections.score > best.score ? projections: best, { score: 0, projections: [] })
+    return best
 }
 
 const projectBackwalls = (map, block) => {
