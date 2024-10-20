@@ -399,6 +399,7 @@ class Map extends Block {
         this.collisionRects.push({ x: block.x, y: block.y, w: block.w, h: block.h })
     }
     setTile(x, y, name, layer = "fg", force=false) {
+        // console.log({layer, name})
         if (this.collapsedTiles[layer][`${x}-${y}`] && !force) return
         if (x < 0 || y < 0 || x > this.w - 1 || y > this.h - 1) return
         this.layers[layer][y][x] = name

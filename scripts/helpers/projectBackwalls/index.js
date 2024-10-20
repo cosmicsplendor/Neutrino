@@ -41,28 +41,37 @@ const computeScore = (map, p) => {
     return (areaScore + widthScore + supportingWidthScore) / 3
 }
 
-const findBestProjections = (map, projectionsByNormal) => {
-    const best = Object.values(projectionsByNormal)
-        .map(projections => {
-            const score = computeScore(map, projections)
-            return { score, projections }
+const findBestProjections = (map, projections) => {
+    const best = projections
+        .map(p => {
+            const score = computeScore(map, p)
+            console.log(p.normal, score)
+            return { score, p }
         })
+        .filter(p => p.score > 0.2)
         .sort((p1, p2) => p2.score - p1.score)
+        .map(p => p.p)
+        .slice(0, 3)
     return best
 }
 
 
 const wait = sec => new Promise((r => setTimeout(r, sec * 1000)))
 
-const postprocessGrid = grid => {
-    const rows = grid.length;
+const postprocessGrid = (map, grid, { x: x0, y: y0, normal }) => {
+    // extend the grid by 1 along y axis
     const cols = grid[0].length;
+    grid.push(Array(cols).fill(null))
+    const rows = grid.length;
 
     function checkCell(row, col) {
         if (row < 0 || row >= rows || col < 0 || col >= cols) {
             return 0; // Out of bounds
         }
-        return grid[row][col] ? 1 : 0;
+        if (!grid[row][col]) {
+            return 0
+        }
+        return grid[row][col].tile !== "bw10" ? 1: 0
     }
 
     for (let row = 0; row < rows; row++) {
@@ -80,58 +89,111 @@ const postprocessGrid = grid => {
             // if (topLeft || top || topRight || right || bottomRight || bottom || bottomLeft || left) {
             //     grid[row][col] = Math.random() < 0.5 ? null : { ...grid[row][col], tile: "bw10" };
             // }
-
-            // if (top && bottom && !cur) {
-            //     const top = grid[row - 1][col]
-            //     grid[row][col] = { y: top.y + 1, x: top.x, tile: "bw10" };
-            // }
+            const occluded = map.getTile(x0 + col, y0 + row)
+            if (occluded && top && normal === "bottom") { // bottom backwall
+                const topTile = grid[row-1][col].tile ?? "bw1"
+                grid[row-1][col].tile = topTile === "bw1" ? "bw3": bw1
+            }
+            if (occluded) {
+                grid[row][col] = null
+                continue
+            }
+            if (top && !cur) { // bottom stub
+                grid[row][col] = { y: y0 + row, x: x0 + col, tile: "bw10" };
+            } else if (row === 0 && normal === "bottom" && !cur) {
+                grid[row][col] = { y: y0 + row, x: x0 + col, tile: Math.random() < 0.125 ? ["bw5", "bw7", "bw6"][rand(2)]: "bw10" };
+            }
         }
     }
     
     return grid;
 }
 
+const percent = (p, l) => Math.round(p * l / 100)
+
 const generateLeftTiles = (map, p) => {
     if (p.normal !== "left") return []
     const supportingWidth = getSupportingWidth(map, p)
     const placeInReverse = Math.random() < 0.5
     const grid = Array.from({ length: p.h }, () => Array(p.w).fill(null))
+    
+    let fullWidths = 0
+    let lastX0 = 0
+    let lastW = p.w
+    
     Array.from({ length: p.h }, (_, row) => {
         const y = placeInReverse ? p.h - 1 - row : row
-        const fullWidth = supportingWidth[row] === 1
-        const w = fullWidth ? p.w : (Math.random() < 0.5 ? rand(p.w) : skewedRand(p.w))
-        const x0 = skewedRand(p.w - w, 0)
+        const fullWidth = fullWidths < percent(50, p.h) && supportingWidth[row]
+        if (fullWidth) fullWidths++
+
+        // Generate width, ensuring it doesn't exceed the grid's width
+        const w = fullWidth ? p.w : (Math.random() < 0.5 ? rand(p.w, 1) : skewedRand(p.w, 1))
+
+        // Ensure that the current (x0, x0 + w) intersects with (lastX0, lastX0 + lastW) by at least 2 units
+        const minIntersection = Math.min(lastX0 + lastW, p.w) - lastX0 // Minimum intersection of 2 units
+        const maxX0 = Math.min(lastX0 + lastW - 2, p.w - w) // Constrain x0 to ensure 2 units intersection
+
+        // Make sure x0 does not overflow the grid's column range
+        const x0 = Math.max(0, Math.min(p.w - w, skewedRand(maxX0, Math.max(0, lastX0 - w + 2))))
+
+        // Update lastX0 and lastW for the next iteration
+        lastW = w
+        lastX0 = x0
+
+        // Fill in the grid for the current row
         for (let i = 0; i < w; i++) {
-            const x = x0 + (p.w - 1 - i)
-            grid[y][x] = { x: p.x + x, y: y + p.y }
+            const x = x0 + (w - 1 - i)
+            if (x >= 0 && x < p.w) {  // Ensure x stays within the grid's column range
+                grid[y][x] = { x: p.x + x, y: y + p.y }
+            }
         }
     })
-    return postprocessGrid(grid).flat().filter(x => !!x)
+    
+    return postprocessGrid(map, grid, p).flat().filter(x => !!x)
 }
+
 
 const generateBottomTiles = (map, p) => {
     if (p.normal !== "bottom") return []
     const supportingWidth = getSupportingWidth(map, p)
-    console.log(p.normal)
-    console.log(supportingWidth)
     const placeInReverse = Math.random() < 0.5
     const grid = Array.from({ length: p.h }, () => Array(p.w).fill(null))
+    let fullHeights = 0
+    let lastY0 = 0
+    let lastH = p.h
     Array.from({ length: p.w }, (_, col) => {
         const x = placeInReverse ? p.w - 1 - col : col
-        const fullHeight = supportingWidth[col]
-        const h = fullHeight ? p.h : (Math.random() < 0.5 ? rand(p.h) : skewedRand(p.h))
-        const y0 = fullHeight ? 0: skewedRand(p.h - h, 0)
-        console.log({ col, fullHeight, y0 })
+        const fullHeight = fullHeights < percent(50, p.w) && supportingWidth[col]
+        if (fullHeight) fullHeights++
+        
+        // Generate height as before, ensuring it doesn't exceed the grid's height
+        const h = fullHeight ? p.h : (Math.random() < 0.5 ? rand(p.h, 1) : skewedRand(p.h, 1))
+
+        // Ensure that the current (y0, y0 + h) intersects with (lastY0, lastY0 + lastH) by at least 2 units
+        const minIntersection = Math.min(lastY0 + lastH, p.h) - lastY0 // Minimum intersection of 2 units
+        const maxY0 = Math.min(lastY0 + lastH - 2, p.h - h) // Constrain y0 to ensure 2 units intersection
+
+        // Make sure y0 does not overflow the grid's row range
+        const y0 = Math.max(0, Math.min(p.h - h, skewedRand(maxY0, Math.max(0, lastY0 - h + 2))))
+
+        // Update lastY0 and lastH for the next iteration
+        lastH = h
+        lastY0 = y0
+
+        // Fill in the grid for the current column
         for (let i = 0; i < h; i++) {
             const y = y0 + (h - 1 - i)
-            grid[y][x] = { x: x + p.x, y: p.y + y }
+            if (y >= 0 && y < p.h) {  // Ensure y stays within the grid's row range
+                grid[y][x] = { x: x + p.x, y: p.y + y }
+            }
         }
     })
-    return postprocessGrid(grid).flat().filter(x => !!x)
+    return postprocessGrid(map, grid, p).flat().filter(x => !!x)
 }
 
+
+
 const generateTiles = (map, projections) => {
-    if (projections.length < 4) return []
     const allTiles = []
     for (const p of projections) {
         if (p.normal === "top" || p.normal === "right") continue
@@ -145,10 +207,10 @@ const generateTiles = (map, projections) => {
 
 const projectBackwalls = async (map, block) => {
     const projections = projectCompositeRects(block, map.collisionRects, map)
-    const bestProjections = findBestProjections(map, projections)
-    const tiles = generateTiles(map, projections)
+    const bestProjections = projections.length > 3 ? findBestProjections(map, projections): []
+    const tiles = generateTiles(map, bestProjections)
     tiles.forEach(({ x, y, tile }) => {
-        map.setTile(x, y, "bw1", tile ?? "fg")
+        map.setTile(x, y, tile ?? "bw1", "mg")
     })
     // return tiles
     await map.exportMap()
