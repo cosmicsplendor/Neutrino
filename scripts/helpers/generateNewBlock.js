@@ -14,8 +14,6 @@ const pickVerticalAlignmentParams = (emptySpaces) => {
     };
 };
 
-
-
 const generateNewBlock = (prevBlock, map) => {
     const newBlock = CompositeBlock.create({
         width: rand(3, 1) + skewedRand(5, 1) + 1, // Width between 2 and 6
