@@ -64,7 +64,7 @@ const fixBoundaries = async (map, block) => {
                     map.collapseTile({ x: block.x+i-2, y: block.y+j-1, tile: "wt_1"})
                     return
                 }
-                if (tileNumber === 5 && leftTile === "wt_16") {
+                if (tileNumber === 4 && leftTile === "wt_16") {
                     return
                 }
                 if (tile === "wt_14") {
