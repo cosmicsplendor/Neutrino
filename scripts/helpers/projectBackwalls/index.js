@@ -1,19 +1,25 @@
 const { scoreArea, scoreSupportingWidth, scoreWidth } = require("./scoreFns");
 const projectCompositeRects = require("../../utils/projectCompositeRects");
 
+const getMapTiles = (map, x, y) => {
+    if (x < 0 || x >= map.w) return false
+    if (y < 0 || y >= map.h) return true
+    map.getTile(x, y) ? 1: 0
+}
+
 const getSupportingWidth = (map, p) => {
     if (p.normal === "left") {
-        return Array(p.h).fill(p.y).map((py, i) => map.getTile(p.x - 1, py + i) ? 1: 0)
+        return Array(p.h).fill(p.y).map((py, i) => getMapTiles(map, p.x - 1, py + i))
     }
     if (p.normal === "right") {
-        return Array(p.h).fill(p.y).map((py, i) => map.getTile(p.x + p.w, py + i) ? 1: 0)
+        return Array(p.h).fill(p.y).map((py, i) => getMapTiles(map, p.x + p.w, py + i))
     }
     if (p.normal === "top") {
-        return Array(p.w).fill(p.x).map((px, i) => map.getTile(px + i, p.y - 1) ? 1: 0)
+        return Array(p.w).fill(p.x).map((px, i) => getMapTiles(map, px + i, p.y - 1))
     }
     if (p.normal === "bottom") {
         return Array(p.w).fill(p.x).map((px, i) => {
-            const sw = map.getTile(px + i, p.y + p.h) ? 1: 0
+            const sw = getMapTiles(map, px + i, p.y + p.h)
             return sw
         })
     }
@@ -51,7 +57,7 @@ const projectBackwalls = async (map, block) => {
      * 5. consider each scores as a component of an unit vector and compute absolute score by taking the square root of their sums squared
      * 6. return the group with the highest score, and let the user decide whether to construct back wall based on the min score threshold and the max scoring group
      */
-    const projections = projectCompositeRects(block, block.collisionRects, map)
+    const projections = projectCompositeRects(block, map.collisionRects, map)
     const bestProjections = findBestProjections(map, projections)
     console.log(bestProjections)
     process.exit()
