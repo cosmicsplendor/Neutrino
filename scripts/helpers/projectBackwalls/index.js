@@ -23,7 +23,7 @@ const getSupportingWidth = (map, p) => {
             return sw
         })
     }
-    return 0
+    return []
 }
 
 const computeScore = (map, p) => {
@@ -48,19 +48,39 @@ const findBestProjections = (map, projectionsByNormal) => {
     return best
 }
 
+const placeTiles = (map, projection) => {
+    for (let x = 0; x < projection.w; x++) {
+        for (let y = 0; y < projection.h; y++) {
+            map.setTile(x, y, "bw1", "mg")
+        }
+    }
+    // return Array(p.h).fill(p.y).map((py, i) => getMapTiles(map, p.x - 1, py + i))
+}
+const wait = sec => new Promise((r => setTimeout(r, sec * 1000)))
+const generatePTiles = (map, p) => {
+    // discard top and right projections
+    if (p.normal === "top" || p.normal === "right") return []
+    const supportingWidth = getSupportingWidth(map, p)
+}
+
+const generateTiles= (map, projections) => {
+    const allTiles = []
+    for (const p of projections) {
+        const tiles = generatePTiles(map, p)
+        tiles.forEach(tile => allTiles.push(tile))
+        if (allTiles.length > 24) return
+    }
+    return allTiles
+}
+
 const projectBackwalls = async (map, block) => {
-    /**
-     * 1. project the edges of the block and group by normal direction
-     * 2. for each normal direction compute supporting width and use it to compute supportingWidth score 
-     * 3. compute the total number of tiles occupied and use it to get numOfBlocks score
-     * 4. use power distribution to compute width score
-     * 5. consider each scores as a component of an unit vector and compute absolute score by taking the square root of their sums squared
-     * 6. return the group with the highest score, and let the user decide whether to construct back wall based on the min score threshold and the max scoring group
-     */
     const projections = projectCompositeRects(block, map.collisionRects, map)
     const bestProjections = findBestProjections(map, projections)
     console.log(bestProjections)
-    process.exit()
+    placeTiles(map, bestProjections[0])
+    await map.exportMap()
+    await wait(300)
+    // process.exit()
 }
 
 module.exports = projectBackwalls
