@@ -8,6 +8,11 @@ class Title extends Node {
         this.rock1 = new TexRegion({ frame: "rock1" })
         this.rock2 = new TexRegion({ frame: "rock2" })
         this.ball = new TexRegion({ frame: "ball" })
+        this.add(this.rock1)
+        this.add(this.rock2)
+        this.add(this.ball)
+        this.add(this.logo)
+
 
         this.ball.pos.x = 88
         this.ball.pos.y = 80
@@ -20,24 +25,7 @@ class Title extends Node {
         }
         this.ball.rotation = 0
 
-        this.rock2.anchor = {
-            x: this.rock2.w * 0.75,
-            y: this.rock2.h / 2
-        }
-        this.rock2.rotation = -Math.PI / 12
-
-        this.rock1.anchor = {
-            x: this.rock1.w / 2,
-            y: this.rock1.h / 2
-        }
-        this.rock1.rotation = Math.PI / 6
-
-        this.add(this.rock1)
-        this.add(this.rock2)
-        this.add(this.ball)
-        this.add(this.logo)
-
-        this.alpha = 0.01
+        this.alpha = 1
         Object.assign(this, compositeDims(this))
     }
     update(dt) {
