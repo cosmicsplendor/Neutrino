@@ -12,26 +12,23 @@ const factories = {
     player: {
         fields: [], // No specific props inferred from the original code
         create: (params) => {
-            // Perform transformation
-            return params
+            const { x, y, name } = params
+            return { x, y, name }
         }
     },
     checkpoint: {
         create: (params) => {
-            return params
+            const { x, y, name } = params
+            return { x, y, name }
         }
     },
-    orb: {
-        fields: [], // No specific props required
-        create: (params) => {
-            return params
-        }
-    },
+
     ball: {
         fields: ['seq',], // Inferred from Ball constructor and props.seq
         create: (params) => {
             // Perform transformation
-            return params
+            const { x, y, name, seq } = params
+            return { x, y, name, seq }
         }
     },
     gearBlade: sawBlades({ small: "sb2", large: "sb6" }),
@@ -84,7 +81,8 @@ const factories = {
         create: params => {
             const groupId = groupMap[params.name]
             if (groupId) params.groupId = groupId
-            return params
+            const { x, y, name } = params
+            return { x, y, name, groupId }
         }
     },
     wind: {

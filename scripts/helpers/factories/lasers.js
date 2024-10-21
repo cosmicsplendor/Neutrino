@@ -1,7 +1,7 @@
 const TILE_SIZE = 48
 
 const lasers = (orientation) => {
-    const fields = ['speed', 'num', 'period', 'on']
+    const fields = ['speed', 'period', 'on']
     if (orientation === "vertical") {
         fields.unshift("toX")
     }
@@ -17,7 +17,7 @@ const lasers = (orientation) => {
             return true
         },
         create: (params) => {
-            const { x, y, toX, toY, speed, num, period, on, name } = params
+            const { x, y, toX, toY, speed, num, period, on, name, projection } = params
             return {
                 x, y,
                 toX: x + Number(toX) * TILE_SIZE, toY: y + Number(toY) * TILE_SIZE,
