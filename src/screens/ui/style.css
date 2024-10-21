@@ -30,17 +30,31 @@
 }
 
 .playBtn {
-    background: #eeeeee;
+    background: linear-gradient(145deg, #f5f5f5, #dcdcdc); /* Soft moonlight gradient */
     font-size: 1.5em;
     color: #e15c22;
-    padding: 0.55em;
-    border-radius: 0.2em;
+    padding: 0.6em 1.2em; /* Adjusted padding for balance */
+    border-radius: 0.4em; /* Slightly more rounded for smoother look */
     cursor: pointer;
     font-weight: bold;
     font-family: monospace;
     letter-spacing: 1px;
     user-select: none;
+    border: none;
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2), /* Soft 3D shadow */
+                inset 2px 2px 4px rgba(255, 255, 255, 0.3); /* Inner glow */
+    transition: opacity 0.3s ease, transform 0.3s ease;
 }
+
 .playBtn:hover, .playBtn:active, .playBtn:focus {
-    box-shadow: 0px 0px 3px 3px #7a371c;
+    background: linear-gradient(145deg, #ffffff, #e0e0e0); /* Lighter gradient on hover */
+    box-shadow: 6px 6px 10px rgba(0, 0, 0, 0.25), /* More pronounced outer shadow */
+                inset 0px 0px 6px 3px rgba(43, 40, 38, 0.4); /* Inner glow */
+    transform: translateY(-2px); /* Slight lift effect */
+}
+
+.playBtn:active {
+    transform: translateY(2px); /* Button presses inwards when clicked */
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2), /* Less shadow for pressed effect */
+                inset 0px 0px 8px 3px rgba(255, 150, 100, 0.5); /* Stronger inner glow */
 }
