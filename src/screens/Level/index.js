@@ -6,14 +6,11 @@ import SoundSprite from "@utils/Sound/SoundSprite"
 import soundSpriteId from "@assets/audio/sprite.mp3"
 import soundMetaId from "@assets/audio/sprite.cson"
 import levels from "@config/levels"
-import config from "@config"
-import { calcAligned } from "@lib/utils/entity"
-import atlasmetaId from "@assets/images/atlasmeta.cson"
-import TexRegion from "@lib/entities/TexRegion"
-import bgDataId from "@assets/levels/background.cson"
+
 import initUI from "./initUI"
 import { hexToNorm } from "@lib/utils/math"
 import * as rendApis  from "@lib/renderer/apis"
+import { placeBg } from "../utils"
 
 const levelColors = [
     { "bg":"#121228","mob_bg":"#121228", "pxbg":"0.058, 0.058, 0.133" },
@@ -28,28 +25,12 @@ const levelColors = [
     { "bg":"rgb(18 18 18)", "mob_bg":"rgb(18 18 18)", "pxbg":"0.090, 0.090, 0.090" },
     {"bg":"#132b27","mob_bg":"#132b27","pxbg":"#0a1614","tint":"0.025, -0.025, -0.0125, 0"}
 ]
-const placeBg = (screen, assetsCache) => {
-    const bgData = assetsCache.get(bgDataId)
-    screen.container = new Node()
-    screen.add(screen.container)
-    bgData.forEach(tile => {
-        screen.container.add(new TexRegion({ frame: tile.name, pos: { x: tile.x, y: tile.y }}))
-    })
-    const atlasMeta = assetsCache.get(atlasmetaId)
-    const y1 = bgData.reduce((min, tile) => Math.min(min, tile.y), Infinity)
-    const y2 = bgData.reduce((max, tile) => Math.max(max, tile.y + atlasMeta[tile.name].height), 0)
-    const height = y2 - y1
-    screen.container.overlay = [0.03529411764705882, 0.03529411764705882, 0.03529411764705882]
-    const realignBg = () => {
-        if (screen.container) screen.container.pos.y = -y1 + (config.viewport.height * config.devicePixelRatio - height)
-    }
-    realignBg()
-    config.viewport.on("change", realignBg)
-}
+
+
 class LevelScreen extends Node {
     background = "#000000"
     curLevel = 0
-    constructor({ game, uiRoot, storage, renderer }) {
+    constructor({ game, uiRoot, storage }) {
         super()
         this.game = game
         this.storage = storage
@@ -65,9 +46,7 @@ class LevelScreen extends Node {
             this.chSound = soundSprite.createPool("change") 
             this.errSound = soundSprite.createPool("error")
 
-            if (game.renderer.api === rendApis.WEBGL) {
-                placeBg(this, assetsCache)
-            }
+                placeBg(this, assetsCache, null, game.renderer.api)
 
         })
     }

@@ -4,9 +4,10 @@ import { calcAligned, getGlobalPos } from "@utils/entity"
 import { LEVEL } from "@screens/names"
 import Title from "./Title"
 import initUI from "./initUI"
-
+import { placeBg } from "../utils"
 class MainMenuScreen extends Node {
     background = "#041a27"
+    background="rgb(8 23 32) "
     constructor({ game, uiRoot, sdk }) {
         super()
         this.game = game
@@ -24,6 +25,7 @@ class MainMenuScreen extends Node {
             viewport.on("change", this.realign)
             this.realign(viewport)
             this.add(this.gameTitle)
+            placeBg(this, game.assetsCache, [0.0110, 0.0714, 0.1071], game.renderer.api)
         })
     }
     onEnter() {
