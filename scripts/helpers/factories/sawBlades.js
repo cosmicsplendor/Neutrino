@@ -6,7 +6,7 @@ const sawBlades = (nameMap, static=false) => {
             console.log(nameMap[params.size])
             console.log(params.size)
             console.log(nameMap)
-            const { width, height } = atlas[nameMap[params.size ?? "large" ]]
+            const { width, height } = atlas[nameMap[params.size ?? "large" ] ?? static.large]
             return { width, height }
         },
         create: (params) => {
