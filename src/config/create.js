@@ -12,10 +12,10 @@ const resolutions = {
     full: { max: 1980, min: 1024 },
     hd: { max: 1440, min: 986 },
     r720p: { max: 1280, min: 720 },
-    custom: { max: 1100, min: 720 }
+    custom: { max: 1280, min: 1080 }
 }
 
-const desktopRes = resolutions.full
+const desktopRes = resolutions.custom
 
 const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 const scale = false
@@ -36,6 +36,14 @@ const computeViewport = () => {
             height: vpHeight
         })
     }
+    const maxWidth = portraitMode ? desktopRes.min: desktopRes.max
+    const maxHeight = portraitMode ? desktopRes.max: desktopRes.min
+    const vpWidth = Math.min(width, maxWidth)
+    const vpHeight = Math.min(height, maxHeight)
+    return ({ // canvas dimensions
+        width: vpWidth,
+        height: vpHeight,
+    })
     return ({ // canvas dimensions
         width: window.innerWidth,
         height: window.innerHeight,

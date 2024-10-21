@@ -31,7 +31,7 @@ const levelColors = [
 class LevelScreen extends Node {
     background = "#000000"
     curLevel = 0
-    constructor({ game, uiRoot, storage }) {
+    constructor({ game, uiRoot, storage, renderer }) {
         super()
         this.game = game
         this.storage = storage
@@ -47,27 +47,23 @@ class LevelScreen extends Node {
             this.chSound = soundSprite.createPool("change") 
             this.errSound = soundSprite.createPool("error")
 
-            if (config.isMobile) {
-                return
-            }
             if (game.renderer.api === rendApis.WEBGL) {
                 const bgData = assetsCache.get(bgDataId)
                 this.container = new Node()
                 bgData.forEach(tile => {
                     this.container.add(new TexRegion({ frame: tile.name, pos: { x: tile.x, y: tile.y }}))
                 })
-                this.container.pos.y = -1016
                 const atlasMeta = assetsCache.get(atlasmetaId)
-                const height = bgData.reduce((max, tile) => Math.max(max, tile.y + atlasMeta[tile.name].height), 0) + this.container.pos.y
+                const y1 = bgData.reduce((min, tile) => Math.min(min, tile.y), Infinity)
+                const y2 = bgData.reduce((max, tile) => Math.max(max, tile.y + atlasMeta[tile.name].height), 0)
+                const height = y2 - y1
                 this.container.overlay = [0.03529411764705882, 0.03529411764705882, 0.03529411764705882]
                 this.add(this.container)
-                const realignBg = viewport => {
-                    const aligned = calcAligned(viewport, { width: config.viewport.width, height: height },"center", "bottom")
-                    if (this.container) this.container.pos.y = aligned.y - 1016
+                const realignBg = () => {
+                    if (this.container) this.container.pos.y = -y1 + (config.viewport.height * config.devicePixelRatio - height)
                 }
-    
-                realignBg(config.viewport)
-                config.viewport.on("change", () => realignBg(config.viewport))
+                realignBg()
+                config.viewport.on("change", realignBg)
             }
 
         })
