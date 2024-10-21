@@ -214,8 +214,9 @@ const projectBackwalls = async (map, block) => {
             const tiles = generateTiles(map, p)
             const previewTiles = [...acceptedTiles, ...tiles]
             await exportmap(map, previewTiles)
-            const choice = await getChoice([ "Accept", "Retry", "Discard" ])
+            if (tiles.length === 0) continue
             message(`[${Number(i) + 1} of ${bestProjections.length}] projecting back walls`)
+            const choice = await getChoice([ "Retry", "Discard", "Accept" ])
             if (choice === "Accept") {
                 acceptedTiles.push(...tiles)
                 break
@@ -229,12 +230,10 @@ const projectBackwalls = async (map, block) => {
         }
     }
 
-
     acceptedTiles.forEach(({ x, y, tile }) => {
         map.setTile(x, y, tile ?? "bw1", "mg")
     })
-    await map.exportMap()
-    process.exit()
+    return acceptedTiles
 }
 
 module.exports = projectBackwalls

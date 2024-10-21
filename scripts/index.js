@@ -30,6 +30,11 @@ const reconstructMap = (map, blocks) => {
     blocks.forEach(block => {
         block.addToMap()
         if (block.tilesGrid) placeTiles(map, block, block.tilesGrid)
+        if (block.backTiles) {
+            block.backTiles.forEach(({ x, y, tile }) => {
+                map.setTile(x, y, tile ?? "bw1", "mg")
+            })
+        }
     });
 };
 
@@ -91,7 +96,7 @@ const interactiveGenerateLevel = async () => {
             map.clearPreviewColRects()
             await decorateBlock(map, newBlock)
             await fixBoundaries(map, newBlock)
-            await projectBackwalls(map, newBlock)
+            newBlock.backTiles = await projectBackwalls(map, newBlock)
             await map.exportMap("testlevel")
 
             graph.setNode(iter, newBlock);
