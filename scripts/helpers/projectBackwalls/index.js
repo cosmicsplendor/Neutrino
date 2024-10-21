@@ -109,18 +109,18 @@ const generateLeftTiles = (map, p) => {
     const supportingWidth = getSupportingWidth(map, p)
     const placeInReverse = Math.random() < 0.5
     const grid = Array.from({ length: p.h }, () => Array(p.w).fill(null))
-
+    
     let fullWidths = 0
     let lastX0 = 0
     let lastW = p.w
-
+    
     Array.from({ length: p.h }, (_, row) => {
         const y = placeInReverse ? p.h - 1 - row : row
         const fullWidth = fullWidths < percent(50, p.h) && supportingWidth[row]
         if (fullWidth) fullWidths++
 
         // Generate width, ensuring it doesn't exceed the grid's width
-        const w = fullWidth ? p.w : (Math.random() < 0.25 ? rand(p.w) : skewedRand(p.w, 1))
+        const w = fullWidth ? p.w : (Math.random() < 0.5 ? rand(p.w, 1) : skewedRand(p.w, 1))
 
         // Ensure that the current (x0, x0 + w) intersects with (lastX0, lastX0 + lastW) by at least 2 units
         const minIntersection = Math.min(lastX0 + lastW, p.w) - lastX0 // Minimum intersection of 2 units
@@ -141,7 +141,7 @@ const generateLeftTiles = (map, p) => {
             }
         }
     })
-
+    
     return postprocessGrid(map, grid, p).flat().filter(x => !!x)
 }
 
@@ -158,9 +158,9 @@ const generateBottomTiles = (map, p) => {
         const x = placeInReverse ? p.w - 1 - col : col
         const fullHeight = fullHeights < percent(50, p.w) && supportingWidth[col]
         if (fullHeight) fullHeights++
-
+        
         // Generate height as before, ensuring it doesn't exceed the grid's height
-        const h = fullHeight ? p.h : (Math.random() < 0.5 ? rand(p.h) : skewedRand(p.h))
+        const h = fullHeight ? p.h : (Math.random() < 0.5 ? rand(p.h, 1) : skewedRand(p.h, 1))
 
         // Ensure that the current (y0, y0 + h) intersects with (lastY0, lastY0 + lastH) by at least 2 units
         const minIntersection = Math.min(lastY0 + lastH, p.h) - lastY0 // Minimum intersection of 2 units
@@ -183,6 +183,7 @@ const generateBottomTiles = (map, p) => {
     })
     return postprocessGrid(map, grid, p).flat().filter(x => !!x)
 }
+
 
 
 

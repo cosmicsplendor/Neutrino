@@ -106,6 +106,7 @@ const interactiveGenerateLevel = async () => {
             if (terminate) break
         } else {
             terminal.red("Retrying current iteration...\n");
+            map.clearPreviewColRects()
             reconstructMap(map, blocks)
             if (terminate) break
         }
