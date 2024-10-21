@@ -1,6 +1,7 @@
 const { scoreArea, scoreSupportingWidth, scoreWidth } = require("./scoreFns");
 const projectCompositeRects = require("../../utils/projectCompositeRects");
 const { skewedRand, rand } = require("../../utils");
+const { promptFields, getChoice, message } = require("../term");
 
 const MAX_TILES = 24
 
@@ -58,7 +59,7 @@ const findBestProjections = (map, projections) => {
 
 
 const wait = sec => new Promise((r => setTimeout(r, sec * 1000)))
-const bws = [ "bw4", "bw5", "bw6", "bw7" ]
+const bws = ["bw4", "bw5", "bw6", "bw7"]
 const postprocessGrid = (map, grid, { x: x0, y: y0, normal }) => {
     // extend the grid by 1 along y axis
     const cols = grid[0].length;
@@ -71,7 +72,7 @@ const postprocessGrid = (map, grid, { x: x0, y: y0, normal }) => {
         if (!grid[row][col]) {
             return 0
         }
-        return grid[row][col].tile !== "bw10" ? 1: 0
+        return grid[row][col].tile !== "bw10" ? 1 : 0
     }
 
     for (let row = 0; row < rows; row++) {
@@ -83,21 +84,21 @@ const postprocessGrid = (map, grid, { x: x0, y: y0, normal }) => {
             if (occluded) {
                 grid[row][col] = null
                 if (top && normal === "bottom") { // bottom backwall
-                    const topTile = grid[row-1][col].tile ?? "bw1"
-                    grid[row-1][col].tile = topTile === "bw1" ? "bw3": "bw1"
+                    const topTile = grid[row - 1][col].tile ?? "bw1"
+                    grid[row - 1][col].tile = topTile === "bw1" ? "bw3" : "bw1"
                 }
             } else if (top && !cur) { // bottom stub
                 grid[row][col] = { y: y0 + row, x: x0 + col, tile: "bw10" };
             } else if (row === 0 && normal === "bottom" && !cur) {
-                grid[row][col] = { y: y0 + row, x: x0 + col, tile: Math.random() < 0.125 ? bws[rand(bws.length - 1)]: "bw10" };
+                grid[row][col] = { y: y0 + row, x: x0 + col, tile: Math.random() < 0.125 ? bws[rand(bws.length - 1)] : "bw10" };
             }
 
             if (checkCell(row, col)) {
-                grid[row][col]. tile = Math.random() < 0.125 ? bws[rand(bws.length - 1)]: "bw1"
+                grid[row][col].tile = Math.random() < 0.125 ? bws[rand(bws.length - 1)] : "bw1"
             }
         }
     }
-    
+
     return grid;
 }
 
@@ -108,11 +109,11 @@ const generateLeftTiles = (map, p) => {
     const supportingWidth = getSupportingWidth(map, p)
     const placeInReverse = Math.random() < 0.5
     const grid = Array.from({ length: p.h }, () => Array(p.w).fill(null))
-    
+
     let fullWidths = 0
     let lastX0 = 0
     let lastW = p.w
-    
+
     Array.from({ length: p.h }, (_, row) => {
         const y = placeInReverse ? p.h - 1 - row : row
         const fullWidth = fullWidths < percent(50, p.h) && supportingWidth[row]
@@ -140,7 +141,7 @@ const generateLeftTiles = (map, p) => {
             }
         }
     })
-    
+
     return postprocessGrid(map, grid, p).flat().filter(x => !!x)
 }
 
@@ -157,9 +158,9 @@ const generateBottomTiles = (map, p) => {
         const x = placeInReverse ? p.w - 1 - col : col
         const fullHeight = fullHeights < percent(50, p.w) && supportingWidth[col]
         if (fullHeight) fullHeights++
-        
+
         // Generate height as before, ensuring it doesn't exceed the grid's height
-        const h = fullHeight ? p.h : (Math.random() < 0.25 ? skewedRand(0, p.h) : skewedRand(p.h, 0))
+        const h = fullHeight ? p.h : (Math.random() < 0.5 ? rand(p.h) : skewedRand(p.h))
 
         // Ensure that the current (y0, y0 + h) intersects with (lastY0, lastY0 + lastH) by at least 2 units
         const minIntersection = Math.min(lastY0 + lastH, p.h) - lastY0 // Minimum intersection of 2 units
@@ -185,26 +186,53 @@ const generateBottomTiles = (map, p) => {
 
 
 
-const generateTiles = (map, projections) => {
-    const allTiles = []
-    for (const p of projections) {
-        if (p.normal === "top" || p.normal === "right") continue
+const generateTiles = (map, p) => {
+    const tiles = p.normal === "bottom" ? generateBottomTiles(map, p) : generateLeftTiles(map, p)
+    return tiles
+}
 
-        const tiles = p.normal === "bottom" ? generateBottomTiles(map, p) : generateLeftTiles(map, p)
-        tiles.forEach(tile => allTiles.push(tile))
-        if (allTiles.length > MAX_TILES) break
-    }
-    return allTiles
+const undoTiles = async (map, tiles) => {
+    tiles.forEach(({ x, y }) => {
+        map.setTile(x, y, null, "mg")
+    })
+    await map.exportMap()
+}
+const exportmap = async (map, tiles) => {
+    tiles.forEach(({ x, y, tile }) => {
+        map.setTile(x, y, tile ?? "bw1", "mg")
+    })
+    await map.exportMap()
 }
 
 const projectBackwalls = async (map, block) => {
     const projections = projectCompositeRects(block, map.collisionRects, map)
-    const bestProjections = projections.length > 3 ? findBestProjections(map, projections): []
-    const tiles = generateTiles(map, bestProjections)
-    tiles.forEach(({ x, y, tile }) => {
+    const bestProjections = projections.length > 3 ? findBestProjections(map, projections) : []
+    const acceptedTiles = []
+    for (const i in bestProjections) {
+        const p = bestProjections[i]
+        while(true) {
+            const tiles = generateTiles(map, p)
+            const previewTiles = [...acceptedTiles, ...tiles]
+            await exportmap(map, previewTiles)
+            const choice = await getChoice([ "Accept", "Retry", "Discard" ])
+            message(`[${Number(i) + 1} of ${bestProjections.length}] projecting back walls`)
+            if (choice === "Accept") {
+                acceptedTiles.push(...tiles)
+                break
+            } else if (choice === "Retry") {
+                await undoTiles(map, tiles)
+                continue
+            } else if (choice === "Discard") {
+                await undoTiles(map, tiles)
+                break
+            }
+        }
+    }
+
+
+    acceptedTiles.forEach(({ x, y, tile }) => {
         map.setTile(x, y, tile ?? "bw1", "mg")
     })
-    // return tiles
     await map.exportMap()
     process.exit()
 }
