@@ -3,7 +3,10 @@ const sawBlades = (nameMap, static=false) => {
     return {
         fields: static ? ["size"]: ['toX', 'toY', 'speed', "size"], // Based on SawBlade constructor
         dims: (params, atlas) => {
-            const { width, height } = atlas[nameMap[params.size]]
+            console.log(nameMap[params.size])
+            console.log(params.size)
+            console.log(nameMap)
+            const { width, height } = atlas[nameMap[params.size ?? "large" ]]
             return { width, height }
         },
         create: (params) => {
