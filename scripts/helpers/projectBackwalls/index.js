@@ -45,25 +45,25 @@ const findBestProjections = (map, projections) => {
     const best = projections
         .map(p => {
             const score = computeScore(map, p)
-            console.log(p.normal, score)
             return { score, p }
         })
         .filter(p => p.score > 0.2)
         .sort((p1, p2) => p2.score - p1.score)
-        .map(p => p.p)
+        .map(p => {
+            return p.p
+        })
         .slice(0, 3)
     return best
 }
 
 
 const wait = sec => new Promise((r => setTimeout(r, sec * 1000)))
-
+const bws = [ "bw4", "bw5", "bw6", "bw7" ]
 const postprocessGrid = (map, grid, { x: x0, y: y0, normal }) => {
     // extend the grid by 1 along y axis
     const cols = grid[0].length;
     grid.push(Array(cols).fill(null))
     const rows = grid.length;
-    grid.forEach(row => console.log(row.map(x => x ? 1: 0).join("")))
     function checkCell(row, col) {
         if (row < 0 || row >= rows || col < 0 || col >= cols) {
             return 0; // Out of bounds
@@ -78,33 +78,22 @@ const postprocessGrid = (map, grid, { x: x0, y: y0, normal }) => {
         for (let col = 0; col < cols; col++) {
             const cur = checkCell(row, col);
             const top = checkCell(row - 1, col);
-            const right = checkCell(row, col + 1);
-            const bottom = checkCell(row + 1, col);
-            const left = checkCell(row, col - 1);
-            const topLeft = checkCell(row - 1, col - 1);
-            const topRight = checkCell(row - 1, col + 1);
-            const bottomLeft = checkCell(row + 1, col - 1);
-            const bottomRight = checkCell(row + 1, col + 1);
 
-            // console.log({ topLeft, top, topRight, right, bottomRight, bottom, bottomLeft, left, cur})
-            if (topLeft && top && topRight && right && bottomRight && bottom && bottomLeft && left && cur) {
-                console.log("HERE")
-                grid[row][col].tile = "bw10"
-                continue
-            }
             const occluded = map.getTile(x0 + col, y0 + row)
-            if (occluded && top && normal === "bottom") { // bottom backwall
-                const topTile = grid[row-1][col].tile ?? "bw1"
-                grid[row-1][col].tile = topTile === "bw1" ? "bw3": bw1
-            }
             if (occluded) {
                 grid[row][col] = null
-                continue
-            }
-            if (top && !cur) { // bottom stub
+                if (top && normal === "bottom") { // bottom backwall
+                    const topTile = grid[row-1][col].tile ?? "bw1"
+                    grid[row-1][col].tile = topTile === "bw1" ? "bw3": "bw1"
+                }
+            } else if (top && !cur) { // bottom stub
                 grid[row][col] = { y: y0 + row, x: x0 + col, tile: "bw10" };
             } else if (row === 0 && normal === "bottom" && !cur) {
-                grid[row][col] = { y: y0 + row, x: x0 + col, tile: Math.random() < 0.125 ? ["bw5", "bw7", "bw6"][rand(2)]: "bw10" };
+                grid[row][col] = { y: y0 + row, x: x0 + col, tile: Math.random() < 0.125 ? bws[rand(bws.length - 1)]: "bw10" };
+            }
+
+            if (checkCell(row, col)) {
+                grid[row][col]. tile = Math.random() < 0.125 ? bws[rand(bws.length - 1)]: "bw1"
             }
         }
     }
@@ -130,7 +119,7 @@ const generateLeftTiles = (map, p) => {
         if (fullWidth) fullWidths++
 
         // Generate width, ensuring it doesn't exceed the grid's width
-        const w = fullWidth ? p.w : (Math.random() < 0.5 ? rand(p.w, 1) : skewedRand(p.w, 1))
+        const w = fullWidth ? p.w : (Math.random() < 0.25 ? rand(p.w) : skewedRand(p.w, 1))
 
         // Ensure that the current (x0, x0 + w) intersects with (lastX0, lastX0 + lastW) by at least 2 units
         const minIntersection = Math.min(lastX0 + lastW, p.w) - lastX0 // Minimum intersection of 2 units
@@ -170,7 +159,7 @@ const generateBottomTiles = (map, p) => {
         if (fullHeight) fullHeights++
         
         // Generate height as before, ensuring it doesn't exceed the grid's height
-        const h = fullHeight ? p.h : (Math.random() < 0.5 ? rand(p.h, 1) : skewedRand(p.h, 1))
+        const h = fullHeight ? p.h : (Math.random() < 0.25 ? skewedRand(0, p.h) : skewedRand(p.h, 0))
 
         // Ensure that the current (y0, y0 + h) intersects with (lastY0, lastY0 + lastH) by at least 2 units
         const minIntersection = Math.min(lastY0 + lastH, p.h) - lastY0 // Minimum intersection of 2 units
@@ -211,7 +200,6 @@ const generateTiles = (map, projections) => {
 const projectBackwalls = async (map, block) => {
     const projections = projectCompositeRects(block, map.collisionRects, map)
     const bestProjections = projections.length > 3 ? findBestProjections(map, projections): []
-    console.log(bestProjections.length)
     const tiles = generateTiles(map, bestProjections)
     tiles.forEach(({ x, y, tile }) => {
         map.setTile(x, y, tile ?? "bw1", "mg")
