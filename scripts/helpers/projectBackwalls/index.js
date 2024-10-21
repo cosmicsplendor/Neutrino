@@ -63,7 +63,7 @@ const postprocessGrid = (map, grid, { x: x0, y: y0, normal }) => {
     const cols = grid[0].length;
     grid.push(Array(cols).fill(null))
     const rows = grid.length;
-
+    grid.forEach(row => console.log(row.map(x => x ? 1: 0).join("")))
     function checkCell(row, col) {
         if (row < 0 || row >= rows || col < 0 || col >= cols) {
             return 0; // Out of bounds
@@ -86,9 +86,12 @@ const postprocessGrid = (map, grid, { x: x0, y: y0, normal }) => {
             const bottomLeft = checkCell(row + 1, col - 1);
             const bottomRight = checkCell(row + 1, col + 1);
 
-            // if (topLeft || top || topRight || right || bottomRight || bottom || bottomLeft || left) {
-            //     grid[row][col] = Math.random() < 0.5 ? null : { ...grid[row][col], tile: "bw10" };
-            // }
+            // console.log({ topLeft, top, topRight, right, bottomRight, bottom, bottomLeft, left, cur})
+            if (topLeft && top && topRight && right && bottomRight && bottom && bottomLeft && left && cur) {
+                console.log("HERE")
+                grid[row][col].tile = "bw10"
+                continue
+            }
             const occluded = map.getTile(x0 + col, y0 + row)
             if (occluded && top && normal === "bottom") { // bottom backwall
                 const topTile = grid[row-1][col].tile ?? "bw1"
@@ -208,6 +211,7 @@ const generateTiles = (map, projections) => {
 const projectBackwalls = async (map, block) => {
     const projections = projectCompositeRects(block, map.collisionRects, map)
     const bestProjections = projections.length > 3 ? findBestProjections(map, projections): []
+    console.log(bestProjections.length)
     const tiles = generateTiles(map, bestProjections)
     tiles.forEach(({ x, y, tile }) => {
         map.setTile(x, y, tile ?? "bw1", "mg")

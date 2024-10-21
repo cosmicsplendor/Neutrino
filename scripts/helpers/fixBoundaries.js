@@ -1,11 +1,43 @@
 const getTileNumber = require("./generateTiles/helpers/createGrid/getTileNumber")
 
+const isBlockFixed = (map, block) => {
+    // Function to check if a tile is empty
+    const isTileEmpty = (x, y) => {
+        const tile = map.getTile(x, y);
+        return tile === null;
+    };
+
+    // Check the surrounding layer (one tile around the block)
+    for (let row = -1; row <= block.h; row++) {
+        for (let col = -1; col <= block.w; col++) {
+            const x = block.x + col;
+            const y = block.y + row;
+
+            // Skip checking inside the block area itself
+            const isBoundaryTile = (row === -1 || row === block.h || col === -1 || col === block.w);
+            
+            if (isBoundaryTile && !isTileEmpty(x, y)) {
+                // If any surrounding tile is not empty, the block isn't fixed
+                return false;
+            }
+        }
+    }
+    
+    // If all surrounding tiles are empty, the block is fixed
+    return true;
+};
+
 const fixBoundaries = async (map, block) => {
     const topEmptiers = ["win2"]
     const leftEmptiers = ["wt_14", "wt_17", "wt_15", "wt_16"]
     const getAdjacentTile = (row, col, dir = { x: 0, y: 0 }) => {
         return map.getTile(col + dir.x, row + dir.y)
     }
+    const fixed = isBlockFixed(map, block)
+    if (fixed) {
+        await map.exportMap("testlevel")
+    }
+
     const boundingBlock = Array.from({ length: block.h + 4 }, (_, row) => {
         return Array.from({ length: block.w + 4 }, (_, col) => {
             const x = block.x - 2 + col
