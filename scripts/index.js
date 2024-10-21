@@ -14,9 +14,10 @@ const initializeMap = () => {
     const map = new Map({
         width: 60,
         height: 30,
-        background: "#132b27",
-        mobileBackground: "#132b27",
-        pixelBackground: "#0a1614",
+        // bg: "rgb(18 18 18)",
+        // mob_bg: "rgb(18 18 18)",
+        // pxBg: "#0a1614",
+        "bg":"rgb(18 18 18)","mob_bg":"rgb(18 18 18)","pxbg":"0.090, 0.090, 0.090","tint":"0.025, 0.0125, -0.025, 0",
         tint: "0.025, -0.025, -0.0125, 0",
         floorHeight: 3,
     });
@@ -76,7 +77,7 @@ const interactiveGenerateLevel = async () => {
         }
 
         reconstructMap(map, [...blocks, newBlock])
-
+        map.addPreviewColRects(newBlock.collisionRects)
         await map.exportMap("testlevel")
 
         const choices = ["Retry", "Proceed", "Proceed & Terminate", "Discard & Terminate"]
@@ -87,6 +88,7 @@ const interactiveGenerateLevel = async () => {
         const userAccepted = response === choices[1] || proceedAndTerminate
 
         if (userAccepted) {
+            map.clearPreviewColRects()
             await decorateBlock(map, newBlock)
             await fixBoundaries(map, newBlock)
             await projectBackwalls(map, newBlock)
