@@ -5,9 +5,14 @@ import { LEVEL } from "@screens/names"
 import Title from "./Title"
 import initUI from "./initUI"
 import { placeBg } from "../utils"
+import { hexToNorm } from "@lib/utils/math"
+import mainmenuData from "../../assets/levels/mainmenu.cson"
+import TiledLevel from "@lib/utils/TiledLevel"
+import { TexRegion } from "@lib/index"
+
+// tint "0.025, -0.025, -0.0125, 0"
 class MainMenuScreen extends Node {
-    background = "#041a27"
-    background="rgb(8 23 32) "
+    background="#333333"
     constructor({ game, uiRoot, sdk }) {
         super()
         this.game = game
@@ -24,8 +29,18 @@ class MainMenuScreen extends Node {
             }
             viewport.on("change", this.realign)
             this.realign(viewport)
+            placeBg(this, game.assetsCache, [0.05, 0.05, 0.05], game.renderer.api)
+            const data = game.assetsCache.get(mainmenuData)
+            const graphic = new TiledLevel({ player: {}, data, scale: { x: 0.5, y: 0.5 }, factories: {
+                default: (x, y, props) => {
+                    return new TexRegion({ pos: { x, y }, frame: props.name })
+                },
+            } })
+            graphic.pos.x = data.width / 4
+            graphic.pos.y = data.height
+            this.add(graphic)
             this.add(this.gameTitle)
-            placeBg(this, game.assetsCache, [0.0110, 0.0714, 0.1071], game.renderer.api)
+
         })
     }
     onEnter() {
