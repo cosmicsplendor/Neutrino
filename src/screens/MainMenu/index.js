@@ -21,6 +21,7 @@ class MainMenuScreen extends Node {
         game.assetsCache.once("load", () => {
             const { viewport } = config
             const data = game.assetsCache.get(mainmenuData)
+            // data.fgTiles = data.fgTiles.reverse
             this.gameTitle = new Title()
             const graphic = new TiledLevel({ player: {}, data, scale: { x: 0.5, y: 0.5 }, factories: {
                 default: (x, y, props) => {
@@ -58,13 +59,13 @@ class MainMenuScreen extends Node {
             graphic: { x: graphic.pos.x, y: graphic.pos.y },
             gameTitle: { x: gameTitle.pos.x, y: gameTitle.pos.y }
         };
-        graphic.smooth = true
-        graphic.gameTitle = true
+        graphic.smooth = false
+        graphic.gameTitle = false
         // Set up the necessary parameters
-        this.frequency = 0.5;  // Adjust for speed of movement
-        this.amplitude = 25;   // Amplitude of oscillation for gameTitle
-        this.parallaxFactor = 0.3;  // How much slower graphic moves compared to gameTitle
-        console.log(graphic.pos)
+        this.frequency = 1.6;  // Adjust for speed of movement
+        this.amplitude = 30;   // Amplitude of oscillation for gameTitle
+        this.parallaxFactor = 0.4;  // How much slower graphic moves compared to gameTitle
+        console.log(graphic.children)
     }
 
     update(dt, t) {
