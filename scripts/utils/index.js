@@ -521,19 +521,11 @@ class Map extends Block {
         this.objCollisionRects.concat(this.tempCollisionRects).forEach(r => {
             collisionRects.push({ x: r.x, y: r.y, width: r.w, height: r.h, mat: r.mat })
         })
-        const previewColRects = this.previewColRects.map(rect => {
-            const { x, y, w, h, mat } = rect
-            return { x: x * tileW, y: y * tileW, width: w * tileW, height: h * tileW, mat }
-        })
+
         const spawnPoints = this.spawnPoints.concat(this.player)
         const checkpoints = this.checkpoints
-        if (this.tempCollisionRects.length) {
-            console.log(this.tempCollisionRects)
-            process.exit()
-        }
         const exports = {
             collisionRects,
-            previewColRects,
             spawnPoints,
             checkpoints,
             tempSpawnPoints,
@@ -546,7 +538,7 @@ class Map extends Block {
             tint,
             width: this.w * tileW,
             height: this.h * tileW,
-            projections,
+            previewColRects: this.previewColRects.concat(projections),
         }
 
         await fs.writeFile(`./src/assets/levels/${levelName}.cson`, JSON.stringify(exports))
