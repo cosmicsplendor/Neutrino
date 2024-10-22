@@ -46,7 +46,7 @@ class LevelScreen extends Node {
             this.chSound = soundSprite.createPool("change") 
             this.errSound = soundSprite.createPool("error")
 
-                placeBg(this, assetsCache, null, game.renderer.api)
+            this.teardownBg = placeBg(this, assetsCache, null, game.renderer.api)
 
         })
     }
@@ -86,6 +86,9 @@ class LevelScreen extends Node {
     }
     onExit() {
         this.teardownUI()
+        this.teardownBg()
+        this.teardownBg = null
+        this.teardownUI = null
     }
 }
 

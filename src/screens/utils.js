@@ -22,4 +22,8 @@ export const placeBg = (screen, assetsCache, overlay=[0.03529411764705882, 0.035
     }
     realignBg()
     config.viewport.on("change", realignBg)
+    
+    return function teardownBg() {
+        viewport.off("change", realignBg)
+    }
 }

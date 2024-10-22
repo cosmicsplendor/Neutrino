@@ -43,7 +43,7 @@ class MainMenuScreen extends Node {
             viewport.on("change", this.realign)
             this.realign(viewport)
 
-            placeBg(this, game.assetsCache, [0.05, 0.05, 0.05], game.renderer.api)
+            this.teardownBg = placeBg(this, game.assetsCache, [0.05, 0.05, 0.05], game.renderer.api)
             this.add(graphic)
             this.add(this.gameTitle)
 
@@ -94,6 +94,8 @@ class MainMenuScreen extends Node {
     onExit() {
         this.teardownUI()
         config.viewport.off("change", this.realign)
+        this.teardownBg()
+
     }
 }
 
