@@ -5,6 +5,7 @@ const { generateTileSpawnPoints } = require("../generateTiles")
 const saws = require("./saws")
 const endTiles = require("./endTiles.json")
 const sawBlades = require("./sawBlades")
+const stackables = require("./stackables")
 const TILE_SIZE = 48
 const STACK_TOP = ["top-start", "top-end", "top"]
 
@@ -260,6 +261,9 @@ const factories = {
             return results
         }
     },
+    crate: stackables({ name: "crate", dims: { width: 88, height: 88 }}),
+    tyre: stackables({ name: "tyre", dims: { width: 104, height: 32 } }),
+    sc: stackables({ name: () => pickOne([ "sc_blue", "sc_red", "sc_green" ]), dims: { width: 120, height: 120 }})
 }
 
 module.exports = factories

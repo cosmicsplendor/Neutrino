@@ -99,7 +99,7 @@ export default ({ onStart, uiRoot, storage, level, maxLevel, images, assetsCache
         levelState = Math.min(levelState  + 1, levels.length + 1)
         const best = storage.getHiscore(levelState)
         levelInfo.content = levelState <= levels.length ? `Level ${levelState}`: "More Levels"
-        bestTime.content = levelState <= levels.length ? renderBest(best): "available elsewhere"
+        bestTime.content = levelState <= levels.length ? renderBest(best): "Coming Soon"
         updateBtnVis(levelState, maxLevel)
         realignTxt(config.viewport)
         chSound.play()
