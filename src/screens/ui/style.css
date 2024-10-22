@@ -49,7 +49,7 @@
 .playBtn:hover, .playBtn:active, .playBtn:focus {
     background: linear-gradient(145deg, #ffffff, #e0e0e0); /* Lighter gradient on hover */
     transform: translateY(-2px); /* Slight lift effect */
-    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2), /* Less shadow for pressed effect */
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1), Less shadow for pressed effect
     inset 0px 0px 8px 3px rgba(255, 150, 100, 0.5); /* Stronger inner glow */
 }
 

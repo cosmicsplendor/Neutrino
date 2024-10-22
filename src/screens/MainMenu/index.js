@@ -1,16 +1,16 @@
 import { Node } from "@lib"
 import config from "@config"
-import { calcAligned, getGlobalPos } from "@utils/entity"
+import { calcAligned } from "@utils/entity"
 import { LEVEL } from "@screens/names"
 import Title from "./Title"
 import initUI from "./initUI"
 import { placeBg } from "../utils"
-import { hexToNorm } from "@lib/utils/math"
 import mainmenuData from "../../assets/levels/mainmenu.cson"
 import TiledLevel from "@lib/utils/TiledLevel"
 import { TexRegion } from "@lib/index"
+import { clamp } from "@lib/utils/math"
 
-// tint "0.025, -0.025, -0.0125, 0"
+
 class MainMenuScreen extends Node {
     background="#333333"
     constructor({ game, uiRoot, sdk }) {
@@ -59,23 +59,36 @@ class MainMenuScreen extends Node {
             graphic: { x: graphic.pos.x, y: graphic.pos.y },
             gameTitle: { x: gameTitle.pos.x, y: gameTitle.pos.y }
         };
-        graphic.smooth = false
-        graphic.gameTitle = false
+        graphic.smooth = true
+        graphic.gameTitle = true
         // Set up the necessary parameters
-        this.frequency = 1.6;  // Adjust for speed of movement
-        this.amplitude = 30;   // Amplitude of oscillation for gameTitle
+        this.frequency = 1.5;  // Adjust for speed of movement
+        this.amplitude = 24;   // Amplitude of oscillation for gameTitle
         this.parallaxFactor = 0.4;  // How much slower graphic moves compared to gameTitle
-        console.log(graphic.children)
+
+        const minPhase = Math.PI * 0.05;
+        const maxPhase = Math.PI * 0.9;
+        const minY = Math.cos(minPhase) * this.amplitude;
+        const maxY = Math.cos(maxPhase) * this.amplitude;
+        this.yMin = Math.min(minY, maxY);
+        this.yMax = Math.max(minY, maxY);
+
+        const minX = Math.cos(minPhase) * this.amplitude;
+        const maxX = Math.cos(maxPhase) * this.amplitude;
+        this.xMin = Math.min(minX, maxX);
+        this.xMax = Math.max(minX, maxX);
     }
 
     update(dt, t) {
-        const { graphic, gameTitle } = this;
+        const { graphic, gameTitle, yMin, yMax, amplitude, frequency, parallaxFactor } = this;
         if (!graphic || !gameTitle) return
 
-        // Create smooth sinusoidal movement for gameTitle
-        gameTitle.pos.y = this.initPositions.gameTitle.y + Math.sin(t * this.frequency) * this.amplitude;
-        // Graphic should move slower with the parallax effect
-        graphic.pos.y = this.initPositions.graphic.y + Math.sin(t * this.frequency) * this.amplitude * this.parallaxFactor;
+        const phase = t * frequency
+        gameTitle.pos.y = this.initPositions.gameTitle.y + clamp(yMin * parallaxFactor * amplitude, yMax/parallaxFactor, Math.cos(phase) * amplitude);
+        graphic.pos.y = this.initPositions.graphic.y + clamp(yMin * amplitude, yMax * amplitude, Math.cos(phase) * amplitude * parallaxFactor);
+
+
+        
     }
     onEnter() {
         const { uiRoot, game, sdk } = this
@@ -95,7 +108,8 @@ class MainMenuScreen extends Node {
         this.teardownUI()
         config.viewport.off("change", this.realign)
         this.teardownBg()
-
+        this.teardownBg = null
+        this.teardownUI = null
     }
 }
 
