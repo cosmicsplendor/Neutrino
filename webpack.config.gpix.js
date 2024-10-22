@@ -1,7 +1,7 @@
 const path = require("path")
 const cwd = process.cwd()
 module.exports = {
-    entry: ["/lib/polyfills.js", "/src/index.js"],
+    entry: "/src/index.js",
     output: {
         filename: "script.js",
         path: path.join(cwd, "dist-gpix")
