@@ -205,9 +205,7 @@ const exportmap = async (map, tiles) => {
     await map.exportMap()
 }
 
-const projectBackwalls = async (map, block) => {
-    const projections = projectCompositeRects(block, map.collisionRects, map)
-    const bestProjections = projections.length > 3 ? findBestProjections(map, projections) : []
+const getProjectedTiles = async (map, bestProjections) => {
     const acceptedTiles = []
     for (const i in bestProjections) {
         const p = bestProjections[i]
@@ -227,7 +225,7 @@ const projectBackwalls = async (map, block) => {
             if (tiles.length === 0) break;
             
             message(`[${Number(i) + 1} of ${bestProjections.length}] projecting back walls`)
-            const choice = await getChoice([ "Retry", "Discard", "Accept" ])
+            const choice = await getChoice([ "Retry", "Discard", "Accept", "Discard All" ])
             
             if (choice === "Accept") {
                 acceptedTiles.push(...tiles)
@@ -239,9 +237,17 @@ const projectBackwalls = async (map, block) => {
             } else if (choice === "Discard") {
                 await undoTiles(map, tiles)
                 break;
+            } else {
+                return acceptedTiles
             }
         }
     }
+}
+
+const projectBackwalls = async (map, block) => {
+    const projections = projectCompositeRects(block, map.collisionRects, map)
+    const bestProjections = projections.length > 3 ? findBestProjections(map, projections) : []
+    const acceptedTiles = await getProjectedTiles(map, bestProjections)
 
     acceptedTiles.forEach(({ x, y, tile }) => {
         map.setTile(x, y, tile ?? "bw1", "mg")
