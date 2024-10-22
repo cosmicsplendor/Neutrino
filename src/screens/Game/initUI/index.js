@@ -191,6 +191,7 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
             console.log(orbExp)
             orbExpInd.show(true)
             orbExp.show(true)
+            orbExp.domNode.innerText =`x ${orbExpAmt}`
             return
         }
 
