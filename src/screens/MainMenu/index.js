@@ -9,10 +9,11 @@ import mainmenuData from "../../assets/levels/mainmenu.cson"
 import TiledLevel from "@lib/utils/TiledLevel"
 import { TexRegion } from "@lib/index"
 import { clamp } from "@lib/utils/math"
+import moonImg from "@assets/images/background.png"
 
 
 class MainMenuScreen extends Node {
-    background="#333333"
+    background="rgb(17 34 55)"
     constructor({ game, uiRoot, sdk }) {
         super()
         this.game = game
@@ -28,7 +29,7 @@ class MainMenuScreen extends Node {
                     return new TexRegion({ pos: { x, y }, frame: props.name })
                 },
             } })
-            game.renderer.tint = [ 0.05, 0.0125, 0.025 ]
+            game.renderer.tint = [ 0.0125, 0.0125, 0.025 ]
             this.graphic = graphic
             this.realign = vp => {
                 const { devicePixelRatio } = config
@@ -43,7 +44,7 @@ class MainMenuScreen extends Node {
             viewport.on("change", this.realign)
             this.realign(viewport)
 
-            this.teardownBg = placeBg(this, game.assetsCache, [0.05, 0.05, 0.05], game.renderer.api)
+            this.teardownBg = placeBg(this, game.assetsCache, [0.05, 0.085, 0.15], game.renderer.api)
             this.add(graphic)
             this.add(this.gameTitle)
 
@@ -59,10 +60,10 @@ class MainMenuScreen extends Node {
             graphic: { x: graphic.pos.x, y: graphic.pos.y },
             gameTitle: { x: gameTitle.pos.x, y: gameTitle.pos.y }
         };
-        graphic.smooth = true
-        graphic.gameTitle = true
+        graphic.smooth = false
+        graphic.gameTitle = false
         // Set up the necessary parameters
-        this.frequency = 1.5;  // Adjust for speed of movement
+        this.frequency = 1.75;  // Adjust for speed of movement
         this.amplitude = 24;   // Amplitude of oscillation for gameTitle
         this.parallaxFactor = 0.4;  // How much slower graphic moves compared to gameTitle
 
@@ -77,6 +78,7 @@ class MainMenuScreen extends Node {
         const maxX = Math.cos(maxPhase) * this.amplitude;
         this.xMin = Math.min(minX, maxX);
         this.xMax = Math.max(minX, maxX);
+
     }
 
     update(dt, t) {
@@ -103,13 +105,14 @@ class MainMenuScreen extends Node {
                 .then(proceed)
                 .catch(proceed)
         }})
+        game.renderer.changeBackground(this.background, moonImg)
+        this.game.renderer.canvas.style.backgroundPosition = "40% 25%"
+        this.game.renderer.canvas.style.backgroundOpacity = 1
     }
     onExit() {
         this.teardownUI()
         config.viewport.off("change", this.realign)
         this.teardownBg()
-        this.teardownBg = null
-        this.teardownUI = null
         this.game.assetsCache.unload(mainmenuData)
         this.game.disposeScreen(this)
     }
