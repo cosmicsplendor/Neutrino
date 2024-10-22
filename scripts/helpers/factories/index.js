@@ -25,7 +25,7 @@ const factories = {
     },
     orb: {
         dims: () => {
-            return { width: 64, height: 64}
+            return { width: 64, height: 64 }
         },
         create: params => {
             const { x, y, name } =params

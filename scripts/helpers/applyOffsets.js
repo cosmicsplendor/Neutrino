@@ -5,6 +5,7 @@ const blades = [
     "gearBlade", "spikeBlade", "buttonBlade",
     "gearBladeS", "spikeBladeS", "buttonBladeS",
 ]
+
 const applyOffsets = async (x, y, name, alignment, props) => {
     if (blades.includes(name)) {
         const dims = await getDims(name, props)
@@ -14,6 +15,9 @@ const applyOffsets = async (x, y, name, alignment, props) => {
         const dx = xAlignment === "left" ? -halfWidth: (xAlignment === "right" ? halfWidth: 0)
         const dy = yAlignment === "top" ? -halfHeight: (yAlignment === "bottom" ? halfHeight: 0)
         return { x: x + dx, y: y + dy }
+    }
+    if (name === "orb") {
+        return { x: 21, y: 21 }
     }
     return {x, y}
 }
