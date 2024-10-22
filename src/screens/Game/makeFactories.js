@@ -49,8 +49,8 @@ export default ({ soundSprite, assetsCache, storage, player, state }) => { // us
         })
         return orbPool
     }
-    const orbPool = createOrbPool(false, 5, orbSound, storage)
-    const tempOrbPool = createOrbPool(true, 2, orbSound, storage)
+    const orbPool = createOrbPool(false, 6, orbSound, storage)
+    const tempOrbPool = createOrbPool(true, 3, orbSound, storage)
     const windPool = new Pool({
         factory: (x, y, props, player) => {
             return new Wind(
@@ -58,7 +58,7 @@ export default ({ soundSprite, assetsCache, storage, player, state }) => { // us
                 x, y, player
             )
         },
-        size: 2,
+        size: 3,
         free(obj) {
             obj.remove()
         },

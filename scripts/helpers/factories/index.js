@@ -192,6 +192,7 @@ const factories = {
         block: null,
         extendedLeft: false,
         randomize: true,
+        fields: ["speed"],
         reset() {
             this.extendedLeft = false
             this.block = new CompositeBlock(new Block(5, 4))
@@ -233,12 +234,12 @@ const factories = {
             return { width: block.w * TILE_SIZE, height: (block.h + 3) * TILE_SIZE }
         },
         create(params) {
-            const { x: originX, y: originY } = params
+            const { x: originX, y: originY, speed } = params
             const { block } = this
             const dx = this.extendedLeft ? 1 : 0
             const dy = block.h - 4
             const gateY = originY + (TILE_SIZE * block.h) - 56
-            const gate = { y: gateY, x: originX + (dx + 2.5) * TILE_SIZE - 56, name: "gate", endY: gateY - 128 }
+            const gate = { y: gateY, x: originX + (dx + 2.5) * TILE_SIZE - 56, name: "gate", endY: gateY - 128, speed: +speed }
             const tileReplacer = (row, col, cell) => {
                 const archY = dy + 2
                 const archX = dx + 1
