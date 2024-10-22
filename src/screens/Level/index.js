@@ -12,21 +12,6 @@ import { hexToNorm } from "@lib/utils/math"
 import * as rendApis  from "@lib/renderer/apis"
 import { placeBg } from "../utils"
 
-const levelColors = [
-    { "bg":"#121228","mob_bg":"#121228", "pxbg":"0.058, 0.058, 0.133" },
-    { "bg":"#121228","mob_bg":"#000000", "pxbg":"0.058, 0.058, 0.133" },
-    { "bg":"#2e2e3d","mob_bg":"#2e2e3d","pxbg":"0.129, 0.129" },
-    { "bg":"#10103a","mob_bg":"#0b0b25", "pxbg":"0.043, 0.043, 0.145" },
-    { "bg":"#2e2e3d","mob_bg":"#2e2e3d", "pxbg":"0.129, 0.129, 0.184" },
-    { "bg":"#171025","mob_bg":"#0f0f22", "pxbg":"0.066, 0.043, 0.109" },
-    { "bg":"#0f0f22","mob_bg":"#0f0f22", "pxbg":"0.039, 0.039, 0.090" },
-    { "bg":"#0f0f22","mob_bg":"#0f0f22", "pxbg":"0.039, 0.039, 0.090" },
-    { "bg":"#132b27","mob_bg":"#132b27", "pxbg": "#0a1614" },
-    { "bg":"rgb(18 18 18)", "mob_bg":"rgb(18 18 18)", "pxbg":"0.090, 0.090, 0.090" },
-    {"bg":"#132b27","mob_bg":"#132b27","pxbg":"#0a1614","tint":"0.025, -0.025, -0.0125, 0"}
-]
-
-
 class LevelScreen extends Node {
     background = "#000000"
     curLevel = 0
@@ -75,11 +60,10 @@ class LevelScreen extends Node {
             contSound,
             chSound,
             errSound,
-            syncColor: level => {
-                const data = levelColors[level-1]
-                game.renderer.changeBackground(data.bg)
+            syncColor: () => {
+                game.renderer.changeBackground("rgb(17, 34, 55)")
                 if (this.container) {
-                    this.container.overlay = data.pxbg && hexToNorm(data.pxbg)
+                    this.container.overlay = [0.033203125,0.06640625,0.107421875]
                 }
             }
         })

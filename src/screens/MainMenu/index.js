@@ -13,7 +13,7 @@ import moonImg from "@assets/images/background.png"
 
 
 class MainMenuScreen extends Node {
-    background="rgb(17 34 55)"
+    background="rgb(17, 34, 55)"
     constructor({ game, uiRoot, sdk }) {
         super()
         this.game = game
@@ -29,7 +29,7 @@ class MainMenuScreen extends Node {
                     return new TexRegion({ pos: { x, y }, frame: props.name })
                 },
             } })
-            game.renderer.tint = [ 0.0125, 0.0125, 0.025 ]
+            game.renderer.tint = [ 0.01, -0.01, -0.005 ]
             this.graphic = graphic
             this.realign = vp => {
                 const { devicePixelRatio } = config
@@ -44,7 +44,7 @@ class MainMenuScreen extends Node {
             viewport.on("change", this.realign)
             this.realign(viewport)
 
-            this.teardownBg = placeBg(this, game.assetsCache, [0.05, 0.085, 0.15], game.renderer.api)
+            this.teardownBg = placeBg(this, game.assetsCache, [0.033203125,0.06640625,0.107421875], game.renderer.api)
             this.add(graphic)
             this.add(this.gameTitle)
 
