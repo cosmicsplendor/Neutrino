@@ -111,6 +111,7 @@ class MainMenuScreen extends Node {
         this.teardownBg = null
         this.teardownUI = null
         this.game.assetsCache.unload(mainmenuData)
+        this.game.disposeScreen(this)
     }
 }
 
