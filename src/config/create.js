@@ -9,19 +9,18 @@ import Viewport  from "@utils/ViewPort"
 
 const resolutions = {
     standard: { max: 1024, min: 720 },
-    full: { max: 1980, min: 1024 },
+    full: { max: 1360, min: 1080 },
     hd: { max: 1440, min: 986 },
     r720p: { max: 1280, min: 720 },
     custom: { max: 1280, min: 1080 }
 }
 
-const desktopRes = resolutions.custom
+const desktopRes = resolutions.full
 
 const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 const scale = false
 const maxDpr = 1
 const maxMobileDpr = 1.5
-
 
 
 export default overrides => {
