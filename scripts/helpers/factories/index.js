@@ -23,7 +23,15 @@ const factories = {
             return { x, y, name }
         }
     },
-
+    orb: {
+        dims: () => {
+            return { width: 64, height: 64}
+        },
+        create: params => {
+            const { x, y, name } =params
+            return { x, y, name }
+        }
+    },
     ball: {
         fields: ['seq',], // Inferred from Ball constructor and props.seq
         create: (params) => {
