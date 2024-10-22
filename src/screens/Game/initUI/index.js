@@ -6,7 +6,6 @@ import styles from "./style.css"
 
 const margin = 20
 const hMargin = margin * 0.5 // hMargin
-const orbExpAmt = 2
 const instFocThres = config.isMobile ? 960: 1500
 
 const PAUSE = "pause-btn"
@@ -28,7 +27,7 @@ const BEST_TIME = "best-time"
 const CONTINUE = "continue"
 const RVA_TXT = "rva"
 
-const render = (images, orbAv) => {
+const render = (images, orbAv, orbExpAmt=2) => {
     return `
         <div id="${BLUR_OVERLAY}" class="${styles.blurOverlay}">PAUSED</div>
         ${imgBtn(ORB_IND, images.orb, styles.hidden, "orb count")}
@@ -57,7 +56,8 @@ const renderResult = (resumeImg, curTime, bestTime) => {
 
 export default (uiRoot, player, images, storage, gameState, onClose, resetLevel, focusInst, getCheckpoint, btnSound, errSound, contSound, webAudioSupported, game, sdkInst) => {
     if (config.testMode) return { updateTiler: () => {}}
-    uiRoot.content = render(images, storage.getOrbCount(), webAudioSupported)
+    let orbExpAmt = 2
+    uiRoot.content = render(images, storage.getOrbCount(), orbExpAmt)
     const ctrlBtns = config.isMobile && player.getCtrlBtns()
     const orbInd = uiRoot.get(`#${ORB_IND}`)
     const orbCount = uiRoot.get(`#${ORB_AV}`)
@@ -186,7 +186,7 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
             // if the player can't afford, prompt them to watch ad (which makes me some money :)) in exchange of checkpoint
             return rvaTxt.show()
         }
-        
+        console.log({ checkpointExists, showRva })
         if (showCost) { // if player can afford to pay for the checkpoint, show the price
             orbExpInd.show()
             orbExp.show()
@@ -292,7 +292,8 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         }
         const continuePlay = () => {
             if (playingAd.getVal()) return
-            
+            console.log(`&times; ${orbExpAmt}`)
+            orbExp.domNode.innerHtml = `&times; ${orbExpAmt}`
             const checkpoint = getCheckpoint(player.pos.x)
 
             const rvaSupported = sdkInst.rvaSupported()
@@ -309,19 +310,11 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
             btnSound.play()
 
             if (payOrbs && canAfford) {
-                playingAd.setVal(true)
-                const onDone = () => {
+                    console.log({ orbExpAmt })
                     storage.setOrbCount(orbs - orbExpAmt)
                     restorePlayer(checkpoint)
                     gameState.play()
-                    playingAd.setVal(false)
-                }
-                if (Math.random() < config.showAdOnResume) { // grabbing ad probability from configuration object
-                    sdkInst.playIntstAd()
-                        .then(onDone)
-                        .catch(onDone)
-                }
-                onDone()
+                    orbExpAmt++
                 return
             }
 
@@ -331,6 +324,7 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
                     restorePlayer(checkpoint)
                     gameState.play()
                     playingAd.setVal(false)
+                    orbExpAmt=2
                 }
                 sdkInst.playRva()
                     .then(onDone)
@@ -338,6 +332,7 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
                 return
             }
 
+            orbExpAmt=2
             restartPlay()
         }
         return [

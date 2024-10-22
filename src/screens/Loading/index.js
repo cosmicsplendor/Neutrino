@@ -42,6 +42,7 @@ class LoadingScreen extends Node {
         this.game.disposeScreen(this)
         this.game.assetsCache.off("prog", this.onProg)
         this.game.assetsCache.off("error")
+        this.teardown()
     }
 }
 
