@@ -44,7 +44,7 @@ const fixBoundaries = async (map, block) => {
             const y = block.y - 2 + row
             if (x < 0 || x > map.w - 1 || y < 0 || y > map.h - 1) return 1
             const leftTile = getAdjacentTile(y, x, { x: -1, y: 0 })
-            const topTile = getAdjacentTile(y, x, { x: 0, y: 1 })
+            const topTile = getAdjacentTile(y, x, { x: 0, y: -1 })
             const tile = map.getTile(x, y)
             if (!tile) {
                 if (leftEmptiers.includes(leftTile)) return 1
