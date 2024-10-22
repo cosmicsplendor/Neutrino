@@ -56,7 +56,7 @@ const renderResult = (resumeImg, curTime, bestTime) => {
 
 export default (uiRoot, player, images, storage, gameState, onClose, resetLevel, focusInst, getCheckpoint, btnSound, errSound, contSound, webAudioSupported, game, sdkInst) => {
     if (config.testMode) return { updateTiler: () => {}}
-    let orbExpAmt = 2
+    let orbExpAmt = 1
     uiRoot.content = render(images, storage.getOrbCount(), orbExpAmt)
     const ctrlBtns = config.isMobile && player.getCtrlBtns()
     const orbInd = uiRoot.get(`#${ORB_IND}`)
@@ -182,14 +182,15 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         resumeBtn.domNode.style.background = `url(${ showRva ? images.rva.src: images.resume.src})`
         resumeBtn.domNode.style.backgroundSize = "contain"
 
+        console.log({ showRva, showCost })
         if (showRva) {
             // if the player can't afford, prompt them to watch ad (which makes me some money :)) in exchange of checkpoint
             return rvaTxt.show()
         }
-        console.log({ checkpointExists, showRva })
         if (showCost) { // if player can afford to pay for the checkpoint, show the price
-            orbExpInd.show()
-            orbExp.show()
+            console.log(orbExp)
+            orbExpInd.show(true)
+            orbExp.show(true)
             return
         }
 
@@ -292,8 +293,6 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         }
         const continuePlay = () => {
             if (playingAd.getVal()) return
-            console.log(`&times; ${orbExpAmt}`)
-            orbExp.domNode.innerHtml = `&times; ${orbExpAmt}`
             const checkpoint = getCheckpoint(player.pos.x)
 
             const rvaSupported = sdkInst.rvaSupported()
@@ -310,7 +309,6 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
             btnSound.play()
 
             if (payOrbs && canAfford) {
-                    console.log({ orbExpAmt })
                     storage.setOrbCount(orbs - orbExpAmt)
                     restorePlayer(checkpoint)
                     gameState.play()
