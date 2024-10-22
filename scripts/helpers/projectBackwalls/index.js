@@ -211,22 +211,34 @@ const projectBackwalls = async (map, block) => {
     const acceptedTiles = []
     for (const i in bestProjections) {
         const p = bestProjections[i]
+        const MAX_RETRIES = 100; // Add a safety limit
+        let retryCount = 0;
+        
         while(true) {
+            if (retryCount >= MAX_RETRIES) {
+                console.warn(`Maximum retries (${MAX_RETRIES}) reached for projection ${i}`);
+                break;
+            }
+        
             const tiles = generateTiles(map, p)
             const previewTiles = [...acceptedTiles, ...tiles]
             await exportmap(map, previewTiles)
-            if (tiles.length === 0) break
+            
+            if (tiles.length === 0) break;
+            
             message(`[${Number(i) + 1} of ${bestProjections.length}] projecting back walls`)
             const choice = await getChoice([ "Retry", "Discard", "Accept" ])
+            
             if (choice === "Accept") {
                 acceptedTiles.push(...tiles)
-                break
+                break;
             } else if (choice === "Retry") {
+                retryCount++;
                 await undoTiles(map, tiles)
-                continue
+                continue;
             } else if (choice === "Discard") {
                 await undoTiles(map, tiles)
-                break
+                break;
             }
         }
     }
