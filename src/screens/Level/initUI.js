@@ -125,18 +125,20 @@ export default ({ onStart, uiRoot, storage, level, maxLevel, images, assetsCache
                 assetsCache.unload(level.id)
             })
 
-            
-            
-            assetsCache.once("error", () => {
-                assetsCache.load([ levelId ])
+            const staleLevels = memoryQueue.slice(2) // only keep 3 levels in the memory queue
+
+
+            assetsCache.load([ levelId ])
+            assetsCache.once("load", () => {
                 memoryQueue.unshift(levelId) // enqueue the currently loaded level
                 const staleLevels = memoryQueue.splice(3) // only keep 3 levels in the memory queue at a time
                 staleLevels.forEach(levelId => { // free up stale memory
                     assetsCache.unload(levelId)
                 })
-
-                assetsCache.once("load", onLoad)
-                assetsCache.off("load", onLoad)
+                onLoad()
+            })
+            
+            assetsCache.once("error", (e) => {
                 uiRoot.content = renderErr(ERROR, RETRY, "Connection Problem")
                 const errMsg = uiRoot.get(`#${ERROR}`)
                 const retryIcon = uiRoot.get(`#${RETRY}`)
