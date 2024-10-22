@@ -44,6 +44,7 @@ const render = (images, level, time) => {
         ${btn(START, "START")}
     `
 }
+const memoryQueue = []
 
 export default ({ onStart, uiRoot, storage, level, maxLevel, images, assetsCache, contSound, chSound, errSound, syncColor }) => {
     let levelState = level, loading = false
@@ -124,11 +125,17 @@ export default ({ onStart, uiRoot, storage, level, maxLevel, images, assetsCache
                 assetsCache.unload(level.id)
             })
 
-            assetsCache.load([ levelId ])
-
-            assetsCache.once("load", onLoad)
+            
             
             assetsCache.once("error", () => {
+                assetsCache.load([ levelId ])
+                memoryQueue.unshift(levelId) // enqueue the currently loaded level
+                const staleLevels = memoryQueue.splice(3) // only keep 3 levels in the memory queue at a time
+                staleLevels.forEach(levelId => { // free up stale memory
+                    assetsCache.unload(levelId)
+                })
+
+                assetsCache.once("load", onLoad)
                 assetsCache.off("load", onLoad)
                 uiRoot.content = renderErr(ERROR, RETRY, "Connection Problem")
                 const errMsg = uiRoot.get(`#${ERROR}`)
