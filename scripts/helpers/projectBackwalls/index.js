@@ -207,14 +207,17 @@ const exportmap = async (map, tiles) => {
 
 const getProjectedTiles = async (map, bestProjections) => {
     const acceptedTiles = []
+    console.log("HERE")
     for (const i in bestProjections) {
         const p = bestProjections[i]
         const MAX_RETRIES = 100; // Add a safety limit
         let retryCount = 0;
         
         while(true) {
+            console.log("HERE")
             if (retryCount >= MAX_RETRIES) {
                 console.warn(`Maximum retries (${MAX_RETRIES}) reached for projection ${i}`);
+                console.log(p)
                 break;
             }
         
@@ -242,12 +245,17 @@ const getProjectedTiles = async (map, bestProjections) => {
             }
         }
     }
+    return acceptedTiles
 }
 
 const projectBackwalls = async (map, block) => {
+    console.log("1")
     const projections = projectCompositeRects(block, map.collisionRects, map)
+    console.log("3")
     const bestProjections = projections.length > 3 ? findBestProjections(map, projections) : []
+    console.log("4")
     const acceptedTiles = await getProjectedTiles(map, bestProjections)
+    console.log("5")
 
     acceptedTiles.forEach(({ x, y, tile }) => {
         map.setTile(x, y, tile ?? "bw1", "mg")

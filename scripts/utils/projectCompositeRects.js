@@ -56,11 +56,11 @@ const computeEdges = block => {
     const rightPointer = new YPointer("right")
     for (let x = 0; x < grid.w; x++) {
         let ytop = 0, ybottom = grid.h - 1
-        while (!grid.get(x, ytop)) {
+        while (!grid.get(x, ytop && ytop < grid.h)) {
             ytop++
         }
         topPointer.record(x, ytop)
-        while (!grid.get(x, ybottom)) {
+        while (!grid.get(x, ybottom) && ytop > -1) {
             ybottom--
         }
         bottomPointer.record(x, ybottom + 1)
@@ -68,11 +68,11 @@ const computeEdges = block => {
 
     for (let y = 0; y < grid.h; y++) {
         let xleft = 0, xright = grid.w - 1
-        while (!grid.get(xleft, y)) {
+        while (!grid.get(xleft, y) && xright < grid.w) {
             xleft++
         }
         leftPointer.record(xleft, y)
-        while (!grid.get(xright, y)) {
+        while (!grid.get(xright, y) && xright > -1) {
             xright--
         }
         rightPointer.record(xright + 1, y)
