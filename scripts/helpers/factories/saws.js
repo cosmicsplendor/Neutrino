@@ -13,11 +13,11 @@ const saws = (data = { name: "saw2", field: "width", dims: { width: 0, height: 0
             const { x, y, width, height } = params
             if (data.field === "height") {
                 return Array(+height).fill(0).map((_, i) => {
-                    return { x: x, y: y + (i * dims.height), name: data.name }
+                    return { x: x, y: y + (i * dims.height), name: data.name, groupId: "spikes" }
                 })
             }
             return Array(+width).fill(0).map((_, i) => {
-                return { x: x + (i + 1) * xOffset + i * dims.width, y: y, name: data.name }
+                return { x: x + (i + 1) * xOffset + i * dims.width, y: y, name: data.name, groupId: "spikes" }
             })
         }
     }
