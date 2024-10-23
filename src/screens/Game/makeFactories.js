@@ -3,6 +3,7 @@ import Orb from "@entities/Orb"
 import Gate from "@entities/Gate"
 import Wind from "@entities/Wind"
 import Magnet from "@entities/Magnet"
+import FloorSpike from "@entities/FloorSpike"
 import Ball from "@entities/Ball"
 import SawBlade from "@entities/SawBlade"
 import Laser from "@entities/Laser"
@@ -127,6 +128,13 @@ export default ({ soundSprite, assetsCache, storage, player, state }) => { // us
                 colSound: null,
                 uSound: gateUSound,
                 dSound: gateDSound,
+                player,
+                ...props
+            })
+        },
+        floorSpike: (x, y, props, player) => {
+            return new FloorSpike({
+                pos: { x, y },
                 player,
                 ...props
             })
