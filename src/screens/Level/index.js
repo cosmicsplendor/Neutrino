@@ -68,7 +68,6 @@ class LevelScreen extends Node {
     }
     onExit() {
         this.teardownUI()
-        this.teardownBg()
         this.teardownUI = null
     }
 }
