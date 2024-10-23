@@ -8,5 +8,5 @@ export default createConfig({
     showAdOnResume: 0,
     prerollAd: false,
     testMode: false,
-    debug: true
+    debug: false
 })

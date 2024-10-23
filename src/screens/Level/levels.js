@@ -10,7 +10,8 @@ import level9 from "@assets/levels/level9.cson"
 import level10 from "@assets/levels/level10.cson"
 import level11 from "@assets/levels/level11.cson"
 import level12 from "@assets/levels/level12.cson"
-import level13 from "@assets/levels/level13.cson"
+import level13 from "@assets/levels/level14.cson"
+import level14 from "@assets/levels/level14.cson"
 export default [
     level1,
     level2,
@@ -25,4 +26,5 @@ export default [
     level11,
     level12,
     level13,
+    level14,
 ]
