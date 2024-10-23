@@ -1,4 +1,5 @@
 import Viewport  from "@utils/ViewPort"
+import levels from "../screens/Level/levels"
 
 /**
  * config checklist:
@@ -57,7 +58,7 @@ export default overrides => {
         
     }
     const defaultConfig = {
-        levels: 11,
+        levels: levels.length,
         viewport: new Viewport(computeViewport),
         storageId: "jshdf190",
         worldWidth: 1000,
