@@ -17,7 +17,7 @@ const applyOffsets = async (x, y, name, alignment, props) => {
         return { x: x + dx, y: y + dy }
     }
     if (name === "orb") {
-        return { x: 21, y: 21 }
+        return { x: x + 21, y: y + 21 }
     }
     return {x, y}
 }

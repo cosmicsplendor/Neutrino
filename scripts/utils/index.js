@@ -349,6 +349,12 @@ class Map extends Block {
         og: {},
         mg: {}
     }
+    
+    bg = "#132b27"
+    mob_bg = "#132b27"
+    pxbg = "#0a1614"
+    tint = "0.025, -0.025, -0.0125, 0"
+    
     collapseTile({x, y, tile, layer="fg", worldSpace=true}) {
         const gridX = worldSpace ? x / 48: x
         const gridY = worldSpace ? y / 48: y
@@ -362,12 +368,12 @@ class Map extends Block {
     centerCamera(block) {
         this.player = { name: "player", temp: true, ...calcStacked(convertToWorld(block, this.tileW), { w: 64, h: 64 }, "top") }
     }
-
-    bg = "#132b27"
-    mob_bg = "#132b27"
-    pxbg = "#0a1614"
-    tint = "0.025, -0.025, -0.0125, 0"
-
+    async save(path="./temp-map-data.json") {
+        const { w, h, tint, pxbg, mob_bg, bg, tileW, player, collapsedTiles, layers, checkpoints, projections, spawnPoints, tempSpawnPoints, tempCollisionRects, objCollisionRects, previewColRects, collisionRects } = this
+        await fs.writeFile(path, JSON.stringify({
+            w, h, tint, pxbg, mob_bg, bg, tileW, player, collapsedTiles, layers, checkpoints, projections, spawnPoints, tempSpawnPoints, tempCollisionRects, objCollisionRects, previewColRects, collisionRects    
+        }))
+    }
     constructor({ width, height, ...config } = {}) {
         super(width, height)
         Object.assign(this, config)

@@ -1,6 +1,6 @@
 const terminal = require('terminal-kit').terminal;
 const { getInitialBlock } = require('./helpers');
-const { getChoice } = require("./helpers/term")
+const { getChoice, promptAccept } = require("./helpers/term")
 const generateNewBlock = require("./helpers/generateNewBlock")
 const { Map } = require("./utils/index");
 const { Graph } = require('graphlib'); // Use a graph library
@@ -54,24 +54,33 @@ const decorateBlock = async (map, block) => {
 
 
 const interactiveGenerateLevel = async () => {
-    let graph = initializeGraph();
-    let map = initializeMap(graph);
-    const floor = generateFloor(map)
-    // map.addBlock({ block: floor, layer: "fg" })
-    let blocks = [floor];
+    const loadSaved = await promptAccept("Do you want to load saved data?")
 
-    const initialBlock = getInitialBlock(floor, graph)
-    blocks.push(initialBlock)
-    reconstructMap(map, blocks)
+    let blocks, map 
 
-    await decorateBlock(map, initialBlock)
-    /**
-     * take the map, scan every block within +-1 for edge tiles that are out of alignment
-     */
-    await fixBoundaries(map, initialBlock)
-    await map.exportMap("testlevel")
+    if (loadSaved) {
+        const loaded = await Map.loadSaved()
+        blocks = loaded.blocks
+        map = loaded.blocks
+    } else {
+        let graph = initializeGraph();
+        map = initializeMap(graph);
+        const floor = generateFloor(map)
+        blocks = [floor];
+    
+        const initialBlock = getInitialBlock(floor, graph)
+        blocks.push(initialBlock)
+        reconstructMap(map, blocks)
+    
+        await decorateBlock(map, initialBlock)
+        /**
+         * take the map, scan every block within +-1 for edge tiles that are out of alignment
+         */
+        await fixBoundaries(map, initialBlock)
+        await map.exportMap("testlevel")
+    }
 
-    let iter = 1;
+    let iter = blocks.length - 1;
 
     while (true) {
         const lastBlock = graph.node(iter - 1);
@@ -103,6 +112,7 @@ const interactiveGenerateLevel = async () => {
             graph.setEdge(iter - 1, iter);
             blocks.push(newBlock);
             iter++;
+            await map.save()
             if (terminate) break
         } else {
             terminal.red("Retrying current iteration...\n");
@@ -115,6 +125,7 @@ const interactiveGenerateLevel = async () => {
     for (const block of blocks) {
         map.centerCamera(block)
         await placeObjects(block, map)
+        await map.save()
     }
     terminal("\nFinal Level:\n");
     terminal("\nLevel design complete. Press any key to exit.\n");
