@@ -136,6 +136,8 @@ export default ({ soundSprite, assetsCache, storage, player, state }) => { // us
             const fs = new FloorSpike({
                 pos: { x, y },
                 player,
+                uSound: gateUSound,
+                dSound: gateUSound,
                 ...props
             })
             console.log(fs)

@@ -54,12 +54,12 @@ const factories = {
         }
     },
     floorSpike: {
-        fields: [ "period", "delay" ],
+        fields: [ "delay" ],
         dims: () => {
             return { width: 80, height: 40 }
         },
         create: params => {
-            const { period=1.5, delay=0, x, y } = params
+            const { delay=0, x, y } = params
             return { period: +period, delay: +delay, x, y }
         }
     },
