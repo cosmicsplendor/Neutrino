@@ -549,6 +549,8 @@ const generateGrid = (block) => {
     const rects = block.collisionRects
     const compositeRect = { x: block.x, y: block.y, w: block.w, h: block.h }
     const grid = Array(compositeRect.w * compositeRect.h).fill(0)
+    grid.width = compositeRect.width
+    grid.height = compositeRect.height
     rects.forEach(rect => {
         const x = rect.x - compositeRect.x
         const y = rect.y - compositeRect.y

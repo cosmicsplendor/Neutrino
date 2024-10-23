@@ -249,13 +249,9 @@ const getProjectedTiles = async (map, bestProjections) => {
 }
 
 const projectBackwalls = async (map, block) => {
-    console.log("1")
     const projections = projectCompositeRects(block, map.collisionRects, map)
-    console.log("3")
     const bestProjections = projections.length > 3 ? findBestProjections(map, projections) : []
-    console.log("4")
     const acceptedTiles = await getProjectedTiles(map, bestProjections)
-    console.log("5")
 
     acceptedTiles.forEach(({ x, y, tile }) => {
         map.setTile(x, y, tile ?? "bw1", "mg")
