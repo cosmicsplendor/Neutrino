@@ -3,7 +3,7 @@ import { clamp, easingFns } from "@utils/math"
 import getTestFn from "@lib/components/Collision/helpers/getTestFn"
 
 class FloorSpike extends TexRegion {
-    constructor({ uSound, dSound, pos, player, delay=0, period=.5, ...rest }) {
+    constructor({ uSound, dSound, pos, player, delay=0, period=.4, ...rest }) {
         super({ frame: "spike", pos, ...rest })
         this.endY = pos.y + 40
         this.startY = pos.y
@@ -28,7 +28,7 @@ class FloorSpike extends TexRegion {
             return
         } 
         // if the FloorSpike has gone beyond extremes
-        this.t = this.dir === 1 ? 1.75: -0.75
+        this.t = this.dir === 1 ? -1.5: -0.75
         this.dir *= -1
         this.pos.y = newPosY
         const dPX = this.pos.x + this.w / 2 - this.player.pos.x

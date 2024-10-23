@@ -1,6 +1,6 @@
 import { calcAligned, calcStacked } from "@lib/utils/entity"
 import config from "@config"
-import levels from "@levels"
+import levels from "./levels.js"
 import imgBtn from "@screens/ui/imgBtn"
 import loadingDot from "@screens/ui/loadingDot"
 import styles from "./style.css"

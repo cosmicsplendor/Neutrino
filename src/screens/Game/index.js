@@ -100,7 +100,7 @@ class GameScreen extends Node { // can only have cameras as children
         })
     }
     setLevel(data, music) {
-        const level = new Level({ player: this.player, data, viewport: config.viewport, subject: this.player, factories: this.factories, music, gameState: this.state })
+        const level = new Level({ player: this.player, data, viewport: config.viewport, subject: this.player, factories: this.factories, music: data.music, gameState: this.state })
         this.add(level)
         this.game.renderer.changeBackground(config.isMobile || this.game.renderer.api === rendApis.CNV_2D ? data.mob_bg: data.bg, moonImg)
         this.game.renderer.canvas.style.backgroundPosition = data.bgPos ?? "-50%"
