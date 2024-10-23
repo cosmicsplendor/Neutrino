@@ -53,6 +53,16 @@ const factories = {
             return { luck: +luck, dmg: +dmg, name, x: x, y: y + (alignment === "top-left" ? 32 : 0), groupId: "crates" }
         }
     },
+    floorSpike: {
+        fields: [ "period", "delay" ],
+        dims: () => {
+            return { width: 80, height: 40 }
+        },
+        create: params => {
+            const { period=1.5, delay=0, x, y } = params
+            return { period: +period, delay: +delay, x, y }
+        }
+    },
     vlhd: lasers("vertical"),
     hlhd: lasers("horizontal"),
     crane: {
