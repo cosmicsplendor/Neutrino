@@ -9,7 +9,7 @@ import testLevelData from "./assets/levels/testlevel.cson"
 import mainmenuData from "./assets/levels/mainmenu.cson"
 
 import config from "@config"
-import levels from "@config/levels"
+import levels from "./screens/Level/levels"
 import * as screenNames from "@screens/names"
 import LoadingScreen from "@screens/Loading"
 import MainMenuScreen from "@screens/MainMenu"
@@ -63,7 +63,7 @@ if (config.testMode) {
 }
 
 try {
-    assets.push({ url: levels[curLevel - 1].id, msg: "loading level data" }) // pre-load the current level
+    assets.push({ url: levels[curLevel - 1], msg: "loading level data" }) // pre-load the current level
 } catch(e) { console.log(e.message)}
 
 assets.push(bgDataId)

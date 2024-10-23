@@ -11,7 +11,7 @@ import Fire from "@entities/Fire"
 import Crate from "@entities/Crate"
 import Pool from "@utils/Pool"
 import Bus from "@entities/Bus"
-import levels from "@config/levels"
+import config from "@config"
 
 import particlesId from "@assets/particles/all.cson"
 import { TexRegion } from "@lib/index"
@@ -72,7 +72,7 @@ export default ({ soundSprite, assetsCache, storage, player, state }) => { // us
     const onFireTouch = () => {
         const bestTime = storage.getHiscore(state.level) || 0
         const curTime = state.elapsed
-        if (state.level === storage.getCurLevel() && state.level < levels.length) {
+        if (state.level === storage.getCurLevel() && state.level < config.levels) {
             storage.setCurLevel(state.level + 1)
         }
         if (bestTime === 0 || curTime < bestTime) {
