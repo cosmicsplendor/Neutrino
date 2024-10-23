@@ -9,15 +9,15 @@ const pickVerticalAlignmentParams = (emptySpaces) => {
     }
     return {
         position: pickOne(["right", "right-end", "right-start", "top", "top-start", "top-end"]),
-        dy: -skewedRand(5, 2),
-        dx: rand(2, 1) + skewedRand(2, 1)
+        dy: skewedRand(5, 2) * (Math.random < 0.5 ? -1: 1),
+        dx: rand(3, -3) + skewedRand(2, 1)* (Math.random < 0.5 ? -1: 1)
     };
 };
 
 const generateNewBlock = (prevBlock, map) => {
     const newBlock = CompositeBlock.create({
-        width: rand(3, 1) + skewedRand(5, 1) + 1, // Width between 2 and 6
-        height: skewedRand(3, 1) + rand(3, 1) // Height between 2 and 4
+        width: rand(5, 1) + skewedRand(5, 1) + 1, // Width between 2 and 6
+        height: skewedRand(3, 1) + rand(5, 1) // Height between 2 and 4
     });
 
     addProtrusions(newBlock);
@@ -27,7 +27,7 @@ const generateNewBlock = (prevBlock, map) => {
         const params = {
             position: pickOne(["right", "right-start", "right-end"]),
             dx: skewedRand(10, 3),
-            dy: 2 * skewedRand(2, 1) + rand(rand(4, 1), 1)
+            dy: 2 * skewedRand(2, 1) + rand(rand(4, 1), - 4)
         };
         newBlock.stackOn(prevBlock, params);
     } else {
