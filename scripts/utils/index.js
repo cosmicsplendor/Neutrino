@@ -350,9 +350,9 @@ class Map extends Block {
         mg: {}
     }
     collapseTile({x, y, tile, layer="fg", worldSpace=true}) {
-        if (x < 0 || y < 0 || x > this.w - 1 || y > this.h - 1) return null
         const gridX = worldSpace ? x / 48: x
         const gridY = worldSpace ? y / 48: y
+        if (gridX < 0 || gridY < 0 || gridX > this.w - 1 || gridY > this.h - 1) return null
         this.setTile(gridX, gridY, tile, "fg", true)
         this.collapsedTiles[layer][`${gridX}-${gridY}`] = tile
     }
@@ -464,7 +464,8 @@ class Map extends Block {
             }
             this.spawnPoints.push(p)
             if (Array.isArray(p.collapsed)) { // collapse wave function (superposition state)
-                p.collapsed.forEach(t => this.collapseTile(t))
+                console.log("HERE", p.collapsed[0])
+                p.collapsed.forEach(t => this.collapseTile({ ...t, testing: true, worldSpace: true }))
             }
         })
         groupAndMergeRectsByMat(this.tempCollisionRects).forEach(r => this.objCollisionRects.push(r))
