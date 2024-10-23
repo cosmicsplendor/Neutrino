@@ -133,11 +133,13 @@ export default ({ soundSprite, assetsCache, storage, player, state }) => { // us
             })
         },
         floorSpike: (x, y, props, player) => {
-            return new FloorSpike({
+            const fs = new FloorSpike({
                 pos: { x, y },
                 player,
                 ...props
             })
+            console.log(fs)
+            return fs
         },
         orb: orbPool.create.bind(orbPool),
         wind: windPool.create.bind(windPool),
