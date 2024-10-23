@@ -10,17 +10,18 @@ const generateFloor = require('./helpers/generateFloor');
 const fixBoundaries = require('./helpers/fixBoundaries');
 const projectBackwalls = require('./helpers/projectBackwalls');
 
+const mapData = {
+    width: 60,
+    height: 30,
+    // bg: "rgb(18 18 18)",
+    // mob_bg: "rgb(18 18 18)",
+    // pxBg: "#0a1614",
+    "bg":"rgb(18 18 18)","mob_bg":"rgb(18 18 18)","pxbg":"0.090, 0.090, 0.090","tint":"0.025, 0.0125, -0.025, 0",
+    tint: "0.025, -0.025, -0.0125, 0",
+    floorHeight: 3,
+}
 const initializeMap = () => {
-    const map = new Map({
-        width: 60,
-        height: 30,
-        // bg: "rgb(18 18 18)",
-        // mob_bg: "rgb(18 18 18)",
-        // pxBg: "#0a1614",
-        "bg":"rgb(18 18 18)","mob_bg":"rgb(18 18 18)","pxbg":"0.090, 0.090, 0.090","tint":"0.025, 0.0125, -0.025, 0",
-        tint: "0.025, -0.025, -0.0125, 0",
-        floorHeight: 3,
-    });
+    const map = new Map(mapData);
     return map
 }
 const initializeGraph = () => new Graph({ directed: true });
@@ -54,16 +55,20 @@ const decorateBlock = async (map, block) => {
 
 
 const interactiveGenerateLevel = async () => {
-    const loadSaved = await promptAccept("Do you want to load saved data?")
+    // const loadSaved = await promptAccept("Do you want to load saved data?")
+    const loadSaved = false
 
     let blocks, map 
+    let graph = initializeGraph();
 
     if (loadSaved) {
-        const loaded = await Map.loadSaved()
+        const loaded = await Map.fromSaved()
         blocks = loaded.blocks
+        blocks.slice(1).forEach((block, i) => {
+            graph.setNode(i, block)
+        })
         map = loaded.blocks
     } else {
-        let graph = initializeGraph();
         map = initializeMap(graph);
         const floor = generateFloor(map)
         blocks = [floor];
@@ -81,7 +86,7 @@ const interactiveGenerateLevel = async () => {
     }
 
     let iter = blocks.length - 1;
-
+    await placeObjects(graph.node(iter - 1), map)
     while (true) {
         const lastBlock = graph.node(iter - 1);
         let newBlock = generateNewBlock(lastBlock, map);
@@ -106,10 +111,11 @@ const interactiveGenerateLevel = async () => {
             await decorateBlock(map, newBlock)
             await fixBoundaries(map, newBlock)
             newBlock.backTiles = await projectBackwalls(map, newBlock)
+            map.centerCamera(newBlock)
+            await placeObjects(newBlock, map)
             await map.exportMap("testlevel")
 
             graph.setNode(iter, newBlock);
-            graph.setEdge(iter - 1, iter);
             blocks.push(newBlock);
             iter++;
             await map.save()
@@ -122,11 +128,11 @@ const interactiveGenerateLevel = async () => {
         }
     }
 
-    for (const block of blocks) {
-        map.centerCamera(block)
-        await placeObjects(block, map)
-        await map.save()
-    }
+    // for (const block of blocks) {
+    //     map.centerCamera(block)
+    //     await placeObjects(block, map)
+    //     await map.save()
+    // }
     terminal("\nFinal Level:\n");
     terminal("\nLevel design complete. Press any key to exit.\n");
     terminal.grabInput(true);
