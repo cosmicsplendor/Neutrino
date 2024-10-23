@@ -10,6 +10,8 @@ class Laser extends MovableEnt {
     startX
     startY
     constructor(x, y, toX = x, toY = y, speed = 100, num = 2, vert, period, delay=0, on = true, player, sounds) {
+        toX = typeof toX == "number" ? toX: x
+        toY = typeof toY == "number" ? toY: y
         const frame = vert ? "vlhd" : "hlhd"
         const bFrame = vert ? "vlbod" : "hlbod" // body frame
         const xOffset = vert ? offset : hheight
