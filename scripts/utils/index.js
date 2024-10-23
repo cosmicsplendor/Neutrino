@@ -374,6 +374,16 @@ class Map extends Block {
             w, h, tint, pxbg, mob_bg, bg, tileW, player, collapsedTiles, layers, checkpoints, projections, spawnPoints, tempSpawnPoints, tempCollisionRects, objCollisionRects, previewColRects, collisionRects    
         }))
     }
+    static async fromSaved(defaultData, path="./temp-map-data.json") {
+        try {
+            const data = (await readFile(path)).toString("utf-8")
+            const map = new Map(defaultData)
+            Object.assign(map, data)
+            return map
+        } catch {
+            return new Map(defaultData)
+        }
+    }
     constructor({ width, height, ...config } = {}) {
         super(width, height)
         Object.assign(this, config)
