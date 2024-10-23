@@ -8,7 +8,7 @@ const sawBlades = require("./sawBlades")
 const stackables = require("./stackables")
 const TILE_SIZE = 48
 const STACK_TOP = ["top-start", "top-end", "top"]
-
+const em3Props = ["wt_1", "wt_5", "wt_5", "wt_10", "wt_1"]
 const factories = {
     player: {
         fields: [], // No specific props inferred from the original code
@@ -118,7 +118,7 @@ const factories = {
             const { x, y } = params
             const roundedX = x % 48 === 0 ? x: x + 24 * (Math.random() < 0.5 ? 1: -1)
             return [
-                { x: roundedX - 16, y, name: "em1", collapsed: [{ y: y + 32, x: roundedX, tile: "wt_1" }]  },
+                { x: roundedX - 16, y, name: "em1", collapsed: [{ y: y + 32, x: roundedX, tile: pickOne(em3Props) }]  },
                 { x: roundedX + 24, y, name: "wind" }
             ]
         }
@@ -149,7 +149,7 @@ const factories = {
                 }).filter(cell => cell.name !== "empty")
             }).flat()
             const results = [
-                { x: roundedX - 16, y, name: "em1", collapsed: [{ y: y + 32, x: roundedX, tile: "wt_1" }] },
+                { x: roundedX - 16, y, name: "em1", collapsed: [{ y: y + 32, x: roundedX, tile: pickOne(em3Props) }] },
                 { x: roundedX + 24, y, name: "fire" },
                 ...wallTiles,
                 ...backwallTiles
