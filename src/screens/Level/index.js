@@ -5,11 +5,9 @@ import arrowImgId from "@assets/images/ui/arrow.png"
 import SoundSprite from "@utils/Sound/SoundSprite"
 import soundSpriteId from "@assets/audio/sprite.mp3"
 import soundMetaId from "@assets/audio/sprite.cson"
-import levels from "@config/levels"
+import config from "@config"
 
 import initUI from "./initUI"
-import { hexToNorm } from "@lib/utils/math"
-import * as rendApis  from "@lib/renderer/apis"
 import { placeBg } from "../utils"
 
 class LevelScreen extends Node {
@@ -41,7 +39,7 @@ class LevelScreen extends Node {
             this.contSound.play()
             this.curLevel = storage.getCurLevel()
         } else if (advance) {
-            this.curLevel = Math.min(this.curLevel + 1, levels.length)
+            this.curLevel = Math.min(this.curLevel + 1, config.levels)
         }
         this.teardownUI = initUI({
             onStart: level => {

@@ -1,6 +1,6 @@
 import { calcAligned, calcStacked } from "@lib/utils/entity"
 import config from "@config"
-import levels from "@config/levels"
+import levels from "@levels"
 import imgBtn from "@screens/ui/imgBtn"
 import loadingDot from "@screens/ui/loadingDot"
 import styles from "./style.css"
@@ -108,7 +108,7 @@ export default ({ onStart, uiRoot, storage, level, maxLevel, images, assetsCache
     const loadAndStart = () => {
         loading = true
         uiRoot.clear()
-        const levelId = levels[levelState - 1].id
+        const levelId = levels[levelState - 1]
         if (!assetsCache.get(levelId)) { // if level data doesn't exist in the cache
             uiRoot.content = loadingDot(LOADING)
 
@@ -121,20 +121,20 @@ export default ({ onStart, uiRoot, storage, level, maxLevel, images, assetsCache
 
             loadingInd.pos = calcAligned(config.viewport, loadingInd, "center", "center")
 
-            levels.forEach(level => {
-                assetsCache.unload(level.id)
-            })
+            // levels.forEach(level => {
+            //     assetsCache.unload(level)
+            // })
 
             assetsCache.load([ levelId ])
             assetsCache.once("load", () => {
-                // memoryQueue.unshift(levelId) // enqueue the currently loaded level
-                // const staleLevels = memoryQueue.splice(3) // only keep 3 levels in the memory queue at a time
-                // console.log(memoryQueue)
-                // staleLevels.forEach(levelId => { // free up stale memory
-                //     console.log("deloading")
-                //     // assetsCache.unload(levelId)
-                // })
-                // console.log(Object.keys(assetsCache.assets))
+                memoryQueue.unshift(levelId) // enqueue the currently loaded level
+                const staleLevels = memoryQueue.splice(3) // only keep 3 levels in the memory queue at a time
+                console.log(memoryQueue)
+                staleLevels.forEach(levelId => { // free up stale memory
+                    console.log("deloading")
+                    assetsCache.unload(levelId)
+                })
+                console.log(Object.keys(assetsCache.assets))
                 onLoad()
             })
             
