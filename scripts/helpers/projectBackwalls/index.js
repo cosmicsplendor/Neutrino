@@ -228,7 +228,7 @@ const getProjectedTiles = async (map, bestProjections) => {
             if (tiles.length === 0) break;
             
             message(`[${Number(i) + 1} of ${bestProjections.length}] projecting back walls`)
-            const choice = await getChoice([ "Retry", "Discard", "Accept", "Discard All" ])
+            const choice = await getChoice([ "Retry", "Discard", "Accept", "Discard Rest" ])
             
             if (choice === "Accept") {
                 acceptedTiles.push(...tiles)
