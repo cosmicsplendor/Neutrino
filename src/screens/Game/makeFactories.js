@@ -81,7 +81,6 @@ export default ({ soundSprite, assetsCache, storage, player, state }) => { // us
         endSound.play()
         state.complete(curTime, bestTime)
     }
-    const fire = new Fire(particles.fire, onFireTouch)
     const crateDmgFacs = Object.freeze({
         up: new Pool({
             factory: () => {
@@ -140,13 +139,12 @@ export default ({ soundSprite, assetsCache, storage, player, state }) => { // us
                 dSound: gateUSound,
                 ...props
             })
-            console.log(fs)
             return fs
         },
         orb: orbPool.create.bind(orbPool),
         wind: windPool.create.bind(windPool),
         fire: (x, y, _, player) => {
-            fire.parent && fire.remove()
+            const fire = new Fire(particles.fire, onFireTouch)
             fire.player = player
             fire.pos.x = x
             fire.pos.y = y

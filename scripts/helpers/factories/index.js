@@ -8,7 +8,7 @@ const sawBlades = require("./sawBlades")
 const stackables = require("./stackables")
 const TILE_SIZE = 48
 const STACK_TOP = ["top-start", "top-end", "top"]
-const em3Props = ["wt_1", "wt_5", "wt_5", "wt_10", "wt_1"]
+const em3Props = ["wt_1", "wt_1", "en4", "en6", "en5"]
 const factories = {
     player: {
         fields: [], // No specific props inferred from the original code

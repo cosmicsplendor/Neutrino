@@ -57,7 +57,7 @@ export default overrides => {
         
     }
     const defaultConfig = {
-        levels: 12,
+        levels: 11,
         viewport: new Viewport(computeViewport),
         storageId: "jshdf190",
         worldWidth: 1000,

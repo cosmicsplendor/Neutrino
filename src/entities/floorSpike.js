@@ -22,13 +22,12 @@ class FloorSpike extends TexRegion {
         if (this.t < 0) return
         const dp = this.dist * easingFns.cubicIn(this.t / this.period)
         this.pos.y = (this.dir === this.initDir ? this.startY: this.endY) + dp * this.dir
-        console.log({ dp, dir: this.dir,  })
         const newPosY = clamp(this.startY, this.endY, this.pos.y)
         if (newPosY === this.pos.y) {
             return
         } 
         // if the FloorSpike has gone beyond extremes
-        this.t = this.dir === 1 ? -1.5: -0.75
+        this.t = this.dir === 1 ? -1.75: -1.25
         this.dir *= -1
         this.pos.y = newPosY
         const dPX = this.pos.x + this.w / 2 - this.player.pos.x

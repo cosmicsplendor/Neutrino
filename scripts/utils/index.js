@@ -480,8 +480,8 @@ class Map extends Block {
             }
             this.spawnPoints.push(p)
             if (Array.isArray(p.collapsed)) { // collapse wave function (superposition state)
-                console.log("HERE", p.collapsed[0])
                 p.collapsed.forEach(t => this.collapseTile({ ...t, testing: true, worldSpace: true }))
+                delete p.collapsed
             }
         })
         groupAndMergeRectsByMat(this.tempCollisionRects).forEach(r => this.objCollisionRects.push(r))

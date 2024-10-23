@@ -8,7 +8,7 @@ class Fire extends ParticleEmitter { // it's no ordinary fire, it's an end-marke
         super(supProps)
         ParticleEmitter.feed(this, 120, 0.02) // feed 2.4 (120 iterations * 0.02 second time step ) seconds worth of update to stabilize the fire
         this.hitbox = {
-            x: -20, width: 40, 
+            x: -20, width: 40,
             y: -15, height: 17
         }
         this.onTouch = onTouch
@@ -21,7 +21,8 @@ class Fire extends ParticleEmitter { // it's no ordinary fire, it's an end-marke
         this._player = val
         this.testCol = getTestFn(this, val)
     }
-    reset() { }
+    reset() {
+    }
     update() {
         if (!this.player) { return }
         if (this.testCol(this, this.player)) {
