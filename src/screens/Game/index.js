@@ -10,7 +10,6 @@ import { LEVEL } from "../names"
 import * as rendApis  from "@lib/renderer/apis"
 import moonImg from "@assets/images/background.png"
 import config from "@config"
-import levels from "@config/levels"
 import Level from "./Level"
 import makeFactories from "./makeFactories"
 import Player from "@entities/Player"
@@ -120,14 +119,9 @@ class GameScreen extends Node { // can only have cameras as children
             lastIdx > -1 && Node.removeChild(this, this.children[lastIdx])
         }
     }
-    onEnter(l) {
-        const levelIdx = Math.min(l - 1, levels.length - 1)
-        const levelData = config.testMode ? { id: testlevel }: levels[levelIdx]
-        const levelDataId = levelData.id
-        const music = levelData.music
-
-        const data = Object.assign(this.game.assetsCache.get(levelDataId), levelData)
-        const level = this.setLevel(data, music && this.music[music])
+    onEnter(l, levelDataId) {
+        const data = this.game.assetsCache.get(config.testMode ? testlevel: levelDataId)
+        const level = this.setLevel(data)
         const onClose = advance => this.game.switchScreen(LEVEL, false, advance)
         const checkpoint = new Checkpoint(data.checkpoints)
         this.checkpoint = checkpoint
@@ -143,10 +137,10 @@ class GameScreen extends Node { // can only have cameras as children
         }
         
         focusInst()
-        level.idx = levelIdx
+        level.idx = l - 1
         const getCheckpoint = checkpoint.get.bind(checkpoint)
         const { teardownUI, updateTimer } = initUI(this.uiRoot, this.player, this.uiImages, this.storage, this.state, onClose, resetLevel, focusInst, getCheckpoint, this.btnSound, this.errSound, this.contSound, webAudioSupported, this.game, this.sdk)
-        this.state.level = levelIdx + 1
+        this.state.level = l
         this.teardownUI = teardownUI
         this.updateTimer = updateTimer
         this.state.play()

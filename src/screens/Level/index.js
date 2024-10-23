@@ -42,8 +42,8 @@ class LevelScreen extends Node {
             this.curLevel = Math.min(this.curLevel + 1, config.levels)
         }
         this.teardownUI = initUI({
-            onStart: level => {
-                game.switchScreen(GAME, level)
+            onStart: (level, id) => {
+                game.switchScreen(GAME, level, id)
                 this.curLevel = level
             },
             uiRoot,

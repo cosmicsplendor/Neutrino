@@ -115,7 +115,7 @@ export default ({ onStart, uiRoot, storage, level, maxLevel, images, assetsCache
             const loadingInd = uiRoot.get(`#${LOADING}`)
 
             const onLoad = () => {
-                onStart(levelState)
+                onStart(levelState, levelId)
                 assetsCache.off("error")
             }
 
@@ -128,7 +128,7 @@ export default ({ onStart, uiRoot, storage, level, maxLevel, images, assetsCache
             assetsCache.load([ levelId ])
             assetsCache.once("load", () => {
                 memoryQueue.unshift(levelId) // enqueue the currently loaded level
-                const staleLevels = memoryQueue.splice(3) // only keep 3 levels in the memory queue at a time
+                const staleLevels = memoryQueue.splice(2) // only keep 2 levels in the memory queue at a time
                 console.log(memoryQueue)
                 staleLevels.forEach(levelId => { // free up stale memory
                     console.log("deloading")
@@ -153,7 +153,7 @@ export default ({ onStart, uiRoot, storage, level, maxLevel, images, assetsCache
             })
             return
         }
-        onStart(levelState)
+        onStart(levelState, levelId)
     }
     const onStartBtnClick = () => {
         if (loading) return
