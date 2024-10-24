@@ -73,10 +73,10 @@ const factories = {
     },
     bus: {
         fieldsFilter: (name, prevParams) => {
-            if (name === "toY" && +prevParams.toX === 0) {
-                return true
+            if (name === "toY" && +prevParams.toX !== 0) {
+                return false
             }
-            return false
+            return true
         },
         fields: ['toX', 'toY', 'period'], // Based on Bus constructor
         dims: () => ({ width: 88, height: 88 }),

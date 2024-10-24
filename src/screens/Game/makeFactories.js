@@ -183,8 +183,8 @@ export default ({ soundSprite, assetsCache, storage, player, state }) => { // us
         hlhd: (x, y, props, player) => {
             return new Laser(x, y, props.toX, props.toY, props.speed, props.num, false, props.period,props.delay, props.on, player, lasSounds)
         },
-        bus: (x, y, props) => {
-            return new Bus(x, y, props.toX, props.toY, props.period)
+        bus: (x, y, props, player) => {
+            return new Bus(x, y, props.toX, props.toY, props.period, player)
         },
         default: (x, y, props) => {
             return new TexRegion({ pos: { x, y }, frame: props.name })

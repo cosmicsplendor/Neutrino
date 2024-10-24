@@ -1,4 +1,5 @@
 import { TexRegion } from "@lib"
+import getTestFn from "@lib/components/Collision/helpers/getTestFn"
 import { easingFns } from "@utils/math"
 
 class Bus extends TexRegion {
@@ -8,7 +9,8 @@ class Bus extends TexRegion {
         width: 86,
         height: 88
     }
-    constructor(x, y, toX, toY, period) { // spawn points for movable collidable entities have to be on midground layer (on tiled layer should be set to mg)
+    smooth=true
+    constructor(x, y, toX, toY, period, player) { // spawn points for movable collidable entities have to be on midground layer (on tiled layer should be set to mg)
         super({ pos: { x, y }, frame: "crane" })
         this.prevPosY = this.pos.y
         this.prevPosX = this.pos.x
@@ -17,12 +19,17 @@ class Bus extends TexRegion {
 
         this.dispY = toY - y
         this.meanY = y
+
         this.dispX = toX - x
         this.meanX = x
+
         this.period = period
         this.t = 0
 
         this.moveY = this.dispY !== 0
+
+        this.player = player
+        this.testCol = getTestFn(this, player)
     }
     update(dt) {
         this.t += dt
@@ -43,14 +50,18 @@ class Bus extends TexRegion {
         this.velY = (this.pos.y - this.prevPosY) / dt
     }
     updateX(dt) {
-        this.pos.y = this.meanY + easingFns.smoothStep(this.t / this.period) * this.dispY
+        this.pos.x = this.meanX + easingFns.linear(this.t / this.period) * this.dispX
         if (this.t > this.period) {
-            this.meanY = this.meanY + this.dispY
-            this.pos.y = this.meanY
-            this.dispY *= -1
+            this.meanX = this.meanX + this.dispX
+            this.pos.x = this.meanX
+            this.dispX *= -1
             this.t = 0
         }
-        this.velY = (this.pos.y - this.prevPosY) / dt
+        const dx = this.pos.x - this.prevPosX
+        if (this.player.pos.y === this.pos.y - 64 && this.player.pos.x < this.pos.x + 88 && this.player.pos.x > this.pos.x - 32) {
+            this.player.pos.x += dx
+        }
+        this.velX = dx / dt
     }
 }
 

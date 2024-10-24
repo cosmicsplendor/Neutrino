@@ -91,7 +91,6 @@ class Player extends TexRegion {
         Movement.makeMovable(this, { accY: config.gravity, roll: true, fricX })
     }
     set mxJmpVel(val) {
-        console.log({ val })
         this.controls.states.jumping.minJmpVel = val ?? -375
     }
     set speed(val) {
