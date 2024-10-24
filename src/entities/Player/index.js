@@ -51,6 +51,7 @@ class Player extends TexRegion {
     static sounds = [ "player_din", "concrete", "wood", "metal", "jump", "player_exp" ]
     remDt = 0 // remnant dt
     smooth = true
+    onBus=false
     constructor({ speed = 48, width = 64, height = 64, fricX=4, shard, cinder, controls, sounds, state, ...rest }) {
         super({ frame: "ball", ...rest })
         this.width = width
@@ -185,8 +186,14 @@ class Player extends TexRegion {
         this.sounds.player_din.play(0.8)
         this.velX = this.velY = 0
     }
+    focusX() {
+        return Math.abs(this.velX) > 5
+    }
+    gotOnBus() {
+        this.onBus = true
+    }
     update(dt) {
-        console.log(this.pos)
+        this.onBus = false // reset at the start of the frame
         if (this.state.is("game-over") || this.state.is("paused")) return
         this.controls.update(this, dt)
         Boolean(this.offEdge) ? Movement.updateOffEdge(this, dt): Movement.update(this, dt)
@@ -195,6 +202,7 @@ class Player extends TexRegion {
         this.magnetCollision.update()
         if (config.testMode) return
         this.spikeCollision.update()
+        console.log(this.onBus)
     }
     onRemove() {
         this.parent = null // free-up the reference for garbage collector

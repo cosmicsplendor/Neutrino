@@ -9,8 +9,8 @@ const pickVerticalAlignmentParams = (emptySpaces) => {
     }
     return {
         position: pickOne(["right", "right-end", "right-start", "top", "top-start", "top-end"]),
-        dy: rand(10, 2) * (Math.random < 0.5 ? -1: 1),
-        dx: rand(6, -6) + skewedRand(5, 1)* (Math.random < 0.5 ? -1: 1)
+        dy: rand(12, 2) * (Math.random < 0.5 ? -1: 1),
+        dx: rand(12) + skewedRand(5, 1)* (Math.random < 0.5 ? -1: 1)
     };
 };
 
@@ -26,8 +26,8 @@ const generateNewBlock = (prevBlock, map) => {
     if (expandDir === "horizontal") {
         const params = {
             position: pickOne(["right", "right-start", "right-end"]),
-            dx: rand(10, -3),
-            dy: 2 * skewedRand(2, 1) + rand(rand(4, 1), - 4) + rand(5, -4)
+            dx: rand(10, -1),
+            dy: 2 * (skewedRand(2, 1) + skewedRand(-2, -1)) + rand(rand(4, 1), - 4) + rand(5, -5)
         };
         newBlock.stackOn(prevBlock, params);
     } else {

@@ -51,7 +51,7 @@ class Bus extends TexRegion {
         this.velY = (this.pos.y - this.prevPosY) / dt
     }
     updateX(dt) {
-        this.pos.x = this.meanX + easingFns.smoothStep(this.t / this.period) * this.dispX
+        this.pos.x = this.meanX + easingFns.linear(this.t / this.period) * this.dispX
         if (this.t > this.period) {
             this.meanX = this.meanX + this.dispX
             this.pos.x = this.meanX
@@ -59,8 +59,9 @@ class Bus extends TexRegion {
             this.t = 0
         }
         const dx = this.pos.x - this.prevPosX
-        if (this.player.pos.y === this.pos.y - 64 && this.player.pos.x < this.pos.x + 88 && this.player.pos.x > this.pos.x - 32) {
+        if (this.player.pos.y >= this.pos.y - 64 && this.player.pos.x < this.pos.x + 88 && this.player.pos.x > this.pos.x - 16) {
             this.player.pos.x += dx
+            this.player.gotOnBus()
         }
         this.velX = dx / dt
     }
