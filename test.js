@@ -1,5 +1,4 @@
-const costAtStep = n => Array.from({ length: n }, (_, i) => i).reduce((s, i) => s + i, 2)
-
-for (let x = 0; x < 100; x++) {
-    console.log(`[${x+1}] => ${costAtStep(x+1)}`)
-}
+{"x": 570, "y": 680, "name": "orb"},
+{"x": 520, "y": 620, "name": "orb"},
+{"x": 470, "y": 600, "name": "orb"},
+{"x": 420, "y": 620, "name": "orb"}

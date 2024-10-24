@@ -192,7 +192,6 @@ class Player extends TexRegion {
         this.onBus = true
     }
     update(dt) {
-        // console.log(this.pos)
         this.onBus = false // reset at the start of the frame
         if (this.state.is("game-over") || this.state.is("paused")) return
         this.controls.update(this, dt)

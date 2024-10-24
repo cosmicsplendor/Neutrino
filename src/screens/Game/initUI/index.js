@@ -248,7 +248,7 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
     const showPauseOverlay =() => {
         pauseOverlay.domNode.style.width = `${config.viewport.width}px`
         pauseOverlay.domNode.style.height = `${config.viewport.height}px`
-        pauseOverlay.domNode.style.opacity = 1
+        pauseOverlay.domNode.style.opacity = 0.8
     }
     const hidePauseOverlay = () => {
         pauseOverlay.domNode.style.opacity = 0
@@ -375,9 +375,11 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
             return gameState.pause()
         } 
         if (gameState.is("over") && e.key === "Enter") { 
+            hidePauseOverlay()
             return continuePlay()
         }
         if (gameState.is("paused") && e.key === "Enter") {
+            hidePauseOverlay()
             return gameState.play()
         }
         // if (gameState.is("completed") && (e.key === "Enter" || e.key === " ")) {

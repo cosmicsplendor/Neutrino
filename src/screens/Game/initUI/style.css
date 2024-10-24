@@ -49,7 +49,7 @@
 }
 .pauseOverlay {
     border-radius: 5px;
-    background: #333366;
+    background: #000;
     opacity: 0;
     transition: opacity 1s easein;
 }
