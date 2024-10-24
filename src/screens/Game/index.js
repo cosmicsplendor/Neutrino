@@ -127,15 +127,15 @@ class GameScreen extends Node { // can only have cameras as children
         const onClose = advance => this.game.switchScreen(LEVEL, false, advance)
         const checkpoint = new Checkpoint(data.checkpoints)
         this.checkpoint = checkpoint
+        const focusInst = () => {
+            level.focusInst()
+            this.bg && this.bg.focusInst()
+        }
         const resetLevel = () => {
             window.Node = Node
             window.level = level
             level.resetRecursively()
             checkpoint.reset()
-        }
-        const focusInst = () => {
-            level.focusInst()
-            this.bg && this.bg.focusInst()
         }
         
         focusInst()

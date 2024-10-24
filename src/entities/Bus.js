@@ -59,9 +59,8 @@ class Bus extends TexRegion {
             this.t = 0
         }
         const dx = this.pos.x - this.prevPosX
-        if (this.player.pos.y >= this.pos.y - 64 && this.player.pos.x < this.pos.x + 88 && this.player.pos.x > this.pos.x - 16) {
+        if (this.player.pos.y === this.pos.y - 64 && this.player.pos.x < this.pos.x + 88 && this.player.pos.x > this.pos.x - 32) {
             this.player.pos.x += dx
-            this.player.gotOnBus()
         }
         this.velX = dx / dt
     }

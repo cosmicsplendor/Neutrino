@@ -6,7 +6,6 @@ import styles from "./style.css"
 
 const margin = 20
 const hMargin = margin * 0.5 // hMargin
-const instFocThres = config.isMobile ? 960: 1500
 
 const PAUSE = "pause-btn"
 const RESUME  = "resume-btn"
@@ -19,7 +18,8 @@ const CROSS = "cross-btn"
 const RESET = "reset-btn"
 
 const OVERLAY = "overlay"
-const BLUR_OVERLAY = "pause-overlay"
+const PAUSE_OVERLAY = "pause-overlay"
+const BLUR_OVERLAY = "blur-overlay"
 const CUR_TIME_IND = "cur-time-ind"
 const CUR_TIME = "cur-time"
 const BEST_TIME_IND = "best-time-ind"
@@ -30,6 +30,7 @@ const RVA_TXT = "rva"
 const render = (images, orbAv, orbExpAmt=2) => {
     return `
         <div id="${BLUR_OVERLAY}" class="${styles.blurOverlay}">PAUSED</div>
+        <div class="${styles.pauseOverlay} ${styles.hidden}" id="${PAUSE_OVERLAY}">  </div>
         ${imgBtn(ORB_IND, images.orb, styles.hidden, "orb count")}
         <div id="${TIMER}" class="${styles.timer} ${styles.hidden}"> 0000:0 </div>
         <div id="${ORB_AV}" class="${styles.txt} ${styles.hidden}"> ${orbAv} </div>
@@ -70,6 +71,7 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
     const crossBtn = uiRoot.get(`#${CROSS}`)
     const timer = uiRoot.get(`#${TIMER}`)
     const blurOverlay = uiRoot.get(`#${BLUR_OVERLAY}`)
+    const pauseOverlay = uiRoot.get(`#${PAUSE_OVERLAY}`)
     // const music = soundBtn(storage, "getMusic", "setMusic", gameState, images.musOn, images.musOff, contSound, webAudioSupported, "toggle music")
     const soundBtn = soundImgBtn(storage, "getSound", "setSound", gameState, images.soundOn, images.soundOff, contSound, webAudioSupported, "toggle audio")
 
@@ -161,6 +163,10 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         hideCtrlBtns()
         resumeBtn.domNode.style.background = `url(${images.resume.src})`
         resumeBtn.domNode.style.backgroundSize = "cover"
+
+
+        showPauseOverlay()
+
     }
     const execOver = () => {
         const checkpoint = getCheckpoint(player.pos.x)
@@ -201,6 +207,7 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
     }
     const onOver = () => {
         // wait(0.75).then(execOver)
+        showPauseOverlay()
         execOver()
     }
     const onComplete = (curTime, bestTime) => {
@@ -238,6 +245,18 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         bestTimeVal.show()
         continueBtn.show()
     }
+    const showPauseOverlay =() => {
+        pauseOverlay.domNode.style.width = `${config.viewport.width}px`
+        pauseOverlay.domNode.style.height = `${config.viewport.height}px`
+        pauseOverlay.domNode.style.opacity = 1
+    }
+    const hidePauseOverlay = () => {
+        pauseOverlay.domNode.style.opacity = 0
+        setTimeout(() => {
+            pauseOverlay.domNode.style.width = 0
+            pauseOverlay.domNode.style.height = 0
+        }, 1000)
+    }
     const [ continuePlay, restartPlay ] = (() => {
         const playingAd = {
             _val: false,
@@ -267,13 +286,15 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         }
         const restorePlayer = point => {
             resetLevel()
+            const posXAtReset = player.pos.x
             player.pos.x = point.x
             player.pos.y = point.y
+            if (Math.abs(posXAtReset - player.pos.x) > 900) focusInst() // if the player is not near enough to it's reset spawn point, focus the camera to player position instantly to avoid jarring focus
         }
         const restart = () => {
             const posXAtReset = player.pos.x
             resetLevel()
-            focusInst() // if the player is not near enough to it's reset spawn point, focus the camera to player position instantly to avoid jarring focus
+            if (Math.abs(posXAtReset - player.pos.x) > 700) focusInst() // if the player is not near enough to it's reset spawn point, focus the camera to player position instantly to avoid jarring focus
             gameState.elapsed = 0
             gameState.play()
             btnSound.play()
@@ -382,6 +403,7 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         btnSound.play()
     })
     resumeBtn.on("click", () => {
+        hidePauseOverlay()
         if (gameState.is("playing") || gameState.is("completed")) return
         if (gameState.is("paused")) {
             gameState.play()
@@ -393,10 +415,12 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         if (gameState.is("playing") || gameState.is("completed")) return
         onClose(false)
         btnSound.play()
+        hidePauseOverlay()
     })
     restartBtn.on("click", () => {
         if (gameState.is("playing") || gameState.is("completed")) return
         restartPlay()
+        hidePauseOverlay()
     })
     realign(config.viewport)
     return {

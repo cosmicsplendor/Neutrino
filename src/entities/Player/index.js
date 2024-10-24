@@ -95,7 +95,6 @@ class Player extends TexRegion {
         this.controls.states.jumping.minJmpVel = val ?? -375
     }
     set speed(val) {
-        console.log({ speed: val })
         this.controls.speed = val ?? 350
     }
     get visible() {
@@ -193,6 +192,7 @@ class Player extends TexRegion {
         this.onBus = true
     }
     update(dt) {
+        // console.log(this.pos)
         this.onBus = false // reset at the start of the frame
         if (this.state.is("game-over") || this.state.is("paused")) return
         this.controls.update(this, dt)
@@ -202,7 +202,6 @@ class Player extends TexRegion {
         this.magnetCollision.update()
         if (config.testMode) return
         this.spikeCollision.update()
-        console.log(this.onBus)
     }
     onRemove() {
         this.parent = null // free-up the reference for garbage collector
