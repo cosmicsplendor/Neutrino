@@ -90,6 +90,14 @@ class Player extends TexRegion {
         
         Movement.makeMovable(this, { accY: config.gravity, roll: true, fricX })
     }
+    set mxJmpVel(val) {
+        console.log({ val })
+        this.controls.states.jumping.minJmpVel = val ?? -375
+    }
+    set speed(val) {
+        console.log({ speed: val })
+        this.controls.speed = val ?? 350
+    }
     get visible() {
         return this.alpha !== 0 && this._visible
     }
