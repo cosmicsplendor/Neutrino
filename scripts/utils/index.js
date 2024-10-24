@@ -556,6 +556,8 @@ class Map extends Block {
             width: this.w * tileW,
             height: this.h * tileW,
             previewColRects: this.previewColRects.concat(projections),
+            mxJmpVel: this.mxJmpVel,
+            speed: this.speed
         }
 
         await fs.writeFile(`./src/assets/levels/${levelName}.cson`, JSON.stringify(exports))

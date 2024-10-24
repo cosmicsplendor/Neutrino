@@ -11,11 +11,12 @@ const fixBoundaries = require('./helpers/fixBoundaries');
 const projectBackwalls = require('./helpers/projectBackwalls');
 
 const mapData = {
-    width: 60,
+    width: 100,
     height: 30,
-    // bg: "rgb(18 18 18)",
-    // mob_bg: "rgb(18 18 18)",
-    // pxBg: "#0a1614",
+    speed:400,
+    mxJmpVel: -400,
+    mob_bg: "rgb(18 18 18)",
+    pxBg: "#0a1614",
     "bg":"rgb(18 18 18)","mob_bg":"rgb(18 18 18)","pxbg":"0.090, 0.090, 0.090","tint":"0.025, 0.0125, -0.025, 0",
     tint: "0.025, -0.025, -0.0125, 0",
     floorHeight: 3,
