@@ -17,12 +17,32 @@ class Bus extends TexRegion {
 
         this.dispY = toY - y
         this.meanY = y
+        this.dispX = toX - x
+        this.meanX = x
         this.period = period
         this.t = 0
 
+        this.moveY = this.dispY !== 0
     }
     update(dt) {
         this.t += dt
+        if (this.moveY) {
+            this.updateY(dt)
+            return
+        }
+        this.updateX(dt)
+    }
+    updateY(dt) {
+        this.pos.y = this.meanY + easingFns.smoothStep(this.t / this.period) * this.dispY
+        if (this.t > this.period) {
+            this.meanY = this.meanY + this.dispY
+            this.pos.y = this.meanY
+            this.dispY *= -1
+            this.t = 0
+        }
+        this.velY = (this.pos.y - this.prevPosY) / dt
+    }
+    updateX(dt) {
         this.pos.y = this.meanY + easingFns.smoothStep(this.t / this.period) * this.dispY
         if (this.t > this.period) {
             this.meanY = this.meanY + this.dispY

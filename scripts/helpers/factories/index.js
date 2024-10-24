@@ -72,11 +72,17 @@ const factories = {
         }
     },
     bus: {
-        fields: ['toY', 'period'], // Based on Bus constructor
+        fieldsFilter: (name, prevParams) => {
+            if (name === "toY" && +prevParams.toX === 0) {
+                return true
+            }
+            return false
+        },
+        fields: ['toX', 'toY', 'period'], // Based on Bus constructor
         dims: () => ({ width: 88, height: 88 }),
         create: (params) => {
-            const { toY, x, y, name, period, alignment } = params
-            return { groupId: "col-rects", x, y: y + (alignment.startsWith("top") ? 32 : 0), name, toY: y + Number(toY) * TILE_SIZE, period: +period }
+            const { toX, toY, x, y, name, period, alignment } = params
+            return { groupId: "col-rects", x, y: y + (alignment.startsWith("top") ? 32 : 0), name, toX: x + (toX ? Number(toX) * TILE_SIZE: 0), toY: y + (toY ? Number(toY) * TILE_SIZE: 0), period: +period }
         }
     },
     default: {
@@ -202,7 +208,7 @@ const factories = {
             const { x, y, width } = params
             const magnets = Array.from({ length: width }, (_, i) => ({ name: "magnet", x: x + 16 + 128 * i, y, groupId: "magnets" }))
             return [
-                ...[magnets],
+                ...magnets,
                 { name: "stud", x, y },
                 { name: "stud", x: x + 128 * width + 16, y }
             ]

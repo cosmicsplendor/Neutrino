@@ -21,7 +21,7 @@ class FloorSpike extends TexRegion {
     updatePos(dt) {
         this.t += dt
         if (this.t < 0) return
-        const dp = this.dist * easingFns.cubicIn(this.t / this.period)
+        const dp = this.dist * easingFns.bounceOut(this.t / this.period)
         this.pos.y = (this.dir === this.initDir ? this.startY: this.endY) + dp * this.dir
         const newPosY = clamp(this.startY, this.endY, this.pos.y)
         if (newPosY === this.pos.y) {
