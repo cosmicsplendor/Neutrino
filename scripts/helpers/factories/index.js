@@ -79,22 +79,6 @@ const factories = {
             return { groupId: "col-rects", x, y: y + (alignment.startsWith("top") ? 32 : 0), name, toY: y + Number(toY) * TILE_SIZE, period: +period }
         }
     },
-    magnet: {
-        dims: () => {
-            return {
-                width: 128 + 16 * 2, // magnet width + twice stud width
-                height: 32
-            }
-        },
-        create: (params) => {
-            const { x, y } = params
-            return [
-                { name: "magnet", x: x + 16, y, groupId: "magnets" },
-                { name: "stud", x, y },
-                { name: "stud", x: x + 128 + 16, y }
-            ]
-        }
-    },
     default: {
         fields: [],
         create: params => {
@@ -204,6 +188,24 @@ const factories = {
                 x: x, y: y + 10, h: 24, mat: "wood", w: 256 * width + 10
             }]
             return results
+        }
+    },
+    magnet: {
+        fields: [ "width" ],
+        dims: ({ width=1 }) => {
+            return {
+                width: 128 * width + 16 * 2, // magnet width + twice stud width
+                height: 32
+            }
+        },
+        create: (params) => {
+            const { x, y, width } = params
+            const magnets = Array.from({ length: width }, (_, i) => ({ name: "magnet", x: x + 16 + 128 * i, y, groupId: "magnets" }))
+            return [
+                ...[magnets],
+                { name: "stud", x, y },
+                { name: "stud", x: x + 128 * width + 16, y }
+            ]
         }
     },
     gate: {
