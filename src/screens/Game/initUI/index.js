@@ -273,7 +273,7 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         const restart = () => {
             const posXAtReset = player.pos.x
             resetLevel()
-            posXAtReset > instFocThres && focusInst() // if the player is not near enough to it's reset spawn point, focus the camera to player position instantly to avoid jarring focus
+            focusInst() // if the player is not near enough to it's reset spawn point, focus the camera to player position instantly to avoid jarring focus
             gameState.elapsed = 0
             gameState.play()
             btnSound.play()
