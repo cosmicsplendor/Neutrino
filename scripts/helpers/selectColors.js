@@ -1,4 +1,4 @@
-const { pickOne } = require("../utils")
+const { pickOne, rand } = require("../utils")
 
 const originalColors = [
     { "bg": "#112237", "pxbg": "#08111b", "tint": "0.01, -0.01, -0.005, 0" },
@@ -13,6 +13,7 @@ const originalColors = [
     { "bg": "#132b27", "pxbg": "#0a1614", "tint": "0.025, -0.025, -0.0125, 0" },
     { "bg": "#121212", "pxbg": "#171717", "tint": "0.025, 0.0125, -0.025, 0" }
 ]
+
 const aiSuggested = [
     { "bg": "#1a1a30", "pxbg": "#0e0e24", "tint": "0.035, -0.02, -0.015, 0" }, // Deep blue-black
     { "bg": "#16162e", "pxbg": "#121227", "tint": "0.05, -0.03, -0.01, 0" },    // Midnight blue
@@ -26,12 +27,24 @@ const aiSuggested = [
     { "bg": "#232323", "pxbg": "#121212", "tint": "0.03, -0.01, -0.01, 0" }
 ]
 
+const getMoon = () => {
+    const placeMoon = Math.random() < 0.75
+    if (!placeMoon) return {}
+    const x = rand(10, 90)
+    const y = rand(10, 65)
+    return {
+        bgPos: `${x}% ${y}%`
+    }
+}
+
 const selectColors = () => {
-    const handcrafted = Math.random() < 0.75
+    const handcrafted = Math.random() < 0.65
     if (handcrafted) {
         return pickOne(originalColors)
     }
-    return pickOne(aiSuggested)
+    const colors = pickOne(aiSuggested)
+    const moon = getMoon()
+    return { ...colors, ...moon }
 }
 
 module.exports = selectColors
