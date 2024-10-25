@@ -559,7 +559,9 @@ class Map extends Block {
             mxJmpVel: this.mxJmpVel,
             speed: this.speed
         }
-
+        if (typeof this.bgPos === "string") {
+            exports.bgPos = this.bgPos
+        }
         await fs.writeFile(`./src/assets/levels/${levelName}.cson`, JSON.stringify(exports))
     }
 }

@@ -10,17 +10,15 @@ const generateFloor = require('./helpers/generateFloor');
 const fixBoundaries = require('./helpers/fixBoundaries');
 const projectBackwalls = require('./helpers/projectBackwalls');
 const selectColors = require('./helpers/selectColors');
+const colors = selectColors()
 
 const mapData = {
-    width: 100,
+    width: 70,
     height: 30,
     speed:400,
     mxJmpVel: -400,
     mob_bg: "rgb(18 18 18)",
-    // pxBg: "#0a1614",
-    // "bg":"rgb(18 18 18)","mob_bg":"rgb(18 18 18)","pxbg":"0.090, 0.090, 0.090","tint":"0.025, 0.0125, -0.025, 0",
-    // tint: "0.025, -0.025, -0.0125, 0",
-    ...selectColors(),
+    ...colors,
     floorHeight: 3,
 }
 const initializeMap = () => {
