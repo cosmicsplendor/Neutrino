@@ -4,8 +4,16 @@ const { CompositeBlock, rand, skewedRand, pickOne } = require("../utils/index");
 
 const pickVerticalAlignmentParams = (emptySpaces) => {
     const { bottom } = emptySpaces;
-    if (bottom.h > 7) {
+    const above = Math.random() < 0.35
+    if (bottom.h > 10) { // if the bottom projection has big enough height meaning the building is tall enough and there's plent of space below
         return { position: "right-end", dy: 4 + rand(4), dx: 1 + rand(2, 1) };
+    }
+    if (above) {
+        return {
+            position: pickOne(["top", "top-start", "top-end"]),
+            dx: 0,
+            dy: skewedRand(4, 1) + rand(5)
+        }
     }
     return {
         position: pickOne(["right", "right-end", "right-start", "top", "top-start", "top-end"]),
@@ -22,7 +30,7 @@ const generateNewBlock = (prevBlock, map) => {
 
     addProtrusions(newBlock);
 
-    const expandDir = prevBlock.y < 11 || skewedRand(20) < 4 ? "horizontal" : "vertical";
+    const expandDir = prevBlock.y < 4 || Math.random() < 0.5 ? "horizontal" : "vertical";
     if (expandDir === "horizontal") {
         const params = {
             position: pickOne(["right", "right-start", "right-end"]),

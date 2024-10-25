@@ -9,6 +9,7 @@ const { generateTiles, placeTiles } = require('./helpers/generateTiles');
 const generateFloor = require('./helpers/generateFloor');
 const fixBoundaries = require('./helpers/fixBoundaries');
 const projectBackwalls = require('./helpers/projectBackwalls');
+const selectColors = require('./helpers/selectColors');
 
 const mapData = {
     width: 100,
@@ -16,9 +17,10 @@ const mapData = {
     speed:400,
     mxJmpVel: -400,
     mob_bg: "rgb(18 18 18)",
-    pxBg: "#0a1614",
-    "bg":"rgb(18 18 18)","mob_bg":"rgb(18 18 18)","pxbg":"0.090, 0.090, 0.090","tint":"0.025, 0.0125, -0.025, 0",
-    tint: "0.025, -0.025, -0.0125, 0",
+    // pxBg: "#0a1614",
+    // "bg":"rgb(18 18 18)","mob_bg":"rgb(18 18 18)","pxbg":"0.090, 0.090, 0.090","tint":"0.025, 0.0125, -0.025, 0",
+    // tint: "0.025, -0.025, -0.0125, 0",
+    ...selectColors(),
     floorHeight: 3,
 }
 const initializeMap = () => {
