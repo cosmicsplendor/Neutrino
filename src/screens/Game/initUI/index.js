@@ -287,18 +287,18 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         }
        
         const restorePlayer = point => {
+            const posAtReset = {...player.pos}
             resetLevel()
-            const dist = sqDist(point, player.pos)
+            const dist = sqDist(point, posAtReset)
             player.pos.x = point.x
             player.pos.y = point.y
-            
-            if (dist > 160000) focusInst() // if the player is not near enough to it's reset spawn point, focus the camera to player position instantly to avoid jarring focus
+            if (dist > 250000) focusInst() // if the player is not near enough to it's reset spawn point, focus the camera to player position instantly to avoid jarring focus
         }
         const restart = () => {
             const posAtReset = {...player.pos}
             resetLevel()
             const dist = sqDist(posAtReset, player.pos)
-            if (dist > 160000) focusInst()
+            if (dist > 250000) focusInst()
             gameState.elapsed = 0
             gameState.play()
             btnSound.play()
