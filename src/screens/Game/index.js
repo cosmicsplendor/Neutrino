@@ -153,6 +153,7 @@ class GameScreen extends Node { // can only have cameras as children
         this.game.reset()
         this.state.halt()
         this.state.elapsed = 0
+        this.checkpoint.reset()
     }
     update(dt, t) {
         this.checkpoint.updateX(this.player.pos.x)
