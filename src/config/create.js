@@ -10,13 +10,14 @@ import levels from "../screens/Level/levels"
 
 const resolutions = {
     standard: { max: 1024, min: 720 },
+    r1080p: { max: 1920, min: 1080 },
     full: { max: 1360, min: 1080 },
     hd: { max: 1440, min: 986 },
     r720p: { max: 1280, min: 720 },
     custom: { max: 1280, min: 1080 }
 }
 
-const desktopRes = resolutions.full
+const desktopRes = resolutions.r1080p
 
 const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 const scale = false
@@ -68,7 +69,7 @@ export default overrides => {
         scale,
         get devicePixelRatio() {
             if (this.testMode) return 1
-            return Math.min(isMobile ? maxMobileDpr: maxDpr, window.devicePixelRatio)
+            return isMobile ? Math.min(maxMobileDpr, window.devicePixelRatio): window.devicePixelRatio
         },
         orientation: "portrait",
     }

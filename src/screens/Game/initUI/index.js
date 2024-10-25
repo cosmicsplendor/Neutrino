@@ -348,7 +348,7 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
                     restorePlayer(checkpoint)
                     gameState.play()
                     playingAd.setVal(false)
-                    orbExpAmt=2
+                    orbExpAmt=1
                 }
                 sdkInst.playRva()
                     .then(onDone)
@@ -356,7 +356,7 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
                 return
             }
 
-            orbExpAmt=2
+            orbExpAmt=1
             restartPlay()
         }
         return [
