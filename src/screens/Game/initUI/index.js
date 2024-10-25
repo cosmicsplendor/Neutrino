@@ -3,6 +3,7 @@ import config from "@config"
 import imgBtn from "@screens/ui/imgBtn"
 import soundImgBtn from "./soundImgBtn"
 import styles from "./style.css"
+import { sqDist } from "@lib/utils/math"
 
 const margin = 20
 const hMargin = margin * 0.5 // hMargin
@@ -284,17 +285,20 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
                 return this._val
             }
         }
+       
         const restorePlayer = point => {
             resetLevel()
-            const posXAtReset = player.pos.x
+            const dist = sqDist(point, player.pos)
             player.pos.x = point.x
             player.pos.y = point.y
-            if (Math.abs(posXAtReset - player.pos.x) > 900) focusInst() // if the player is not near enough to it's reset spawn point, focus the camera to player position instantly to avoid jarring focus
+            
+            if (dist > 160000) focusInst() // if the player is not near enough to it's reset spawn point, focus the camera to player position instantly to avoid jarring focus
         }
         const restart = () => {
-            const posXAtReset = player.pos.x
+            const posAtReset = {...player.pos}
             resetLevel()
-            if (Math.abs(posXAtReset - player.pos.x) > 700) focusInst() // if the player is not near enough to it's reset spawn point, focus the camera to player position instantly to avoid jarring focus
+            const dist = sqDist(posAtReset, player.pos)
+            if (dist > 160000) focusInst()
             gameState.elapsed = 0
             gameState.play()
             btnSound.play()
