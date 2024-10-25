@@ -338,7 +338,7 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
                     storage.setOrbCount(orbs - orbExpAmt)
                     restorePlayer(checkpoint)
                     gameState.play()
-                    orbExpAmt++
+                    orbExpAmt = Math.min(orbExpAmt + 1, 3)
                 return
             }
 

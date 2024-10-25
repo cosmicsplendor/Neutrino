@@ -1,73 +1,26 @@
-function normalizedToHex(colorString) {
-    // Split the color string by commas and convert to an array of floats
-    const rgb = colorString.split(',').map(value => parseFloat(value.trim()));
 
-    // Scale each component to [0, 255] and convert to a 2-digit hex string
-    const hex = rgb
-        .map(value => Math.round(value * 255))  // Scale to [0, 255]
-        .map(value => value.toString(16).padStart(2, '0'))  // Convert to hex and pad with zeros
-        .join('');  // Join all hex values into a single string
-
-    return `#${hex}`;
-}
-
-// Example usage
-console.log(normalizedToHex("0.1,0.32,0.5"));  // Outputs: "#19527f"
-
-[
-    {
-        "bg": "#121228",
-        "pxbg": "0.058, 0.058, 0.133",
-        "tint": "0.025, -0.025, -0.025, 0"
-    },
-    {
-        "bg": "#222235",
-        "pxbg": "#151525",
-        "tint": "0.065, -0.025, 0.000, 0"
-    },
-    {
-        "bg": "#102728",
-        "pxbg": "0.09, 0.15, 0.16",
-        "tint": "0.1, 0.05, 0.025"
-    },
-    {
-        "bg": "#050525",
-        "pxbg": "#000012",
-        "tint": "0.075, -0.025, -0.0125, 0"
-    },
-    {
-        "bg": "#050505",
-        "pxbg": "#000000",
-        "tint": "0.075, 0.04, 0.035, 0"
-    },
-    {
-        "bg": "#0f0f22",
-        "pxbg": "0.039, 0.039, 0.090",
-        "tint": "0.025, -0.0125, -0.025, 0"
-    },
-    {
-        "bg": "#10103a",
-        "pxbg": "0.043, 0.043, 0.145",
-        "tint": "0.05,0,-0.05,0"
-    },
-    {
-        "bg": "#132b27",
-        "pxbg": "#0a1614",
-        "tint": "0.025, -0.025, -0.0125, 0"
-    },
-    {
-        "bg": "#121212",
-        "pxbg": "0.090, 0.090, 0.090",
-        "tint": "0.025, 0.0125, -0.025, 0"
-    },
-    {
-        "bg": "#2e2e3d",
-        "pxbg": "0.129, 0.129, 0.184",
-        "tint": "0.025, -0.025, -0.025, 0"
-    }
-].forEach(d => {
-    if (!d.pxbg.startsWith("#")) {
-        d.pxbg = normalizedToHex(d.pxbg)
-    }
-})
-console.log(d)
+const originalColors = [
+    { "bg": "#112237", "pxbg": "#08111b", "tint": "0.01, -0.01, -0.005, 0" },
+    { "bg": "#121228", "pxbg": "#0f0f22", "tint": "0.025, -0.025, -0.025, 0" },
+    { "bg": "#121228", "pxbg": "#0f0f22", "tint": "0.025, -0.025, -0.025, 0" },
+    { "bg": "#222235", "pxbg": "#151525", "tint": "0.065, -0.025, 0.000, 0" },
+    { "bg": "#102728", "pxbg": "#172629", "tint": "0.1, 0.05, 0.025" },
+    { "bg": "#050525", "pxbg": "#000012", "tint": "0.075, -0.025, -0.0125, 0" },
+    { "bg": "#050505", "pxbg": "#000000", "tint": "0.075, 0.04, 0.035, 0" },
+    { "bg": "#0f0f22", "pxbg": "#0a0a17", "tint": "0.025, -0.0125, -0.025, 0" },
+    { "bg": "#10103a", "pxbg": "#0b0b25", "tint": "0.05,0,-0.05,0" },
+    { "bg": "#132b27", "pxbg": "#0a1614", "tint": "0.025, -0.025, -0.0125, 0" },
+    { "bg": "#121212", "pxbg": "#171717", "tint": "0.025, 0.0125, -0.025, 0" },
+    { "bg": "#2e2e3d", "pxbg": "#21212f", "tint": "0.025, -0.025, -0.025, 0" }
+]
+const aiSuggested = [
+    { "bg": "#1a1a30", "pxbg": "#0e0e24", "tint": "0.035, -0.02, -0.015, 0" }, // Deep blue-black
+    { "bg": "#0a1c1c", "pxbg": "#091818", "tint": "0.04, 0.02, -0.02, 0" },     // Dark teal
+    { "bg": "#16162e", "pxbg": "#121227", "tint": "0.05, -0.03, -0.01, 0" },    // Midnight blue
+    { "bg": "#1e2427", "pxbg": "#181d1f", "tint": "0.03, -0.02, -0.01, 0" },    // Charcoal grey-blue
+    { "bg": "#1c1c2f", "pxbg": "#131322", "tint": "0.045, -0.02, -0.015, 0" },  // Dark slate-blue
+    { "bg": "#101822", "pxbg": "#0c121a", "tint": "0.03, 0, -0.03, 0" },        // Smokey blue-grey
+    { "bg": "#19272a", "pxbg": "#132022", "tint": "0.035, -0.015, -0.02, 0" },  // Slate green-blue
+    { "bg": "#0b1a1e", "pxbg": "#030d12", "tint": "0.025, -0.02, -0.02, 0" },   // Cool dark cyan -corected
+    { "bg": "#20202d", "pxbg": "#10101d", "tint": "0.04, -0.03, -0.02, 0" }     // Shadowed navy - level16
+]
