@@ -189,13 +189,11 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         resumeBtn.domNode.style.background = `url(${ showRva ? images.rva.src: images.resume.src})`
         resumeBtn.domNode.style.backgroundSize = "contain"
 
-        console.log({ showRva, showCost })
         if (showRva) {
             // if the player can't afford, prompt them to watch ad (which makes me some money :)) in exchange of checkpoint
             return rvaTxt.show()
         }
         if (showCost) { // if player can afford to pay for the checkpoint, show the price
-            console.log(orbExp)
             orbExpInd.show(true)
             orbExp.show(true)
             orbExp.domNode.innerText =`x ${orbExpAmt}`

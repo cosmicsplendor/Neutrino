@@ -16,7 +16,6 @@ class FloorSpike extends TexRegion {
         this.dSound = dSound
         this.player = player
         this.testCol = getTestFn(this, player)
-        console.log(uSound)
     }
     updatePos(dt) {
         this.t += dt

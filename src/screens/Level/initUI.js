@@ -121,20 +121,14 @@ export default ({ onStart, uiRoot, storage, level, maxLevel, images, assetsCache
 
             loadingInd.pos = calcAligned(config.viewport, loadingInd, "center", "center")
 
-            // levels.forEach(level => {
-            //     assetsCache.unload(level)
-            // })
-
             assetsCache.load([ levelId ])
+            console.log(Object.keys(assetsCache.assets).length)
             assetsCache.once("load", () => {
                 memoryQueue.unshift(levelId) // enqueue the currently loaded level
                 const staleLevels = memoryQueue.splice(2) // only keep 2 levels in the memory queue at a time
-                console.log(memoryQueue)
                 staleLevels.forEach(levelId => { // free up stale memory
-                    console.log("deloading")
                     assetsCache.unload(levelId)
                 })
-                console.log(Object.keys(assetsCache.assets))
                 onLoad()
             })
             
