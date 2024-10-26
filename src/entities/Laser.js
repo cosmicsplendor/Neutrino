@@ -21,6 +21,7 @@ class Laser extends MovableEnt {
         super(x, y, frame, toX, toY, speed)
         this.startX = x
         this.startY = y
+        if (this.startX !== x || this.startY !== y) this.forceUpdate = true
         this.player = player
         for (let i = 0; i < num; i++) {
             const body = new TexRegion({ frame: bFrame })

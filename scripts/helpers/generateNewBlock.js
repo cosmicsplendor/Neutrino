@@ -30,7 +30,7 @@ const generateNewBlock = (prevBlock, map) => {
 
     addProtrusions(newBlock);
 
-    const expandDir = prevBlock.y < 4 || Math.random() < 0.5 ? "horizontal" : "vertical";
+    const expandDir = prevBlock.y < 4 || Math.random() < 0.5  ? "horizontal" : "vertical";
     if (expandDir === "horizontal") {
         const params = {
             position: pickOne(["right", "right-start", "right-end"]),

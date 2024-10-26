@@ -122,10 +122,12 @@ class GameScreen extends Node { // can only have cameras as children
         }
     }
     onEnter(l, levelDataId) {
+        console.log("HERE")
         const data = this.game.assetsCache.get(config.testMode ? testlevel: levelDataId)
         const level = this.setLevel(data)
         const onClose = advance => this.game.switchScreen(LEVEL, false, advance)
         const checkpoint = new Checkpoint(data.checkpoints)
+        console.log(checkpoint)
         this.checkpoint = checkpoint
         const focusInst = () => {
             level.focusInst()

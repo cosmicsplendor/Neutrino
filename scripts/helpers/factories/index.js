@@ -217,7 +217,7 @@ const factories = {
     gate: {
         fields: ["speed", "toY"],
         create: params => {
-            const { x, y, speed, toY } = params
+            const { name, x, y, speed, toY } = params
             return { name, x, y, speed: +speed, endY: y + (toY * TILE_SIZE)}
         }
     },
