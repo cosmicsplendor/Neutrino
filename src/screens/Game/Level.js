@@ -16,6 +16,7 @@ class Level extends Camera {
         this.resetRecursively = () => {
             arena.resetRecursively()
         }
+        this.setYTracking(arena.height - 192, 400)
     }
     update(dt) {
         super.update(dt)
