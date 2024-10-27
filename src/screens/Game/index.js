@@ -29,6 +29,8 @@ import soundOffImgId from "@assets/images/ui/sound_off.png"
 import rvaImgId from "@assets/images/ui/rva.png" // rewarded video add icon
 import { hexToNorm } from "@lib/utils/math"
 import Checkpoint from "./Checkpoint"
+import Ambience from "./Ambience"
+import Ambience1Graph from "./Ambience/graphs/ambience1"
 
 class GameScreen extends Node { // can only have cameras as children
     // background = "rgb(181 24 24)"
@@ -76,8 +78,7 @@ class GameScreen extends Node { // can only have cameras as children
             this.btnSound = soundSprite.create("btn")
             this.errSound = soundSprite.createPool("err_alt")
             this.contSound = soundSprite.create("continue")
-            this.music = {
-                "music1": soundSprite.create("jingl_1"),
+            this.soundMap = {
                 "flute_1": soundSprite.create("flute_1"),
                 "flute_2": soundSprite.create("flute_2"),
                 "flute_3": soundSprite.create("flute_3"),
@@ -100,6 +101,9 @@ class GameScreen extends Node { // can only have cameras as children
                 "wind_2": soundSprite.create("wind_2"),
                 "wind_3": soundSprite.create("wind_3"),
             }
+            this.ambiences = {
+                ambience1: new Ambience(assetsCache.get(soundMetaId), ambience1Graph, this.soundMap)
+            }
             this.player = new Player({ width: 64, height: 64, fill: "brown", speed: 350, fricX: 3, pos: { x: 300, y: 0 }, shard, cinder, sounds: playerSounds, state: this.state })
             this.factories = makeFactories({ soundSprite, assetsCache, storage, player: this.player, state: this.state })
             if (game.renderer.api === rendApis.WEBGL) {
@@ -121,7 +125,7 @@ class GameScreen extends Node { // can only have cameras as children
         })
     }
     setLevel(data) {
-        const level = new Level({ player: this.player, data, viewport: config.viewport, subject: this.player, factories: this.factories, music: this.music[data.music], gameState: this.state })
+        const level = new Level({ player: this.player, data, viewport: config.viewport, subject: this.player, factories: this.factories, ambience1: this.ambiences.ambience1, gameState: this.state })
         this.add(level)
         this.player.mxJmpVel = data.mxJmpVel
         this.player.speed = data.speed ?? 350

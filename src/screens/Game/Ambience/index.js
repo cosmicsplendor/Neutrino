@@ -11,10 +11,9 @@ class Ambience { // StateMachine
             "silence": new Silence(this, graph)
         }
         initialSilence = initialSilence
-        this.switchState("silence", { nextNode: graph.get(initialNode), silence: initialSilence })
     }
     update(dt) {
-        this.state.update(dt)
+        this.state && this.state.update(dt)
     }
     getDuration(name) {
         return this.sprite[name]
@@ -32,6 +31,16 @@ class Ambience { // StateMachine
         const sound = this.soundMap[node.name]
         const loops = (Array.isArray(node.loop) ? rand(node.loop[1], node.loog[0]): node.loop)
         return { duration, sound, loops }
+    }
+    init() {
+        this.switchState("silence", { nextNode: graph.get(initialNode), silence: initialSilence })
+    }
+    terminate() {
+        if (this.state !== this.states.playing) {
+            return
+        }
+        this.states.playing.sound.pause()
+        this.state = null
     }
 }
 
@@ -61,7 +70,7 @@ class Playing {
         this.duration = duration
         this.t = duration
         this.loops = loops
-        sound.play()
+        this.sound = sound.play()
     }
     onExit() {
 
