@@ -3,7 +3,7 @@ class SoundGraph {
         this.nodes = new Map();
     }
 
-    addNode(name, loop=0, silence=0) {
+    addNode(name, loop=0) {
         this.nodes.set(name, { name, loop, edges: [], totalWeight: 0 });
     }
 

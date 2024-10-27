@@ -8,4 +8,14 @@ graph.addNode("mel2_3")
 
 graph.addEdge("mel2_1", "mel2_2", 1)
 
-graph.addEdge("mel2_2", "mel")
+graph.addEdge("mel2_2", "mel2_3", 1)
+
+graph.addEdge("mel2_2", "wind_2", 1, [2,6])
+graph.addEdge("mel2_2", "wind_1", 1.5, [2,6])
+graph.addEdge("mel2_2", "creepy", 1, [2, 4])
+
+graph.addEdge("creepy", "wind_1", 1.5, [2, 3])
+graph.addEdge("creepy", "wind_2", 1, [2, 3])
+
+graph.addEdge("wind_1", "mel2_1", 1, [2,5])
+graph.addEdge("wind_2", "mel2_1", 1, [2,5])
