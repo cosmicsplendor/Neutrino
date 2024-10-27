@@ -1,39 +1,38 @@
-import { randf } from "@lib/utils/math"
-import { rand } from "scripts/utils"
+import { randf, rand } from "@lib/utils/math"
 
 class Ambience { // StateMachine
-    constructor(sprite, graph, soundMap, initialNode, initialSilence=0) {
-        this.sprite = sprite
+    constructor(graph, soundMap, initialNode, initialSilence=0) {
         this.graph = graph
         this.soundMap = soundMap
         this.states = {
             "playing": new Playing(this),
             "silence": new Silence(this, graph)
         }
-        initialSilence = initialSilence
+        this.initialNode = initialNode
+        this.initialSilence = initialSilence
     }
     update(dt) {
         this.state && this.state.update(dt)
-    }
-    getDuration(name) {
-        return this.sprite[name]
     }
     getSound(name) {
         return this.soundMap[name]
     }
     getNextNode(curNode) {
-        const { node, edge } = this.graph.getNextNode(curNode)
-        const silence = Array.isArray(edge.silence)? randf(edge.silence[1], edge.silence[0]): silence
+        const { node, edge } = this.graph.getNext(curNode)
+        const silence = Array.isArray(edge.silence)? randf(edge.silence[1], edge.silence[0]): edge.silence
         return { nextNode: node, silence }
     }
     getNodeInfo(node) {
-        const duration = this.sprite[node.name].duration
         const sound = this.soundMap[node.name]
-        const loops = (Array.isArray(node.loop) ? rand(node.loop[1], node.loog[0]): node.loop)
-        return { duration, sound, loops }
+        const loops = (Array.isArray(node.loop) ? rand(node.loop[1], node.loop[0]): node.loop)
+        return { sound, loops }
+    }
+    switchState(name, ...props) {
+        this.state = this.states[name]
+        this.state.onEnter(...props)
     }
     init() {
-        this.switchState("silence", { nextNode: graph.get(initialNode), silence: initialSilence })
+        this.switchState("silence", { nextNode: this.graph.get(this.initialNode), silence: this.initialSilence })
     }
     terminate() {
         if (this.state !== this.states.playing) {
@@ -48,13 +47,14 @@ class Silence {
     constructor(ambience) {
         this.ambience = ambience
     }
-    onEnter({ nextNode, silence }) {
+    onEnter(props) {
+        const { nextNode, silence } = props
         this.t = silence
         this.nextNode = nextNode
     }
     update(dt) {
         this.t -= dt
-        if (dt < 0) {
+        if (this.t < 0) {
             this.ambience.switchState("playing", this.nextNode)
         }
     }
@@ -66,25 +66,23 @@ class Playing {
     }
     onEnter(node) {
         this.node = node
-        const { duration, sound, loops } = this.ambience.getNodeInfo()
-        this.duration = duration
-        this.t = duration
+        const { sound, loops } = this.ambience.getNodeInfo(node)
         this.loops = loops
-        this.sound = sound.play()
+        this.sound = sound
+        this.sound.play()
     }
     onExit() {
 
     }
     update(dt) {
-        this.t -= dt
-        if (this.t > 0) return
-        // the current countdown has finished
-        if (this.loops === 0) {
+        if (this.sound.playing) return
+        // the current sound has finished playing
+        if (this.loops < 1) {
             this.ambience.switchState("silence", this.ambience.getNextNode(this.node))
             return
         }
         this.loops--
-        this.t = this.duration
+        this.sound.play()
     }
 }
 

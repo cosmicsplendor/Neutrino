@@ -30,7 +30,7 @@ import rvaImgId from "@assets/images/ui/rva.png" // rewarded video add icon
 import { hexToNorm } from "@lib/utils/math"
 import Checkpoint from "./Checkpoint"
 import Ambience from "./Ambience"
-import Ambience1Graph from "./Ambience/graphs/ambience1"
+import ambience1Graph from "./Ambience/graphs/ambience1"
 
 class GameScreen extends Node { // can only have cameras as children
     // background = "rgb(181 24 24)"
@@ -100,9 +100,10 @@ class GameScreen extends Node { // can only have cameras as children
                 "wind_1": soundSprite.create("wind_1"),
                 "wind_2": soundSprite.create("wind_2"),
                 "wind_3": soundSprite.create("wind_3"),
+                "creepy": soundSprite.create("creepy")
             }
             this.ambiences = {
-                ambience1: new Ambience(assetsCache.get(soundMetaId), ambience1Graph, this.soundMap)
+                ambience1: new Ambience(ambience1Graph, this.soundMap, "mel2_1", 1)
             }
             this.player = new Player({ width: 64, height: 64, fill: "brown", speed: 350, fricX: 3, pos: { x: 300, y: 0 }, shard, cinder, sounds: playerSounds, state: this.state })
             this.factories = makeFactories({ soundSprite, assetsCache, storage, player: this.player, state: this.state })
@@ -125,7 +126,7 @@ class GameScreen extends Node { // can only have cameras as children
         })
     }
     setLevel(data) {
-        const level = new Level({ player: this.player, data, viewport: config.viewport, subject: this.player, factories: this.factories, ambience1: this.ambiences.ambience1, gameState: this.state })
+        const level = new Level({ player: this.player, data, viewport: config.viewport, subject: this.player, factories: this.factories, ambience: this.ambiences.ambience1, gameState: this.state })
         this.add(level)
         this.player.mxJmpVel = data.mxJmpVel
         this.player.speed = data.speed ?? 350
