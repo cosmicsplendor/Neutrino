@@ -23,8 +23,8 @@ class SoundGraph {
     get(name) {
         return this.nodes.get(name);
     }
-    getNext(name) {
-        const node = this.nodes.get(name);
+    getNext(lastNode) {
+        const node = this.nodes.get(typeof lastNode === "string" ? lastNode: lastNode.name);
         if (!node || node.edges.length === 0) return null;
 
         const totalWeight = node.totalWeight;

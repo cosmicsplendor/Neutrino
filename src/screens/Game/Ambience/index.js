@@ -2,7 +2,7 @@ import { randf } from "@lib/utils/math"
 import { rand } from "scripts/utils"
 
 class Ambience { // StateMachine
-    constructor(sprite, graph, soundMap) {
+    constructor(sprite, graph, soundMap, initialNode, initialSilence=0) {
         this.sprite = sprite
         this.graph = graph
         this.soundMap = soundMap
@@ -10,6 +10,8 @@ class Ambience { // StateMachine
             "playing": new Playing(this),
             "silence": new Silence(this, graph)
         }
+        initialSilence = initialSilence
+        this.switchState("silence", { nextNode: graph.get(initialNode), silence: initialSilence })
     }
     update(dt) {
         this.state.update(dt)
@@ -23,7 +25,7 @@ class Ambience { // StateMachine
     getNextNode(curNode) {
         const { node, edge } = this.graph.getNextNode(curNode)
         const silence = Array.isArray(edge.silence)? randf(edge.silence[1], edge.silence[0]): silence
-        return { node, silence }
+        return { nextNode: node, silence }
     }
     getNodeInfo(node) {
         const duration = this.sprite[node.name].duration
@@ -37,8 +39,7 @@ class Silence {
     constructor(ambience) {
         this.ambience = ambience
     }
-    onEnter(curNode) {
-        const { node: nextNode, silence } = this.ambience.getNextNode(curNode)
+    onEnter({ nextNode, silence }) {
         this.t = silence
         this.nextNode = nextNode
     }
@@ -70,7 +71,7 @@ class Playing {
         if (this.t > 0) return
         // the current countdown has finished
         if (this.loops === 0) {
-            this.ambience.switchState("silence", this.node.name)
+            this.ambience.switchState("silence", this.ambience.getNextNode(this.node))
             return
         }
         this.loops--
