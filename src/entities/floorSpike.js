@@ -32,11 +32,11 @@ class FloorSpike extends TexRegion {
         this.pos.y = newPosY
         const dPX = this.pos.x + this.w / 2 - this.player.pos.x
         const dPY = this.pos.y + this.h / 2 - this.player.pos.y
-        if (dPX * dPX + dPY * dPY > 90000 || !this.uSound || !this.dSound) return // if the distance from player is greater than 300px return
+        if (dPX * dPX + dPY * dPY > 160000 || !this.uSound || !this.dSound) return // if the distance from player is greater than 300px return
         if (this.dir === 1) { // just collided with ceiling
-            return this.uSound?.play()
+            return this.uSound?.play(0.125)
         }
-        this.dSound.play()
+        this.dSound.play(0.125)
     }
     reset() {
         this.pos.Y = this.startY

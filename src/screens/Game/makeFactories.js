@@ -21,6 +21,7 @@ export default ({ soundSprite, assetsCache, storage, player, state }) => { // us
     const gateDSound = soundSprite.create("gate_d")
     const orbSound = soundSprite.createPool("orb")
     const endSound = soundSprite.create("end")
+    const spikeSound = soundSprite.createPool("spike", { size: 2 })
     const lasSounds = {
         on: soundSprite.createPool("las_on"),
         off: soundSprite.createPool("las_off")
@@ -135,8 +136,8 @@ export default ({ soundSprite, assetsCache, storage, player, state }) => { // us
             const fs = new FloorSpike({
                 pos: { x, y },
                 player,
-                uSound: gateUSound,
-                dSound: gateUSound,
+                uSound: spikeSound,
+                dSound: spikeSound,
                 ...props
             })
             return fs
