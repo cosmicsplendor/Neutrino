@@ -23,6 +23,9 @@ graph.addEdge("creepy", "wind_2", 1)
 graph.addEdge("wind_1", "mel2_1")
 graph.addEdge("wind_2", "mel2_1")
 
+graph.excludeRandom("mel2_3")
+
+
 graph.commit()
 
 export default graph
