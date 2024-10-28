@@ -31,6 +31,7 @@ import { hexToNorm } from "@lib/utils/math"
 import Checkpoint from "./Checkpoint"
 import Ambience from "./Ambience"
 import ambience1Graph from "./Ambience/graphs/ambience1"
+import ambience2Graph from "./Ambience/graphs/ambience2"
 
 class GameScreen extends Node { // can only have cameras as children
     // background = "rgb(181 24 24)"
@@ -103,7 +104,8 @@ class GameScreen extends Node { // can only have cameras as children
                 "creepy": soundSprite.create("creepy")
             }
             this.ambiences = {
-                ambience1: new Ambience(ambience1Graph, this.soundMap, "mel2_1", 1)
+                ambience1: new Ambience(ambience1Graph, this.soundMap, "mel2_1", 1),
+                ambience2: new Ambience(ambience2Graph, this.soundMap, "creepy", 1),
             }
             this.player = new Player({ width: 64, height: 64, fill: "brown", speed: 350, fricX: 3, pos: { x: 300, y: 0 }, shard, cinder, sounds: playerSounds, state: this.state })
             this.factories = makeFactories({ soundSprite, assetsCache, storage, player: this.player, state: this.state })
@@ -126,7 +128,7 @@ class GameScreen extends Node { // can only have cameras as children
         })
     }
     setLevel(data) {
-        const level = new Level({ player: this.player, data, viewport: config.viewport, subject: this.player, factories: this.factories, ambience: this.ambiences.ambience1, gameState: this.state })
+        const level = new Level({ player: this.player, data, viewport: config.viewport, subject: this.player, factories: this.factories, ambience: this.ambiences.ambience2, gameState: this.state })
         this.add(level)
         this.player.mxJmpVel = data.mxJmpVel
         this.player.speed = data.speed ?? 350

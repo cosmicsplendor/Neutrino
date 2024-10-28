@@ -1,3 +1,5 @@
+import { pickOne } from "@lib/utils/math";
+
 class SoundGraph {
     constructor() {
         this.nodes = new Map();
@@ -8,6 +10,7 @@ class SoundGraph {
     }
 
     addEdge(from, to, weight = 1, silence=0) {
+        // console.log({ from, to })
         const fromNode = this.nodes.get(from);
         fromNode.edges.push({ to, weight, silence });
         fromNode.totalWeight = null; // Invalidate cached weight
@@ -40,6 +43,11 @@ class SoundGraph {
         }
 
         return null;
+    }
+    getRandom() {
+        const keys = Array.from(this.nodes.keys());
+        const randomKey = pickOne(keys);
+        return this.nodes.get(randomKey);
     }
 }
 

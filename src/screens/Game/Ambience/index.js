@@ -1,15 +1,13 @@
 import { randf, rand } from "@lib/utils/math"
 
 class Ambience { // StateMachine
-    constructor(graph, soundMap, initialNode, initialSilence=0) {
+    constructor(graph, soundMap) {
         this.graph = graph
         this.soundMap = soundMap
         this.states = {
             "playing": new Playing(this),
             "silence": new Silence(this, graph)
         }
-        this.initialNode = initialNode
-        this.initialSilence = initialSilence
     }
     update(dt) {
         this.state && this.state.update(dt)
@@ -18,9 +16,8 @@ class Ambience { // StateMachine
         return this.soundMap[name]
     }
     getNextNode(curNode) {
-        const { node, edge } = this.graph.getNext(curNode)
-        const silence = Array.isArray(edge.silence)? randf(edge.silence[1], edge.silence[0]): edge.silence
-        return { nextNode: node, silence }
+        const { node } = this.graph.getNext(curNode)
+        return { nextNode: node, silence: rand(7, 14) }
     }
     getNodeInfo(node) {
         const sound = this.soundMap[node.name]
@@ -32,7 +29,7 @@ class Ambience { // StateMachine
         this.state.onEnter(...props)
     }
     init() {
-        this.switchState("silence", { nextNode: this.graph.get(this.initialNode), silence: this.initialSilence })
+        this.switchState("silence", { nextNode: this.graph.getRandom(), silence: rand(5, 2) })
     }
     terminate() {
         if (this.state !== this.states.playing) {
