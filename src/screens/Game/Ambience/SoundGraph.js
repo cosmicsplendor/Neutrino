@@ -4,12 +4,12 @@ class SoundGraph {
     constructor() {
         this.nodes = new Map();
     }
-
+    randomExclusion = []
     addNode(name, loop=0) {
         this.nodes.set(name, { name, loop, edges: [], totalWeight: 0 });
     }
 
-    addEdge(from, to, weight = 1, silence=0) {
+    addEdge(from, to, weight = 1, silence) {
         // console.log({ from, to })
         const fromNode = this.nodes.get(from);
         fromNode.edges.push({ to, weight, silence });
@@ -44,8 +44,12 @@ class SoundGraph {
 
         return null;
     }
+    excludeRandom(node) {
+        this.randomExclusion.push(node)
+    }
     getRandom() {
-        const keys = Array.from(this.nodes.keys());
+        const keys = Array.from(this.nodes.keys()).filter(k => !this.randomExclusion.includes(k))
+        console.log(keys)
         const randomKey = pickOne(keys);
         return this.nodes.get(randomKey);
     }

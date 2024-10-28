@@ -16,8 +16,9 @@ class Ambience { // StateMachine
         return this.soundMap[name]
     }
     getNextNode(curNode) {
-        const { node } = this.graph.getNext(curNode)
-        return { nextNode: node, silence: rand(7, 14) }
+        const { node, edge } = this.graph.getNext(curNode)
+        const silence = Array.isArray(edge.silence)? randf(edge.silence[1], edge.silence[0]): edge.silence
+        return { nextNode: node, silence: typeof silence === "number" && !Number.isNaN(silence) ? silence: rand(7, 14) }
     }
     getNodeInfo(node) {
         const sound = this.soundMap[node.name]
