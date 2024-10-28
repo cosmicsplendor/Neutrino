@@ -108,7 +108,7 @@ class GameScreen extends Node { // can only have cameras as children
                 ambience4: new Ambience(ambience4Graph, this.soundMap),
                 ambience5: new Ambience(ambience5Graph, this.soundMap),
             }
-            this.player = new Player({ width: 64, height: 64, fill: "brown", speed: 350, fricX: 3, pos: { x: 300, y: 0 }, shard, cinder, sounds: playerSounds, state: this.state })
+            this.player = new Player({ width: 64, height: 64, fill: "brown", speed: 350, fricX: 3, pos: { x: 0, y: 0 }, shard, cinder, sounds: playerSounds, state: this.state })
             this.factories = makeFactories({ soundSprite, assetsCache, storage, player: this.player, state: this.state })
             if (game.renderer.api === rendApis.WEBGL) {
                 const bgData = assetsCache.get(bgDataId)
@@ -151,6 +151,8 @@ class GameScreen extends Node { // can only have cameras as children
         }
     }
     onEnter(l, levelDataId) {
+        this.player.pos.x = 0 // fix starting point bug (last level's checkpoint persistence)
+
         const data = this.game.assetsCache.get(config.testMode ? testlevel: levelDataId)
         const level = this.setLevel(data)
         const onClose = advance => this.game.switchScreen(LEVEL, false, advance)
@@ -183,6 +185,7 @@ class GameScreen extends Node { // can only have cameras as children
         this.state.halt()
         this.state.elapsed = 0
         this.checkpoint.reset()
+        this.player.pos.x = 0
     }
     update(dt, t) {
         this.checkpoint.updateX(this.player.pos.x)
