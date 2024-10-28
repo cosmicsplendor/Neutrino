@@ -305,6 +305,7 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         }
         const restartPlay = () => { 
             if (playingAd.getVal()) return
+            player.rotation = 0
             playingAd.setVal(true)
             // pre-restart hook: ad trigger point (configureable chance if restart is triggered programmatically triggred or explicitly by user)
             if (Math.random() < config.showAdOnRestart) {
@@ -317,6 +318,7 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         }
         const continuePlay = () => {
             if (playingAd.getVal()) return
+            player.rotation = 0
             const checkpoint = getCheckpoint(player.pos.x)
 
             const rvaSupported = sdkInst.rvaSupported()
