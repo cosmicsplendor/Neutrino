@@ -32,7 +32,9 @@ import Checkpoint from "./Checkpoint"
 import Ambience from "./Ambience"
 import ambience1Graph from "./Ambience/graphs/ambience1"
 import ambience2Graph from "./Ambience/graphs/ambience2"
+import ambience3Graph from "./Ambience/graphs/ambience3"
 import ambience4Graph from "./Ambience/graphs/ambience4"
+import ambience5Graph from "./Ambience/graphs/ambience5"
 
 class GameScreen extends Node { // can only have cameras as children
     // background = "rgb(181 24 24)"
@@ -81,10 +83,6 @@ class GameScreen extends Node { // can only have cameras as children
             this.errSound = soundSprite.createPool("err_alt")
             this.contSound = soundSprite.create("continue")
             this.soundMap = {
-                "flute_1": soundSprite.create("flute_1"),
-                "flute_2": soundSprite.create("flute_2"),
-                "flute_3": soundSprite.create("flute_3"),
-                "flute_4": soundSprite.create("flute_4"),
                 "flute_amb_1": soundSprite.create("flute_amb_1"),
                 "flute_amb_2": soundSprite.create("flute_amb_2"),
                 "g_solo_1": soundSprite.create("g_solo_1"),
@@ -98,16 +96,17 @@ class GameScreen extends Node { // can only have cameras as children
                 "mel2_2": soundSprite.create("mel2_2"),
                 "mel2_3": soundSprite.create("mel2_3"),
                 "mel3": soundSprite.create("mel3"),
-                "spike": soundSprite.create("spike"),
                 "wind_1": soundSprite.create("wind_1"),
                 "wind_2": soundSprite.create("wind_2"),
                 "wind_3": soundSprite.create("wind_3"),
                 "creepy": soundSprite.create("creepy")
             }
             this.ambiences = {
-                ambience1: new Ambience(ambience1Graph, this.soundMap, "mel2_1", 1),
-                ambience2: new Ambience(ambience2Graph, this.soundMap, "creepy", 1),
-                ambience4: new Ambience(ambience4Graph, this.soundMap, "creepy", 1)
+                ambience1: new Ambience(ambience1Graph, this.soundMap),
+                ambience2: new Ambience(ambience2Graph, this.soundMap),
+                ambience3: new Ambience(ambience3Graph, this.soundMap),
+                ambience4: new Ambience(ambience4Graph, this.soundMap),
+                ambience5: new Ambience(ambience5Graph, this.soundMap),
             }
             this.player = new Player({ width: 64, height: 64, fill: "brown", speed: 350, fricX: 3, pos: { x: 300, y: 0 }, shard, cinder, sounds: playerSounds, state: this.state })
             this.factories = makeFactories({ soundSprite, assetsCache, storage, player: this.player, state: this.state })
