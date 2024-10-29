@@ -152,6 +152,7 @@ class GameScreen extends Node { // can only have cameras as children
         if (this.children) {
             const lastIdx = this.children.length - 1
             lastIdx > -1 && Node.removeChild(this, this.children[lastIdx])
+            this.children.length = 0
         }
     }
     onEnter(l, levelDataId) {
@@ -180,19 +181,12 @@ class GameScreen extends Node { // can only have cameras as children
         this.teardownUI = teardownUI
         this.updateTimer = updateTimer
         this.state.play()
-        console.log("OnEnterComplete", { ...this.player.pos })
     }
     onExit() {
-        console.log("OnExit", { ...this.player.pos })
         this.unsetLevel()
         this.teardownUI && this.teardownUI()
         this.game.reset()
-        this.state.halt()
-        this.state.elapsed = 0
-        this.checkpoint = null
-        this.player.pos.x = 0
-        this.player.pos.y = 0
-        console.log("OnExitComplete", { ...this.player.pos })
+        this.game.disposeScreen(this)
     }
     update(dt, t) {
         this.checkpoint.updateX(this.player.pos.x)
