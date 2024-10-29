@@ -10,8 +10,9 @@ class SoundGraph {
     }
 
     addEdge(from, to, weight = 1, silence) {
-        // console.log({ from, to })
         const fromNode = this.nodes.get(from);
+        const toNode = this.nodes.get(to);
+        if (!toNode) throw new Error(`Invalid toNode: ${to}`)
         fromNode.edges.push({ to, weight, silence });
         fromNode.totalWeight = null; // Invalidate cached weight
     }
@@ -49,7 +50,6 @@ class SoundGraph {
     }
     getRandom() {
         const keys = Array.from(this.nodes.keys()).filter(k => !this.randomExclusion.includes(k))
-        console.log(keys)
         const randomKey = pickOne(keys);
         return this.nodes.get(randomKey);
     }

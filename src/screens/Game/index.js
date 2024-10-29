@@ -129,7 +129,7 @@ class GameScreen extends Node { // can only have cameras as children
         })
     }
     setLevel(data) {
-        const level = new Level({ player: this.player, data, viewport: config.viewport, subject: this.player, factories: this.factories, ambience: this.ambiences.ambience4, gameState: this.state })
+        const level = new Level({ player: this.player, data, viewport: config.viewport, subject: this.player, factories: this.factories, ambience: this.ambiences[data.ambience], gameState: this.state })
         this.add(level)
         this.player.mxJmpVel = data.mxJmpVel
         this.player.speed = data.speed ?? 350
@@ -151,8 +151,6 @@ class GameScreen extends Node { // can only have cameras as children
         }
     }
     onEnter(l, levelDataId) {
-        this.player.pos.x = 0 // fix starting point bug (last level's checkpoint persistence)
-
         const data = this.game.assetsCache.get(config.testMode ? testlevel: levelDataId)
         const level = this.setLevel(data)
         const onClose = advance => this.game.switchScreen(LEVEL, false, advance)

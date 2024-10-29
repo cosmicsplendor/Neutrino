@@ -8,6 +8,12 @@ class Ambience { // StateMachine
             "playing": new Playing(this),
             "silence": new Silence(this, graph)
         }
+        this.validateGraph(graph, soundMap)
+    }
+    validateGraph(graph, soundMap) {
+        for (const node of graph.nodes.values()) {
+            if (!(node.name in soundMap)) throw new Error(`Node ${node.name} doesn't exist in sound map`)
+        }
     }
     update(dt) {
         this.state && this.state.update(dt)
