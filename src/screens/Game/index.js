@@ -151,6 +151,7 @@ class GameScreen extends Node { // can only have cameras as children
         }
     }
     onEnter(l, levelDataId) {
+        console.log("OnEnter", {...this.player.pos})
         const data = this.game.assetsCache.get(config.testMode ? testlevel: levelDataId)
         const level = this.setLevel(data)
         const onClose = advance => this.game.switchScreen(LEVEL, false, advance)
@@ -175,15 +176,18 @@ class GameScreen extends Node { // can only have cameras as children
         this.teardownUI = teardownUI
         this.updateTimer = updateTimer
         this.state.play()
+        console.log("OnEnterComplete", {...this.player.pos})
     }
     onExit() {
+        console.log("OnExit", {...this.player.pos})
         this.unsetLevel()
         this.teardownUI && this.teardownUI()
         this.game.reset()
         this.state.halt()
         this.state.elapsed = 0
-        this.checkpoint.reset()
+        this.checkpoint = null
         this.player.pos.x = 0
+        console.log("OnExitComplete", {...this.player.pos})
     }
     update(dt, t) {
         this.checkpoint.updateX(this.player.pos.x)

@@ -39,10 +39,9 @@ class Ambience { // StateMachine
         this.switchState("silence", { nextNode: this.graph.getRandom(), silence: rand(6, 3) })
     }
     terminate() {
-        if (this.state !== this.states.playing) {
-            return
+        if (this.state === this.states.playing) {
+            this.states.playing.sound.pause()
         }
-        this.states.playing.sound.pause()
         this.state = null
     }
 }
@@ -75,10 +74,7 @@ class Playing {
         this.sound = sound
         this.sound.play()
     }
-    onExit() {
-
-    }
-    update(dt) {
+    update() {
         if (this.sound.playing) return
         // the current sound has finished playing
         if (this.loops < 1) {
