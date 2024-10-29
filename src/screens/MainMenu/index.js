@@ -88,9 +88,6 @@ class MainMenuScreen extends Node {
         const phase = t * frequency
         gameTitle.pos.y = this.initPositions.gameTitle.y + clamp(yMin * parallaxFactor * amplitude, yMax/parallaxFactor, Math.cos(phase) * amplitude);
         graphic.pos.y = this.initPositions.graphic.y + clamp(yMin * amplitude, yMax * amplitude, Math.cos(phase) * amplitude * parallaxFactor);
-
-
-        
     }
     onEnter() {
         const { uiRoot, game, sdk } = this

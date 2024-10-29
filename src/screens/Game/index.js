@@ -184,8 +184,9 @@ class GameScreen extends Node { // can only have cameras as children
     }
     onExit() {
         this.unsetLevel()
-        this.teardownUI && this.teardownUI()
         this.game.reset()
+        this.teardownUI && this.teardownUI()
+        this.children.length = 0
         this.game.disposeScreen(this)
     }
     update(dt, t) {

@@ -211,6 +211,7 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
     }
     const onComplete = (curTime, bestTime) => {
         uiRoot.clear()
+
         uiRoot.content = renderResult(images.resume, curTime, bestTime)
         const overlay = uiRoot.get(`#${OVERLAY}`)
         const curTimeInd = uiRoot.get(`#${CUR_TIME_IND}`)
@@ -229,6 +230,8 @@ export default (uiRoot, player, images, storage, gameState, onClose, resetLevel,
         continueBtn.pos = calcStacked(calcComposite([ bestTimeInd, bestTimeVal ]), continueBtn, "bottom", 0, 16)
         
         continueBtn.on("click", () => {
+            game.pause()
+            game.renderer.clear()
             continueBtn.domNode.remove()
             bestTimeInd.domNode.remove()
             curTimeInd.domNode.remove()
