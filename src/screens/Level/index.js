@@ -18,22 +18,23 @@ class LevelScreen extends Node {
         this.game = game
         this.storage = storage
         this.uiRoot = uiRoot
-        game.assetsCache.once("load", () => {
-            const { assetsCache } = game
-            const soundSprite = new SoundSprite({ 
-                resource: assetsCache.get(soundSpriteId), 
-                resourceId: soundSpriteId, 
-                meta: assetsCache.get(soundMetaId)
-            })
-            this.contSound = soundSprite.createPool("continue")
-            this.chSound = soundSprite.createPool("change") 
-            this.errSound = soundSprite.createPool("error")
-
-            this.teardownBg = placeBg(this, assetsCache, null, game.renderer.api)
-
+    }
+    setThingsUp() {
+        const { game } = this
+        const { assetsCache } = game
+        const soundSprite = new SoundSprite({ 
+            resource: assetsCache.get(soundSpriteId), 
+            resourceId: soundSpriteId, 
+            meta: assetsCache.get(soundMetaId)
         })
+        this.contSound = soundSprite.createPool("continue")
+        this.chSound = soundSprite.createPool("change") 
+        this.errSound = soundSprite.createPool("error")
+
+        this.teardownBg = placeBg(this, assetsCache, null, game.renderer.api)
     }
     onEnter(fromMenu, advance) { // second level tells whether to advance to the next level (relative to the current one)
+        this.setThingsUp()
         const { game, storage, uiRoot, contSound, chSound, errSound } = this
         if (fromMenu) {
             this.contSound.play()

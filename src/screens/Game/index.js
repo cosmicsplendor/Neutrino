@@ -7,7 +7,7 @@ import TexRegion from "@lib/entities/TexRegion"
 import State from "./State"
 import initUI from "./initUI"
 import { LEVEL } from "../names"
-import * as rendApis  from "@lib/renderer/apis"
+import * as rendApis from "@lib/renderer/apis"
 import moonImg from "@assets/images/background.png"
 import config from "@config"
 import Level from "./Level"
@@ -39,14 +39,19 @@ import ambience5Graph from "./Ambience/graphs/ambience5"
 class GameScreen extends Node { // can only have cameras as children
     // background = "rgb(181 24 24)"
     initialized = false
-    soundPools = [ "gate" ]
+    soundPools = ["gate"]
     constructor({ game, uiRoot, storage, sdk }) {
         super()
-        const { assetsCache } = game
         this.storage = storage
         this.sdk = sdk
         this.game = game
         this.uiRoot = uiRoot
+       
+    }
+    setThingsUp() {
+        const { storage, game } = this
+        const { assetsCache } = game
+
         this.state = new State()
         this.state.on("pause", () => {
             game.pause()
@@ -55,85 +60,84 @@ class GameScreen extends Node { // can only have cameras as children
             game.resume()
         })
         storage.on("sound-update", state => {
-            state ? game.turnOnSound(): game.turnOffSound()
+            state ? game.turnOnSound() : game.turnOffSound()
         })
-        assetsCache.once("load", () => {
-            const soundSprite = new SoundSprite({ 
-                resource: assetsCache.get(soundSpriteId), 
-                resourceId: soundSpriteId, 
-                meta: assetsCache.get(soundMetaId)
-            })
-            const particles = assetsCache.get(particlesUrl)
-            const shard = new ParticleEmitter(particles.shard)
-            const cinder = new ParticleEmitter(particles.cinder)
-            const playerSounds = Player.sounds.reduce((spritemap, frame) => {
-                spritemap[frame] = soundSprite.create(frame)
-                return spritemap
-            }, {})
-            
-            shard.onRemove = () => {
-                shard.parent = null
-            }
-            cinder.onRemove = () => {
-                cinder.parent = null
-            }
 
-            this.soundSprite = soundSprite
-            this.btnSound = soundSprite.create("btn")
-            this.errSound = soundSprite.createPool("err_alt")
-            this.contSound = soundSprite.create("continue")
-            this.soundMap = {
-                "flute_amb_1": soundSprite.create("flute_amb_1"),
-                "flute_amb_2": soundSprite.create("flute_amb_2"),
-                "g_solo_1": soundSprite.create("g_solo_1"),
-                "g_solo_2": soundSprite.create("g_solo_2"),
-                "g_solo_3": soundSprite.create("g_solo_3"),
-                "jingl_1": soundSprite.create("jingl_1"),
-                "jingl_2": soundSprite.create("jingl_2"),
-                "mel1": soundSprite.create("mel1"),
-                "mel2": soundSprite.create("mel2"),
-                "mel2_1": soundSprite.create("mel2_1"),
-                "mel2_2": soundSprite.create("mel2_2"),
-                "mel2_3": soundSprite.create("mel2_3"),
-                "mel3": soundSprite.create("mel3"),
-                "wind_1": soundSprite.create("wind_1"),
-                "wind_2": soundSprite.create("wind_2"),
-                "wind_3": soundSprite.create("wind_3"),
-                "creepy": soundSprite.create("creepy")
-            }
-            this.ambiences = {
-                ambience1: new Ambience(ambience1Graph, this.soundMap),
-                ambience2: new Ambience(ambience2Graph, this.soundMap),
-                ambience3: new Ambience(ambience3Graph, this.soundMap),
-                ambience4: new Ambience(ambience4Graph, this.soundMap),
-                ambience5: new Ambience(ambience5Graph, this.soundMap),
-            }
-            this.player = new Player({ width: 64, height: 64, fill: "brown", speed: 350, fricX: 3, pos: { x: 0, y: 0 }, shard, cinder, sounds: playerSounds, state: this.state })
-            this.factories = makeFactories({ soundSprite, assetsCache, storage, player: this.player, state: this.state })
-            if (game.renderer.api === rendApis.WEBGL) {
-                const bgData = assetsCache.get(bgDataId)
-                const dataToTile = tile => new TexRegion({ frame: tile.name, pos: { x: tile.x, y: tile.y }})
-                this.bg = new ParallaxCamera({ z: 2.5, zAtop: 1, viewport: config.viewport, subject: this.player, instF: false, entYOffset: 0, tiles: bgData.map(dataToTile) }) // parallax bg
-                this.add(this.bg)
-            }
-            this.uiImages = {
-                cross: assetsCache.get(crossImgId),
-                resume: assetsCache.get(resumeImgId),
-                pause: assetsCache.get(pauseImgId),
-                orb: assetsCache.get(orbImgId),
-                reset: assetsCache.get(resetImgId),
-                soundOn: assetsCache.get(soundOnImgId),
-                soundOff: assetsCache.get(soundOffImgId),
-                rva: assetsCache.get(rvaImgId)
-            }
+        const soundSprite = new SoundSprite({
+            resource: assetsCache.get(soundSpriteId),
+            resourceId: soundSpriteId,
+            meta: assetsCache.get(soundMetaId)
         })
+        const particles = assetsCache.get(particlesUrl)
+        const shard = new ParticleEmitter(particles.shard)
+        const cinder = new ParticleEmitter(particles.cinder)
+        const playerSounds = Player.sounds.reduce((spritemap, frame) => {
+            spritemap[frame] = soundSprite.create(frame)
+            return spritemap
+        }, {})
+
+        shard.onRemove = () => {
+            shard.parent = null
+        }
+        cinder.onRemove = () => {
+            cinder.parent = null
+        }
+
+        this.soundSprite = soundSprite
+        this.btnSound = soundSprite.create("btn")
+        this.errSound = soundSprite.createPool("err_alt")
+        this.contSound = soundSprite.create("continue")
+        this.soundMap = {
+            "flute_amb_1": soundSprite.create("flute_amb_1"),
+            "flute_amb_2": soundSprite.create("flute_amb_2"),
+            "g_solo_1": soundSprite.create("g_solo_1"),
+            "g_solo_2": soundSprite.create("g_solo_2"),
+            "g_solo_3": soundSprite.create("g_solo_3"),
+            "jingl_1": soundSprite.create("jingl_1"),
+            "jingl_2": soundSprite.create("jingl_2"),
+            "mel1": soundSprite.create("mel1"),
+            "mel2": soundSprite.create("mel2"),
+            "mel2_1": soundSprite.create("mel2_1"),
+            "mel2_2": soundSprite.create("mel2_2"),
+            "mel2_3": soundSprite.create("mel2_3"),
+            "mel3": soundSprite.create("mel3"),
+            "wind_1": soundSprite.create("wind_1"),
+            "wind_2": soundSprite.create("wind_2"),
+            "wind_3": soundSprite.create("wind_3"),
+            "creepy": soundSprite.create("creepy")
+        }
+        this.ambiences = {
+            ambience1: new Ambience(ambience1Graph, this.soundMap),
+            ambience2: new Ambience(ambience2Graph, this.soundMap),
+            ambience3: new Ambience(ambience3Graph, this.soundMap),
+            ambience4: new Ambience(ambience4Graph, this.soundMap),
+            ambience5: new Ambience(ambience5Graph, this.soundMap),
+        }
+        this.player = new Player({ width: 64, height: 64, fill: "brown", speed: 350, fricX: 3, pos: { x: 0, y: 0 }, shard, cinder, sounds: playerSounds, state: this.state })
+        this.factories = makeFactories({ soundSprite, assetsCache, storage, player: this.player, state: this.state })
+        if (game.renderer.api === rendApis.WEBGL) {
+            const bgData = assetsCache.get(bgDataId)
+            const dataToTile = tile => new TexRegion({ frame: tile.name, pos: { x: tile.x, y: tile.y } })
+            this.bg = new ParallaxCamera({ z: 2.5, zAtop: 1, viewport: config.viewport, subject: this.player, instF: false, entYOffset: 0, tiles: bgData.map(dataToTile) }) // parallax bg
+            this.add(this.bg)
+        }
+        this.uiImages = {
+            cross: assetsCache.get(crossImgId),
+            resume: assetsCache.get(resumeImgId),
+            pause: assetsCache.get(pauseImgId),
+            orb: assetsCache.get(orbImgId),
+            reset: assetsCache.get(resetImgId),
+            soundOn: assetsCache.get(soundOnImgId),
+            soundOff: assetsCache.get(soundOffImgId),
+            rva: assetsCache.get(rvaImgId)
+        }
     }
     setLevel(data) {
         const level = new Level({ player: this.player, data, viewport: config.viewport, subject: this.player, factories: this.factories, ambience: this.ambiences[data.ambience], gameState: this.state })
         this.add(level)
         this.player.mxJmpVel = data.mxJmpVel
         this.player.speed = data.speed ?? 350
-        this.game.renderer.changeBackground(config.isMobile || this.game.renderer.api === rendApis.CNV_2D ? data.mob_bg: data.bg, moonImg)
+        this.game.renderer.changeBackground(config.isMobile || this.game.renderer.api === rendApis.CNV_2D ? data.mob_bg : data.bg, moonImg)
         this.game.renderer.canvas.style.backgroundPosition = data.bgPos ?? "-50%"
         this.game.renderer.tint = data.tint && data.tint.split(",").slice(0, 3)
 
@@ -151,8 +155,8 @@ class GameScreen extends Node { // can only have cameras as children
         }
     }
     onEnter(l, levelDataId) {
-        console.log("OnEnter", {...this.player.pos})
-        const data = this.game.assetsCache.get(config.testMode ? testlevel: levelDataId)
+        this.setThingsUp()
+        const data = this.game.assetsCache.get(config.testMode ? testlevel : levelDataId)
         const level = this.setLevel(data)
         const onClose = advance => this.game.switchScreen(LEVEL, false, advance)
         const checkpoint = new Checkpoint(data.checkpoints)
@@ -167,7 +171,7 @@ class GameScreen extends Node { // can only have cameras as children
             level.resetRecursively()
             checkpoint.reset()
         }
-        
+
         focusInst()
         level.idx = l - 1
         const getCheckpoint = checkpoint.get.bind(checkpoint)
@@ -176,10 +180,10 @@ class GameScreen extends Node { // can only have cameras as children
         this.teardownUI = teardownUI
         this.updateTimer = updateTimer
         this.state.play()
-        console.log("OnEnterComplete", {...this.player.pos})
+        console.log("OnEnterComplete", { ...this.player.pos })
     }
     onExit() {
-        console.log("OnExit", {...this.player.pos})
+        console.log("OnExit", { ...this.player.pos })
         this.unsetLevel()
         this.teardownUI && this.teardownUI()
         this.game.reset()
@@ -187,7 +191,8 @@ class GameScreen extends Node { // can only have cameras as children
         this.state.elapsed = 0
         this.checkpoint = null
         this.player.pos.x = 0
-        console.log("OnExitComplete", {...this.player.pos})
+        this.player.pos.y = 0
+        console.log("OnExitComplete", { ...this.player.pos })
     }
     update(dt, t) {
         this.checkpoint.updateX(this.player.pos.x)

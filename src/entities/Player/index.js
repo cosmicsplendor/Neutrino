@@ -192,7 +192,6 @@ class Player extends TexRegion {
         this.onBus = true
     }
     update(dt) {
-        console.log(this.pos)
         if (this.state.is("game-over") || this.state.is("paused")) return
         this.controls.update(this, dt)
         Boolean(this.offEdge) ? Movement.updateOffEdge(this, dt): Movement.update(this, dt)
