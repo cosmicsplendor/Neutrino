@@ -19,7 +19,7 @@ class LevelScreen extends Node {
         this.storage = storage
         this.uiRoot = uiRoot
     }
-    setThingsUp() {
+    setupSounds() {
         const { game } = this
         const { assetsCache } = game
         const soundSprite = new SoundSprite({ 
@@ -27,21 +27,22 @@ class LevelScreen extends Node {
             resourceId: soundSpriteId, 
             meta: assetsCache.get(soundMetaId)
         })
-        this.contSound = soundSprite.createPool("continue")
-        this.chSound = soundSprite.createPool("change") 
-        this.errSound = soundSprite.createPool("error")
+        const contSound = soundSprite.createPool("continue")
+        const chSound = soundSprite.createPool("change") 
+        const errSound = soundSprite.createPool("error")
+        return { contSound, chSound, errSound }
 
-        this.teardownBg = placeBg(this, assetsCache, null, game.renderer.api)
     }
     onEnter(fromMenu, advance) { // second level tells whether to advance to the next level (relative to the current one)
-        this.setThingsUp()
-        const { game, storage, uiRoot, contSound, chSound, errSound } = this
+        const { contSound, chSound, errSound } = this.setupSounds()
+        const { game, storage, uiRoot } = this
         if (fromMenu) {
-            this.contSound.play()
+            contSound.play()
             this.curLevel = storage.getCurLevel()
         } else if (advance) {
             this.curLevel = Math.min(this.curLevel + 1, config.levels)
         }
+        this.teardownBg = placeBg(this, game.assetsCache, null, game.renderer.api)
         this.teardownUI = initUI({
             onStart: (level, id) => {
                 game.switchScreen(GAME, level, id)
